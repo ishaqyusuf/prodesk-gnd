@@ -72,7 +72,7 @@ export function useStepComponentModal(
             return (
                 <div id="" className="absolute right-0 top-0 flex ">
                     <Label>{priceLen}</Label>
-                    <Icons.dollar className="text-muted-foreground w-4 h-4" />
+                    <Icons.dollar className="text-muted-foreground size-4" />
                 </div>
             );
         return null;

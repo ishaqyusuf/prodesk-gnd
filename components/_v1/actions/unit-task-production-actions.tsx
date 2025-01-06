@@ -63,7 +63,7 @@ function ActionButton({ itemId, disabled, Icon, color, _action }) {
             )}
             size="icon"
         >
-            <Icon className="w-4 h-4" />
+            <Icon className="size-4" />
         </Btn>
     );
 }

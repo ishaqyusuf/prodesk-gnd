@@ -47,7 +47,7 @@ export default function CustomersPageClient(props: InfiniteDataTablePageProps) {
                         <div className="flex-1"></div>
                         <QueryTabAction />
                         <Button size="sm">
-                            <Icons.add className="w-4 h-4 mr-2" />
+                            <Icons.add className="size-4 mr-2" />
                             <span>New</span>
                         </Button>
                     </div>

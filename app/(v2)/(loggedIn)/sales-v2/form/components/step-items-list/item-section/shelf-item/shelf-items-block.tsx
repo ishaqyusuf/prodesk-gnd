@@ -164,7 +164,7 @@ export default function ShelfItemsBlock({ shelfIndex, deleteItem }: Props) {
                                     className="w-full mt-2"
                                     size="sm"
                                 >
-                                    <Icons.add className="w-4 h-4 mr-4" />
+                                    <Icons.add className="size-4 mr-4" />
                                     Add Product
                                 </Button>
                                 <Button
@@ -174,7 +174,7 @@ export default function ShelfItemsBlock({ shelfIndex, deleteItem }: Props) {
                                     className="w-full mt-2"
                                     size="sm"
                                 >
-                                    <Icons.add className="w-4 h-4 mr-4" />
+                                    <Icons.add className="size-4 mr-4" />
                                     Create
                                 </Button>
                             </div>
@@ -187,7 +187,7 @@ export default function ShelfItemsBlock({ shelfIndex, deleteItem }: Props) {
                         size="icon"
                         variant={"destructive"}
                     >
-                        <Icons.trash className="w-4 h-4" />
+                        <Icons.trash className="size-4" />
                     </Button>
                 </TableCell>
             </TableRow>
@@ -247,7 +247,7 @@ function ShellProductCells({
                         className="w-full mt-2"
                         size="sm"
                     >
-                        <Icons.add className="w-4 h-4 mr-4" />
+                        <Icons.add className="size-4 mr-4" />
                         Add Product
                     </Button>
                 )} */}
@@ -293,7 +293,7 @@ function ShellProductCells({
                     size="icon"
                     variant="ghost"
                 >
-                    <Icons.edit className="w-4 h-4" />
+                    <Icons.edit className="size-4" />
                 </Button>
                 <Button
                     onClick={() => {
@@ -304,7 +304,7 @@ function ShellProductCells({
                     size="icon"
                     variant="ghost"
                 >
-                    <Icons.trash className="w-4 h-4" />
+                    <Icons.trash className="size-4" />
                 </Button>
             </div>
         </div>

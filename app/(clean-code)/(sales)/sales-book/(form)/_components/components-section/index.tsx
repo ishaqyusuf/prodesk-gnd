@@ -325,10 +325,10 @@ function Component({
             {/* {cls.getStepForm()?.meta?.stepPricingDeps?. } */}
             {/* <div className="absolute m-2">
                 {component?.variations?.length ? (
-                    <Filter className="w-4 h-4 text-muted-foreground/70" />
+                    <Filter className="size-4 text-muted-foreground/70" />
                 ) : (
                     <></>
-                    // <MinusCircle className="w-4 h-4 text-muted-foreground/70" />
+                    // <MinusCircle className="size-4 text-muted-foreground/70" />
                 )}
             </div> */}
             {component.productCode ? (
@@ -345,7 +345,7 @@ function Component({
                     <Checkbox checked={selectState?.uids?.[component.uid]} />
                 </div>
                 <div className={cn(!component?.variations?.length && "hidden")}>
-                    <Filter className="w-4 h-4 text-muted-foreground/70" />
+                    <Filter className="size-4 text-muted-foreground/70" />
                 </div>
                 <div className={cn(!component.redirectUid && "hidden")}>
                     <ExternalLink className="w-4 text-muted-foreground/70 h-4" />

@@ -133,7 +133,7 @@ Props) {
                         ) : null}
                         {stepForm.step.title == "Door" ? (
                             <span className="inline-flex space-x-1 text-muted-foreground">
-                                {/* <Icons.dollar className="w-4 h-4" /> */}
+                                {/* <Icons.dollar className="size-4" /> */}
                                 <span>
                                     {doorPriceCount} {" price found"}
                                 </span>
@@ -318,7 +318,7 @@ Props) {
                 )}
             >
                 <Checkbox checked={stepCtx.selections?.[item.uid]?.selected} />
-                {/* <Icons.check className="text-green-600 w-4 h-4" /> */}
+                {/* <Icons.check className="text-green-600 size-4" /> */}
             </div>
             <span className="sr-only">
                 {isRoot

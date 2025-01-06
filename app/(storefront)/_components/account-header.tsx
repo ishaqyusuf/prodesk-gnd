@@ -84,7 +84,7 @@ export default function AcccountHeader() {
         );
     return (
         <Link href={"/login"} className="flex space-x-2 items-center">
-            <User2 className="w-4 h-4" />
+            <User2 className="size-4" />
             <span>My Account</span>
         </Link>
     );

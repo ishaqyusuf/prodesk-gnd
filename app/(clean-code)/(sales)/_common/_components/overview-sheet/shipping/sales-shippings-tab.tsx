@@ -67,7 +67,7 @@ export function SalesShippingTab({}) {
                             href={`/printer/sales?slugs=${ctx?.overview?.orderId}&mode=packing list&dispatchId=all`}
                             target="_blank"
                         >
-                            <Icons.print className="w-4 h-4 mr-2" />
+                            <Icons.print className="size-4 mr-2" />
                             <span>Print All</span>
                         </Link>
                     </Button>
@@ -78,7 +78,7 @@ export function SalesShippingTab({}) {
                         size="sm"
                         className="h-8"
                     >
-                        <Icons.add className="w-4 h-4 mr-2" />
+                        <Icons.add className="size-4 mr-2" />
                         <span>Create</span>
                     </Button>
                 </div>

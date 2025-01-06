@@ -101,7 +101,7 @@ function DoorSizeTable({ door }) {
                         <Menu
                             Trigger={
                                 <Button>
-                                    <Icons.add className="w-4 h-4 mr-2" />
+                                    <Icons.add className="size-4 mr-2" />
                                     <span>Size</span>
                                 </Button>
                             }

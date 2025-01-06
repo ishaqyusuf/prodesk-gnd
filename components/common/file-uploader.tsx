@@ -146,7 +146,7 @@ export function FileUploader({
                                     size="icon"
                                     className="w-8 h-8"
                                 >
-                                    <Upload className="w-4 h-4" />
+                                    <Upload className="size-4" />
                                 </Button>
                             </div>
                         </div>

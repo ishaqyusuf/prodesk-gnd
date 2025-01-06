@@ -120,7 +120,7 @@ function RouteSection({ uid }) {
                         className="w-fit"
                         onClick={() => arr.append({ uid: "" })}
                     >
-                        <Icons.add className="w-4 h-4" />
+                        <Icons.add className="size-4" />
                         <span>Step</span>
                     </Button>
                 </CardHeader>
@@ -204,7 +204,7 @@ function RouteSection({ uid }) {
                         variant="secondary"
                         size="sm"
                     >
-                        <Icons.add className="w-4 h-4" />
+                        <Icons.add className="size-4" />
                         <span>Step</span>
                     </Button>
                 </div>

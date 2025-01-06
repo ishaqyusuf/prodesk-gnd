@@ -38,22 +38,22 @@ export default function SiteFooter() {
                         <ul>
                             <div className="flex flex-col space-y-4">
                                 <div className="flex items-center space-x-2">
-                                    <Icons.address className="w-4 h-4" />
+                                    <Icons.address className="size-4" />
                                     <p>13285 SW 131th St Miami, FL 33186</p>
                                 </div>
                                 <div className="flex items-center space-x-2">
-                                    <Icons.time className="w-4 h-4" />
+                                    <Icons.time className="size-4" />
                                     <p>
                                         Mon – Fri 7:30 am-4:30 pm Sat & Sun
                                         CLOSED
                                     </p>
                                 </div>
                                 <div className="flex items-center space-x-2">
-                                    <Icons.phone className="w-4 h-4" />
+                                    <Icons.phone className="size-4" />
                                     <p>(305) 278-6555</p>
                                 </div>
                                 <div className="flex items-center space-x-2">
-                                    <Icons.Email className="w-4 h-4" />
+                                    <Icons.Email className="size-4" />
                                     <p>support@gndmillwork.com</p>
                                 </div>
                             </div>

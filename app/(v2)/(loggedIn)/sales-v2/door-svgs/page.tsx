@@ -96,7 +96,7 @@ function Door({ title, url: _url, id, index, setDoors }: any) {
                                         className="w-8 h-8"
                                         size={"icon"}
                                     >
-                                        <Icons.copy className="w-4 h-4" />
+                                        <Icons.copy className="size-4" />
                                     </Button>
                                 )}
                             </div>

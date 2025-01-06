@@ -57,13 +57,13 @@ export function UserNav() {
                 <DropdownMenuGroup>
                     <DropdownMenuItem className="hover:cursor-pointer" asChild>
                         <Link href="/dashboard" className="flex items-center">
-                            <LayoutGrid className="w-4 h-4 mr-3 text-muted-foreground" />
+                            <LayoutGrid className="size-4 mr-3 text-muted-foreground" />
                             Dashboard
                         </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem className="hover:cursor-pointer" asChild>
                         <Link href="/account" className="flex items-center">
-                            <User className="w-4 h-4 mr-3 text-muted-foreground" />
+                            <User className="size-4 mr-3 text-muted-foreground" />
                             Account
                         </Link>
                     </DropdownMenuItem>
@@ -73,11 +73,10 @@ export function UserNav() {
                     className="hover:cursor-pointer"
                     onClick={() => {}}
                 >
-                    <LogOut className="w-4 h-4 mr-3 text-muted-foreground" />
+                    <LogOut className="size-4 mr-3 text-muted-foreground" />
                     Sign out
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
     );
 }
-

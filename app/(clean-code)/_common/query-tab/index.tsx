@@ -40,7 +40,7 @@ export default function QueryTab({ page }: Props) {
                     className="h-8 text-xs"
                     variant="outline"
                 >
-                    <Icons.add className="w-4 h-4" />
+                    <Icons.add className="size-4" />
                     <span>Query Tab</span>
                 </Button>
             )}

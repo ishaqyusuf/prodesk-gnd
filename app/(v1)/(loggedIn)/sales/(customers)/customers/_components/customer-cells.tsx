@@ -83,7 +83,7 @@ export let Cells = {
                             className="h-8"
                             variant="secondary"
                         >
-                            {/* <Icons.reciept className="w-4 h-4 mr-2" /> */}
+                            {/* <Icons.reciept className="size-4 mr-2" /> */}
                             Report
                         </Button>
                     </div>

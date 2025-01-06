@@ -327,7 +327,7 @@ const iconVariants = cva("", {
             destructive: "text-red-600",
         },
         size: {
-            sm: "w-4 h-4",
+            sm: "size-4",
             default: "",
         },
     },

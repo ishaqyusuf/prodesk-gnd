@@ -127,7 +127,7 @@ export default function CommunityInstallCostModal() {
                                 variant="outline"
                                 className="w-full h-7 mt-1"
                             >
-                                <Plus className="mr-2 w-4 h-4" />
+                                <Plus className="mr-2 size-4" />
                                 <span>New Install</span>
                             </Button>
                         </div>

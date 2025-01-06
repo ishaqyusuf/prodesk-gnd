@@ -140,13 +140,13 @@ function Header({ title, icon, subtitle, onBack, children }: HeaderProps) {
                                 variant={"secondary"}
                                 size={"icon"}
                             >
-                                <Icons.chevronLeft className="w-4 h-4" />
+                                <Icons.chevronLeft className="size-4" />
                             </Button>
                         </div>
                     )}
                     <div className="flex-1 flex-col justify-start">
                         <div className="flex items-center">
-                            {Icon && <Icon className="w-4 h-4 mr-4" />}
+                            {Icon && <Icon className="size-4 mr-4" />}
                             {title && (
                                 <Title className="line-clamp-1">{title}</Title>
                             )}

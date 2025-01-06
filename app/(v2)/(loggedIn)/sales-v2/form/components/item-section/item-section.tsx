@@ -119,7 +119,7 @@ function ItemHeader({ item }: ItemHeaderProps) {
                     className="p-0 h-6 w-6"
                     variant={"destructive"}
                 >
-                    <Icons.trash className="w-4 h-4" />
+                    <Icons.trash className="size-4" />
                 </Button>
 
                 {dykeCtx.superAdmin && (

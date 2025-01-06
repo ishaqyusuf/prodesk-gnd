@@ -182,7 +182,7 @@ export function InstallCostForm({ data }: { data: InstallCostSettings }) {
                                                             ))}
 
                                                             <div className="col-span-1 space-x-2  border h-7 flex items-center">
-                                                                <Move className="w-4 h-4 mx-2 text-slate-300 group-hover:text-gray-600" />
+                                                                <Move className="size-4 mx-2 text-slate-300 group-hover:text-gray-600" />
                                                                 <Button
                                                                     onClick={() => {
                                                                         remove(
@@ -213,7 +213,7 @@ export function InstallCostForm({ data }: { data: InstallCostSettings }) {
                         variant="secondary"
                         className="w-full h-7 mt-1"
                     >
-                        <Plus className="mr-2 w-4 h-4" />
+                        <Plus className="mr-2 size-4" />
                         <span>Add Line</span>
                     </Button>
                 </div>

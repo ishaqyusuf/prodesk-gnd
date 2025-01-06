@@ -62,7 +62,7 @@ export default function QuotesPageClient({ filterFields, queryKey }: Props) {
                         <QueryTabAction />
                         <Button asChild size="sm">
                             <Link href="/sales-book/create-quote">
-                                <Icons.add className="w-4 h-4 mr-2" />
+                                <Icons.add className="size-4 mr-2" />
                                 <span>New</span>
                             </Link>
                         </Button>

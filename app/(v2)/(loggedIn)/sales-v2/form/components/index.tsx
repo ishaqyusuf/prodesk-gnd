@@ -47,7 +47,7 @@ export default function SalesFormComponent({ defaultValues }: Props) {
                             itemArray.append(doorUnit as any);
                         }}
                     >
-                        <Icons.add className="w-4 h-4 mr-2" />
+                        <Icons.add className="size-4 mr-2" />
                         <span>Add Item</span>
                     </Button>
                 </div>

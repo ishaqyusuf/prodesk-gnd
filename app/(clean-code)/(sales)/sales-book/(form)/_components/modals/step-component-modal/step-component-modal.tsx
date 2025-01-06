@@ -192,7 +192,7 @@ export default function StepComponentModal({ item, ctx }: Props) {
                                     >
                                         {fieldIndex != 0 && (
                                             <>
-                                                <Icons.chevronDown className="w-4 h-4" />
+                                                <Icons.chevronDown className="size-4" />
                                             </>
                                         )}
                                         <FormSelect
@@ -225,7 +225,7 @@ export default function StepComponentModal({ item, ctx }: Props) {
                                                 size="sm"
                                                 variant="destructive"
                                             >
-                                                <Icons.trash className="w-4 h-4" />
+                                                <Icons.trash className="size-4" />
                                             </Button>
                                         </div>
                                     </div>

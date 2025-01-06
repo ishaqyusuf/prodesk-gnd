@@ -5,6 +5,7 @@ import {
     getCustomerPaymentInfo,
     getCustomerProfileDta,
     getCustomerSalesInfoDta,
+    getCustomersSimpleListDta,
 } from "../data-access/customer.dta";
 
 export type GetCustomerOverviewUseCase = AsyncFnType<
@@ -25,4 +26,18 @@ export async function getCustomerOverviewUseCase(phoneNo) {
         paymentInfo,
         tabs,
     };
+}
+export type GetCustomersSelectListUseCase = AsyncFnType<
+    typeof getCustomersSelectListUseCase
+>;
+export async function getCustomersSelectListUseCase() {
+    return (await getCustomersSimpleListDta()).map((customer) => {
+        return {
+            value: customer.phoneNo,
+            label: `${customer.phoneNo || ""} ${
+                customer.businessName || customer.name
+            }`,
+            customer,
+        };
+    });
 }

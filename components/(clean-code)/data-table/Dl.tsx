@@ -57,7 +57,7 @@ function Icon({
             )}
         >
             <div className="flex gap-4">
-                <Ico className="w-4 h-4" />
+                <Ico className="size-4" />
                 <dt className="text-muted-foreground">{label}</dt>
             </div>
             <dt className="">{value}</dt>

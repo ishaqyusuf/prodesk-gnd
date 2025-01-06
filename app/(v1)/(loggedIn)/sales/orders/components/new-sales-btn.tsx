@@ -63,7 +63,7 @@ export default function NewSalesBtn({ type }: Props) {
                     asChild
                 >
                     <Link href={b.href}>
-                        <Icons.add className="w-4 h-4 mr-2" />
+                        <Icons.add className="size-4 mr-2" />
                         <span>{b.text}</span>
                     </Link>
                 </Button>

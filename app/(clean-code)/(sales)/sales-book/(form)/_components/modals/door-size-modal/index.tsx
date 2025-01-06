@@ -107,7 +107,7 @@ export default function DoorSizeModal({ cls }: Props) {
                                 size="sm"
                                 className="h-8 text-xs"
                             >
-                                <Icons.add className="w-4 h-4 mr-2" />
+                                <Icons.add className="size-4 mr-2" />
                                 <span>Add Rule</span>
                             </Button>
                         </div>
@@ -190,7 +190,7 @@ function RuleComponent({ index }) {
                     onClick={addRuleFilter}
                     className="h-7 text-xs"
                 >
-                    <Icons.add className="w-4 h-4 mr-2" />
+                    <Icons.add className="size-4 mr-2" />
                     <span>Add Filter</span>
                 </Button>
             </div>

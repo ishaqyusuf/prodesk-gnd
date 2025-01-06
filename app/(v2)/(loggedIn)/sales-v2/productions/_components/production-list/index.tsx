@@ -47,7 +47,7 @@ export default function ProductionList({
         return (
             <div className="rounded-lg rounded-l-none shadow border-l-2 border-l-emerald-700 bg-emerald-100 p-2 px-4 text-emerald-600 flex space-x-4 font-semibold">
                 <span className="bg-emerald-700 rounded-full w-6 h-6 flex justify-center items-center">
-                    <Icons.check className="w-4 h-4 text-white" />
+                    <Icons.check className="size-4 text-white" />
                 </span>
                 <span>{emptyText}</span>
             </div>

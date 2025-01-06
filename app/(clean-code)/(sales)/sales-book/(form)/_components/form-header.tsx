@@ -148,7 +148,7 @@ export function FormHeader({ sticky }: { sticky: Sticky }) {
                     action={save}
                     variant="default"
                 >
-                    {/* <Icons.save className="w-4 h-4 mr-4" /> */}
+                    {/* <Icons.save className="size-4 mr-4" /> */}
                     <span className="">Save</span>
                 </Button>
             </div>

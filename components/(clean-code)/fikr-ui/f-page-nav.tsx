@@ -15,7 +15,7 @@ export default Object.assign(({ children }) => {
         <DropdownMenu>
             <DropdownMenuTrigger>
                 <Button size="icon" className="w-6 h-6" variant="outline">
-                    <Icons.more className="w-4 h-4" />
+                    <Icons.more className="size-4" />
                 </Button>
             </DropdownMenuTrigger>
         </DropdownMenu>,

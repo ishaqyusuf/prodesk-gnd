@@ -21,7 +21,7 @@ export default function MobileMenuBtn({ data }: Props) {
             className="p-0 h-5 w-5"
             variant={"secondary"}
         >
-            <MoreHorizontal className="w-4 h-4" />
+            <MoreHorizontal className="size-4" />
         </Button>
     );
 }

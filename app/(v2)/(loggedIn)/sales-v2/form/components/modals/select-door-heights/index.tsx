@@ -235,7 +235,7 @@ export default function SelectDoorHeightsModal({
                             variant="outline"
                             className="h-8 w-8 p-1"
                         >
-                            <Icons.edit className="w-4 h-4" />
+                            <Icons.edit className="size-4" />
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>

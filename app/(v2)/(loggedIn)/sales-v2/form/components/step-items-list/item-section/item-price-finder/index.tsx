@@ -71,7 +71,7 @@ export default function ItemPriceFinder({
                         className="w-8 h-8"
                         variant={!priceChart?.hasPrice ? "ghost" : "outline"}
                     >
-                        <Icons.dollar className="w-4 h-4" />
+                        <Icons.dollar className="size-4" />
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>

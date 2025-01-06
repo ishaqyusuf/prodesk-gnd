@@ -155,7 +155,7 @@ export default function SalesNotes({
                         className="h-8"
                     >
                         <span>New</span>
-                        <Icons.add className="w-4 h-4 ml-4" />
+                        <Icons.add className="size-4 ml-4" />
                     </Button>
                 </div>
                 <div className="flex flex-col overflow-auto max-h-[70vh] pb-20 -mr-6 pr-6">

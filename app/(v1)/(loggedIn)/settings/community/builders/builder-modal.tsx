@@ -230,7 +230,7 @@ function TasksForm({}) {
                             size="icon"
                             className=""
                         >
-                            <Trash className="w-4 h-4 text-slate-300 group-hover:text-red-600" />
+                            <Trash className="size-4 text-slate-300 group-hover:text-red-600" />
                         </Button>
                     </div>
                 </div>
@@ -242,7 +242,7 @@ function TasksForm({}) {
                 variant="secondary"
                 className="w-full h-7 mt-1"
             >
-                <Plus className="mr-2 w-4 h-4" />
+                <Plus className="mr-2 size-4" />
                 <span>Add Line</span>
             </Button>
         </div>

@@ -135,9 +135,9 @@ function DetailsBlock({ children, group }) {
             >
                 <span>{!showDetails ? "Show Details" : "Hide Details"}</span>
                 {!showDetails ? (
-                    <Icons.chevronDown className="w-4 h-4" />
+                    <Icons.chevronDown className="size-4" />
                 ) : (
-                    <Icons.chevronUp className="w-4 h-4" />
+                    <Icons.chevronUp className="size-4" />
                 )}
             </Button>
             <div

@@ -38,9 +38,9 @@ function Order({ item }: Props) {
                 <TableCell.Date>{item.createdAt}</TableCell.Date>
                 {/* {item.isDyke && (
                     // <div className="rounded-full bg-pink-500 p-[.5px]   text-xs leading-none text-[#000000]s text-white no-underline group-hover:no-underline">
-                    //     <SparklesIcon className="w-4 h-4" />
+                    //     <SparklesIcon className="size-4" />
                     // </div>
-                    // <SparklesIcon className="w-4 h-4 text-pink-700" />
+                    // <SparklesIcon className="size-4 text-pink-700" />
                 )} */}
             </TableCell.Secondary>
         </TableCell>

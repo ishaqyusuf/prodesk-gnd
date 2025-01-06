@@ -8,43 +8,20 @@ import {
 import { TabsContent } from "@/components/ui/tabs";
 import { customerStore } from "./store";
 import { TCell } from "@/components/(clean-code)/data-table/table-cells";
-import { Button } from "@/components/ui/button";
-import { Icons } from "@/components/_v1/icons";
-import { _modal } from "@/components/common/modal/provider";
-import { openPayPortal } from "../pay-portal";
 
-export default function SalesTab() {
+export default function Quotes() {
     const ctx = customerStore();
     return (
-        <TabsContent value="sales">
+        <TabsContent value="quotes">
             <div className="">
-                <div className="flex gap-4 justify-end">
-                    <Button
-                        onClick={() => {
-                            _modal.close();
-                            setTimeout(() => {
-                                openPayPortal(ctx.profile?.phoneNo);
-                            }, 500);
-                        }}
-                        size="xs"
-                    >
-                        <Icons.reciept className="mr-2 size-4" />
-                        Make Payment
-                    </Button>
-                    <Button disabled size="xs">
-                        {/* <Icons.reciept className="mr-2 size-4" /> */}
-                        Report
-                    </Button>
-                </div>
                 <Table>
                     <TableHeader>
                         <TableHead>Date</TableHead>
                         <TableHead>Order No</TableHead>
-                        <TableHead>Amount</TableHead>
-                        <TableHead>Pending</TableHead>
+                        <TableHead align="right">Amount</TableHead>
                     </TableHeader>
                     <TableBody>
-                        {ctx.salesInfo?.orders?.map((order) => (
+                        {ctx.salesInfo?.quotes?.map((order) => (
                             <TableRow key={order.orderId}>
                                 <TCell>
                                     <TCell.Date>{order.createdAt}</TCell.Date>
@@ -56,9 +33,6 @@ export default function SalesTab() {
                                 </TCell>
                                 <TCell align="right">
                                     <TCell.Money value={order.grandTotal} />
-                                </TCell>
-                                <TCell align="right">
-                                    <TCell.Money value={order.amountDue} />
                                 </TCell>
                             </TableRow>
                         ))}

@@ -15,7 +15,6 @@ export type GetCustomersDta = AsyncFnType<typeof getCustomersDta>;
 
 export async function getCustomersDta(query: CustomersQueryParams) {
     const where = whereCustomers(query);
-
     const data = await prisma.customers.findMany({
         where,
         ...pageQueryFilter(query),
@@ -40,6 +39,17 @@ export async function getCustomersDta(query: CustomersQueryParams) {
         ...pageInfo,
         data,
     };
+}
+export async function getCustomersSimpleListDta() {
+    const data = await prisma.customers.findMany({
+        select: {
+            phoneNo: true,
+            name: true,
+            businessName: true,
+        },
+        distinct: "phoneNo",
+    });
+    return data;
 }
 export async function updateCustomerEmailDta(id, email) {
     if (!id) throw new Error("Customer id is required");

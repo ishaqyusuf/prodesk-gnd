@@ -81,7 +81,7 @@ function Assignment({ assignment }: { assignment: ItemAssignment }) {
                             {assignment.assignedTo}
                         </Label>
                         <div className="flex items-center text-sm gap-2">
-                            <Icons.calendar className="w-4 h-4" />
+                            <Icons.calendar className="size-4" />
                             <span>{formatDate(assignment.dueDate)}</span>
                         </div>
                     </div>

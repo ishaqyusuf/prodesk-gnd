@@ -33,7 +33,7 @@ export function SalesGeneralOverview({}) {
                                     target="_blank"
                                 >
                                     <span>Edit</span>
-                                    <ExternalLink className="w-4 h-4 text-muted-foreground" />
+                                    <ExternalLink className="size-4 text-muted-foreground" />
                                 </Link>
                             </Button>
                         </div>
@@ -60,7 +60,7 @@ export function SalesGeneralOverview({}) {
                         //     className="inline-flex gap-2 items-center hover:underline"
                         // >
                         //     <span>{item.displayName}</span>
-                        //     <ExternalLink className="w-4 h-4 text-muted-foreground" />
+                        //     <ExternalLink className="size-4 text-muted-foreground" />
                         // </Link>
                     }
                 />

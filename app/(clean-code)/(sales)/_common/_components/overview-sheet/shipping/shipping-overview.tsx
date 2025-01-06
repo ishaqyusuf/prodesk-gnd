@@ -103,7 +103,7 @@ export function ShippingOverview({}) {
                             href={`/printer/sales?slugs=${mainCtx.overview.orderId}&mode=packing list&dispatchId=${shipping.id}`}
                             target="_blank"
                         >
-                            <Icons.print className="w-4 h-4 mr-2" />
+                            <Icons.print className="size-4 mr-2" />
                             <span>Print</span>
                         </Link>
                     </Button>

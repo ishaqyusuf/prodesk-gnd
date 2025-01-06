@@ -34,9 +34,9 @@ export function MobileOption({
                 href={href}
                 className="flex text-start flex-1 items-center"
             >
-                {Icon && <Icon className="w-4 h-4 mr-4" />}
+                {Icon && <Icon className="size-4 mr-4" />}
                 <p className="w-full">{label || children}</p>
-                {more && <Icons.chevronRight className="w-4 h-4" />}
+                {more && <Icons.chevronRight className="size-4" />}
             </LinkableNode>
         </Button>
     );

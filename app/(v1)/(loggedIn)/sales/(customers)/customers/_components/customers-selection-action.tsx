@@ -14,7 +14,7 @@ export default function CustomersBatchAction({ items }: { items }) {
         <>
             {items.length > 1 && (
                 <Btn onClick={mergeDuplicates} className="h-8">
-                    <Icons.Merge className="w-4 h-4 mr-2" />
+                    <Icons.Merge className="size-4 mr-2" />
                     Merge
                 </Btn>
             )}

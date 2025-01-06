@@ -200,7 +200,7 @@ function ShippingItemLine({
                     {itemForm?.selected ? (
                         <CheckCircle2Icon
                             className={cn(
-                                "w-4 h-4",
+                                "size-4",
                                 itemForm?.selected && "text-green-500"
                             )}
                         />

@@ -71,7 +71,7 @@ export default function Notification({}) {
                             notificationCount > 0 ? "p-1" : "p-1"
                         )}
                     >
-                        <Bell className="w-4 h-4 text-muted-foreground" />
+                        <Bell className="size-4 text-muted-foreground" />
                         {notificationCount > 0 && (
                             <Badge
                                 variant="default"
@@ -219,7 +219,7 @@ function NotificationItem({
                                 variant="secondary"
                                 size="icon"
                             >
-                                <Archive className="w-4 h-4" />
+                                <Archive className="size-4" />
                             </Btn>
                         </ToolTip>
                     </div>

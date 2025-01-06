@@ -18,6 +18,7 @@ import { __filters } from "../../utils/contants";
 import QueryTab from "@/app/(clean-code)/_common/query-tab";
 import { QueryTabAction } from "@/app/(clean-code)/_common/query-tab/query-tab-edit";
 import { Menu } from "@/components/(clean-code)/menu";
+import { openPayPortal } from "../pay-portal";
 
 export default function OrdersPageClient({
     filterFields,
@@ -72,9 +73,19 @@ export default function OrdersPageClient({
                         </div>
                         <div className="flex-1"></div>
                         <QueryTabAction />
+                        <Button
+                            onClick={() => {
+                                openPayPortal();
+                            }}
+                            variant="destructive"
+                            size="sm"
+                        >
+                            <Icons.dollar className="size-4 mr-2" />
+                            <span>Pay Portal</span>
+                        </Button>
                         <Button asChild size="sm">
                             <Link href="/sales-book/create-order">
-                                <Icons.add className="w-4 h-4 mr-2" />
+                                <Icons.add className="size-4 mr-2" />
                                 <span>New</span>
                             </Link>
                         </Button>

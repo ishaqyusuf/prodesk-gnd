@@ -43,7 +43,7 @@ export default function DeliveryTabIndex() {
                                 }}
                                 size={"sm"}
                             >
-                                <Icons.add className="w-4 h-4 mr-4" />
+                                <Icons.add className="size-4 mr-4" />
                                 <span>Create Delivery</span>
                             </Button>
                         </div>

@@ -151,7 +151,7 @@ function ActionBtn({ size = "sm", ...props }: ActionBtnProps) {
     const Content = ({}) => (
         <>
             {Icon && (
-                <Icon className={cn("w-4 h-4", props.label ? "mr-2" : "")} />
+                <Icon className={cn("size-4", props.label ? "mr-2" : "")} />
             )}
             {props.label}
         </>

@@ -98,7 +98,7 @@ export default function RolesTableShell({
                                 modal.open();
                             }}
                         >
-                            <Icons.add className="w-4 h-4 mr-4" />
+                            <Icons.add className="size-4 mr-4" />
                             <span>New</span>
                         </Button>
                     </>

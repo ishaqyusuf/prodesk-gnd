@@ -33,7 +33,7 @@ export default function TableExport({ type }: Props) {
                 </>
             ) : (
                 <Button size="sm" onClick={openExport} className="h-8">
-                    <Icons.Export className="w-4 h-4 mr-2" />
+                    <Icons.Export className="size-4 mr-2" />
                     Export
                 </Button>
             )}
