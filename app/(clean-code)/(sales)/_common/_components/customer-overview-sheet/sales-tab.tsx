@@ -17,7 +17,7 @@ export default function SalesTab() {
         <TabsContent value="sales">
             <div className="">
                 <div className="flex justify-end">
-                    <Button size="xs">
+                    <Button disabled size="xs">
                         <Icons.reciept className="mr-2 size-4" />
                         Report
                     </Button>

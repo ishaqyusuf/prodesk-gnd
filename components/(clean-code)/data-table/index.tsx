@@ -57,14 +57,25 @@ BaseProps<TData, TValue>) {
         </dataTableContext.Provider>
     );
 }
-function Header({ className, children }: { className?; children }) {
+function Header({
+    className,
+    children,
+    top = "sm",
+}: {
+    className?;
+    children;
+    top?: "sm" | "md" | "lg";
+}) {
     const ctx = useInfiniteDataTable();
     return (
         <div
             className={cn(
-                className,
+                "z-10 sticky  p-4 sm:px-8s",
+                top == "md" && "top-[60px]",
+                top == "sm" && "top-[60px]",
+                top == "lg" && "top-24",
                 "flex flex-col",
-                "z-10 sticky top-24   p-4 sm:px-8s"
+                className
             )}
             ref={ctx.topBarRef}
         >

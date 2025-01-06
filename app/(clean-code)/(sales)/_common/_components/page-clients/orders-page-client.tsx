@@ -65,7 +65,7 @@ export default function OrdersPageClient({
                         <Menu.Trash action={() => {}}>Delete</Menu.Trash>
                     </Menu>
                 </DataTable.BatchAction>
-                <DataTable.Header className="bg-white">
+                <DataTable.Header top="lg" className="bg-white">
                     <div className="flex justify-between items-end mb-2 gap-2 sm:sticky">
                         <div className="">
                             <QueryTab page="orders" />

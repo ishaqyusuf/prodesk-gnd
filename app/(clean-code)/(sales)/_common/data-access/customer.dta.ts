@@ -23,7 +23,17 @@ export async function getCustomersDta(query: CustomersQueryParams) {
         orderBy: {
             createdAt: "desc",
         },
-        include: {},
+        include: {
+            _count: {
+                select: {
+                    salesOrders: {
+                        where: {
+                            type: "order" as SalesType,
+                        },
+                    },
+                },
+            },
+        },
     });
     const pageInfo = await getPageInfo(query, where, prisma.customers);
     return {

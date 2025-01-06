@@ -5,6 +5,8 @@ import FPage from "@/components/(clean-code)/fikr-ui/f-page";
 import { constructMetadata } from "@/lib/(clean-code)/construct-metadata";
 import { getQueryClient } from "@/providers/get-query-client";
 import CustomersPageClient from "../../../_common/_components/page-clients/customers-page-client";
+import Portal from "@/components/_v1/portal";
+import NewFeatureBtn from "@/components/common/new-feature-btn";
 
 export async function generateMetadata({}) {
     return constructMetadata({
@@ -22,6 +24,9 @@ export default async function CustomersPage({ searchParams }) {
 
     return (
         <FPage className="" title="Customers">
+            <Portal nodeId={"navRightSlot"}>
+                <NewFeatureBtn href="/sales/customers">Old Site</NewFeatureBtn>
+            </Portal>
             <CustomersPageClient {...props} />
         </FPage>
     );

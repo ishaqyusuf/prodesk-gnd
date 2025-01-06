@@ -13,6 +13,7 @@ import QueryTab from "@/app/(clean-code)/_common/query-tab";
 import { QueryTabAction } from "@/app/(clean-code)/_common/query-tab/query-tab-edit";
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/_v1/icons";
+import { Badge } from "@/components/ui/badge";
 
 export default function CustomersPageClient(props: InfiniteDataTablePageProps) {
     const table = useTableCompose({
@@ -20,6 +21,7 @@ export default function CustomersPageClient(props: InfiniteDataTablePageProps) {
             return [
                 ctx.Column("Name", "name", NameCell),
                 ctx.Column("Phone", "phone", PhoneCell),
+                ctx.Column("Sales", "sales", SalesCell),
                 ...__filters().customers.filterColumns,
             ];
         },
@@ -76,6 +78,17 @@ function PhoneCell({ item }: ItemProps) {
     return (
         <TCell>
             <TCell.Secondary>{item.phoneNo}</TCell.Secondary>
+        </TCell>
+    );
+}
+function SalesCell({ item }: ItemProps) {
+    return (
+        <TCell>
+            <TCell.Secondary>
+                <Badge variant="outline" className="font-mono">
+                    {item._count.salesOrders}
+                </Badge>
+            </TCell.Secondary>
         </TCell>
     );
 }

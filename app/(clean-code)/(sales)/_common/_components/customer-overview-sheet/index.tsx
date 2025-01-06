@@ -2,7 +2,7 @@ import Modal from "@/components/common/modal";
 import { useEffect } from "react";
 import { customerStore } from "./store";
 import { getCustomerOverviewUseCase } from "../../use-case/customer-use-case";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import SalesTab from "./sales-tab";
@@ -18,8 +18,6 @@ export default function CustomerOverviewSheet({ phoneNo }) {
     useEffect(() => {
         store.clear();
         getCustomerOverviewUseCase(phoneNo).then((resp) => {
-            console.log(resp);
-
             store.initialize(resp);
         });
     }, []);
