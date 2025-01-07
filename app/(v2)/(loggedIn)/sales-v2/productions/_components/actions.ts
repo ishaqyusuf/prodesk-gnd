@@ -60,6 +60,8 @@ export async function _getProductionList({ query, production = false }: Props) {
             ],
         },
     };
+    const assignedToId = !production ? undefined : authId;
+
     const where: Prisma.SalesOrdersWhereInput =
         query?.dueToday || query.pastDue
             ? {
@@ -68,8 +70,11 @@ export async function _getProductionList({ query, production = false }: Props) {
                   assignments: {
                       some: {
                           deletedAt: null,
-                          assignedToId: !production ? undefined : authId,
+                          assignedToId,
                           dueDate,
+                          qtyAssigned: {
+                              gt: 0,
+                          },
                       },
                   },
               }
@@ -83,6 +88,7 @@ export async function _getProductionList({ query, production = false }: Props) {
                             {
                                 assignments: {
                                     some: {
+                                        deletedAt: null,
                                         assignedTo: {
                                             name: searchQuery,
                                         },
@@ -108,6 +114,9 @@ export async function _getProductionList({ query, production = false }: Props) {
                           ? {
                                 deletedAt: null,
                                 assignedToId: authId,
+                                qtyAssigned: {
+                                    gt: 0,
+                                },
                                 // dueDate,
                             }
                           : {},
@@ -115,6 +124,7 @@ export async function _getProductionList({ query, production = false }: Props) {
 
                   items: itemsFilter,
               };
+
     const { pageCount, skip, take } = await paginatedAction(
         query,
         prisma.salesOrders,
@@ -152,6 +162,7 @@ export async function _getProductionList({ query, production = false }: Props) {
             assignments: {
                 where: {
                     deletedAt: null,
+                    assignedToId,
                     item: {
                         deletedAt: null,
                     },

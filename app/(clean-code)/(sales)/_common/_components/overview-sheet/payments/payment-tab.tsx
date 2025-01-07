@@ -1,7 +1,6 @@
 import { Table, TableBody, TableRow } from "@/components/ui/table";
 import { TableCell } from "@/app/_components/data-table/table-cells";
 import { Icons } from "@/components/_v1/icons";
-import { usePayment } from "./payment-hooks";
 import { TCell } from "@/components/(clean-code)/data-table/table-cells";
 import { Progress } from "@/components/(clean-code)/progress";
 import { Menu } from "@/components/(clean-code)/menu";

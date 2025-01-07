@@ -1,7 +1,7 @@
 "use client";
 
 import { ServerPromiseType } from "@/types";
-import React from "react";
+import React, { useEffect } from "react";
 import { _getProductionList } from "../actions";
 import useDataTableColumn from "@/components/common/data-table/columns/use-data-table-columns";
 import { DataTable2 } from "@/components/_v1/data-table/data-table-2";
@@ -24,6 +24,7 @@ export default function ProductionList({
 }: Props) {
     const { data, pageCount }: DataServerPromiseType["Response"] =
         React.use(promise);
+    // useEffect(() => {}, [data]);
     const table = useDataTableColumn(
         data,
         (ctx) => [

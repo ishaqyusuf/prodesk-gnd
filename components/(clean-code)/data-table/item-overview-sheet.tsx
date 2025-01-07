@@ -44,9 +44,7 @@ Props) {
             // modal={false}
             open={!!selectedRowKey}
             onOpenChange={(e) => {
-                console.log(e);
                 if (!e) refresh.init();
-
                 table.toggleAllRowsSelected(false);
             }}
         >

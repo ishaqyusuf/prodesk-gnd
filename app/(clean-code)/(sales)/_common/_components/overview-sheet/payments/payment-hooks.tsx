@@ -126,6 +126,7 @@ const usePaymentContext = (ctx) => {
                     amount: +formData.amount,
                     paymentMode: formData.paymentMethod,
                     salesIds: [ctx.item.id],
+                    description: "",
                 });
                 _ctx.closePaymentForm();
                 toast.success("Payment Applied");

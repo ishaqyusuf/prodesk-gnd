@@ -19,6 +19,7 @@ import QueryTab from "@/app/(clean-code)/_common/query-tab";
 import { QueryTabAction } from "@/app/(clean-code)/_common/query-tab/query-tab-edit";
 import { Menu } from "@/components/(clean-code)/menu";
 import { openPayPortal } from "../pay-portal";
+import { openTxForm } from "../tx-form";
 
 export default function OrdersPageClient({
     filterFields,
@@ -75,7 +76,7 @@ export default function OrdersPageClient({
                         <QueryTabAction />
                         <Button
                             onClick={() => {
-                                openPayPortal();
+                                openTxForm({});
                             }}
                             variant="destructive"
                             size="sm"

@@ -16,6 +16,7 @@ import { cn } from "@/lib/utils";
 import { Label } from "@/components/ui/label";
 import { formatMoney } from "@/lib/use-number";
 import Money from "@/components/_v1/money";
+import { openTxForm } from "../tx-form";
 
 export default function SalesTab() {
     const ctx = customerStore();
@@ -108,7 +109,22 @@ export default function SalesTab() {
                 <Label>
                     <Money value={ctx.total} />
                 </Label>
-                <Button>Pay</Button>
+                <Button
+                    onClick={() => {
+                        openTxForm({
+                            paymentMethod: "terminal",
+                            phoneNo: ctx.phoneNo,
+                            payables: Object.entries(ctx.selections || {})
+                                .filter(([k, v]) => v.checked)
+                                .map(([k, v]) => ({
+                                    id: v.id,
+                                    amountDue: v.amount,
+                                })),
+                        });
+                    }}
+                >
+                    Pay
+                </Button>
             </div>
         </div>
     );

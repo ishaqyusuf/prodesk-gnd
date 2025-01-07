@@ -12,6 +12,8 @@ import { Form } from "@/components/ui/form";
 import FormSelect from "@/components/common/controls/form-select";
 import AutoComplete from "@/components/_v1/common/auto-complete";
 import { toast } from "sonner";
+import { usePayment } from "../overview-sheet/payments/payment-hooks";
+import { TxForm } from "../tx-form";
 
 export const openPayPortal = (phoneNo?) =>
     _modal.openSheet(<CustomerOverviewSheet phoneNo={phoneNo} />);
@@ -45,6 +47,7 @@ export default function CustomerOverviewSheet({ phoneNo }) {
                         subtitle={store.profile.phoneNo}
                     />
                     <SalesTab />
+                    <TxForm />
                 </>
             )}
         </Modal.Content>
@@ -91,4 +94,8 @@ function CustomerSelect({}) {
             </div>
         </Form>
     );
+}
+function Payment({}) {
+    const ctx = customerStore();
+    const payCtx = usePayment({});
 }
