@@ -20,6 +20,7 @@ export async function getCustomerOverviewUseCase(phoneNo) {
         { title: "Quotes", badge: salesInfo.quotes.length },
         { title: "Payments" },
     ];
+
     return {
         profile,
         salesInfo,

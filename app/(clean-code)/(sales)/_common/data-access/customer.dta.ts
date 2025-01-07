@@ -9,6 +9,7 @@ import {
 } from "@/app/(clean-code)/_common/utils/db-utils";
 import { SalesType } from "../../types";
 import { sum } from "@/lib/utils";
+import { getCustomerWalletInfoDta } from "./wallet/wallet-dta";
 
 export type CustomersQueryParams = Pick<SearchParamsType, "search" | "address">;
 export type GetCustomersDta = AsyncFnType<typeof getCustomersDta>;
@@ -135,8 +136,10 @@ export async function getCustomerSalesInfoDta(phoneNo) {
     });
     const orders = salesList.filter((a) => a.type == ("order" as SalesType));
     const quotes = salesList.filter((a) => a.type == ("quote" as SalesType));
+    const wallet = await getCustomerWalletInfoDta(phoneNo);
     return {
         quotes,
+        wallet,
         orders: orders.map((order) => {
             return {
                 ...order,

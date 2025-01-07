@@ -20,7 +20,8 @@ export async function createTransactionDta(data: SalesTransaction) {
             const tx = await fundCustomerWalletDta(
                 wallet.id,
                 balance,
-                data.paymentMode
+                data.paymentMode,
+                data.description
             );
             const transactionIds = await Promise.all(
                 saleslist.map(async (orderItem) => {

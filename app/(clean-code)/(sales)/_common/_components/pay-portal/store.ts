@@ -7,6 +7,14 @@ import {
 } from "../../use-case/customer-use-case";
 
 const defaultValues = {
+    selections: {} as {
+        [id in string]: {
+            id: number;
+            amount: number;
+            checked: boolean;
+        };
+    },
+    total: 0,
     loading: true,
     phoneNo: null,
     customersList: [] as GetCustomersSelectListUseCase,
@@ -32,6 +40,7 @@ function funcs(set: ZusFormSet) {
             set((state) => {
                 return {
                     ...data,
+
                     phoneNo,
                 };
             }),

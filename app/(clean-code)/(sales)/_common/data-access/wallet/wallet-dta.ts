@@ -16,17 +16,43 @@ export async function getCustomerWalletDta(accountNo) {
     });
     return wallet;
 }
-export async function fundCustomerWalletDta(accountId, amount, paymentMethod) {
+export async function fundCustomerWalletDta(
+    accountId,
+    amount,
+    paymentMethod,
+    description
+) {
     const tx = await prisma.customerTransaction.create({
         data: {
             amount,
             walletId: accountId,
             authorId: await userId(),
             paymentMethod,
+            description,
             status: "success" as SalesPaymentStatus,
         },
     });
     return tx;
+}
+export async function getCustomerWalletInfoDta(accountId) {
+    const wallet = await getCustomerWalletDta(accountId);
+    let customerBalance = await getWalletBalance(wallet.id);
+    return {
+        id: wallet.id,
+        customerBalance,
+    };
+}
+export async function getWalletBalance(walletId) {
+    const tx = await prisma.customerTransaction.findMany({
+        where: {
+            walletId,
+            status: "success",
+        },
+        select: {
+            amount: true,
+        },
+    });
+    return sum(tx, "amount");
 }
 export async function applyPaymentDta(walletId, transactionIds) {
     const transactions = await prisma.salesPayments.findMany({

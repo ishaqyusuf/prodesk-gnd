@@ -4,14 +4,8 @@ import { customerStore } from "./store";
 import {
     getCustomerOverviewUseCase,
     getCustomersSelectListUseCase,
-    GetCustomersSelectListUseCase,
 } from "../../use-case/customer-use-case";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Badge } from "@/components/ui/badge";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import SalesTab from "./sales-tab";
-import QuotesTab from "./quotes-tab";
-import PaymentsTab from "./payments-tab";
 import { _modal } from "@/components/common/modal/provider";
 import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
