@@ -18,6 +18,8 @@ const data = {
     customers: [] as GetCustomersSelectListUseCase,
     selections: {} as { [orderId in string]: boolean },
     totalPay: 0,
+    inProgress: false,
+    terminals: [],
 };
 type Action = ReturnType<typeof funcs>;
 type Data = typeof data;

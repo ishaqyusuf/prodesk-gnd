@@ -110,7 +110,6 @@ const usePaymentContext = (ctx) => {
                 })
                 .catch((e) => {
                     toast.error(e.message);
-
                     form.setError("paymentMethod", {
                         message: e.message,
                     });

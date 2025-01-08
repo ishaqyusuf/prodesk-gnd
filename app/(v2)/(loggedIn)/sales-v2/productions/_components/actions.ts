@@ -72,9 +72,23 @@ export async function _getProductionList({ query, production = false }: Props) {
                           deletedAt: null,
                           assignedToId,
                           dueDate,
-                          qtyAssigned: {
-                              gt: 0,
-                          },
+                          OR: [
+                              {
+                                  qtyAssigned: {
+                                      gt: 0,
+                                  },
+                              },
+                              {
+                                  rhQty: {
+                                      gt: 0,
+                                  },
+                              },
+                              {
+                                  lhQty: {
+                                      gt: 0,
+                                  },
+                              },
+                          ],
                       },
                   },
               }
