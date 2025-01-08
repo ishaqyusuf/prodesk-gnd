@@ -5,6 +5,7 @@ import {
     fundCustomerWalletDta,
     getCustomerWalletDta,
 } from "./wallet-dta";
+import { getCustomerIdByPhoneNo } from "../customer.dta";
 
 // transactions -> payments -> checkout
 export async function createTransactionDta(data: SalesTransaction) {
@@ -30,10 +31,15 @@ export async function createTransactionDta(data: SalesTransaction) {
                             ? orderItem.amountDue
                             : balance;
                     balance -= payAmount;
+                    let customerId =
+                        orderItem.customerId ||
+                        (await getCustomerIdByPhoneNo(data.accountNo));
+                    if (!customerId)
+                        throw Error(`Customer not found for ${data.accountNo}`);
                     if (payAmount) {
                         const res = await createSalesPaymentTransactionDta({
                             amount: payAmount,
-                            customerId: orderItem.customerId,
+                            customerId,
                             orderId: orderItem.id,
                             paymentMethod: data.paymentMode,
                             transactionId: tx.id,

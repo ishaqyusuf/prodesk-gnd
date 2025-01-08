@@ -70,13 +70,6 @@ function CustomerSelect({}) {
     return (
         <Form {...form}>
             <div className="h-[90vh] flex flex-col sjustify-center items-centers">
-                {/* <FormSelect
-                    className="w-2/3s"
-                    control={form.control}
-                    name="phoneNo"
-                    label={"Select Customer"}
-                    options={s.customersList}
-                /> */}
                 <AutoComplete
                     onSelect={(value: any) => {
                         const phone = value.data?.value;

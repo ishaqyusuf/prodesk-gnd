@@ -182,3 +182,13 @@ export async function getCustomerPaymentInfo(phoneNo) {
         orders,
     };
 }
+
+export async function getCustomerIdByPhoneNo(phoneNo) {
+    return (
+        await prisma.customers.findFirst({
+            where: {
+                phoneNo,
+            },
+        })
+    )?.id;
+}

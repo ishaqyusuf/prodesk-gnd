@@ -36,6 +36,7 @@ export type TableCellProps = VariantProps<typeof cellVariants>;
 function Cell({
     children,
     href,
+    className,
     ...rest
 }: { children?; href? } & TdHTMLAttributes<HTMLTableCellElement> &
     TableCellProps) {
@@ -43,17 +44,14 @@ function Cell({
 
     if (href)
         return (
-            <TCellBase
-                {...rest}
-                className={cn(cellVariants(cv), rest?.className)}
-            >
+            <TCellBase {...rest} className={cn(cellVariants(cv), className)}>
                 <Link className="hover:underline" href={href}>
                     {children}
                 </Link>
             </TCellBase>
         );
     return (
-        <TCellBase {...rest} className={cn(cellVariants(cv), rest?.className)}>
+        <TCellBase {...rest} className={cn(cellVariants(cv), className)}>
             {children}
         </TCellBase>
     );

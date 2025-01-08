@@ -11,6 +11,7 @@ import {
 export type GetCustomerOverviewUseCase = AsyncFnType<
     typeof getCustomerOverviewUseCase
 >;
+
 export async function getCustomerOverviewUseCase(phoneNo) {
     const profile = await getCustomerProfileDta(phoneNo);
     const salesInfo = await getCustomerSalesInfoDta(phoneNo);

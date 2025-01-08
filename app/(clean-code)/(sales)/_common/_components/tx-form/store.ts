@@ -1,7 +1,11 @@
-import { dotObject, dotSet } from "@/app/(clean-code)/_common/utils/utils";
+import { dotSet } from "@/app/(clean-code)/_common/utils/utils";
 import { FieldPath, FieldPathValue } from "react-hook-form";
 import { create } from "zustand";
 import { PaymentMethods } from "../../../types";
+import {
+    GetCustomerOverviewUseCase,
+    GetCustomersSelectListUseCase,
+} from "../../use-case/customer-use-case";
 
 export interface Payables {
     id;
@@ -10,8 +14,10 @@ export interface Payables {
 const data = {
     paymentMethod: null as PaymentMethods,
     phoneNo: null,
-    payables: [] as Payables[],
-    totalPay: null,
+    customerProfiles: {} as { [phoneNo in string]: GetCustomerOverviewUseCase },
+    customers: [] as GetCustomersSelectListUseCase,
+    selections: {} as { [orderId in string]: boolean },
+    totalPay: 0,
 };
 type Action = ReturnType<typeof funcs>;
 type Data = typeof data;
@@ -26,8 +32,11 @@ function funcs(set: ZusFormSet) {
                 ...state,
             })),
         reset: () =>
-            set(() => ({
+            set((state) => ({
                 ...data,
+                customers: state.customers,
+                phoneNo: state.phoneNo,
+                paymentMethod: state.paymentMethod,
             })),
         dotUpdate: <K extends FieldPath<Data>>(
             k: K,
