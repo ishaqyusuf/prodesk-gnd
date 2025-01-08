@@ -14,6 +14,7 @@ import { notFound, redirect } from "next/navigation";
 import { SalesOverview } from "./type";
 import AuthGuard from "@/app/(v2)/(loggedIn)/_components/auth-guard";
 import TimelineSection from "@/app/(v2)/(loggedIn)/sales-v2/overview/components/timeline";
+import { prisma } from "@/db";
 
 export const metadata: Metadata = {
     title: "Order Overview",
@@ -21,6 +22,21 @@ export const metadata: Metadata = {
 };
 
 export default async function SalesOrderPage({ params: { slug } }) {
+    const s = await prisma.salesOrders.findFirst({
+        where: {
+            id: 3263,
+        },
+        select: {
+            payments: {
+                where: {
+                    deletedAt: {},
+                },
+                select: {
+                    id: true,
+                },
+            },
+        },
+    });
     const order: SalesOverview = (await getOrderAction(slug)) as any;
     if (!order) return notFound();
     metadata.description = order.orderId;

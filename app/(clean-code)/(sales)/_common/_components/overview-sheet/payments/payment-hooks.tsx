@@ -51,15 +51,16 @@ const usePaymentContext = (ctx) => {
         load();
     }, []);
     async function load() {
-        getSalesPaymentUseCase(orderId)
-            .then((result) => {
-                setData(result);
-                setReady(true);
-                _ctx.orderId = orderId;
-            })
-            .catch((e) => {
-                toast.error(e.message);
-            });
+        if (ctx.item.type == "order")
+            getSalesPaymentUseCase(orderId)
+                .then((result) => {
+                    setData(result);
+                    setReady(true);
+                    _ctx.orderId = orderId;
+                })
+                .catch((e) => {
+                    toast.error(e.message);
+                });
     }
     // const [waitingForPayment, setWaitingForPayment] = useState(false);
     useEffect(() => {
