@@ -70,7 +70,6 @@ export async function submitAssignmentUseCase(
     data: AssignmentSubmitForm,
     produceable
 ) {
-    // data.
     await submitAssignmentDta(data, produceable);
 }
 export async function deleteAssignmentUseCase(id, produceable) {

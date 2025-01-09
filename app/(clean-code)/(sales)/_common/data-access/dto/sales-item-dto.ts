@@ -390,9 +390,7 @@ function itemAnalytics(
             control.shippable ? data.totalQty.total : 0
         ),
     };
-    if (!produceable) {
-        console.log("NOT PRODUCEABLE", assignments.length);
-    }
+
     if (produceable || deliverable) {
         const { analytics, totalQty } = data;
         const dynamicKey = data.totalQty.lh ? "lh" : "qty";

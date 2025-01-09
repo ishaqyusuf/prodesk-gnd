@@ -41,11 +41,19 @@ const useShippingFormCtx = (ctx: ReturnType<typeof useItemProdViewContext>) => {
         context = null;
         return null;
     }
+    // let _items = shipping?.items?.map(shippingItem => {
+
+    // })
     let items = shippingOverview.dispatchableItemList
         .map((item) => {
             const deliveries = shipping.items.filter(
-                (i) => i.itemId == item.id
+                (i) =>
+                    i.itemId == item.id &&
+                    item.assignments.some((a) =>
+                        a.submissions.some((s) => s.id == i.submissionId)
+                    )
             );
+
             const [d1, d2, ...rest] = deliveries;
             let qty = d2 ? qtyDiff(d1.qty, d2.qty, true) : d1?.qty;
             rest?.map((r) => {
