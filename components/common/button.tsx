@@ -28,14 +28,11 @@ export default function Button({
         } else onClick?.(e);
     }
     return (
-        <BaseButton
-            className={cn(props.className, "relative")}
-            onClick={_action}
-            {...props}
-        >
+        <BaseButton className={cn("relative")} onClick={_action} {...props}>
             <div
                 className={cn(
                     "inline-flex items-center",
+                    props.className,
                     loading && "opacity-0"
                 )}
             >

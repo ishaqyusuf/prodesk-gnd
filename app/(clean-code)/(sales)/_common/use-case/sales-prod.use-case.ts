@@ -64,7 +64,8 @@ export async function createItemAssignmentUseCase(
     // await _revalidate('sales')
     revalidatePath("/sales-book/orders");
 }
-export type AssignmentSubmitForm = OrderProductionSubmissions;
+export type AssignmentSubmitForm =
+    Prisma.OrderProductionSubmissionsCreateManyInput;
 export async function submitAssignmentUseCase(
     data: AssignmentSubmitForm,
     produceable

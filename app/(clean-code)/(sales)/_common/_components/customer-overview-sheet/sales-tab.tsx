@@ -40,6 +40,7 @@ export default function SalesTab() {
                     <TableHeader>
                         <TableHead>Date</TableHead>
                         <TableHead>Order No</TableHead>
+                        <TableHead>P.O</TableHead>
                         <TableHead>Amount</TableHead>
                         <TableHead>Pending</TableHead>
                     </TableHeader>
@@ -52,6 +53,11 @@ export default function SalesTab() {
                                 <TCell>
                                     <TCell.Secondary className="uppercase font-mono">
                                         {order.orderId}
+                                    </TCell.Secondary>
+                                </TCell>
+                                <TCell>
+                                    <TCell.Secondary className="uppercase font-mono">
+                                        {order.po}
                                     </TCell.Secondary>
                                 </TCell>
                                 <TCell align="right">

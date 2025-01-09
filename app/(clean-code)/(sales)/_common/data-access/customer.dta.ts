@@ -7,7 +7,7 @@ import {
     getPageInfo,
     pageQueryFilter,
 } from "@/app/(clean-code)/_common/utils/db-utils";
-import { SalesType } from "../../types";
+import { SalesMeta, SalesType } from "../../types";
 import { sum } from "@/lib/utils";
 import { getCustomerWalletInfoDta } from "./wallet/wallet-dta";
 
@@ -106,33 +106,42 @@ export async function getCustomerOverviewDta(phoneNo) {
     const customerInfo = await getCustomerSalesInfoDta(phoneNo);
 }
 export async function getCustomerSalesInfoDta(phoneNo) {
-    const salesList = await prisma.salesOrders.findMany({
-        where: {
-            OR: [
-                {
-                    customer: { phoneNo },
-                },
-                {
-                    billingAddress: { phoneNo },
-                },
-                {
-                    shippingAddress: { phoneNo },
-                },
-            ],
-        },
-        select: {
-            id: true,
-            amountDue: true,
-            type: true,
-            orderId: true,
-            stat: true,
-            grandTotal: true,
-            createdAt: true,
-        },
-        orderBy: {
-            createdAt: "desc",
-        },
-        // take: 20,
+    const salesList = (
+        await prisma.salesOrders.findMany({
+            where: {
+                OR: [
+                    {
+                        customer: { phoneNo },
+                    },
+                    {
+                        billingAddress: { phoneNo },
+                    },
+                    {
+                        shippingAddress: { phoneNo },
+                    },
+                ],
+            },
+            select: {
+                id: true,
+                amountDue: true,
+                type: true,
+                orderId: true,
+                stat: true,
+                grandTotal: true,
+                createdAt: true,
+                meta: true,
+            },
+            orderBy: {
+                createdAt: "desc",
+            },
+            // take: 20,
+        })
+    )?.map((s) => {
+        const { meta, ...rest } = s;
+        return {
+            ...s,
+            po: (meta as any as SalesMeta)?.po,
+        };
     });
     const orders = salesList.filter((a) => a.type == ("order" as SalesType));
     const quotes = salesList.filter((a) => a.type == ("quote" as SalesType));

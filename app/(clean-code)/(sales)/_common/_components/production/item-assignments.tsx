@@ -16,6 +16,8 @@ import {
 import { Calendar } from "@/components/ui/calendar";
 import { Menu } from "@/components/(clean-code)/menu";
 import {
+    deleteAssignmentSubmissionUseCase,
+    deleteAssignmentUseCase,
     submitAssignmentUseCase,
     updateAssignmentDueDateUseCase,
 } from "../../use-case/sales-prod.use-case";
@@ -24,6 +26,8 @@ import { zSalesOverview } from "../overview-sheet/utils/store";
 import { SubmitForm } from "./submit-form";
 import { LineAssignment } from "../../data-access/dto/sales-item-dto";
 import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 
 export function ItemAssignments({}) {
     const ctx = useSalesItem();
@@ -44,11 +48,31 @@ const AssignmentContext = createContext<ReturnType<typeof useAssingmentCtx>>(
 );
 function useAssingmentCtx(assignment: LineAssignment) {
     const [submit, setSubmit] = useState(false);
+    const pending = assignment.pending;
+    console.log(pending);
+
     const form = useForm({
+        resolver: zodResolver(
+            z.object({
+                qty: z
+                    .number()
+                    .min(0)
+                    .max(pending?.qty || 0),
+                lhQty: z
+                    .number()
+                    .min(0)
+                    .max(pending?.lh || 0),
+                rhQty: z
+                    .number()
+                    .min(0)
+                    .max(pending?.rh || 0),
+                note: z.string().nullable(),
+            })
+        ),
         defaultValues: {
-            qty: 0,
-            lhQty: 0,
-            rhQty: 0,
+            qty: pending.qty,
+            lhQty: pending.lh,
+            rhQty: pending.rh,
             note: "",
         },
     });
@@ -72,7 +96,7 @@ function useAssingmentCtx(assignment: LineAssignment) {
 export const useAssignment = () => useContext(AssignmentContext);
 function Assignment({ assignment, index }) {
     const ctx = useAssingmentCtx(assignment);
-
+    const itemCtx = useSalesItem();
     return (
         <AssignmentContext.Provider value={ctx}>
             <div className="" key={assignment.id}>
@@ -99,12 +123,21 @@ function Assignment({ assignment, index }) {
                             Submit
                         </Button>
                         <Admin>
-                            <ConfirmBtn trash />
+                            <ConfirmBtn
+                                onClick={async (e) => {
+                                    await deleteAssignmentUseCase(
+                                        assignment.id,
+                                        itemCtx.item?.analytics?.control
+                                            ?.produceable
+                                    );
+                                }}
+                                trash
+                            />
                         </Admin>
                     </div>
                 </div>
                 {ctx.submit && <SubmitForm />}
-                <div className="mx-4 sm:mx-8">
+                <div className="mx-4 flex flex-col-reverse sm:mx-8">
                     {assignment.submissions.map((submission) => (
                         <div
                             key={submission.id}
@@ -115,7 +148,16 @@ function Assignment({ assignment, index }) {
                                 {formatDate(submission.date)}
                             </div>
                             <div className="flex-1"></div>
-                            <ConfirmBtn trash />
+                            <ConfirmBtn
+                                onClick={async (e) => {
+                                    await deleteAssignmentSubmissionUseCase(
+                                        submission.id,
+                                        itemCtx.item?.analytics?.control
+                                            ?.produceable
+                                    );
+                                }}
+                                trash
+                            />
                         </div>
                     ))}
                 </div>
