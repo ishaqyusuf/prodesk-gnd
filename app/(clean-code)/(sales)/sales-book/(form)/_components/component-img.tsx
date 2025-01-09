@@ -10,9 +10,11 @@ interface Props {
     svg?;
     url?: string;
     alt?: string;
+    noHover?: boolean;
 }
 export function ComponentImg({
     aspectRatio,
+    noHover,
     src,
     svg,
     alt = "no-alt",
@@ -21,7 +23,7 @@ export function ComponentImg({
     const Wrapper = ({ children }) => (
         <motion.div
             className="flex flex-1 h-full flex-col items-center space-y-2 justify-center relative "
-            whileHover={{ scale: 1.01 }}
+            whileHover={noHover ? undefined : { scale: 1.01 }}
             transition={{ type: "spring", stiffness: 300 }}
         >
             {children}

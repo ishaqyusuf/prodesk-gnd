@@ -1,7 +1,5 @@
-import { SalesType } from "@/app/(clean-code)/(sales)/types";
 import { useSalesOverview } from "../overview-provider";
 import { Menu } from "@/components/(clean-code)/menu";
-import { Move } from "lucide-react";
 import { openLink } from "@/lib/open-link";
 import { SalesPrintProps } from "@/app/(v2)/printer/sales/page";
 import { toast } from "sonner";

@@ -24,6 +24,7 @@ export function composeStepRouting(fdata: LoadSalesFormData) {
                 id: number;
                 title: string;
                 redirectUid: string;
+                img: string;
             }[];
         };
     } = {};
@@ -51,6 +52,7 @@ export function composeStepRouting(fdata: LoadSalesFormData) {
                 id: p.id,
                 variations: p.meta?.variations || [],
                 redirectUid: p.redirectUid,
+                img: p.product?.img || p.door?.img,
             })),
         };
     });

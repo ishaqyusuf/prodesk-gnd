@@ -92,11 +92,13 @@ export async function getStepsForRoutingDta() {
                         select: {
                             title: true,
                             value: true,
+                            img: true,
                         },
                     },
                     door: {
                         select: {
                             title: true,
+                            img: true,
                         },
                     },
                 },

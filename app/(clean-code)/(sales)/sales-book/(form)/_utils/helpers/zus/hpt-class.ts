@@ -27,16 +27,20 @@ export class HptClass extends GroupFormClass {
         const resp = {
             doors: doors.map((door) => {
                 const priceModel = this.getDoorPriceModel(door.uid);
+
                 return {
                     ...door,
                     sizeList: priceModel.heightSizeList?.map((hsl) => {
                         const path = `${door.uid}-${hsl.size}`;
                         const selected = this.isDoorSelected(path);
+                        const basePrice =
+                            priceModel.formData?.priceVariants?.[hsl.size]
+                                ?.price;
                         return {
                             path,
                             title: hsl.size,
-                            basePrice:
-                                priceModel.formData?.priceVariants?.[path],
+                            basePrice,
+                            salesPrice: this.calculateSales(basePrice),
                             selected,
                         };
                     }),
@@ -96,7 +100,7 @@ export class HptClass extends GroupFormClass {
             this.dotUpdateGroupItemFormPath(path, "qty.total", "");
         } else {
             const componentPrice = this.getComponentPrice();
-            const salesPrice = this.calculateSales(size.basePrice?.price);
+            const salesPrice = size.salesPrice; //this.calculateSales(size.basePrice?.price);
             const estimatedComponentPrice = formatMoney(
                 salesPrice + componentPrice
             );
@@ -112,7 +116,7 @@ export class HptClass extends GroupFormClass {
                 pricing: {
                     addon: "",
                     itemPrice: {
-                        basePrice: size.basePrice?.price,
+                        basePrice: size.basePrice,
                         salesPrice,
                     },
                     customPrice: "",
