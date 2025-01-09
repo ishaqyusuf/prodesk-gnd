@@ -14,7 +14,7 @@ export const useTx = () => {
             })
         ),
         defaultValues: {
-            amount: sum(store.payables, "amountDue"),
+            // amount: sum(store.payables, "amountDue"),
             paymentMethod: store.paymentMethod,
             deviceId: null,
             enableTip: false,

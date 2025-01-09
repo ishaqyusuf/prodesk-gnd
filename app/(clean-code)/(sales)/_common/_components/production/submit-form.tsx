@@ -85,6 +85,7 @@ function QtyInput({ label }) {
                     }}
                     defaultValue={qty}
                     className="border-0 border-b w-16 "
+                    inputMode="numeric"
                     type="number"
                 />
                 <Button size="xs" variant="link">
