@@ -14,6 +14,9 @@ import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
 import dayjs from "dayjs";
 import { useSearchParams } from "next/navigation";
+import { Menu } from "@/components/(clean-code)/menu";
+import { PrintAction } from "../../../_common/_components/overview-sheet/footer/print.action";
+import { useMemo } from "react";
 
 export function FormHeader({ sticky }: { sticky: Sticky }) {
     const zus = useFormDataStore();
@@ -40,6 +43,17 @@ export function FormHeader({ sticky }: { sticky: Sticky }) {
 
         zus.init(zhInitializeState(data));
     }
+    const printData = useMemo(() => {
+        return zus.metaData.id
+            ? {
+                  item: {
+                      type: zus.metaData.type,
+                      slug: zus.metaData.salesId,
+                      dispatchList: [],
+                  },
+              }
+            : null;
+    }, [zus.metaData]);
     const searchParams = useSearchParams();
     async function save() {
         const { kvFormItem, kvStepForm, metaData, sequence } = zus;
@@ -119,8 +133,8 @@ export function FormHeader({ sticky }: { sticky: Sticky }) {
                 ))}
             </div>
             <div className="flex-1" />
-            <div className="flex gap-4">
-                {isOld > 0 && (
+            <div className="flex gap-4 px-4 py-2 items-center">
+                {/* {isOld > 0 && (
                     <Link
                         className={cn(
                             buttonVariants({
@@ -131,9 +145,9 @@ export function FormHeader({ sticky }: { sticky: Sticky }) {
                     >
                         Open In Old Version
                     </Link>
-                )}
+                )} */}
                 <Button
-                    size="default"
+                    size="xs"
                     icon="settings"
                     onClick={() => {
                         _modal.openSheet(<FormSettingsModal />);
@@ -142,15 +156,16 @@ export function FormHeader({ sticky }: { sticky: Sticky }) {
                 >
                     <span className="">Settings</span>
                 </Button>
-                <Button
-                    icon="save"
-                    size="default"
-                    action={save}
-                    variant="default"
-                >
+                <Button icon="save" size="xs" action={save} variant="default">
                     {/* <Icons.save className="size-4 mr-4" /> */}
                     <span className="">Save</span>
                 </Button>
+                {printData && (
+                    <Menu>
+                        <PrintAction data={printData} />
+                        <PrintAction pdf data={printData} />
+                    </Menu>
+                )}
             </div>
         </div>
     );

@@ -9,10 +9,12 @@ import { salesPdf } from "@/app/(v2)/printer/_action/sales-pdf";
 
 interface Props {
     pdf?: boolean;
+    data?: {};
 }
-export function PrintAction({ pdf }: Props) {
-    const ctx = useSalesOverview();
-    const dispatchList = ctx.item.dispatchList;
+export function PrintAction({ data, pdf }: Props) {
+    let ctx = useSalesOverview();
+    if (data) ctx = data as any;
+    const dispatchList = ctx.item.dispatchList || [];
     const type = ctx.item.type;
     function print(params?: SalesPrintProps["searchParams"]) {
         const query = {

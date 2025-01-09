@@ -85,7 +85,7 @@ export default function SalesPaymentTableShell({
                             <Money value={row.original.amount} />
                         </PrimaryCellContent>
                         <SecondaryCellContent>
-                            {row.original.meta.checkNo}
+                            {row.original.meta?.checkNo}
                         </SecondaryCellContent>
                     </Cell>
                 ),
