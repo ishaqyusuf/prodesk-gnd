@@ -51,6 +51,7 @@ export class ItemHelperClass {
 
         const updateData = {
             meta,
+            dykeDescription: formItem?.title,
         } satisfies Prisma.SalesOrderItemsUpdateInput;
         if (!salesItemId) {
             const { ...rest } = updateData;
@@ -298,11 +299,12 @@ export class ItemHelperClass {
             rate: this.ctx.safeInt(gf?.pricing?.unitPrice),
             total: this.ctx.safeInt(gf?.pricing?.totalPrice),
             description: gf.meta.description,
+
             swing: gf.swing,
             qty: this.ctx.safeInt(gf.qty.total),
             multiDykeUid: formItem.groupItem.groupUid,
             multiDyke: primaryGroupItem,
-
+            dykeDescription: formItem?.title,
             // salesOrder
         } satisfies Prisma.SalesOrderItemsUpdateInput;
         const { multiDykeUid, multiDyke, ...rest } = updateData;

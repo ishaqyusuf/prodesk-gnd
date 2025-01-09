@@ -73,7 +73,7 @@ function ItemSectionHeader({ uid }) {
                         onChange={(e) => {
                             zus.updateFormItem(uid, "title", e.target.value);
                         }}
-                        className="h-8"
+                        className="h-8 uppercase"
                         placeholder={placeholder}
                     />
                 </div>
