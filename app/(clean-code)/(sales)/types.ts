@@ -16,7 +16,14 @@ import { GetStepComponent } from "./_common/data-access/step-components.dta";
 
 export type SalesType = "order" | "quote";
 export type SalesPriority = "Low" | "High" | "Medium" | "Non";
-export type PaymentMethods = "link" | "terminal" | "check" | "cash";
+export type PaymentMethods =
+    | "link"
+    | "terminal"
+    | "check"
+    | "cash"
+    | "zelle"
+    | "credit-card"
+    | "wire";
 export type DykeStepTitles =
     | "Category"
     | "Shelf Items"

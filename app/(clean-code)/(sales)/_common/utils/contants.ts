@@ -113,5 +113,8 @@ export const paymentMethods: {
     { label: "Terminal Payment", value: "terminal" },
     { label: "Check", value: "check" },
     { label: "Payment Link", value: "link" },
+    { label: "Wire Transfer", value: "wire" },
+    { label: "Credit Card", value: "credit-card" },
+    { label: "Zelle", value: "zelle" },
     { label: "Cash", value: "cash" },
 ];
