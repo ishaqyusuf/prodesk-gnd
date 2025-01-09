@@ -2,18 +2,10 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { CalendarIcon } from "@radix-ui/react-icons";
-import { addDays } from "date-fns";
 import { DateRange } from "react-day-picker";
-
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Calendar, CalendarProps } from "@/components/ui/calendar";
-import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
-} from "@/components/ui/popover";
-import dayjs from "dayjs";
 import { DateFormats, formatDate } from "@/lib/use-day";
 import { Menu } from "../(clean-code)/menu";
 
@@ -91,10 +83,13 @@ export function DatePicker({
         <div className={cn("grid gap-2")}>
             <Menu
                 noSize
+                open={open}
+                onOpenChanged={openChanged}
                 Trigger={
                     <Button
                         id="date"
                         variant={"outline"}
+                        disabled={!!calendarProps.disabled}
                         className={cn(
                             "w-[260px] justify-start text-left font-normal",
                             !date && "text-muted-foreground",

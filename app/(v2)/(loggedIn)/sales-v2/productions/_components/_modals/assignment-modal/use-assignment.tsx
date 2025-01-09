@@ -1,7 +1,11 @@
-import { useModal } from "@/components/common/modal/provider";
+import { _modal, useModal } from "@/components/common/modal/provider";
 import AssignmentModal, { useAssignmentData } from ".";
 import { getOrderAssignmentData } from "./_action/get-order-assignment-data";
 import { _revalidate } from "@/app/(v1)/_actions/_revalidate";
+import {
+    openAdminProductionModal,
+    openSalesProduction,
+} from "@/app/(clean-code)/(sales)/_common/_components/production";
 
 interface Props {
     // prod?: boolean;
@@ -11,7 +15,7 @@ interface Props {
 export function useAssignment({ type }: Props = {}) {
     const modal = useModal();
     const data = useAssignmentData();
-    async function open(id) {
+    async function __open(id) {
         const mode = {
             prod: type == "prod",
             dispatch: type == "dispatch",
@@ -21,12 +25,18 @@ export function useAssignment({ type }: Props = {}) {
 
         modal.openModal(<AssignmentModal order={data} />);
     }
-
+    function open(id) {
+        !type
+            ? openAdminProductionModal({ id })
+            : openSalesProduction({
+                  id,
+              });
+    }
     return {
         async revalidate() {},
         open,
         refresh() {
-            open(data.data.id);
+            __open(data.data.id);
             // console.log(data);
         },
     };

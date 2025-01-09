@@ -123,6 +123,16 @@ export async function deleteAssignmentSubmissionDta(submitId, produceable) {
             minusScore: submission.qty,
         });
 }
+export async function updateAssignmentDta(
+    id,
+    data: Prisma.OrderItemProductionAssignmentsUpdateInput
+) {
+    return await prisma.orderItemProductionAssignments.update({
+        where: { id },
+        data,
+    });
+}
+
 export async function quickCreateAssignmentDta({
     itemId,
     orderId,

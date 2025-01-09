@@ -45,6 +45,7 @@ export function zhInitializeState(data: GetSalesBookForm, copy = false) {
         kvFilteredStepComponentList: {},
         kvStepComponentList: {},
         currentTab: !data.order?.id ? "info" : "invoice",
+
         metaData: {
             debugMode: false,
             salesRepId: data.order?.salesRepId || data.order.salesRep?.id,

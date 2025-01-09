@@ -102,10 +102,25 @@ export async function _getProductionList({ query, production = false }: Props) {
                             {
                                 assignments: {
                                     some: {
+                                        assignedToId,
                                         deletedAt: null,
-                                        assignedTo: {
-                                            name: searchQuery,
-                                        },
+                                        OR: [
+                                            {
+                                                qtyAssigned: {
+                                                    gt: 0,
+                                                },
+                                            },
+                                            {
+                                                rhQty: {
+                                                    gt: 0,
+                                                },
+                                            },
+                                            {
+                                                lhQty: {
+                                                    gt: 0,
+                                                },
+                                            },
+                                        ],
                                     },
                                 },
                             },

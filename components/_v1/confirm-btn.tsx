@@ -10,7 +10,7 @@ import { Icons } from "./icons";
 
 interface Props extends ButtonProps {
     Icon?;
-    trash?: Boolean;
+    trash?: boolean;
     variant?: ButtonProps["variant"];
 }
 

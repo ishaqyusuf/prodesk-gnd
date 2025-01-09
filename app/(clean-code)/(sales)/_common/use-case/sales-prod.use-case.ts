@@ -12,6 +12,7 @@ import {
     deleteAssignmentDta,
     deleteAssignmentSubmissionDta,
     submitAssignmentDta,
+    updateAssignmentDta,
 } from "../data-access/sales-prod.dta";
 
 export type ItemAssignmentForm = AsyncFnType<
@@ -76,4 +77,11 @@ export async function deleteAssignmentUseCase(id, produceable) {
 }
 export async function deleteAssignmentSubmissionUseCase(id, produceable) {
     await deleteAssignmentSubmissionDta(id, produceable);
+}
+
+export async function updateAssignmentDueDateUseCase(id, dueDate) {
+    const resp = await updateAssignmentDta(id, {
+        dueDate,
+    });
+    return resp;
 }

@@ -81,12 +81,14 @@ export async function getFullSaleById(id) {
     return sale;
 }
 export async function getFullSaleBySlugType(slug, type) {
+    const include = SalesOverviewIncludes;
+
     const sale = await prisma.salesOrders.findFirstOrThrow({
         where: {
             OR: [{ slug }, { orderId: slug }],
             type,
         },
-        include: SalesOverviewIncludes,
+        include,
     });
     return sale;
 }
@@ -120,13 +122,16 @@ export type GetSalesItemOverviewDta = AsyncFnType<
     typeof getSalesItemOverviewDta
 >;
 export async function getSalesItemOverviewDta(slug, type, retries = 0) {
-    const sale = await getFullSaleBySlugType(slug, type);
+    const sale = isNaN(Number(slug))
+        ? await getFullSaleBySlugType(slug, type)
+        : await getFullSaleById(slug);
     const data = typedFullSale(sale);
     const overview = salesOverviewDto(data);
     const resp = {
         ...overview,
         shipping: salesShippingDto(overview, data),
         retries,
+        salesInfo: salesOrderDto(data as any),
     };
     if ((await statMismatchDta(resp)) && retries < 1) {
         return await getSalesItemOverviewDta(slug, type, retries + 1);
