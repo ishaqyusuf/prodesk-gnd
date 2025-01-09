@@ -119,7 +119,7 @@ export function zhInitializeState(data: GetSalesBookForm, copy = false) {
             collapsed: !item.expanded,
             uid,
             id: copy ? null : item.item.id,
-            title: "",
+            title: item?.item?.dykeDescription,
         };
 
         resp.sequence.stepComponent[uid] = [];
