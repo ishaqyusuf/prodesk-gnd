@@ -238,12 +238,14 @@ function FloatingAction({ ctx }: { ctx: UseStepContext }) {
         </>
     );
 }
-function Component({
+export function Component({
     component,
     ctx,
+    swapDoor,
 }: {
     component: ZusComponent;
     ctx: UseStepContext;
+    swapDoor?;
 }) {
     const { stepUid } = ctx;
     const zus = useFormDataStore();
@@ -284,7 +286,7 @@ function Component({
             ctx.toggleComponent(component.uid);
             return;
         }
-        if (cls.isDoor()) openDoorSizeSelectModal(cls);
+        if (cls.isDoor()) openDoorSizeSelectModal(cls, swapDoor);
         else cls.selectComponent();
     }, [selectState, cls, component, ctx]);
     const multiSelect = cls.isMultiSelect();

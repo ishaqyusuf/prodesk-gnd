@@ -1,4 +1,4 @@
-import { cn, sum, toNumber } from "@/lib/utils";
+import { cn, generateRandomString, sum, toNumber } from "@/lib/utils";
 
 import { createContext, useContext, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -6,12 +6,14 @@ import { useForm } from "react-hook-form";
 import { _modal } from "@/components/common/modal/provider";
 import { ComponentHelperClass } from "../../../_utils/helpers/zus/zus-helper-class";
 import { formatMoney } from "@/lib/use-number";
+import { Door } from "../door-swap-modal";
 
 export const useCtx = () => useContext(DoorSizeSelectContext);
 export const DoorSizeSelectContext =
     createContext<ReturnType<typeof useInitContext>>(null);
 
-export function useInitContext(cls: ComponentHelperClass) {
+export function useInitContext(cls: ComponentHelperClass, door?: Door) {
+    const swapPaths = door?.sizeList?.map((s) => s.path);
     const memoied = useMemo(() => {
         const priceModel = cls.getDoorPriceModel(cls.componentUid);
 
@@ -34,7 +36,12 @@ export function useInitContext(cls: ComponentHelperClass) {
         } = {};
         const sList = sizeList.map((sl) => {
             const path = `${componentUid}-${sl.size}`;
-            const sizeData = groupItem?.form?.[path];
+            const swapPath = door?.sizeList?.find((s) =>
+                s.path?.endsWith(`-${sl.size}`)
+            )?.path;
+            const sizeData =
+                groupItem?.form?.[swapPath] || groupItem?.form?.[path];
+            console.log({ swapPath, sizeData });
             const basePrice =
                 priceModel?.formData?.priceVariants?.[sl.size]?.price;
             let salesPrice = cls.calculateSales(basePrice);
@@ -84,14 +91,16 @@ export function useInitContext(cls: ComponentHelperClass) {
         else {
             const _uids = Object.keys(data.selections);
             groupItem.itemIds = groupItem.itemIds.filter(
-                (id) => !_uids.includes(id)
+                (id) => !_uids.includes(id) && !swapPaths?.includes(id)
             );
+            swapPaths?.map((p) => {
+                delete groupItem.form[p];
+            });
             Object.entries(data.selections).map(([uid, data]) => {
                 const s = sum([data.qty.lh, data.qty.rh]);
                 if (!data.qty.total && s) {
                     data.qty.total = s;
                 }
-
                 const selected = !data.qty.total == false;
                 if (selected && !clear) {
                     groupItem.itemIds.push(uid);
@@ -161,6 +170,11 @@ export function useInitContext(cls: ComponentHelperClass) {
         cls.nextStep();
         _modal.close();
     }
+    function swapDoor() {
+        updateDoorForm();
+        _modal.close();
+        cls.dotUpdateItemForm("swapUid", generateRandomString());
+    }
     function priceChanged(size, price) {
         form.setValue(
             `selections.${cls.componentUid}-${size}.basePrice`,
@@ -177,6 +191,7 @@ export function useInitContext(cls: ComponentHelperClass) {
         priceChanged,
         removeSelection,
         cls,
+        swapDoor,
         priceModel,
         nextStep,
         pickMore,

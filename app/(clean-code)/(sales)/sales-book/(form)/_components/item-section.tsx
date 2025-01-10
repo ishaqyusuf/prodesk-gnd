@@ -12,6 +12,8 @@ import ConfirmBtn from "@/components/_v1/confirm-btn";
 import ItemSideView from "./item-side-view";
 import { useMemo } from "react";
 import { ItemClass } from "../_utils/helpers/zus/item-class";
+import { Menu } from "@/components/(clean-code)/menu";
+import { swap } from "@/lib/utils";
 
 interface Props {
     uid?: string;
@@ -58,7 +60,7 @@ function ItemSectionHeader({ uid }) {
     }, [uid]);
     const placeholder = `Item ${cls.itemIndex + 1}`;
     const formItem = cls.formItem;
-
+    const itemSequence = zus.sequence.formItem;
     return (
         <div className="flex border items-center gap-4 p-2 px-4">
             <CollapsibleTrigger asChild className="flex-1">
@@ -88,6 +90,30 @@ function ItemSectionHeader({ uid }) {
             >
                 {formItem.collapsed ? "Expand" : "Collapse"}
             </Button>
+            <Menu>
+                <Menu.Item icon="copy">Make Copy</Menu.Item>
+                <Menu.Item
+                    disabled={itemSequence?.length <= 1}
+                    icon="move2"
+                    SubMenu={itemSequence?.map((seq, ind) => (
+                        <Menu.Item
+                            onClick={() => {
+                                let sequence = zus.sequence.formItem;
+                                let currentIndex = cls.itemIndex;
+                                let newIndex = ind;
+                                swap(sequence, currentIndex, newIndex);
+                                zus.dotUpdate("sequence.formItem", sequence);
+                            }}
+                            key={seq}
+                            disabled={ind == cls.itemIndex}
+                        >
+                            {ind + 1}
+                        </Menu.Item>
+                    ))}
+                >
+                    Move To
+                </Menu.Item>
+            </Menu>
             <ConfirmBtn
                 trash
                 size="icon"

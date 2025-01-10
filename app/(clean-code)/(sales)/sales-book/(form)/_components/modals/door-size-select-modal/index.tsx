@@ -47,16 +47,18 @@ import {
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { DoorSizeSelectContext, useCtx, useInitContext } from "./ctx";
+import { Door } from "../door-swap-modal";
 
 interface Props {
     cls: ComponentHelperClass;
+    door?: Door;
 }
 
 const pricingOptions = ["Single Pricing", "Multi Pricing"] as const;
 type PricingOption = (typeof pricingOptions)[number];
 
-export default function DoorSizeSelectModal({ cls }: Props) {
-    const ctx = useInitContext(cls);
+export default function DoorSizeSelectModal({ cls, door }: Props) {
+    const ctx = useInitContext(cls, door);
     const config = ctx.routeConfig;
     return (
         <DoorSizeSelectContext.Provider value={ctx}>
@@ -98,28 +100,47 @@ export default function DoorSizeSelectModal({ cls }: Props) {
                         </Table>
                     </ScrollArea>
                 </Form>
-                <Modal.Footer
-                    className={""}
-                    submitText="Pick More"
-                    size="sm"
-                    onSubmit={ctx.pickMore}
-                >
-                    <Button
-                        onClick={ctx.removeSelection}
-                        variant="destructive"
+                {door ? (
+                    <Modal.Footer
+                        className={""}
+                        submitText="Swap Door"
                         size="sm"
+                        onSubmit={ctx.swapDoor}
                     >
-                        Remove Selection
-                    </Button>
-                    <div className="flex-1"></div>
-                    <Button
-                        onClick={ctx.nextStep}
-                        variant="secondary"
+                        <Button
+                            onClick={() => {
+                                _modal.close();
+                            }}
+                            variant="destructive"
+                            size="sm"
+                        >
+                            Cancel Swap
+                        </Button>
+                    </Modal.Footer>
+                ) : (
+                    <Modal.Footer
+                        className={""}
+                        submitText="Pick More"
                         size="sm"
+                        onSubmit={ctx.pickMore}
                     >
-                        Next Step
-                    </Button>
-                </Modal.Footer>
+                        <Button
+                            onClick={ctx.removeSelection}
+                            variant="destructive"
+                            size="sm"
+                        >
+                            Remove Selection
+                        </Button>
+                        <div className="flex-1"></div>
+                        <Button
+                            onClick={ctx.nextStep}
+                            variant="secondary"
+                            size="sm"
+                        >
+                            Next Step
+                        </Button>
+                    </Modal.Footer>
+                )}
             </Modal.Content>
         </DoorSizeSelectContext.Provider>
     );

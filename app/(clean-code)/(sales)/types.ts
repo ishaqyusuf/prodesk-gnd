@@ -403,6 +403,7 @@ export interface SalesFormFields {
             currentStepUid?: string;
             title?: string;
             routeUid?: string;
+            swapUid?: string;
             sideView?: {
                 img?: string;
             }[];

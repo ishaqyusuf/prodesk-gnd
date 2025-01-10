@@ -6,6 +6,7 @@ export const useCtx = () => useContext(Context);
 export type HptContext = ReturnType<typeof useCreateContext>;
 export const useCreateContext = (itemStepUid) => {
     const zus = useFormDataStore();
+    const [itemUid] = itemStepUid.split("-");
     const ctx = useMemo(() => {
         const ctx = new HptClass(itemStepUid);
         const itemForm = ctx.getItemForm();
@@ -16,7 +17,7 @@ export const useCreateContext = (itemStepUid) => {
             itemForm,
             ...ctx.getHptForm(),
         };
-    }, [itemStepUid]);
+    }, [itemStepUid, zus.kvFormItem?.[itemUid]?.swapUid]);
     useEffect(() => {
         let tuid = ctx.ctx.tabUid;
         if (ctx.doors.every((s) => s.uid != ctx.ctx.tabUid)) {
@@ -30,5 +31,6 @@ export const useCreateContext = (itemStepUid) => {
     }, [ctx.doors]);
     return {
         ...ctx,
+        itemUid: ctx.ctx.itemUid,
     };
 };

@@ -477,3 +477,8 @@ export function removeKeys<T>(
     }
     return from;
 }
+export function swap(array, indexA, indexB) {
+    let tmp = array[indexA];
+    array[indexA] = array[indexB];
+    array[indexB] = tmp;
+}
