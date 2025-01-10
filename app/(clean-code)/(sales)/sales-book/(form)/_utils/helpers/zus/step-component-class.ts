@@ -16,7 +16,7 @@ import { FieldPath, FieldPathValue } from "react-hook-form";
 import { SettingsClass } from "./settings-class";
 import { toast } from "sonner";
 import { sum } from "@/lib/utils";
-import { dotObject, dotSet } from "@/app/(clean-code)/_common/utils/utils";
+import { dotSet } from "@/app/(clean-code)/_common/utils/utils";
 interface Filters {
     stepUid?;
     stepTitle?;
@@ -656,7 +656,7 @@ export class ComponentHelperClass extends StepHelperClass {
                         description: this.component?.title,
                         taxxable: false,
                         produceable: false,
-                        noHandle: this.getRouteConfig()?.noHandle,
+                        // noHandle: this.getRouteConfig()?.noHandle,
                     },
                     qty: {
                         rh: "",
@@ -703,6 +703,7 @@ export class ComponentHelperClass extends StepHelperClass {
             stepData = {
                 ...stepData,
                 componentUid: this.componentUid,
+                componentId: component.id,
                 value: component.title,
                 stepId: component.stepId,
                 salesPrice: component.salesPrice,

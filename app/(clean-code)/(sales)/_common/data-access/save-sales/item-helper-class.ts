@@ -175,9 +175,11 @@ export class ItemHelperClass {
         steps.map((step) => {
             const updateData = this.composeStepUpdateData(step);
             if (!step.stepFormId) {
-                const { salesOrderItem, ...rest } = updateData;
+                const { salesOrderItem, component, ...rest } = updateData;
                 const createData = {
                     ...rest,
+                    componentId: component?.connect?.id,
+
                     id: this.ctx.nextId("formStep"),
                     stepId: step.stepId,
                     salesId: this.ctx.salesId,

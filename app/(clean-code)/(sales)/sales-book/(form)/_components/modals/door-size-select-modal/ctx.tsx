@@ -112,7 +112,6 @@ export function useInitContext(cls: ComponentHelperClass, door?: Door) {
                             description: "",
                             produceable: false,
                             taxxable: false,
-                            noHandle: cls?.getRouteConfig()?.noHandle,
                         },
                         ...(groupItem.form[uid] || {}),
                         swing: data.swing,

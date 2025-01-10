@@ -92,23 +92,25 @@ export default function ComponentVariantModal({ cls }: Props) {
         const resp = await updateSectionOverrideUseCase(cls.component.id, data);
         cls.updateComponentKey("sectionOverride", data, cls.componentUid);
         _modal.close();
+        toast.success("Saved");
     }
     return (
-        <Modal.Content size="lg">
+        <Modal.Content>
             <Modal.Header
                 title={"Edit Component Section Override"}
                 subtitle={"Add override rules to this component"}
             />
             <Form {...form}>
-                <div className="grid gap-4 pb-4">
-                    <FormCheckbox
-                        switchInput
-                        control={form.control}
-                        name={`overrideMode`}
-                        label="Activate Component Section Override"
-                        description=""
-                    />
-                    <div className={cn("")}>
+                <div className="h-[25vh]">
+                    <div className="grid gap-4 pb-4">
+                        <FormCheckbox
+                            switchInput
+                            control={form.control}
+                            name={`overrideMode`}
+                            label="Activate Component Section Override"
+                            description=""
+                        />
+
                         <FormCheckbox
                             switchInput
                             disabled={!overrideMode}
@@ -116,11 +118,13 @@ export default function ComponentVariantModal({ cls }: Props) {
                             name={`noHandle`}
                             label="Single Handle Mode"
                             description="Turn on if this component does not have the LH and RH attribute"
+                            className={cn(!overrideMode && "hidden")}
                         />
                         <FormCheckbox
                             disabled={!overrideMode}
                             switchInput
                             control={form.control}
+                            className={cn(!overrideMode && "hidden")}
                             name={`hasSwing`}
                             label="Swing Input"
                             description="Turn on if this component does not have swing attribute"

@@ -455,7 +455,7 @@ export interface SalesFormFields {
                             taxxable?: boolean;
                             produceable?: boolean;
                             salesItemId?;
-                            noHandle: boolean;
+                            // noHandle: boolean;
                         };
                         qty: {
                             rh?: number | string;

@@ -63,6 +63,8 @@ export function whereSales(query: FilterParams) {
     });
     const keys = Object.keys(query) as FilterKeys[];
     keys.map((k) => {
+        const val = query?.[k] as any;
+
         if (!query?.[k]) return;
         switch (k) {
             case "id":
@@ -73,7 +75,7 @@ export function whereSales(query: FilterParams) {
             case "order.no":
                 whereAnd.push({
                     orderId: {
-                        contains: query["order.no"],
+                        contains: val,
                     },
                 });
                 break;
@@ -82,7 +84,7 @@ export function whereSales(query: FilterParams) {
                     meta: {
                         path: "$.po",
                         // equals: query.po,
-                        string_contains: query.po,
+                        string_contains: val,
                     },
                 });
                 break;
@@ -92,21 +94,21 @@ export function whereSales(query: FilterParams) {
                         {
                             customer: {
                                 name: {
-                                    contains: query["customer.name"],
+                                    contains: val,
                                 },
                             },
                         },
                         {
                             customer: {
                                 businessName: {
-                                    contains: query["customer.name"],
+                                    contains: val,
                                 },
                             },
                         },
                         {
                             billingAddress: {
                                 name: {
-                                    contains: query["customer.name"],
+                                    contains: val,
                                 },
                             },
                         },
@@ -114,23 +116,38 @@ export function whereSales(query: FilterParams) {
                 });
                 break;
             case "phone":
+                const _phoneQuery = {
+                    phoneNo: val,
+                };
                 whereAnd.push({
                     OR: [
                         {
+                            customer: _phoneQuery,
+                        },
+                        {
                             customer: {
-                                phoneNo: { contains: query.phone },
+                                phoneNo2: val,
                             },
+                        },
+                        {
+                            billingAddress: _phoneQuery,
+                        },
+                        {
+                            shippingAddress: _phoneQuery,
                         },
                     ],
                 });
+                break;
             case "sales.rep":
                 whereAnd.push({
                     salesRep: {
-                        name: query["sales.rep"],
+                        name: val,
                     },
                 });
+                break;
         }
     });
+
     return composeQuery(whereAnd);
 }
 function whereSearch(query): Prisma.SalesOrdersWhereInput | null {

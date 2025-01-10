@@ -240,6 +240,7 @@ export function zhInitializeState(data: GetSalesBookForm, copy = false) {
 
                     const formId = `${stepProdUid}-${inToFt(dimIn)}`;
                     pushItemId(formId);
+                    // console.log(doorForm);
                     addFormItem(formId, {
                         doorId: copy ? null : doorForm.id,
                         pricing: {
@@ -253,7 +254,7 @@ export function zhInitializeState(data: GetSalesBookForm, copy = false) {
                         },
                         meta: {
                             salesItemId: copy ? null : data.itemId,
-                            noHandle,
+                            // noHandle,
                         },
                         hptId: copy ? null : doorForm.housePackageToolId,
                         selected: true,
@@ -284,7 +285,7 @@ export function zhInitializeState(data: GetSalesBookForm, copy = false) {
                     selected: true,
                     meta: {
                         salesItemId: copy ? null : data.itemId,
-                        noHandle,
+                        // noHandle,
                     },
                     qty: {
                         total: data.qty,
@@ -326,7 +327,7 @@ export function zhInitializeState(data: GetSalesBookForm, copy = false) {
                         produceable: data.production,
                         taxxable: data.tax,
                         salesItemId: copy ? null : data.itemId,
-                        noHandle,
+                        // noHandle,
                     },
                     stepProductId: null,
                 });

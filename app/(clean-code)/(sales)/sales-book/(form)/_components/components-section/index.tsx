@@ -15,6 +15,7 @@ import {
     Filter,
     Folder,
     Info,
+    LucideVariable,
     Variable,
     VariableIcon,
 } from "lucide-react";
@@ -323,17 +324,8 @@ export function Component({
                         )}
                     </div>
                 </div>
-                {/* <div>{component.img}</div> */}
             </button>
-            {/* {cls.getStepForm()?.meta?.stepPricingDeps?. } */}
-            {/* <div className="absolute m-2">
-                {component?.variations?.length ? (
-                    <Filter className="size-4 text-muted-foreground/70" />
-                ) : (
-                    <></>
-                    // <MinusCircle className="size-4 text-muted-foreground/70" />
-                )}
-            </div> */}
+
             {component.productCode ? (
                 <div className="absolute -rotate-90 -translate-y-1/2 text-sm font-mono uppercase tracking-wider font-semibold text-muted-foreground transform top-1/2">
                     {component.productCode}
@@ -349,6 +341,13 @@ export function Component({
                 </div>
                 <div className={cn(!component?.variations?.length && "hidden")}>
                     <Filter className="size-4 text-muted-foreground/70" />
+                </div>
+                <div
+                    className={cn(
+                        !component?.sectionOverride?.overrideMode && "hidden"
+                    )}
+                >
+                    <LucideVariable className="size-4 text-muted-foreground/70" />
                 </div>
                 <div className={cn(!component.redirectUid && "hidden")}>
                     <ExternalLink className="w-4 text-muted-foreground/70 h-4" />
