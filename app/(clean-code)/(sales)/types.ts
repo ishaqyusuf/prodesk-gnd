@@ -163,6 +163,12 @@ export interface StepComponentMeta {
             componentsUid: string[];
         }[];
     }[];
+    sortIndex?;
+    sectionOverride?: {
+        hasSwing?: boolean;
+        noHandle?: boolean;
+        overrideMode?: boolean;
+    };
 }
 export interface DykeProductMeta {
     svg;
@@ -498,6 +504,7 @@ export interface SalesFormFields {
             meta?: StepMeta;
             salesOrderItemId?;
             componentId?;
+            sectionOverride?: StepComponentMeta["sectionOverride"];
         };
     };
     sequence: {

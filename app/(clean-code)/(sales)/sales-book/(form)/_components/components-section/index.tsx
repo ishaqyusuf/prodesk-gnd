@@ -16,6 +16,7 @@ import {
     Folder,
     Info,
     Variable,
+    VariableIcon,
 } from "lucide-react";
 import { DeleteRowAction } from "@/components/_v1/data-table/data-table-row-actions";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -35,6 +36,7 @@ import { openStepPricingModal } from "../modals/step-pricing-modal";
 import { openComponentModal } from "../modals/component-form";
 import SearchBar from "./search-bar";
 import { openDoorSizeSelectModal } from "../modals/door-size-select-modal/open-modal";
+import { openSectionSettingOverride } from "../modals/component-section-setting-override";
 
 interface Props {
     itemStepUid;
@@ -394,6 +396,14 @@ export function Component({
                                         Icon={Icons.dollar}
                                     >
                                         Price
+                                    </Menu.Item>
+                                    <Menu.Item
+                                        onClick={() => {
+                                            openSectionSettingOverride(cls);
+                                        }}
+                                        Icon={VariableIcon}
+                                    >
+                                        Section Setting Override
                                     </Menu.Item>
                                 </>
                             }

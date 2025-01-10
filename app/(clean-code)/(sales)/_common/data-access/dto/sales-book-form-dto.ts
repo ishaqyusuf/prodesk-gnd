@@ -56,7 +56,6 @@ export function typedSalesBookFormItems(data: SalesFormData) {
                 d.priceData = {
                     salesUnitCost: d.jambSizePrice,
                 } as any;
-            console.log(d.stepProduct);
 
             _doorForm[dim] = { ...d } as any;
             _doorFormDefaultValue[dim] = {
@@ -82,7 +81,13 @@ export function typedSalesBookFormItems(data: SalesFormData) {
                 .map((item) => ({
                     ...item,
                     meta: item.meta as any as DykeFormStepMeta,
-
+                    component: item.component
+                        ? {
+                              id: item.component.id,
+                              meta: (item.component.meta ||
+                                  {}) as any as StepComponentMeta,
+                          }
+                        : null,
                     step: {
                         ...item.step,
                         meta: (item.step.meta || {}) as any as DykeStepMeta &
@@ -126,10 +131,13 @@ export function transformSalesBookFormItem(
                 sectionPrice:
                     multiItem.sectionPrice || shelfItemArray.sectionPrice,
                 priceReferesher: null,
-                formStepArray: formSteps.map(({ step, ...rest }) => ({
-                    step: transformSalesStepMeta(step),
-                    item: rest,
-                })),
+                formStepArray: formSteps.map(
+                    ({ step, component, ...rest }) => ({
+                        component,
+                        step: transformSalesStepMeta(step),
+                        item: rest,
+                    })
+                ),
                 item: {
                     ...itemData,
                     housePackageTool,

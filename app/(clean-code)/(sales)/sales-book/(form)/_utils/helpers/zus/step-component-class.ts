@@ -16,7 +16,7 @@ import { FieldPath, FieldPathValue } from "react-hook-form";
 import { SettingsClass } from "./settings-class";
 import { toast } from "sonner";
 import { sum } from "@/lib/utils";
-import { dotSet } from "@/app/(clean-code)/_common/utils/utils";
+import { dotObject, dotSet } from "@/app/(clean-code)/_common/utils/utils";
 interface Filters {
     stepUid?;
     stepTitle?;
@@ -174,6 +174,20 @@ export class StepHelperClass extends SettingsClass {
             `kvStepComponentList.${this.stepUid}`,
             this.getStepComponents?.map((c) => {
                 if (c.uid == data.uid) return data;
+                return c;
+            })
+        );
+        this.refreshStepComponentsData();
+    }
+    public updateComponentKey(key: FieldPath<ZusComponent>, value, ...uids) {
+        this.zus.dotUpdate(
+            `kvStepComponentList.${this.stepUid}`,
+            this.getStepComponents?.map((c) => {
+                if (uids.includes(c.uid)) {
+                    const s = dotSet(c);
+                    s.set(key, value);
+                }
+
                 return c;
             })
         );
@@ -693,6 +707,7 @@ export class ComponentHelperClass extends StepHelperClass {
                 stepId: component.stepId,
                 salesPrice: component.salesPrice,
                 basePrice: component.basePrice,
+                sectionOverride: component.sectionOverride,
             };
             if (stepData.title == "Item Type") {
                 this.resetGroupItem(component.title);

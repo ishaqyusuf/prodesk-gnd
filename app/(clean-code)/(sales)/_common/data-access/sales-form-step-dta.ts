@@ -182,6 +182,14 @@ export async function deleteStepProductsByUidDta(uids: string[]) {
         },
     });
 }
+export async function getComponentDta(id) {
+    return await prisma.dykeStepProducts.findUniqueOrThrow({
+        where: { id },
+    });
+}
+export async function getComponentMetaDta(id) {
+    return (await getComponentDta(id))?.meta as any as StepComponentMeta;
+}
 export async function getStepComponentsMetaByUidDta(uids: string[]) {
     return (
         await prisma.dykeStepProducts.findMany({

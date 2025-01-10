@@ -149,7 +149,8 @@ export function zhInitializeState(data: GetSalesBookForm, copy = false) {
                 stepId: fs.step.id,
                 meta: stepMeta as any,
                 salesOrderItemId: item.item.id,
-                componentId: fs.item?.id,
+                componentId: fs.component?.id,
+                sectionOverride: fs.component?.meta?.sectionOverride,
             });
             if (stp.title == "Item Type") {
                 itemType = stp.value as any;

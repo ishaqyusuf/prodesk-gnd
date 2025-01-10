@@ -112,6 +112,7 @@ export function transformStepProduct(
         img: prod.img || product?.img || door?.img,
         productId: product?.id || door?.id,
         variations: meta?.variations || [],
+        sectionOverride: meta?.sectionOverride,
         salesPrice: null,
         basePrice: null,
         stepId: component.dykeStepId,

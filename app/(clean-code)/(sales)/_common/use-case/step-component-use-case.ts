@@ -14,6 +14,7 @@ import {
 } from "../data-access/step-components.dta";
 import {
     deleteStepProductsByUidDta,
+    getComponentMetaDta,
     getSalesFormStepByIdDta,
     getStepComponentsMetaByUidDta,
     updateStepComponentMetaDta,
@@ -93,6 +94,12 @@ export async function saveComponentVariantUseCase(uids, variants) {
         variants,
         uids,
     };
+}
+export async function updateSectionOverrideUseCase(id, sectionOverride) {
+    let meta = await getComponentMetaDta(id);
+    if (!meta) meta = {};
+    meta.sectionOverride = sectionOverride;
+    await updateStepComponentMetaDta(id, meta);
 }
 // export async function saveDoorSizeVariants
 export async function updateStepMetaUseCase(id, meta) {
