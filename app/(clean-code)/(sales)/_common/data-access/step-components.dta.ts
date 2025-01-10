@@ -8,9 +8,10 @@ export interface LoadStepComponentsProps {
     stepId?: number;
     stepTitle?: "Door" | "Moulding";
     id?;
+    ids?;
 }
 export async function loadStepComponentsDta(props: LoadStepComponentsProps) {
-    const prods = await __getStepProducts(props);
+    const prods = await getComponentsDta(props);
     const resp = prods
         // .filter((p) => p.product || p.door)
         .map(transformStepProduct);
@@ -25,7 +26,8 @@ export async function loadStepComponentsDta(props: LoadStepComponentsProps) {
 
     return resp;
 }
-export async function __getStepProducts(props: LoadStepComponentsProps) {
+export async function getSaleRootComponentConfigDta(ids) {}
+export async function getComponentsDta(props: LoadStepComponentsProps) {
     const wheres: Prisma.DykeStepProductsWhereInput[] = [];
 
     if (props.stepTitle == "Door")
@@ -55,7 +57,12 @@ export async function __getStepProducts(props: LoadStepComponentsProps) {
             });
     }
     if (props.id) wheres.push({ id: props.id });
-
+    if (props.ids)
+        wheres.push({
+            id: {
+                in: props.ids,
+            },
+        });
     const stepProducts = await prisma.dykeStepProducts.findMany({
         where:
             wheres.length == 0
@@ -73,23 +80,26 @@ export async function __getStepProducts(props: LoadStepComponentsProps) {
     //     if (!b.img || !b.product?.img || !b.door?.img) return -1; // `b` has no image, move it later
     //     return 0; // Both have images, keep order
     // });
-    if (props.stepId) {
-        console.log(stepProducts.length);
-        // const filtered = stepProducts.filter((_, i) =>
-        //     _.name
-        //         ? true
-        //         : stepProducts.findIndex(
-        //               (p) => p.dykeProductId == _.dykeProductId
-        //           ) == i
-        // );
-        console.log(stepProducts.length);
-        return stepProducts;
-    }
-    return stepProducts;
+    // if (props.stepId) {
+    //     console.log(stepProducts.length);
+    //     // const filtered = stepProducts.filter((_, i) =>
+    //     //     _.name
+    //     //         ? true
+    //     //         : stepProducts.findIndex(
+    //     //               (p) => p.dykeProductId == _.dykeProductId
+    //     //           ) == i
+    //     // );
+    //     console.log(stepProducts.length);
+    //     return stepProducts;
+    // }
+    return stepProducts.map((s) => ({
+        ...s,
+        meta: s.meta as any as StepComponentMeta,
+    }));
 }
 
 export function transformStepProduct(
-    component: AsyncFnType<typeof __getStepProducts>[number]
+    component: AsyncFnType<typeof getComponentsDta>[number]
 ) {
     const { door, product, ...prod } = component;
     let meta: StepComponentMeta = prod.meta as any;

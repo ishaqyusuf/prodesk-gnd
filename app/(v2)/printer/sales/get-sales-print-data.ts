@@ -12,7 +12,6 @@ export async function getSalesPrintData(
     const resp = {};
 
     const order = await viewSale(null, slug, query.deletedAt);
-    // console.log(order);
 
     const salesitems = composeSalesItems(order);
 

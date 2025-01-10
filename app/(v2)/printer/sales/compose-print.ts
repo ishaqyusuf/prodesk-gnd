@@ -270,9 +270,15 @@ function getDoorsTable(
             )
             .map((item) => {
                 const doorType = item.meta.doorType;
-                // console.log(doorType);
-
+                // console.log(item.configs);
                 const is = isComponentType(doorType);
+                const noHandle = item.configs
+                    ? item.configs.noHandle
+                    : !is.bifold && !is.service && !is.slab;
+                const hasSwing = item.configs
+                    ? item.configs.hasSwing
+                    : !is.bifold && !is.service;
+
                 const res = {
                     cells: [
                         _cell(
@@ -330,7 +336,8 @@ function getDoorsTable(
                                   ...(is.garage
                                       ? [_cell("Swing", "swing", 2, {}, {})]
                                       : []),
-                                  ...(is.bifold || is.slab || is.service
+                                  ...// is.bifold || is.slab || is.service
+                                  (noHandle
                                       ? [
                                             _cell(
                                                 "Qty",

@@ -10,6 +10,8 @@ import { composeSalesItems } from "../../_utils/compose-sales-items";
 import { DykeDoorType } from "../../type";
 import { isComponentType } from "../is-component-type";
 import { Prisma } from "@prisma/client";
+import { loadSalesSetting } from "@/app/(clean-code)/(sales)/_common/data-access/sales-form-settings.dta";
+import { StepComponentMeta } from "@/app/(clean-code)/(sales)/types";
 
 export async function getSalesOverview({
     type,
@@ -40,6 +42,7 @@ export async function viewSale(type, slug, deletedAt?) {
     });
 
     if (!order) throw Error();
+    const settings = await loadSalesSetting();
 
     const sectionTitles = await prisma.dykeSteps.findFirst({
         where: {
@@ -63,8 +66,28 @@ export async function viewSale(type, slug, deletedAt?) {
     const items = order.items.map((item) => {
         // console.log(item.meta);
         const meta = item.meta as any as ISalesOrderItemMeta;
+
+        const rootStep = item.formSteps.find(
+            (fs) => fs.step.title == "Item Type"
+        );
+        const routes = settings?.data?.route;
+        const rootConfig = settings?.data?.route?.[rootStep?.prodUid]?.config;
+
+        const sectionOverride = item.formSteps
+            ?.map(
+                (fs) =>
+                    (fs.component?.meta as any as StepComponentMeta)
+                        ?.sectionOverride
+            )
+            ?.filter(Boolean)
+            .find((s) => s.overrideMode);
         return {
             ...item,
+            configs: sectionOverride
+                ? sectionOverride
+                : rootConfig
+                ? rootConfig
+                : null,
 
             sectionTitle: sectionTitles?.stepProducts?.find(
                 (p) => p?.product?.title == meta?.doorType
@@ -94,6 +117,7 @@ export async function viewSale(type, slug, deletedAt?) {
             return {
                 multiDykeComponents: _multiDyke,
                 isType: isComponentType(item.meta.doorType),
+
                 ...item,
             };
         });
@@ -155,6 +179,12 @@ const SalesIncludes = {
             formSteps: {
                 where: { deletedAt: null },
                 include: {
+                    component: {
+                        select: {
+                            uid: true,
+                            meta: true,
+                        },
+                    },
                     step: {
                         select: {
                             id: true,
