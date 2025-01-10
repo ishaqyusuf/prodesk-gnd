@@ -128,7 +128,7 @@ export class HptClass extends GroupFormClass {
                     description: "",
                     produceable: true,
                     taxxable: true,
-                    noHandle: config?.noHandle,
+                    // noHandle: config?.noHandle,
                 },
             });
         }
