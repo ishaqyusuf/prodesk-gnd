@@ -3,7 +3,7 @@ import {
     ZusGroupItemForm,
     ZusGroupItemFormPath,
 } from "../../../_common/_stores/form-data-store";
-import { StepHelperClass } from "./zus-helper-class";
+import { StepHelperClass } from "./step-component-class";
 import { dotObject } from "@/app/(clean-code)/_common/utils/utils";
 
 export class GroupFormClass extends StepHelperClass {

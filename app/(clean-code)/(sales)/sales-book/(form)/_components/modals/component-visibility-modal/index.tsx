@@ -15,7 +15,7 @@ import { _modal } from "@/components/common/modal/provider";
 import { toast } from "sonner";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
-import { ComponentHelperClass } from "../../../_utils/helpers/zus/zus-helper-class";
+import { ComponentHelperClass } from "../../../_utils/helpers/zus/step-component-class";
 
 interface Props {
     cls: ComponentHelperClass;

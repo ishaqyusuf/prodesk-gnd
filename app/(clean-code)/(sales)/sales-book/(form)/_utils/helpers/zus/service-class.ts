@@ -1,7 +1,7 @@
 import { generateRandomString } from "@/lib/utils";
 import { ZusSales } from "../../../_common/_stores/form-data-store";
 import { GroupFormClass } from "./group-form-class";
-import { StepHelperClass } from "./zus-helper-class";
+import { StepHelperClass } from "./step-component-class";
 
 export class ServiceClass extends GroupFormClass {
     constructor(public itemStepUid) {

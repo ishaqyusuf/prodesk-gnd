@@ -12,7 +12,7 @@ import { useEffect, useMemo, useRef } from "react";
 import { useIsVisible } from "@/hooks/use-is-visible";
 import { motion } from "framer-motion";
 import DevOnly from "@/_v2/components/common/dev-only";
-import { StepHelperClass } from "../_utils/helpers/zus/zus-helper-class";
+import { StepHelperClass } from "../_utils/helpers/zus/step-component-class";
 import MouldingLineItem from "./moulding-step";
 import ServiceLineItem from "./service-step";
 import { ComponentsSection } from "./components-section";

@@ -125,12 +125,11 @@ export class SettingsClass extends CostingClass {
     }
     public getRouteConfig() {
         const route = this.zus.setting.composedRouter;
-
         const fItem = this.zus.sequence?.stepComponent?.[this.itemUid];
         const componentUid = this.zus.kvStepForm[fItem[0]]?.componentUid;
-        // const [_, componentUid] = fItem?.[0]?.split("-");
-        const config = route[componentUid]?.config;
 
+        // const [_, componentUid] = fItem?.[0]?.split("-");
+        const config = route[componentUid]?.config || {};
         return config || {};
     }
     public updateComponentRedirectUid(componentUid, redirectUid) {

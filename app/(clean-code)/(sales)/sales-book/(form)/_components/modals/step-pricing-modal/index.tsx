@@ -10,7 +10,7 @@ import { ComboxBox } from "@/components/(clean-code)/custom/controlled/combo-box
 import { updateStepMetaUseCase } from "@/app/(clean-code)/(sales)/_common/use-case/step-component-use-case";
 import { _modal } from "@/components/common/modal/provider";
 import { toast } from "sonner";
-import { StepHelperClass } from "../../../_utils/helpers/zus/zus-helper-class";
+import { StepHelperClass } from "../../../_utils/helpers/zus/step-component-class";
 
 interface Props {
     stepUid;

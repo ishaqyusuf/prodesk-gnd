@@ -24,7 +24,7 @@ import {
     SalesFormZusData,
 } from "@/app/(clean-code)/(sales)/types";
 import { SearchAddressType } from "@/app/(clean-code)/(sales)/_common/data-access/sales-address-dta";
-import { SettingsClass } from "../../_utils/helpers/zus/zus-settings-class";
+import { SettingsClass } from "../../_utils/helpers/zus/settings-class";
 
 interface Props {
     addressType: string;

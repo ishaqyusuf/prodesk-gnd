@@ -1,5 +1,4 @@
 import { getSalesOrdersDta } from "@/app/(clean-code)/(sales)/_common/data-access/sales-dta";
-import { SalesType } from "@/app/(clean-code)/(sales)/types";
 
 import {
     FilterParams,

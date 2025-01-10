@@ -497,6 +497,7 @@ export interface SalesFormFields {
             componentUid: string;
             meta?: StepMeta;
             salesOrderItemId?;
+            componentId?;
         };
     };
     sequence: {

@@ -1,6 +1,6 @@
 import { ZusSales } from "../../../_common/_stores/form-data-store";
 import { GroupFormClass } from "./group-form-class";
-import { StepHelperClass } from "./zus-helper-class";
+import { StepHelperClass } from "./step-component-class";
 
 export class MouldingClass extends GroupFormClass {
     constructor(public itemStepUid) {

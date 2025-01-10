@@ -13,7 +13,7 @@ import { _modal } from "@/components/common/modal/provider";
 import { zhHarvestDoorSizes } from "./zus-form-helper";
 
 import { FieldPath, FieldPathValue } from "react-hook-form";
-import { SettingsClass } from "./zus-settings-class";
+import { SettingsClass } from "./settings-class";
 import { toast } from "sonner";
 import { sum } from "@/lib/utils";
 import { dotSet } from "@/app/(clean-code)/_common/utils/utils";

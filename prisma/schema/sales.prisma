@@ -234,25 +234,28 @@ model DykeSalesDoors {
 }
 
 model DykeStepForm {
-    id             Int              @unique @default(autoincrement())
+    id             Int               @unique @default(autoincrement())
+    componentId    Int?
     value          String?
-    priceId        String?          @unique
-    qty            Int?             @default(0)
-    price          Float?           @default(0)
-    basePrice      Float?           @default(0)
+    priceId        String?           @unique
+    qty            Int?              @default(0)
+    price          Float?            @default(0)
+    basePrice      Float?            @default(0)
     prodUid        String?
     salesId        Int?
     salesItemId    Int?
     stepId         Int
-    meta           Json?            @db.Json
-    deletedAt      DateTime?        @db.Timestamp(0)
-    createdAt      DateTime?        @default(now()) @db.Timestamp(0)
-    updatedAt      DateTime?        @updatedAt
-    sales          SalesOrders?     @relation(fields: [salesId], references: [id])
-    salesOrderItem SalesOrderItems? @relation(fields: [salesItemId], references: [id])
-    step           DykeSteps        @relation(fields: [stepId], references: [id])
-    priceData      ComponentPrice?  @relation(fields: [priceId], references: [id], name: "component")
+    meta           Json?             @db.Json
+    deletedAt      DateTime?         @db.Timestamp(0)
+    createdAt      DateTime?         @default(now()) @db.Timestamp(0)
+    updatedAt      DateTime?         @updatedAt
+    sales          SalesOrders?      @relation(fields: [salesId], references: [id])
+    salesOrderItem SalesOrderItems?  @relation(fields: [salesItemId], references: [id])
+    step           DykeSteps         @relation(fields: [stepId], references: [id])
+    priceData      ComponentPrice?   @relation(fields: [priceId], references: [id], name: "component")
+    component      DykeStepProducts? @relation(fields: [componentId], references: [id])
 
+    @@index([componentId])
     @@index([salesId])
     @@index([salesItemId])
     @@index([stepId])
@@ -324,7 +327,9 @@ model DykeStepProducts {
     door              DykeDoors?          @relation(fields: [doorId], references: [id])
     salesDoors        DykeSalesDoors[]
     step              DykeSteps           @relation(fields: [dykeStepId], references: [id])
+    stepForms         DykeStepForm[]
 
+    @@index([doorId])
     @@index([dykeStepId])
     @@index([dykeProductId])
 }

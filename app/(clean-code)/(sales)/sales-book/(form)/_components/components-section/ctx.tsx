@@ -4,7 +4,7 @@ import {
     ZusComponent,
 } from "../../_common/_stores/form-data-store";
 
-import { StepHelperClass } from "../../_utils/helpers/zus/zus-helper-class";
+import { StepHelperClass } from "../../_utils/helpers/zus/step-component-class";
 import { useSticky } from "../../_hooks/use-sticky";
 import { useDebounce } from "@/hooks/use-debounce";
 import { Edit3, EyeOff, Layout } from "lucide-react";

@@ -23,7 +23,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { ComponentImg } from "../component-img";
-import { ComponentHelperClass } from "../../_utils/helpers/zus/zus-helper-class";
+import { ComponentHelperClass } from "../../_utils/helpers/zus/step-component-class";
 import { openEditComponentPrice } from "../modals/component-price-modal";
 import { Badge } from "@/components/ui/badge";
 import DoorSizeModal from "../modals/door-size-modal";

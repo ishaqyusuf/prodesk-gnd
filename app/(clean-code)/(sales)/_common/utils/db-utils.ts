@@ -389,6 +389,7 @@ export const SalesBookFormIncludes = (restoreQuery) =>
 
                     include: {
                         priceData: true,
+
                         step: {
                             include: {
                                 _count: includeStepPriceCount,

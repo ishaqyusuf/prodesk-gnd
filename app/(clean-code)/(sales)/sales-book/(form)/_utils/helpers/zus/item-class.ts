@@ -1,4 +1,4 @@
-import { SettingsClass } from "./zus-settings-class";
+import { SettingsClass } from "./settings-class";
 
 export class ItemClass extends SettingsClass {
     constructor(public itemUid) {

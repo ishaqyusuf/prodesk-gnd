@@ -7,7 +7,7 @@ import { Form } from "@/components/ui/form";
 import { createComponentUseCase } from "@/app/(clean-code)/(sales)/_common/use-case/step-component-use-case";
 import { _modal } from "@/components/common/modal/provider";
 import { toast } from "sonner";
-import { StepHelperClass } from "../../../_utils/helpers/zus/zus-helper-class";
+import { StepHelperClass } from "../../../_utils/helpers/zus/step-component-class";
 import FormInput from "@/components/common/controls/form-input";
 import { StepComponentForm } from "@/app/(clean-code)/(sales)/types";
 import { ComponentImg } from "../../component-img";

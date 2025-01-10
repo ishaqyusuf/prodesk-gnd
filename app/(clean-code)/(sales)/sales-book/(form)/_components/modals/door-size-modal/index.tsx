@@ -14,7 +14,7 @@ import { _modal } from "@/components/common/modal/provider";
 import { toast } from "sonner";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
-import { StepHelperClass } from "../../../_utils/helpers/zus/zus-helper-class";
+import { StepHelperClass } from "../../../_utils/helpers/zus/step-component-class";
 import { Label } from "@/components/ui/label";
 import { widthList } from "@/app/(clean-code)/(sales)/_common/utils/contants";
 import { ScrollArea } from "@/components/ui/scroll-area";

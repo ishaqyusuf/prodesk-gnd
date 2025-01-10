@@ -3,7 +3,7 @@ import {
     ZusGroupItem,
     ZusSales,
 } from "../../../_common/_stores/form-data-store";
-import { SettingsClass } from "./zus-settings-class";
+import { SettingsClass } from "./settings-class";
 import { toast } from "sonner";
 import { addPercentage, dotArray, percentageValue, sum } from "@/lib/utils";
 import { PricingMetaData } from "@/app/(clean-code)/(sales)/types";

@@ -200,6 +200,14 @@ export class ItemHelperClass {
             basePrice: this.ctx.safeInt(step.basePrice),
             price: this.ctx.safeInt(step.salesPrice),
             prodUid: step.componentUid,
+            component: step.componentId
+                ? {
+                      connect: {
+                          id: step.componentId,
+                      },
+                  }
+                : undefined,
+            // componentId: step.componentId,
             qty: 1,
             meta,
             value: step.value,

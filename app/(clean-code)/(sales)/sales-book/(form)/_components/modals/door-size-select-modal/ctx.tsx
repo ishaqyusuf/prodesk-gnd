@@ -4,7 +4,7 @@ import { createContext, useContext, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 
 import { _modal } from "@/components/common/modal/provider";
-import { ComponentHelperClass } from "../../../_utils/helpers/zus/zus-helper-class";
+import { ComponentHelperClass } from "../../../_utils/helpers/zus/step-component-class";
 import { formatMoney } from "@/lib/use-number";
 import { Door } from "../door-swap-modal";
 

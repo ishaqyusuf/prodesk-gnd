@@ -4,12 +4,12 @@ import {
     SalesFormZusData,
 } from "@/app/(clean-code)/(sales)/types";
 import { getFormState } from "../../../_common/_stores/form-data-store";
-import { StepHelperClass } from "./zus-helper-class";
+import { StepHelperClass } from "./step-component-class";
 import { generateRandomString } from "@/lib/utils";
 import { formatMoney } from "@/lib/use-number";
 import { inToFt } from "@/app/(clean-code)/(sales)/_common/utils/sales-utils";
 import { CostingClass } from "./costing-class";
-import { SettingsClass } from "./zus-settings-class";
+import { SettingsClass } from "./settings-class";
 export function zhInitializeState(data: GetSalesBookForm, copy = false) {
     const profile = data.order?.id
         ? data.salesProfile
@@ -130,10 +130,17 @@ export function zhInitializeState(data: GetSalesBookForm, copy = false) {
         item.formStepArray.map((fs, i) => {
             // console.log(i);
             // if (fs.step.title == "Door") doorStepUid = fs.step.uid;
+            const componentUid = fs.item?.prodUid;
+            // data.salesSetting.stepsByKey[''].components.find()
+            const c = Object.entries(data.salesSetting.stepsByKey)
+                .map(([k, s]) =>
+                    s.components.find((s) => s.uid == componentUid)
+                )
+                .filter(Boolean)[0];
             const stepMeta = fs.step.meta;
             const suid = `${uid}-${fs.step.uid}`;
             const stp = (resp.kvStepForm[suid] = {
-                componentUid: fs.item?.prodUid,
+                componentUid,
                 title: fs.step.title,
                 value: fs.item?.value,
                 salesPrice: fs.item?.price,
@@ -142,6 +149,7 @@ export function zhInitializeState(data: GetSalesBookForm, copy = false) {
                 stepId: fs.step.id,
                 meta: stepMeta as any,
                 salesOrderItemId: item.item.id,
+                componentId: fs.item?.id,
             });
             if (stp.title == "Item Type") {
                 itemType = stp.value as any;
