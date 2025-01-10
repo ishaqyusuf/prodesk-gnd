@@ -1,21 +1,20 @@
 import Modal from "@/components/common/modal";
-import { useFormDataStore } from "../../../_common/_stores/form-data-store";
-import { createContext, useContext, useMemo } from "react";
+import { createContext, useContext } from "react";
 import { useForm } from "react-hook-form";
 
 import { Form } from "@/components/ui/form";
-import FormSelect from "@/components/common/controls/form-select";
-import { ComboxBox } from "@/components/(clean-code)/custom/controlled/combo-box";
 
-import {
-    createComponentUseCase,
-    updateStepMetaUseCase,
-} from "@/app/(clean-code)/(sales)/_common/use-case/step-component-use-case";
+import { createComponentUseCase } from "@/app/(clean-code)/(sales)/_common/use-case/step-component-use-case";
 import { _modal } from "@/components/common/modal/provider";
 import { toast } from "sonner";
 import { StepHelperClass } from "../../../_utils/helpers/zus/zus-helper-class";
 import FormInput from "@/components/common/controls/form-input";
 import { StepComponentForm } from "@/app/(clean-code)/(sales)/types";
+import { ComponentImg } from "../../component-img";
+import { Label } from "@/components/ui/label";
+import Button from "@/components/common/button";
+import { Image } from "lucide-react";
+import { openImgModal } from "../img-gallery-modal";
 
 interface Props {
     stepCls: StepHelperClass;
@@ -33,8 +32,8 @@ export function openComponentModal(
             title: "",
             stepId: stepCls.getStepForm().stepId,
             isDoor: stepCls.isDoor(),
+            productCode: "",
         };
-        console.log(data);
     }
     _modal.openModal(<StepComponentFormModal stepCls={stepCls} data={data} />);
 }
@@ -52,9 +51,30 @@ export function useInitContext(props: Props) {
         _modal.close();
         toast.success("Saved.");
     }
+    const [img, title] = form.watch(["img", "title"]);
+    const browseImg = () => {
+        openImgModal({
+            title: title,
+            stepId: props.stepCls.getStepForm().stepId,
+            onBack() {
+                openComponentModal(props.stepCls, {
+                    ...form.getValues(),
+                });
+            },
+            onSelect(img) {
+                openComponentModal(props.stepCls, {
+                    ...form.getValues(),
+                    img,
+                });
+            },
+        });
+    };
     return {
         form,
+        browseImg,
         save,
+        img,
+        title,
     };
 }
 export default function StepComponentFormModal(props: Props) {
@@ -70,6 +90,24 @@ export default function StepComponentFormModal(props: Props) {
                         name="title"
                         label="Component Name"
                     />
+                    <FormInput
+                        uppercase
+                        control={ctx.form.control}
+                        name="productCode"
+                        label="Product Code"
+                    />
+                    <div className="flex justify-between items-center">
+                        <Label>Image</Label>
+                        <Button onClick={ctx.browseImg} size="xs">
+                            <Image className="size-4 mr-2" />
+                            Images
+                        </Button>
+                    </div>
+                    <div className="flex justify-center">
+                        <div className="w-2/3">
+                            <ComponentImg src={ctx.img} aspectRatio={2 / 2} />
+                        </div>
+                    </div>
                 </Form>
                 <Modal.Footer submitText="Save" onSubmit={ctx.save} />
             </Modal.Content>

@@ -134,39 +134,27 @@ export async function updateStepComponentDta(id, data) {
 }
 export async function createStepComponentDta(data: StepComponentForm) {
     const meta = {} satisfies StepComponentMeta;
-    const c = await prisma.dykeStepProducts.create({
-        data: {
-            uid: generateRandomString(5),
-            custom: data.custom,
-            meta,
-            step: {
-                connect: { id: data.stepId },
-            },
-            img: data.img,
-            name: data.title,
-            // door: data.isDoor
-            //     ? {
-            //           create: {
-            //               title: data.title,
-            //               img: data.img,
-            //           },
-            //       }
-            //     : undefined,
-            // product: data.isDoor
-            //     ? undefined
-            //     : {
-            //           create: {
-            //               title: data.title,
-            //               value: data.title,
-            //               img: data.img,
-            //           },
-            //       },
-        },
-        // include: {
-        //     door: data.isDoor,
-        //     product: !data.isDoor,
-        // },
-    });
+    const c = data.id
+        ? await prisma.dykeStepProducts?.update({
+              where: { id: data.id },
+              data: {
+                  img: data.img,
+                  name: data.title,
+                  productCode: data.productCode,
+              },
+          })
+        : prisma.dykeStepProducts.create({
+              data: {
+                  uid: generateRandomString(5),
+                  custom: data.custom,
+                  productCode: data.productCode,
+                  meta,
+                  step: {
+                      connect: { id: data.stepId },
+                  },
+                  img: data.img,
+                  name: data.title,
+              },
+          });
     return c;
-    // const resp = transformStepProduct(c as any);
 }

@@ -233,9 +233,12 @@ export class StepHelperClass extends SettingsClass {
         });
     }
     public addStepComponent(component) {
+        let _components = this.getStepComponents;
+        let index = _components.findIndex((s) => s.id == component.id);
+        if (index >= 0) _components[index] = component;
+        else _components.push(component);
         this.zus.dotUpdate(`kvStepComponentList.${this.stepUid}`, [
-            component,
-            ...this.getStepComponents,
+            ..._components,
         ]);
         this.refreshStepComponentsData();
     }

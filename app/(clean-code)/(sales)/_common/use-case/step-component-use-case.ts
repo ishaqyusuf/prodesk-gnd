@@ -24,6 +24,8 @@ import {
     harvestSalesPricingDta,
     saveHarvestedDta,
 } from "../data-access/sales-pricing-dta";
+import { Prisma } from "@prisma/client";
+import { prisma } from "@/db";
 
 export async function getMouldingSpeciesUseCase() {
     return await getDykeStepProductTitles("Specie");
@@ -111,4 +113,87 @@ export async function createComponentUseCase(data: StepComponentForm) {
     const c = await createStepComponentDta(data);
     const resp = transformStepProduct(c as any);
     return resp;
+}
+interface BrowseComponentImgProps {
+    q: string;
+    stepId: number;
+    page?: number;
+    perPage?: number;
+}
+export async function browseComponentImgUseCase({
+    q,
+    stepId,
+    perPage = 20,
+    page = 1,
+}: BrowseComponentImgProps) {
+    const imgNotNull = { img: { not: null } };
+    const query: Prisma.DykeStepProductsWhereInput[] = [
+        {
+            deletedAt: {},
+            OR: [
+                imgNotNull,
+                {
+                    door: imgNotNull,
+                },
+                {
+                    product: imgNotNull,
+                },
+            ],
+        },
+    ];
+    if (q) {
+        const _q = { contains: q };
+        query.push({
+            OR: [
+                {
+                    door: {
+                        title: _q,
+                    },
+                },
+                {
+                    product: {
+                        title: _q,
+                    },
+                },
+                {
+                    name: _q,
+                },
+            ],
+        });
+    }
+    if (stepId) {
+        query.push({
+            dykeStepId: stepId,
+        });
+        // console.log(stepId);
+    }
+    const result = await prisma.dykeStepProducts.findMany({
+        where: {
+            AND: query,
+        },
+        select: {
+            img: true,
+            name: true,
+            door: {
+                select: {
+                    img: true,
+                    title: true,
+                },
+            },
+            product: {
+                select: {
+                    img: true,
+                    title: true,
+                },
+            },
+        },
+        // distinct: "img",
+        take: 20,
+    });
+    return result.map((result) => {
+        return {
+            title: result.name || result.door?.title || result.product?.title,
+            img: result.img || result.door?.img || result.product?.img,
+        };
+    });
 }

@@ -548,4 +548,5 @@ export interface StepComponentForm {
     stepId;
     isDoor?: boolean;
     custom?: boolean;
+    productCode?: string;
 }

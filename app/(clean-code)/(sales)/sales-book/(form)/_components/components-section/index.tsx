@@ -39,7 +39,6 @@ import { openDoorSizeSelectModal } from "../modals/door-size-select-modal/open-m
 interface Props {
     itemStepUid;
 }
-
 export function ComponentsSection({ itemStepUid }: Props) {
     const ctx = useStepContext(itemStepUid);
     const { items, sticky, cls, props } = ctx;
@@ -369,7 +368,17 @@ export function Component({
                             Icon={Icons.edit}
                             SubMenu={
                                 <>
-                                    <Menu.Item Icon={Info}>Details</Menu.Item>
+                                    <Menu.Item
+                                        onClick={() => {
+                                            openComponentModal(
+                                                ctx.cls,
+                                                component
+                                            );
+                                        }}
+                                        Icon={Info}
+                                    >
+                                        Details
+                                    </Menu.Item>
                                     <Menu.Item
                                         onClick={editVisibility}
                                         Icon={Variable}
