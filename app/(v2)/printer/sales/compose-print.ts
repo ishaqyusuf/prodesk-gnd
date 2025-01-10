@@ -775,8 +775,8 @@ function heading({ mode, isOrder, order, isEstimate, isPacking }) {
             )
         );
     }
-    if (isOrder || isPacking)
-        h.lines.push(styled("P.O No", order?.meta?.po, {}));
+    // if (isOrder || isPacking)
+    h.lines.push(styled("P.O No", order?.meta?.po, {}));
 
     if (isOrder) {
         h.lines.push(
