@@ -14,6 +14,7 @@ import { Icons } from "@/components/_v1/icons";
 import Link from "next/link";
 import QueryTab from "@/app/(clean-code)/_common/query-tab";
 import { QueryTabAction } from "@/app/(clean-code)/_common/query-tab/query-tab-edit";
+import { __filters } from "../../utils/contants";
 
 interface Props {
     // promise;
@@ -33,6 +34,7 @@ export default function QuotesPageClient({ filterFields, queryKey }: Props) {
                 ctx.Column("Address", "address", QuotesCell.Address),
                 ctx.Column("Rep", "rep", QuotesCell.SalesRep),
                 ctx.Column("Invoice", "invoice", QuotesCell.Invoice),
+                ...__filters().quotes.filterColumns,
             ];
         },
         checkable: true,
@@ -53,7 +55,7 @@ export default function QuotesPageClient({ filterFields, queryKey }: Props) {
                 {...table.props}
                 ActionCell={QuotesCell.Action}
             >
-                <DataTable.Header className="bg-white">
+                <DataTable.Header top="lg" className="bg-white">
                     <div className="flex justify-between items-end mb-2 gap-2 sm:sticky">
                         <div className="">
                             <QueryTab page="quotes" />
