@@ -1,8 +1,6 @@
 import { Label } from "@/components/ui/label";
 import { useFormDataStore } from "../../../_common/_stores/form-data-store";
 import { Input, LineSwitch } from "../line-input";
-import { useMemo } from "react";
-import { SettingsClass } from "../../../_utils/helpers/zus/settings-class";
 import { FieldPath } from "react-hook-form";
 import { SalesFormZusData } from "@/app/(clean-code)/(sales)/types";
 import { CustomerSearch } from "../customer-search";

@@ -45,7 +45,6 @@ export function TxForm({}) {
         if (!tx.customerProfiles?.[tx.phoneNo] && tx.phoneNo) {
             getCustomerOverviewUseCase(tx.phoneNo)
                 .then((result) => {
-                    console.log(result);
                     tx.dotUpdate(`customerProfiles.${tx.phoneNo}`, result);
                 })
                 .catch((e) => {

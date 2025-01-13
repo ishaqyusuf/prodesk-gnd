@@ -16,6 +16,7 @@ import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { FormSelectProps } from "@/components/common/controls/form-select";
 import { Label } from "@/components/ui/label";
+import { useMemo } from "react";
 
 interface LineInputProps {
     name: FieldPath<SalesFormZusData>;
@@ -23,14 +24,18 @@ interface LineInputProps {
 }
 function getValue<K extends FieldPath<SalesFormZusData>>(
     path: K,
-    state
+    state: SalesFormZusData
 ): FieldPathValue<SalesFormZusData, K> {
     return dotObject.pick(path, state);
 }
 export function Input({ name, label, ...props }: LineInputProps & InputProps) {
     const state = useFormDataStore();
 
-    const value = getValue(name, state);
+    const value = useMemo(() => {
+        const value = getValue(name, state);
+        return value || "";
+    }, [state]);
+
     return (
         <div className={cn(label && "grid gap-2")}>
             {label && (

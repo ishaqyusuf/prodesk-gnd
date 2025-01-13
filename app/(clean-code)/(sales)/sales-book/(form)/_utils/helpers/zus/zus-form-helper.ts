@@ -108,6 +108,8 @@ export function zhInitializeState(data: GetSalesBookForm, copy = false) {
         },
         formStatus: "ready",
     };
+    console.log({ resp });
+
     // console.log({ itemArray: data.itemArray });
 
     data.itemArray.map((item) => {

@@ -46,7 +46,7 @@ export default function PayForm({}) {
     }, [pm, tx.terminals]);
     if (!tx.phoneNo) return null;
     return (
-        <div className="border-t pt-2 -mb-2 bg-white">
+        <div className="border-t p-4 -m-4 sm:-m-6 grid gap-2 rounded-b-lg shadow-lg bg-white">
             {!tx.paymentMethod || (
                 <Form {...form}>
                     <div className="grid gap-4">
