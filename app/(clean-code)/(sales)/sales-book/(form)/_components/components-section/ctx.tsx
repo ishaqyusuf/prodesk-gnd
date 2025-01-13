@@ -159,6 +159,7 @@ export function useStepContext(stepUid) {
         setTab,
         tab,
         tabComponents,
+        stepComponents,
         selectAll,
         q,
         setQ,

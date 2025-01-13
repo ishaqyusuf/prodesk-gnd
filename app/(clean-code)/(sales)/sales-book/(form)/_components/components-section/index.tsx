@@ -38,6 +38,7 @@ import { openComponentModal } from "../modals/component-form";
 import SearchBar from "./search-bar";
 import { openDoorSizeSelectModal } from "../modals/door-size-select-modal/open-modal";
 import { openSectionSettingOverride } from "../modals/component-section-setting-override";
+import { CustomComponent } from "./custom-component";
 
 interface Props {
     itemStepUid;
@@ -60,6 +61,7 @@ export function ComponentsSection({ itemStepUid }: Props) {
                         component={component}
                     />
                 ))}
+                <CustomComponent ctx={ctx} />
             </div>
             <FloatingAction ctx={ctx} />
         </ScrollArea>
@@ -273,7 +275,6 @@ export function Component({
         });
         ctx.cls.deleteComponent(component.id);
     }
-
     const editVisibility = useCallback(() => {
         openComponentVariantModal(cls, [component.uid]);
     }, [cls, component]);
