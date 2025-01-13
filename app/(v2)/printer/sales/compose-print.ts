@@ -472,7 +472,9 @@ function getDoorsTable(
                     } else {
                         m.housePackageTool?.doors?.map((door, _doorI) => {
                             const doorTitle =
-                                m.housePackageTool.stepProduct?.door?.title;
+                                m.housePackageTool.stepProduct?.door?.title ||
+                                m.housePackageTool?.door?.title ||
+                                "";
                             const isPh = m.formSteps.find((s) =>
                                 s.value?.toLowerCase()?.startsWith("ph -")
                             );
