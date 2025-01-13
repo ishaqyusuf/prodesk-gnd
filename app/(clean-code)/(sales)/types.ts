@@ -327,6 +327,7 @@ export type DykeSalesDoor = Omit<DykeSalesDoors, "meta"> & {
     priceData?: Partial<ComponentPrice>;
 };
 export type StepMeta = {
+    custom: boolean;
     priceStepDeps: string[];
     doorSizeVariation?: {
         rules: {

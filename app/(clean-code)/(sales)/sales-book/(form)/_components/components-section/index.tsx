@@ -39,6 +39,7 @@ import SearchBar from "./search-bar";
 import { openDoorSizeSelectModal } from "../modals/door-size-select-modal/open-modal";
 import { openSectionSettingOverride } from "../modals/component-section-setting-override";
 import { CustomComponent } from "./custom-component";
+import { CustomComponentAction } from "./custom-component.action";
 
 interface Props {
     itemStepUid;
@@ -95,7 +96,6 @@ function FloatingAction({ ctx }: { ctx: UseStepContext }) {
     }, [stepUid, ctx]);
     const editVisibility = useCallback(() => {
         const uids = selectionUids();
-
         openComponentVariantModal(
             new ComponentHelperClass(stepUid, uids[0]),
             uids
@@ -222,6 +222,7 @@ function FloatingAction({ ctx }: { ctx: UseStepContext }) {
                                 >
                                     Refresh
                                 </Menu.Item>
+                                <CustomComponentAction ctx={ctx} />
                             </Menu>
                             {!hasSelections || (
                                 <>
