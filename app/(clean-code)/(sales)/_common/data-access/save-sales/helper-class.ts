@@ -12,7 +12,9 @@ export class SaveSalesHelper {
 
     public paymentDueDate(md: SalesFormFields["metaData"]) {
         if (!md.paymentTerm || md.paymentTerm == "None") return null;
-        const val = +md.paymentTerm?.toLowerCase()?.replace("net", null);
+        const val = +md.paymentTerm?.toLowerCase()?.replace("net", "")?.trim();
+        // console.log(val, md.paymentTerm);
+
         return dayjs(md.createdAt).add(val, "days").toISOString();
     }
     public createRel(newId, oldId) {
