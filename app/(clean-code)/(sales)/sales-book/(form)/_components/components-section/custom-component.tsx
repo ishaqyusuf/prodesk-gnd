@@ -37,13 +37,19 @@ export function CustomComponent({ ctx }: Props) {
         const data = form.getValues();
         let cls: ComponentHelperClass;
         let eProd = customInputs?.find((s) => s.title == data.title);
+        console.log({ data, eProd });
+
         if (!eProd) {
             eProd = (await createCustomComponentUseCase({
                 title: data.title,
                 price: data.basePrice ? +data.basePrice : null,
                 stepId: stepForm?.stepId,
             })) as any;
-            cls = new ComponentHelperClass(ctx.cls.itemStepUid, eProd.uid);
+            cls = new ComponentHelperClass(
+                ctx.cls.itemStepUid,
+                eProd.uid,
+                eProd
+            );
             if (data.basePrice) {
                 await cls.fetchUpdatedPrice();
             }
@@ -54,7 +60,11 @@ export function CustomComponent({ ctx }: Props) {
                     price: +data.basePrice,
                     id: eProd.id,
                 });
-                cls = new ComponentHelperClass(ctx.cls.itemStepUid, eProd.uid);
+                cls = new ComponentHelperClass(
+                    ctx.cls.itemStepUid,
+                    eProd.uid,
+                    eProd
+                );
                 await cls.fetchUpdatedPrice();
             }
         }
