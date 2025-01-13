@@ -11,6 +11,7 @@ import {
     updateCustomComponentUseCase,
 } from "@/app/(clean-code)/(sales)/_common/use-case/step-component-use-case";
 import { ComponentHelperClass } from "../../_utils/helpers/zus/step-component-class";
+import { toast } from "sonner";
 
 interface Props {
     ctx: UseStepContext;
@@ -35,6 +36,10 @@ export function CustomComponent({ ctx }: Props) {
     );
     async function _continue() {
         const data = form.getValues();
+        if (!data.title) {
+            toast.error("Invalid custom input");
+            return;
+        }
         let cls: ComponentHelperClass;
         let eProd = customInputs?.find((s) => s.title == data.title);
         console.log({ data, eProd });
