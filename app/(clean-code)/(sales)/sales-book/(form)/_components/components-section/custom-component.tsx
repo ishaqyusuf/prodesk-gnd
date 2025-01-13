@@ -36,6 +36,8 @@ export function CustomComponent({ ctx }: Props) {
     );
     async function _continue() {
         const data = form.getValues();
+        console.log(data);
+
         if (!data.title) {
             toast.error("Invalid custom input");
             return;
@@ -82,7 +84,7 @@ export function CustomComponent({ ctx }: Props) {
     return (
         <Form {...form}>
             <div className="relative p-2 min-h-[25vh] xl:min-h-[40hv]  group  flex flex-col gap-4">
-                {customInputs?.length ? (
+                {/* {customInputs?.length ? (
                     <AutoComplete
                         onSelect={(value: any) => {
                             form.setValue("salesPrice", value?.salesPrice);
@@ -98,15 +100,15 @@ export function CustomComponent({ ctx }: Props) {
                         label={"Custom"}
                         perPage={10}
                     />
-                ) : (
-                    <FormInput
-                        label="Custom"
-                        size="sm"
-                        control={form.control}
-                        name="title"
-                        className="uppercase"
-                    />
-                )}
+                ) : ( */}
+                <FormInput
+                    label="Custom"
+                    size="sm"
+                    control={form.control}
+                    name="title"
+                    className="uppercase"
+                />
+                {/* )} */}
                 {hasCost ? (
                     <FormInput
                         label="Price"
