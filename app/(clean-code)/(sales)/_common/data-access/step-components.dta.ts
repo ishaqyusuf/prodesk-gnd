@@ -9,6 +9,8 @@ export interface LoadStepComponentsProps {
     stepTitle?: "Door" | "Moulding";
     id?;
     ids?;
+    title?;
+    isCustom?: boolean;
 }
 export async function loadStepComponentsDta(props: LoadStepComponentsProps) {
     const prods = await getComponentsDta(props);
@@ -56,6 +58,11 @@ export async function getComponentsDta(props: LoadStepComponentsProps) {
                 dykeStepId: props.stepId,
             });
     }
+    if (props.isCustom) wheres.push({ custom: true });
+    if (props.title)
+        wheres.push({
+            name: props.title,
+        });
     if (props.id) wheres.push({ id: props.id });
     if (props.ids)
         wheres.push({
@@ -131,6 +138,7 @@ export function transformStepProduct(
         _metaData: {
             custom: component.custom,
             visible: false,
+            priceId: null,
         },
     };
 }

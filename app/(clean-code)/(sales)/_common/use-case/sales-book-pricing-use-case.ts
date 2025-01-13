@@ -16,7 +16,7 @@ export async function saveComponentPricingUseCase(
 export async function updateComponentPricingUseCase(
     data: Partial<Prisma.DykePricingSystemCreateManyInput>[]
 ) {
-    await updateComponentPricingsDta(data);
+    return await updateComponentPricingsDta(data);
 }
 export async function getPricingByUidUseCase(componentUid) {
     return composeSalesPricing(

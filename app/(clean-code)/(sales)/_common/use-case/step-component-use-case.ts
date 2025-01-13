@@ -8,12 +8,14 @@ import {
 } from "../data-access/dyke-steps.persistent";
 import {
     createStepComponentDta,
+    getComponentsDta,
     loadStepComponentsDta,
     transformStepProduct,
     updateStepComponentDta,
 } from "../data-access/step-components.dta";
 import {
     deleteStepProductsByUidDta,
+    getComponentDta,
     getComponentMetaDta,
     getSalesFormStepByIdDta,
     getStepComponentsMetaByUidDta,
@@ -27,6 +29,7 @@ import {
 } from "../data-access/sales-pricing-dta";
 import { Prisma } from "@prisma/client";
 import { prisma } from "@/db";
+import { updateComponentPricingUseCase } from "./sales-book-pricing-use-case";
 
 export async function getMouldingSpeciesUseCase() {
     return await getDykeStepProductTitles("Specie");
@@ -120,6 +123,44 @@ export async function createComponentUseCase(data: StepComponentForm) {
     const c = await createStepComponentDta(data);
     const resp = transformStepProduct(c as any);
     return resp;
+}
+export async function updateCustomComponentUseCase(data: {
+    price: number;
+    id: number;
+}) {
+    await updateComponentPricingUseCase([
+        {
+            id: data.id,
+            price: data.price,
+        },
+    ]);
+    const c = (
+        await getComponentsDta({
+            isCustom: true,
+            id: data.id,
+        })
+    )[0];
+    const resp = transformStepProduct(c as any);
+    return resp;
+}
+export async function createCustomComponentUseCase(data: {
+    title: string;
+    stepId: number;
+    price: number | null;
+}) {
+    const component = await createStepComponentDta({
+        stepId: data.stepId,
+        title: data.title,
+        custom: true,
+    });
+    if (data.price)
+        await updateComponentPricingUseCase([
+            {
+                id: component.id,
+                price: data.price,
+            },
+        ]);
+    return transformStepProduct(component as any);
 }
 interface BrowseComponentImgProps {
     q: string;

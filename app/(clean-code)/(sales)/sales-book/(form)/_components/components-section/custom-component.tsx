@@ -6,13 +6,18 @@ import FormInput from "@/components/common/controls/form-input";
 import Button from "@/components/common/button";
 import { useMemo } from "react";
 import AutoComplete from "@/components/_v1/common/auto-complete";
+import {
+    createCustomComponentUseCase,
+    updateCustomComponentUseCase,
+} from "@/app/(clean-code)/(sales)/_common/use-case/step-component-use-case";
+import { ComponentHelperClass } from "../../_utils/helpers/zus/step-component-class";
 
 interface Props {
     ctx: UseStepContext;
 }
 export function CustomComponent({ ctx }: Props) {
     const zus = useFormDataStore();
-    const stepForm = ctx.cls.getItemForm();
+    const stepForm = ctx.cls.getStepForm();
     const form = useForm({
         defaultValues: {
             title: "",
@@ -28,7 +33,37 @@ export function CustomComponent({ ctx }: Props) {
         () => ctx.items?.filter((s) => s.salesPrice)?.length > 0,
         [ctx.items]
     );
-    async function _continue() {}
+    async function _continue() {
+        const data = form.getValues();
+        let cls: ComponentHelperClass;
+        let eProd = customInputs?.find((s) => s.title == data.title);
+        if (!eProd) {
+            eProd = (await createCustomComponentUseCase({
+                title: data.title,
+                price: data.basePrice ? +data.basePrice : null,
+                stepId: stepForm?.stepId,
+            })) as any;
+            cls = new ComponentHelperClass(ctx.cls.itemStepUid, eProd.uid);
+            if (data.basePrice) {
+                await cls.fetchUpdatedPrice();
+            }
+            ctx.cls.addStepComponent(eProd);
+        } else {
+            if (eProd.basePrice != data.basePrice && data.basePrice) {
+                eProd = await updateCustomComponentUseCase({
+                    price: +data.basePrice,
+                    id: eProd.id,
+                });
+                cls = new ComponentHelperClass(ctx.cls.itemStepUid, eProd.uid);
+                await cls.fetchUpdatedPrice();
+            }
+        }
+        if (eProd) {
+            if (!cls)
+                cls = new ComponentHelperClass(ctx.cls.itemStepUid, eProd.uid);
+            cls.selectComponent();
+        }
+    }
     return (
         <Form {...form}>
             <div className="relative p-2 min-h-[25vh] xl:min-h-[40hv]  group  flex flex-col gap-4">
@@ -39,6 +74,7 @@ export function CustomComponent({ ctx }: Props) {
                             form.setValue("basePrice", value?.basePrice);
                         }}
                         itemText={"label"}
+                        allowCreate
                         itemValue={"value"}
                         options={customInputs}
                         size="sm"
