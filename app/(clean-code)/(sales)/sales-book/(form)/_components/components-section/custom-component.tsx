@@ -99,6 +99,7 @@ export function CustomComponent({ ctx }: Props) {
                         size="sm"
                         control={form.control}
                         name="title"
+                        className="uppercase"
                     />
                 )}
                 {hasCost ? (
