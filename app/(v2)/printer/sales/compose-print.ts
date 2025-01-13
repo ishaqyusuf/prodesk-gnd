@@ -425,7 +425,8 @@ function getDoorsTable(
                             case "swing":
                                 return door?.swing;
                             case "qty":
-                                return m.qty || door?.totalQty;
+                                const lhQty = door?.lhQty;
+                                return lhQty || m.qty || door?.totalQty;
                             case "description":
                                 return m.description;
                             case "door":

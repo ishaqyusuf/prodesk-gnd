@@ -3,7 +3,6 @@ import { getSalesBookFormDataDta } from "../sales-form-dta";
 import {
     DykeDoorType,
     DykeFormStepMeta,
-    DykeProductMeta,
     DykeStepProduct,
     HousePackageToolMeta,
     MultiSalesFormItem,
@@ -13,7 +12,6 @@ import {
     StepMeta,
     TypedDykeSalesDoor,
 } from "../../../types";
-import { inToFt, isComponentType } from "../../utils/sales-utils";
 import { generateRandomString, safeFormText, sum } from "@/lib/utils";
 import { DykeStepMeta } from "@/app/(v2)/(loggedIn)/sales-v2/type";
 import { transformSalesStepMeta } from "./sales-step-dto";
