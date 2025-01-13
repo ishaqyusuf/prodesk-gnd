@@ -34,7 +34,7 @@ export function Input({ name, label, ...props }: LineInputProps & InputProps) {
     const value = useMemo(() => {
         const value = getValue(name, state);
         return value || "";
-    }, [state.metaData]);
+    }, [state]);
 
     return (
         <div className={cn(label && "grid gap-2")}>

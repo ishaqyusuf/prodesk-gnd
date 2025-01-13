@@ -75,6 +75,8 @@ export function ShippingForm({}) {
             toast.error("Select Delivery Mode");
             return;
         }
+        console.log(data);
+        return;
         createSalesDispatchUseCase(data)
             .then((resp) => {
                 toast.success("Shipping created");
@@ -128,11 +130,8 @@ export function ShippingForm({}) {
                         </div>
                         <ScrollArea className="w-[600px] h-[65vh] flex flex-col">
                             <div className="p-4">
-                                {dispatchables?.map((item) => (
-                                    <ShippingItemLine
-                                        item={item}
-                                        key={item.id}
-                                    />
+                                {dispatchables?.map((item, index) => (
+                                    <ShippingItemLine item={item} key={index} />
                                 ))}
                             </div>
                         </ScrollArea>
