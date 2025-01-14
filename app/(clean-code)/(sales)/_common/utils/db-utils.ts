@@ -263,6 +263,7 @@ export const SalesOverviewIncludes = {
                     doors: {
                         ...excludeDeleted,
                         include: {
+                            stepProduct: true,
                             productions: AssignmentsInclude,
                         },
                     },

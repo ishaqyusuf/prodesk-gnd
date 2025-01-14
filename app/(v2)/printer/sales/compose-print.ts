@@ -472,6 +472,7 @@ function getDoorsTable(
                     } else {
                         m.housePackageTool?.doors?.map((door, _doorI) => {
                             const doorTitle =
+                                door?.stepProduct?.name ||
                                 m.housePackageTool.stepProduct?.door?.title ||
                                 m.housePackageTool?.door?.title ||
                                 "";

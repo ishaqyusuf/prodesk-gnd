@@ -176,10 +176,12 @@ export function salesItemGroupOverviewDto(data: GetFullSalesDataDta) {
                 molding,
                 doorType,
             } = gItem?.housePackageTool || {};
-            const doorTitle =
-                od?.title || gItem?.housePackageTool?.stepProduct?.door?.title;
             if (doors?.length) {
                 doors?.map((_door) => {
+                    const doorTitle =
+                        _door?.stepProduct?.name ||
+                        od?.title ||
+                        gItem?.housePackageTool?.stepProduct?.door?.title;
                     const pills = [
                         createTextPill(
                             inToFt(_door.dimension),
@@ -239,6 +241,7 @@ export function salesItemGroupOverviewDto(data: GetFullSalesDataDta) {
                                 "blue"
                             )
                         );
+                    // console.log(_door.);
 
                     items.push(
                         itemAnalytics(
