@@ -1,5 +1,8 @@
-import { GetDispatchListActions } from "../dispatch-actions/dispatch-action";
+import {
+    GetDispatchListActions,
+    LoadDispatchListAction,
+} from "../dispatch-actions/dispatch-action";
 
-// export function transformDispatchListItem(
-//     item: GetDispatchListActions['data'][0]
-// )
+export function transformDispatchListItem(item: LoadDispatchListAction[0]) {
+    return {};
+}

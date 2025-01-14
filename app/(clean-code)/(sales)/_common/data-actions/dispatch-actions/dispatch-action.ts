@@ -8,9 +8,25 @@ import {
     pageQueryFilter,
 } from "@/app/(clean-code)/_common/utils/db-utils";
 import { AsyncFnType } from "@/app/(clean-code)/type";
+import { transformDispatchListItem } from "../dto/dispatch-list-dto";
 
+export type LoadDispatchListAction = AsyncFnType<typeof loadDispatchListAction>;
 export type GetDispatchListActions = AsyncFnType<typeof getDispatchListActions>;
 export async function getDispatchListActions(query: SearchParamsType) {
+    const where = whereDispatch(query);
+    const data = await loadDispatchListAction(query);
+    const pageInfo = await getPageInfo(query, where, prisma.orderDelivery);
+    return {
+        pageCount: pageInfo.pageCount,
+        pageInfo,
+        data: data.map(transformDispatchListItem),
+        meta: {
+            totalRowCount: pageInfo.totalItems,
+        },
+    };
+}
+
+export async function loadDispatchListAction(query: SearchParamsType) {
     const where = whereDispatch(query);
     const data = await prisma.orderDelivery.findMany({
         where,
@@ -60,13 +76,5 @@ export async function getDispatchListActions(query: SearchParamsType) {
             },
         },
     });
-    const pageInfo = await getPageInfo(query, where, prisma.orderDelivery);
-    return {
-        pageCount: pageInfo.pageCount,
-        pageInfo,
-        data,
-        meta: {
-            totalRowCount: pageInfo.totalItems,
-        },
-    };
+    return data;
 }
