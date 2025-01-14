@@ -18,13 +18,15 @@ import { dispatchStatusList } from "../../../utils/contants";
 import { updateDispatchStatusUseCase } from "../../../use-case/sales-dispatch-use-case";
 
 let context = null;
-type Ctx = ReturnType<typeof useShippingFormCtx>;
-const useShippingForm = (): Ctx => {
+type Ctx = ReturnType<typeof useShippingOverviewCtx>;
+const useShippingOverview = (): Ctx => {
     const ctx = useItemProdViewContext();
 
-    return useShippingFormCtx(ctx);
+    return useShippingOverviewCtx(ctx);
 };
-const useShippingFormCtx = (ctx: ReturnType<typeof useItemProdViewContext>) => {
+const useShippingOverviewCtx = (
+    ctx: ReturnType<typeof useItemProdViewContext>
+) => {
     // const ctx = useItemProdViewContext();
     // if (_) return _;
     if (context?.id == ctx?.mainCtx?.tabData?.payloadSlug)
@@ -59,6 +61,8 @@ const useShippingFormCtx = (ctx: ReturnType<typeof useItemProdViewContext>) => {
             rest?.map((r) => {
                 qty = qtyDiff(qty, r.qty, true);
             });
+            console.log({ item, deliveries, qty, sItems: shipping.items });
+
             return {
                 item,
                 deliveries,
@@ -75,12 +79,12 @@ const useShippingFormCtx = (ctx: ReturnType<typeof useItemProdViewContext>) => {
     context = resp;
     return resp;
 };
-const ShippingFormCtx = createContext<ReturnType<typeof useShippingFormCtx>>(
-    null as any
-);
+const ShippingOverviewCtx = createContext<
+    ReturnType<typeof useShippingOverviewCtx>
+>(null as any);
 
 export function ShippingOverview({}) {
-    const ctx = useShippingForm();
+    const ctx = useShippingOverview();
     if (!ctx || !ctx?.shipping?.id) return null;
     const { mainCtx, shipping } = ctx;
     async function updateProgress(progress) {
@@ -97,7 +101,7 @@ export function ShippingOverview({}) {
         }
     }
     return (
-        <ShippingFormCtx.Provider value={ctx}>
+        <ShippingOverviewCtx.Provider value={ctx}>
             <div className="secondary-tab flex flex-col">
                 <SecondaryTabSheet
                     title={shipping.title}
@@ -198,6 +202,6 @@ export function ShippingOverview({}) {
                     </div>
                 </ScrollArea>
             </div>
-        </ShippingFormCtx.Provider>
+        </ShippingOverviewCtx.Provider>
     );
 }

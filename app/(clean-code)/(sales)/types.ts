@@ -311,7 +311,10 @@ export interface MultiSalesFormItem {
                 };
             };
             _doorForm: {
-                [dim in string]: DykeSalesDoor & { priceData: ComponentPrice };
+                [dim in string]: DykeSalesDoor & {
+                    priceData: ComponentPrice;
+                    stepProduct?: DykeStepProduct;
+                };
             };
             uid?;
             priceTags?: HousePackageToolMeta["priceTags"];

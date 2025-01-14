@@ -76,7 +76,7 @@ export function ShippingForm({}) {
             return;
         }
         console.log(data);
-        return;
+        // return;
         createSalesDispatchUseCase(data)
             .then((resp) => {
                 toast.success("Shipping created");

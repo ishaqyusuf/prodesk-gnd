@@ -139,6 +139,8 @@ export function salesShippingDto(
                 } as Qty,
             };
         });
+        console.log(items);
+
         return {
             id: d.id,
             date: formatDate(d.createdAt),

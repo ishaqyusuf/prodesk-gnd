@@ -136,7 +136,7 @@ export function salesItemGroupOverviewDto(data: GetFullSalesDataDta) {
                 ...def,
                 uid,
                 salesId: data.id,
-            };
+            } as any;
         return control;
     }
 

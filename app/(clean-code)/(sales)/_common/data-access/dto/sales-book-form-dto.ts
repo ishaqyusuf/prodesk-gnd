@@ -50,6 +50,7 @@ export function typedSalesBookFormItems(data: SalesFormData) {
         item.housePackageTool?.doors?.map((d) => {
             // if (d.rhQty && !isType.multiHandles) d.rhQty = 0;
             let dim = d.dimension?.replaceAll('"', "in");
+            // d.stepProduct?.uid;
             if (!d.priceId)
                 d.priceData = {
                     salesUnitCost: d.jambSizePrice,
