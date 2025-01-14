@@ -87,11 +87,11 @@ const ShippingOverviewCtx = createContext<
 
 export function ShippingOverview({}) {
     const ctx = useShippingOverview();
-    if (!ctx || !ctx?.shipping?.id) return null;
     const { mainCtx, shipping } = ctx;
     useEffect(() => {
         console.log("SHIPPING OVERVIEW");
     }, []);
+    if (!ctx || !ctx?.shipping?.id) return null;
     async function updateProgress(progress) {
         try {
             const resp = await updateDispatchStatusUseCase(
