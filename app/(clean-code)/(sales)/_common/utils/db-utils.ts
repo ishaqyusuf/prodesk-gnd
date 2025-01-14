@@ -103,6 +103,9 @@ export const SalesListInclude = {
         select: {
             id: true,
         },
+        where: {
+            deletedAt: null,
+        },
     },
     doors: {
         where: {
