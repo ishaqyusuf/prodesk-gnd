@@ -48,6 +48,7 @@ export const widthList = [
     "5-0",
     "5-4",
     "6-0",
+    "6-8",
 ];
 export const __filters = (): Filters => ({
     customers: {

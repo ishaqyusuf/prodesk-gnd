@@ -46,7 +46,7 @@ export async function getSalesOrdersDta(query: SearchParamsType) {
 }
 
 export type GetSalesListDta = AsyncFnType<typeof getSalesListDta>;
-export async function getSalesListDta(query: Partial<SearchParamsType>) {
+export async function getSalesListDta(query: SearchParamsType) {
     const where = whereSales(query);
 
     const data = await prisma.salesOrders.findMany({

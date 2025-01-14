@@ -302,7 +302,8 @@ export function salesItemGroupOverviewDto(data: GetFullSalesDataDta) {
                         {
                             orderId: data.id,
                             salesItemId: gItem.id,
-                            title: stepProduct.name,
+                            title:
+                                stepProduct.name || stepProduct?.product?.title,
                             totalQty: {
                                 qty: gItem.qty,
                                 total: gItem.qty,

@@ -77,6 +77,7 @@ export const searchParamsParser: {
     "with.trashed": parseAsBoolean,
     "trashed.only": parseAsBoolean,
     "dealer.id": parseAsInteger,
+    "sales.id": parseAsInteger,
     _q: parseAsString,
     id: parseAsInteger,
 };
@@ -96,6 +97,7 @@ export const searchSchema = z.object({
     search: z.string().optional(),
     "sales.type": z.enum(["order", "quote"]).optional(),
     "dealer.id": z.number().optional(),
+    "sales.id": z.number().optional(),
 });
 export const searchParamsCache = createSearchParamsCache(searchParamsParser);
 export const searchParamsSerializer = createSerializer(searchParamsParser);

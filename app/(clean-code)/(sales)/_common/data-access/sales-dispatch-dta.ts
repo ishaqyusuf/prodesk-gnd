@@ -19,7 +19,7 @@ import {
     pageQueryFilter,
 } from "@/app/(clean-code)/_common/utils/db-utils";
 import { DispatchListInclude } from "../utils/db/dispatch";
-import { SalesDispatchStatus, SalesStatType } from "../../types";
+import { SalesDispatchStatus } from "../../types";
 import { FilterParams } from "@/components/(clean-code)/data-table/search-params";
 
 export type SalesDispatchFormData = AsyncFnType<typeof getSalesDispatchFormDta>;
@@ -266,7 +266,6 @@ export async function createSalesDispatchDta(data: SalesDispatchFormData) {
 
             if (createManyData.length) {
                 const totalQty = sum(createManyData.map((s) => s.qty));
-                console.log({ createManyData });
 
                 await prisma.orderItemDelivery.createMany({
                     data: createManyData,

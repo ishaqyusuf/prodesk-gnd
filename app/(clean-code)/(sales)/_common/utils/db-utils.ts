@@ -271,6 +271,7 @@ export const SalesOverviewIncludes = {
                     stepProduct: {
                         include: {
                             door: true,
+                            product: true,
                         },
                     },
                 },

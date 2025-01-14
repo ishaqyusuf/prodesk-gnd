@@ -195,8 +195,6 @@ function whereSearch(query): Prisma.SalesOrdersWhereInput | null {
         };
     }
     if (query) {
-        console.log(parsedQ);
-
         return {
             OR: [
                 { orderId: inputQ },
