@@ -13,6 +13,7 @@ export function PayAction({}) {
             disabled={!ctx.item.due || payCtx.paymentMethod != null}
             onClick={() => {
                 payCtx.form.setValue("paymentMethod", "terminal");
+                payCtx.form.setValue("amount", ctx.item.due);
             }}
         >
             <Icons.dollar className="size-4" />
