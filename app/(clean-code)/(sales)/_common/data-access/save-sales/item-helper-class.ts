@@ -300,7 +300,6 @@ export class ItemHelperClass {
 
         const updateData = {
             meta,
-
             ...(isMoulding
                 ? {}
                 : {
@@ -309,7 +308,6 @@ export class ItemHelperClass {
             rate: this.ctx.safeInt(gf?.pricing?.unitPrice),
             total: this.ctx.safeInt(gf?.pricing?.totalPrice),
             description: gf.meta.description,
-
             swing: gf.swing,
             qty: this.ctx.safeInt(gf.qty.total),
             multiDykeUid: formItem.groupItem.groupUid,
@@ -341,7 +339,6 @@ export class ItemHelperClass {
             const itemHtp: HptData = {
                 id: gf.hptId,
             };
-
             const hptMeta = {
                 priceTags: {
                     moulding: {
@@ -387,7 +384,6 @@ export class ItemHelperClass {
                 } satisfies Prisma.HousePackageToolsCreateManyInput;
                 itemHtp.data = hpt;
                 itemHtp.id = hpt.id;
-                console.log("CREATE");
             }
             this.itemData.hpt = itemHtp;
         }

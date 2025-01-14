@@ -562,3 +562,11 @@ export interface StepComponentForm {
     custom?: boolean;
     productCode?: string;
 }
+
+export type QtyControlType =
+    | "qty"
+    | "prodAssigned"
+    | "prodCompleted"
+    | "dispatchAssigned"
+    | "dispatchCompleted"
+    | "dispatchFailed";

@@ -1,7 +1,7 @@
 import { toSafeInteger } from "lodash";
 import { SalesDispatchStatus } from "../../../types";
 import { generateDispatchId } from "../../utils/dispatch-utils";
-import { LoadDispatchListAction } from "../dispatch-actions/dispatch-action";
+import { LoadDispatchListAction } from "./dispatch-list-action";
 import { sum } from "@/lib/utils";
 import { formatDate } from "@/lib/use-day";
 type DispatchItem = LoadDispatchListAction[number]["items"][number];
