@@ -129,6 +129,7 @@ model QtyControl {
     total               Int               @default(0)
     type                String
     percentage          Float?
+    autoComplete        Boolean?
     deletedAt           DateTime?         @db.Timestamp(0)
     SalesItemControl    SalesItemControl? @relation(fields: [salesItemControlUid], references: [uid])
     salesItemControlUid String?
