@@ -126,6 +126,7 @@ model SalesItemControl {
     produceable Boolean?
     shippable   Boolean?
     sales       SalesOrders? @relation(fields: [salesId], references: [id])
+    deletedAt   DateTime?    @db.Timestamp(0)
 
     @@index([salesId])
     @@index([uid])

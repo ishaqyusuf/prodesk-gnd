@@ -29,6 +29,7 @@ model GitTaskTags {
     gitTaskId Int
     task      GitTasks? @relation(fields: [gitTaskId], references: [id])
     tag       Tags?     @relation(fields: [tagId], references: [id])
+    deletedAt DateTime? @db.Timestamp(0)
 
     @@index([gitTaskId])
     @@index([tagId])

@@ -56,12 +56,12 @@ model Users {
 }
 
 model Session {
-    id           String   @id @default(cuid())
-    sessionToken String   @unique @map("session_token")
+    id           String    @id @default(cuid())
+    sessionToken String    @unique @map("session_token")
     userId       Int
     expires      DateTime
-
-    user Users @relation(fields: [userId], references: [id], onDelete: Cascade)
+    deletedAt    DateTime? @db.Timestamp(0)
+    user         Users     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model EmployeeProfile {

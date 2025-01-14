@@ -11,7 +11,6 @@ import { Switch } from "@/components/ui/switch";
 import { useFormDataStore } from "../../_common/_stores/form-data-store";
 import { SalesFormZusData } from "@/app/(clean-code)/(sales)/types";
 import { dotObject } from "@/app/(clean-code)/_common/utils/utils";
-import { SelectProps } from "@radix-ui/react-select";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { FormSelectProps } from "@/components/common/controls/form-select";

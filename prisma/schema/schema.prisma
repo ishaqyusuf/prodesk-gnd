@@ -75,6 +75,7 @@ model ErrorLogTags {
     errorTagId Int
     errorLog   ErrorLog  @relation(fields: [errorLogId], references: [id])
     errorTags  ErrorTags @relation(fields: [errorTagId], references: [id])
+    deletedAt  DateTime? @db.Timestamp(0)
 
     @@index([errorLogId])
     @@index([errorTagId])
@@ -84,6 +85,7 @@ model ErrorTags {
     id           Int            @unique @default(autoincrement())
     name         String         @unique
     errorLogTags ErrorLogTags[]
+    deletedAt    DateTime?      @db.Timestamp(0)
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
@@ -452,6 +454,7 @@ model ModelHasPermissions {
     modelType    String      @db.VarChar(255)
     modelId      BigInt      @db.UnsignedBigInt
     permissions  Permissions @relation(fields: [permissionId], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "model_has_permissions_permission_id_foreign")
+    deletedAt    DateTime?   @db.Timestamp(0)
     // @@index([createdAt,deletedAt,modelId, modelType], map: "model_has_permissions_model_id_model_type_index")
 
     @@id([permissionId, modelId, modelType])
@@ -463,8 +466,9 @@ model ModelHasRoles {
     modelType String @db.VarChar(255)
     modelId   Int
 
-    role Roles @relation(fields: [roleId], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "model_has_roles_role_id_foreign")
-    user Users @relation(fields: [modelId], references: [id])
+    role      Roles     @relation(fields: [roleId], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "model_has_roles_role_id_foreign")
+    user      Users     @relation(fields: [modelId], references: [id])
+    deletedAt DateTime? @db.Timestamp(0)
     // @@index([createdAt,deletedAt,modelId, modelType], map: "model_has_roles_model_id_model_type_index")
 
     @@id([roleId, modelId, modelType])
@@ -532,6 +536,7 @@ model PasswordResets {
     email     String    @db.VarChar(255)
     token     String    @db.VarChar(255)
     usedAt    DateTime? @db.Timestamp(0)
+    deletedAt DateTime? @db.Timestamp(0)
     createdAt DateTime? @default(now()) @db.Timestamp(0)
 }
 
