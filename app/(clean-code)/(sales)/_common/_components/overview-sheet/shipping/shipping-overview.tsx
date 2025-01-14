@@ -57,6 +57,8 @@ const useShippingOverviewCtx = (
             );
 
             const [d1, d2, ...rest] = deliveries;
+            console.log(item.assignments);
+
             let qty = d2 ? qtyDiff(d1.qty, d2.qty, true) : d1?.qty;
             rest?.map((r) => {
                 qty = qtyDiff(qty, r.qty, true);

@@ -208,7 +208,6 @@ const SalesIncludes = {
                             deletedAt: null,
                         },
                     },
-
                     jambSize: true,
                     doors: {
                         where: { deletedAt: null },

@@ -366,6 +366,11 @@ export class ItemHelperClass {
                         id: gf.stepProductId?.id,
                     },
                 },
+                // molding: {
+                //     connect: {
+                //         id: gf.stepProductId?.id,
+                //     },
+                // },
             } satisfies Prisma.HousePackageToolsUpdateInput;
             if (itemHtp.id) {
                 itemHtp.data = updateHpt;

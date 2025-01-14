@@ -11,6 +11,12 @@ import { deliveryBreakdownDto } from "./sales-shipping-dto";
 import { calculateDeliveryBreakdownPercentage } from "../../utils/dispatch-utils";
 import { SalesItemControl } from "@prisma/client";
 import { SalesDispatchStatus } from "../../../types";
+import {
+    doorItemControlUid,
+    itemControlUid,
+    itemItemControlUid,
+    mouldingItemControlUid,
+} from "../../utils/item-control-utils";
 
 interface Pill {
     label?: string;
@@ -173,7 +179,8 @@ export function salesItemGroupOverviewDto(data: GetFullSalesDataDta) {
             const {
                 doors,
                 door: od,
-                molding,
+                // molding,
+                stepProduct,
                 doorType,
             } = gItem?.housePackageTool || {};
             if (doors?.length) {
@@ -192,7 +199,10 @@ export function salesItemGroupOverviewDto(data: GetFullSalesDataDta) {
                     let _totalQty;
                     let totalQty: Qty = {};
                     const isBifold = doorType == "Bifold";
-                    const controlUid = `door-${_door.id}-${_door.dimension}`;
+                    const controlUid = doorItemControlUid(
+                        _door.id,
+                        _door.dimension
+                    );
                     const control = itemControl(controlUid, {
                         produceable: true,
                         shippable: true,
@@ -267,9 +277,9 @@ export function salesItemGroupOverviewDto(data: GetFullSalesDataDta) {
                         )
                     );
                 });
-            } else if (molding) {
+            } else if (stepProduct) {
                 const control = itemControl(
-                    `molding-${gItem.id}-${molding.id}`,
+                    mouldingItemControlUid(gItem.id, stepProduct.id),
                     {
                         produceable: false,
                         shippable: true,
@@ -292,7 +302,7 @@ export function salesItemGroupOverviewDto(data: GetFullSalesDataDta) {
                         {
                             orderId: data.id,
                             salesItemId: gItem.id,
-                            title: molding.title,
+                            title: stepProduct.name,
                             totalQty: {
                                 qty: gItem.qty,
                                 total: gItem.qty,
@@ -313,7 +323,8 @@ export function salesItemGroupOverviewDto(data: GetFullSalesDataDta) {
                 const produceable =
                     gItem.dykeProduction ||
                     (!data.isDyke && gItem.swing != null);
-                const control = itemControl(`item-${gItem.id}`, {
+
+                const control = itemControl(itemItemControlUid(gItem.id), {
                     produceable,
                     shippable: true,
                 });
