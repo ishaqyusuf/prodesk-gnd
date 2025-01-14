@@ -1,4 +1,4 @@
-import { formatDate, timeAgo } from "@/lib/use-day";
+import { timeAgo } from "@/lib/use-day";
 import { GetSalesListDta } from "../sales-dta";
 import { salesLinks } from "./links-dto";
 import { SalesStat } from "@prisma/client";

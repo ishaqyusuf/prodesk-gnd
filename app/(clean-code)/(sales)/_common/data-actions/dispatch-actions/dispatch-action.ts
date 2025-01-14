@@ -8,7 +8,7 @@ import {
     pageQueryFilter,
 } from "@/app/(clean-code)/_common/utils/db-utils";
 import { AsyncFnType } from "@/app/(clean-code)/type";
-import { transformDispatchList } from "../dto/dispatch-list-dto";
+import { transformDispatchList } from "./dispatch-list-dto";
 
 export type LoadDispatchListAction = AsyncFnType<typeof loadDispatchListAction>;
 export type GetDispatchListActions = AsyncFnType<typeof getDispatchListActions>;

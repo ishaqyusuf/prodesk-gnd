@@ -115,20 +115,42 @@ model SalesOrderItems {
     productions        OrderProductionSubmissions[]
     itemDeliveries     OrderItemDelivery[]
     priceList          ComponentPrice[]
+    itemControls       SalesItemControl[]
 
     @@index([createdAt, description, swing])
     @@index([salesOrderId], name: "idx_SalesOrderItems_on_salesOrderId")
 }
 
+model QtyControl {
+    id                  Int               @unique @default(autoincrement())
+    qty                 Int?              @default(0)
+    lh                  Int?              @default(0)
+    rh                  Int?              @default(0)
+    total               Int               @default(0)
+    type                String // qty,prodAssigned, prodCompleted, dispatchAssigned, dispatchCompleted, dispatchFailed etc
+    deletedAt           DateTime?         @db.Timestamp(0)
+    SalesItemControl    SalesItemControl? @relation(fields: [salesItemControlUid], references: [uid])
+    salesItemControlUid String?
+
+    @@index([salesItemControlUid])
+}
+
 model SalesItemControl {
-    uid         String       @unique // item-1, door-234
-    salesId     Int
-    produceable Boolean?
-    shippable   Boolean?
-    sales       SalesOrders? @relation(fields: [salesId], references: [id])
-    deletedAt   DateTime?    @db.Timestamp(0)
+    uid          String           @unique // item-1, door-234, moulding-1
+    title        String?
+    subtitle     String?
+    sectionTitle String?
+    salesId      Int
+    produceable  Boolean?
+    shippable    Boolean?
+    deletedAt    DateTime?        @db.Timestamp(0)
+    orderItemId  Int?
+    sales        SalesOrders?     @relation(fields: [salesId], references: [id])
+    item         SalesOrderItems? @relation(fields: [orderItemId], references: [id])
+    qtyControls  QtyControl[]
 
     @@index([salesId])
+    @@index([orderItemId])
     @@index([uid])
 }
 
