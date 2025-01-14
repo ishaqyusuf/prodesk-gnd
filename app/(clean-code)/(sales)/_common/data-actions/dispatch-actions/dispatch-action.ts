@@ -8,7 +8,7 @@ import {
     pageQueryFilter,
 } from "@/app/(clean-code)/_common/utils/db-utils";
 import { AsyncFnType } from "@/app/(clean-code)/type";
-import { transformDispatchListItem } from "../dto/dispatch-list-dto";
+import { transformDispatchList } from "../dto/dispatch-list-dto";
 
 export type LoadDispatchListAction = AsyncFnType<typeof loadDispatchListAction>;
 export type GetDispatchListActions = AsyncFnType<typeof getDispatchListActions>;
@@ -19,7 +19,7 @@ export async function getDispatchListActions(query: SearchParamsType) {
     return {
         pageCount: pageInfo.pageCount,
         pageInfo,
-        data: data.map(transformDispatchListItem),
+        data: data.map(transformDispatchList),
         meta: {
             totalRowCount: pageInfo.totalItems,
         },
@@ -32,6 +32,8 @@ export async function loadDispatchListAction(query: SearchParamsType) {
         where,
         ...pageQueryFilter(query),
         include: {
+            driver: true,
+            createdBy: true,
             items: {
                 include: {
                     submission: {
@@ -53,6 +55,8 @@ export async function loadDispatchListAction(query: SearchParamsType) {
                     },
                     salesItem: {
                         select: {
+                            swing: true,
+                            qty: true,
                             description: true,
                             housePackageTool: {
                                 select: {
