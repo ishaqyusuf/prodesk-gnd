@@ -1,7 +1,7 @@
 import { SecondaryTabSheet } from "@/components/(clean-code)/data-table/item-overview-sheet";
 import { useItemProdViewContext } from "../production/use-hooks";
 
-import { createContext } from "react";
+import { createContext, useEffect } from "react";
 
 import { ScrollArea } from "@/components/ui/scroll-area";
 
@@ -89,6 +89,9 @@ export function ShippingOverview({}) {
     const ctx = useShippingOverview();
     if (!ctx || !ctx?.shipping?.id) return null;
     const { mainCtx, shipping } = ctx;
+    useEffect(() => {
+        console.log("SHIPPING OVERVIEW");
+    }, []);
     async function updateProgress(progress) {
         try {
             const resp = await updateDispatchStatusUseCase(

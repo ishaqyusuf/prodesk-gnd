@@ -10,9 +10,12 @@ import {
 } from "../../../types";
 import { overallStatus, statToKeyValueDto } from "./sales-stat-dto";
 import { dispatchTitle } from "./sales-shipping-dto";
+import { toNumber } from "@/lib/utils";
 
 export type Item = GetSalesListDta["data"][number];
 export function salesOrderDto(data: Item) {
+    let due = toNumber(data.amountDue);
+    if (due <= 0) due = 0;
     return {
         ...commonListData(data),
         dispatchList: data.deliveries?.map((d) => {
@@ -21,7 +24,7 @@ export function salesOrderDto(data: Item) {
                 id: d.id,
             };
         }),
-        due: data.amountDue,
+        due,
         stats: statToKeyValueDto(data.stat),
         status: overallStatus(data.stat),
         addressData: {

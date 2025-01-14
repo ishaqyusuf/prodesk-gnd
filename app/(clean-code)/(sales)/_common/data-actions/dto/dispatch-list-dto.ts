@@ -1,12 +1,30 @@
+import { toSafeInteger } from "lodash";
 import { SalesDispatchStatus } from "../../../types";
 import { generateDispatchId } from "../../utils/dispatch-utils";
 import { LoadDispatchListAction } from "../dispatch-actions/dispatch-action";
+import { sum } from "@/lib/utils";
+import { formatDate } from "@/lib/use-day";
 type DispatchItem = LoadDispatchListAction[number]["items"][number];
 
 export function transformDispatchList(dispatch: LoadDispatchListAction[0]) {
+    const items = dispatch.items.map(transformDispatchListItem);
+    let qty = {
+        lh: 0,
+        rh: 0,
+        qty: 0,
+        total: 0,
+    };
+    items.map((i) => {
+        qty.total += toSafeInteger(i.total);
+        qty.lh += toSafeInteger(i.lh);
+        qty.rh += toSafeInteger(i.rh);
+        qty.qty += toSafeInteger(i.qty);
+    });
+
     return {
+        id: dispatch.id,
         uid: generateDispatchId(dispatch.id),
-        items: dispatch.items.map(transformDispatchListItem),
+        items,
         status: dispatch.status as SalesDispatchStatus,
         assignedTo: {
             id: dispatch.driver?.id,
@@ -16,25 +34,16 @@ export function transformDispatchList(dispatch: LoadDispatchListAction[0]) {
             id: dispatch.createdBy?.id,
             name: dispatch?.createdBy?.name,
         },
+        totalQty: qty.total,
+        date: formatDate(dispatch.createdAt),
     };
 }
 
 export function transformDispatchListItem(item: DispatchItem) {
-    let qty = {
-        itemQty: {
-            lh: 0,
-            rh: 0,
-            qty: 0,
-            total: 0,
-        },
-        deliveryQty: {
-            lh: 0,
-            rh: 0,
-            qty: 0,
-            total: 0,
-        },
-    };
     const {
+        lhQty,
+        rhQty,
+        qty,
         salesItem: {
             description,
             housePackageTool: { stepProduct: { name: productName } = {} } = {},
@@ -43,4 +52,13 @@ export function transformDispatchListItem(item: DispatchItem) {
             assignment: { salesDoor: { dimension, swing } = {} },
         },
     } = item;
+    return {
+        lh: lhQty,
+        rh: rhQty,
+        qty,
+        total: lhQty || rhQty ? sum([lhQty, rhQty]) : qty,
+        itemTitle: dimension
+            ? `${productName} - ${dimension}`
+            : productName || description,
+    };
 }
