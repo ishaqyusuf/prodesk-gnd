@@ -4,6 +4,7 @@ import { Prisma } from "@prisma/client";
 import {
     doorItemControlUid,
     itemControlUidObject,
+    mouldingItemControlUid,
 } from "../utils/item-control-utils";
 import { prisma } from "@/db";
 import { QtyControlType } from "../../types";
@@ -50,6 +51,31 @@ export async function updateSalesItemControl(salesId) {
                     id: true,
                     housePackageTool: {
                         select: {
+                            stepProduct: {
+                                select: {
+                                    name: true,
+                                    product: {
+                                        select: {
+                                            title: true,
+                                        },
+                                    },
+                                    door: {
+                                        select: {
+                                            title: true,
+                                        },
+                                    },
+                                },
+                            },
+                            molding: {
+                                select: {
+                                    title: true,
+                                },
+                            },
+                            door: {
+                                select: {
+                                    title: true,
+                                },
+                            },
                             id: true,
                             moldingId: true,
                             doors: {
@@ -97,12 +123,33 @@ export async function updateSalesItemControl(salesId) {
                         ],
                         data: {
                             // title: door.dimension
+                            subtitle: `${door.dimension}`,
+
                             shippable: true,
                             produceable: true,
                         },
                     });
                 });
             } else {
+                let controlUid = mouldingItemControlUid(
+                    item.id,
+                    item.housePackageTool.id
+                );
+                controls.push({
+                    uid: controlUid,
+                    data: {
+                        title: `${
+                            item.housePackageTool?.stepProduct?.name ||
+                            item.housePackageTool?.stepProduct?.product?.title
+                        }`,
+                    },
+                    qtyControls: [
+                        {
+                            qty: item.qty,
+                            type: "qty",
+                        },
+                    ],
+                });
             }
         } else {
             //

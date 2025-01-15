@@ -5,7 +5,7 @@ export type ItemControl = {
     doorId?;
     dim?;
     itemId?;
-    moldingId?;
+    hptId?;
 };
 export function itemControlUid(props: ItemControl) {
     const stacks = [props.type];
@@ -14,7 +14,7 @@ export function itemControlUid(props: ItemControl) {
         stacks.push(props.dim);
     } else {
         stacks.push(props.itemId);
-        if (props.moldingId) stacks.push(props.moldingId);
+        if (props.hptId) stacks.push(props.hptId);
     }
     return stacks.join("-");
 }
@@ -27,7 +27,7 @@ export function itemControlUidObject(str) {
         obj.dim = y.join("-");
     } else {
         obj.itemId = x;
-        if (type == "molding") obj.moldingId = y?.[0];
+        if (type == "molding") obj.hptId = y?.[0];
     }
     return obj;
 }
@@ -44,10 +44,10 @@ export function doorItemControlUid(doorId, dim) {
         dim,
     });
 }
-export function mouldingItemControlUid(itemId, moldingId) {
+export function mouldingItemControlUid(itemId, hptId) {
     return itemControlUid({
         type: "molding",
         itemId,
-        moldingId,
+        hptId,
     });
 }
