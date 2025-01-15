@@ -4,6 +4,7 @@ import {
     DykeDoors,
     DykeSalesDoors,
     DykeStepProducts,
+    Prisma,
     SalesOrders,
     SalesStat,
     SalesTaxes,
@@ -568,5 +569,11 @@ export type QtyControlType =
     | "prodAssigned"
     | "prodCompleted"
     | "dispatchAssigned"
+    | "dispatchInProgress"
     | "dispatchCompleted"
-    | "dispatchFailed";
+    | "dispatchCancelled";
+export type QtyControlByType = {
+    [type in QtyControlType]: Omit<Prisma.QtyControlUpdateInput, "type"> & {
+        type: QtyControlType;
+    };
+};
