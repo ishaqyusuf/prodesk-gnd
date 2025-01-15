@@ -9,8 +9,7 @@
     "postinstall": "prisma generate",
     "primapush": "prisma push",
     "migrate": "prisma migrate dev",
-    "lint": "next lint",
-    "vercel-build": "prisma generate && prisma db push && next build"
+    "lint": "next lint"
   },
   "prisma": {
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"

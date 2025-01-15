@@ -122,9 +122,7 @@ export async function updateSalesItemControl(salesId) {
                             },
                         ],
                         data: {
-                            // title: door.dimension
                             subtitle: `${door.dimension}`,
-
                             shippable: true,
                             produceable: true,
                         },
@@ -138,6 +136,8 @@ export async function updateSalesItemControl(salesId) {
                 controls.push({
                     uid: controlUid,
                     data: {
+                        shippable: true,
+                        produceable: true,
                         title: `${
                             item.housePackageTool?.stepProduct?.name ||
                             item.housePackageTool?.stepProduct?.product?.title
@@ -152,7 +152,6 @@ export async function updateSalesItemControl(salesId) {
                                     uid: controlUid,
                                 },
                             },
-                            // itemControlUid: `${controlUid}`,
                         },
                     ],
                 });
