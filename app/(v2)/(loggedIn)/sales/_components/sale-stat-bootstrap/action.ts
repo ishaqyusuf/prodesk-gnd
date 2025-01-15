@@ -11,9 +11,9 @@ export async function loadSales() {
             id: true,
             orderId: true,
             stat: {
-                select: {
-                    id: true,
-                },
+                // select: {
+                //     id: true,
+                // },
             },
         },
     });
