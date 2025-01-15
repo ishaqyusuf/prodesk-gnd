@@ -49,7 +49,7 @@ export function salesShippingDto(
     data: GetFullSalesDataDta
 ) {
     //    data.deliveries
-    const dispatchStat = overview.stat.calculatedStats.dispatch;
+    const dispatchStat = overview.stat.calculatedStats.dispatchCompleted;
     const dispatchableItemList = overview?.itemGroup
         ?.map((grp) => {
             return grp?.items?.map((item, uid) => {
