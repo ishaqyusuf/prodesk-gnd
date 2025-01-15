@@ -147,6 +147,11 @@ export async function updateSalesItemControl(salesId) {
                         {
                             qty: item.qty,
                             type: "qty",
+                            itemControl: {
+                                connect: {
+                                    uid: controlUid,
+                                },
+                            },
                             // itemControlUid: `${controlUid}`,
                         },
                     ],
