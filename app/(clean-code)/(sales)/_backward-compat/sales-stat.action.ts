@@ -184,21 +184,21 @@ function productionStats(order: LoadedSales[number]) {
     });
 
     resp.stats = [
-        {
-            total: totalProds,
-            type: "prod",
-            score: completedProds,
-        },
-        {
-            total: totalProds,
-            type: "prodAssignment",
-            score: assignedProd,
-        },
-        {
-            total: totalProds,
-            score: delivered,
-            type: "dispatch",
-        },
+        // {
+        //     total: totalProds,
+        //     type: "prod",
+        //     score: completedProds,
+        // },
+        // {
+        //     total: totalProds,
+        //     type: "prodAssignment",
+        //     score: assignedProd,
+        // },
+        // {
+        //     total: totalProds,
+        //     score: delivered,
+        //     type: "dispatch",
+        // },
     ];
     return resp;
 }
@@ -347,30 +347,30 @@ export async function salesStatUpgrade() {
             //     console.log(assignments.length);
             // }
         });
-        data.stats.push(
-            createSaleStat(
-                "dispatch",
-                statData.delivered,
-                statData.deliverable,
-                sale.raw.id
-            )
-        );
-        data.stats.push(
-            createSaleStat(
-                "prod",
-                statData.produced,
-                statData.produceable,
-                sale.raw.id
-            )
-        );
-        data.stats.push(
-            createSaleStat(
-                "prodAssignment",
-                statData.produceable,
-                statData.assigned,
-                sale.raw.id
-            )
-        );
+        //     data.stats.push(
+        //         createSaleStat(
+        //             "dispatch",
+        //             statData.delivered,
+        //             statData.deliverable,
+        //             sale.raw.id
+        //         )
+        //     );
+        //     data.stats.push(
+        //         createSaleStat(
+        //             "prod",
+        //             statData.produced,
+        //             statData.produceable,
+        //             sale.raw.id
+        //         )
+        //     );
+        //     data.stats.push(
+        //         createSaleStat(
+        //             "prodAssignment",
+        //             statData.produceable,
+        //             statData.assigned,
+        //             sale.raw.id
+        //         )
+        //     );
     });
     return data;
 }
