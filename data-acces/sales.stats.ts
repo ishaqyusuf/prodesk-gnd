@@ -57,7 +57,7 @@ export async function updateSalesStat(id) {
     );
     const statkv = composeSalesStatKeyValue(data.stat);
     await saveStat({
-        type: "prod",
+        type: "prodCompleted",
         salesId: data.id,
         total: totalQty,
         score: sum(
@@ -74,7 +74,7 @@ export async function updateSalesStat(id) {
         id: statkv["production"]?.id,
     });
     await saveStat({
-        type: "prodAssignment",
+        type: "prodAssigned",
         total: totalQty,
         salesId: data.id,
         score: sum(
@@ -84,7 +84,7 @@ export async function updateSalesStat(id) {
         ),
     });
     await saveStat({
-        type: "dispatch",
+        type: "dispatchCompleted",
         total: totalQty,
         salesId: data.id,
         score: data.deliveredAt
@@ -101,16 +101,16 @@ export async function saveStat(data: Partial<TypedSalesStat>) {
     const { id, salesId, ...rest } = data;
     rest.percentage = (rest.score / rest.total) * 100 || 0;
     data.status = statStatus(rest as any).status;
-    if (id)
-        await prisma.salesStat.update({
-            where: { id },
-            data: rest,
-        });
-    else
-        await prisma.salesStat.create({
-            data: {
-                ...rest,
-                salesId,
-            } as any,
-        });
+    // if (id)
+    //     await prisma.salesStat.update({
+    //         where: { id },
+    //         data: rest,
+    //     });
+    // else
+    //     await prisma.salesStat.create({
+    //         data: {
+    //             ...rest,
+    //             salesId,
+    //         } as any,
+    //     });
 }

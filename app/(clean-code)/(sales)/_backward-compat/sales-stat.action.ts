@@ -169,7 +169,7 @@ function productionStats(order: LoadedSales[number]) {
                 .filter((s) => s > 0)
                 .reduce((a, b) => a + b, 0);
             if (prodId && !item.assignments?.length) {
-                console.log("REGISTERING OLD SALE");
+                // console.log("REGISTERING OLD SALE");
                 registerAssignment(totalItems);
                 // resp.assignments.push({
                 //     itemId: item.id,

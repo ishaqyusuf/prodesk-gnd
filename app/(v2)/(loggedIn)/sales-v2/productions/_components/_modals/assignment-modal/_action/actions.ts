@@ -37,7 +37,7 @@ export async function _deleteAssignment(data: Props) {
             ...updateData,
         },
     });
-    await updateSalesProgressDta(assignment.orderId, "prodAssignment", {
+    await updateSalesProgressDta(assignment.orderId, "prodAssigned", {
         minusScore: assignment?.qtyAssigned,
     });
     await _deleteAssignmentSubmissions(data.id, k);
@@ -63,7 +63,7 @@ export async function _deleteAssignmentSubmission(submissionId) {
         },
     });
     const qty = submission?.qty;
-    await updateSalesProgressDta(submission?.salesOrderId, "prod", {
+    await updateSalesProgressDta(submission?.salesOrderId, "prodCompleted", {
         minusScore: qty,
     });
 }
@@ -93,7 +93,7 @@ export async function _deleteAssignmentSubmissions(
     });
     const salesOrderId = submissions[0]?.salesOrderId;
     const totalQty = await sum(submissions, "qty");
-    await updateSalesProgressDta(salesOrderId, "prodAssignment", {
+    await updateSalesProgressDta(salesOrderId, "prodAssigned", {
         minusScore: totalQty,
     });
 }
@@ -115,7 +115,7 @@ export async function _submitProduction(
             },
         },
     });
-    await updateSalesProgressDta(data.salesOrderId, "prod", {
+    await updateSalesProgressDta(data.salesOrderId, "prodCompleted", {
         plusScore: qty,
     });
 }

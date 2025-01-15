@@ -62,7 +62,7 @@ export async function deleteAssignmentDta(
         },
     });
     if (produceable)
-        await updateSalesProgressDta(a.orderId, "prodAssignment", {
+        await updateSalesProgressDta(a.orderId, "prodAssigned", {
             minusScore: a.qtyAssigned,
         });
     const submissions = a.submissions;
@@ -88,10 +88,10 @@ export async function deleteAssignmentDta(
             },
         });
         if (produceable)
-            await updateSalesProgressDta(a.orderId, "prod", {
+            await updateSalesProgressDta(a.orderId, "prodCompleted", {
                 minusScore: sum(submissions.map((s) => s.qty)),
             });
-        await updateSalesProgressDta(a.orderId, "dispatch", {
+        await updateSalesProgressDta(a.orderId, "dispatchCompleted", {
             minusScore: sum(deliveries.map((s) => s.qty)),
         });
     }
@@ -104,7 +104,7 @@ export async function submitAssignmentDta(
         data,
     });
     if (produceable)
-        await updateSalesProgressDta(c.salesOrderId, "prod", {
+        await updateSalesProgressDta(c.salesOrderId, "prodCompleted", {
             plusScore: c.qty,
         });
     return c;
@@ -119,7 +119,7 @@ export async function deleteAssignmentSubmissionDta(submitId, produceable) {
         },
     });
     if (produceable)
-        await updateSalesProgressDta(submission.salesOrderId, "prod", {
+        await updateSalesProgressDta(submission.salesOrderId, "prodCompleted", {
             minusScore: submission.qty,
         });
 }

@@ -131,23 +131,23 @@ export function SalesGeneralOverview({}) {
                     <div className="px-4 sm:px-8">
                         <SalesItemStatus
                             status={
-                                overview?.stat?.calculatedStats
-                                    ?.prodAssignment ||
-                                item.stats.prodAssignment
+                                overview?.stat?.calculatedStats?.prodAssigned ||
+                                item.stats.prodAssigned
                             }
                             title="Assigned"
                         />
                         <SalesItemStatus
                             status={
-                                overview?.stat?.calculatedStats?.prod ||
-                                item.stats.prod
+                                overview?.stat?.calculatedStats
+                                    ?.prodCompleted || item.stats.prodCompleted
                             }
                             title="Production Completed"
                         />
                         <SalesItemStatus
                             status={
-                                overview?.stat?.calculatedStats?.dispatch ||
-                                item.stats.dispatch
+                                overview?.stat?.calculatedStats
+                                    ?.dispatchCompleted ||
+                                item.stats.dispatchCompleted
                             }
                             title="Fulfilled"
                         />

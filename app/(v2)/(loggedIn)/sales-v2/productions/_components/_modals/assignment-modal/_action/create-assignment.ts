@@ -26,7 +26,7 @@ export async function createProdAssignment(
             return d;
         }) as any,
     });
-    await updateSalesProgressDta(data[0].orderId, "prodAssignment", {
+    await updateSalesProgressDta(data[0].orderId, "prodAssigned", {
         plusScore: score,
     });
     // console.log("SUCCESS");
