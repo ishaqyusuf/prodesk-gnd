@@ -207,6 +207,7 @@ export function composeControls(order: GetSalesItemControllables) {
                     shippable: true,
                     produceable: true,
                     title: `${item.description}`,
+                    subtitle: [item.swing]?.filter(Boolean)?.join(" | "),
                 },
                 qtyControls: composeQtyControl({
                     order,
@@ -252,9 +253,11 @@ export function composeControls(order: GetSalesItemControllables) {
                                 const prevQty = qtyControls.find(
                                     (c) => c.type == qty.type
                                 );
+
                                 qty.autoComplete = prevQty?.autoComplete;
                                 if (prevQty?.autoComplete) qty.percentage = 100;
-                                return qty;
+                                const { itemControlUid, ...createData } = qty;
+                                return createData;
                             }),
                         },
                     },
@@ -274,9 +277,10 @@ export function composeControls(order: GetSalesItemControllables) {
                     },
                     qtyControls: {
                         createMany: {
-                            data: control.qtyControls.map((cont) => ({
-                                ...cont,
-                            })),
+                            data: control.qtyControls.map((cont) => {
+                                const { itemControlUid, ...rest } = cont;
+                                return rest;
+                            }),
                         },
                     },
                 },

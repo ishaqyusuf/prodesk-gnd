@@ -117,7 +117,7 @@ export async function deleteSalesDispatchDta(id) {
     });
     const status: SalesDispatchStatus = d.status as any;
     // if(status ==)
-    await updateSalesProgressDta(d.salesOrderId, "dispatch", {
+    await updateSalesProgressDta(d.salesOrderId, "dispatchCompleted", {
         minusScore: totalQty,
     });
 }
@@ -139,17 +139,25 @@ export async function updateSalesDispatchStatusDta(
             },
         },
     });
-    // const oldStatType = getSalesStatTypeByDispatch(oldStatus);
-    // const newStatType = getSalesStatTypeByDispatch(status);
+    // const oldStatType = getQtyControlTypeByDispatch(oldStatus);
+    // const newStatType = getQtyControlTypeByDispatch(status);
     const score = sum(dispatch.items.map((s) => s.qty));
     if (status == "cancelled")
-        await updateSalesProgressDta(dispatch.salesOrderId, "dispatch", {
-            minusScore: score,
-        });
+        await updateSalesProgressDta(
+            dispatch.salesOrderId,
+            "dispatchCompleted",
+            {
+                minusScore: score,
+            }
+        );
     if (oldStatus == "cancelled" && status != oldStatus)
-        await updateSalesProgressDta(dispatch.salesOrderId, "dispatch", {
-            plusScore: score,
-        });
+        await updateSalesProgressDta(
+            dispatch.salesOrderId,
+            "dispatchCompleted",
+            {
+                plusScore: score,
+            }
+        );
 }
 
 export async function createSalesDispatchDta(data: SalesDispatchFormData) {
@@ -272,7 +280,7 @@ export async function createSalesDispatchDta(data: SalesDispatchFormData) {
                 });
                 await updateSalesProgressDta(
                     dispatch.salesOrderId,
-                    "dispatch",
+                    "dispatchCompleted",
                     {
                         plusScore: totalQty,
                     }

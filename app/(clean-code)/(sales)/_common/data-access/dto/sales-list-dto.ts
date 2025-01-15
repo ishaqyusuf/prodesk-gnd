@@ -5,7 +5,7 @@ import { SalesStat } from "@prisma/client";
 import {
     AddressBookMeta,
     SalesMeta,
-    SalesStatType,
+    QtyControlType,
     SalesType,
 } from "../../../types";
 import { overallStatus, statToKeyValueDto } from "./sales-stat-dto";
@@ -50,7 +50,7 @@ function getAddressDto(data: Item["shippingAddress"], title) {
     };
 }
 function getSalesOrderStatus(stats: SalesStat[]) {
-    const _stat: { [id in SalesStatType]: SalesStat } = {} as any;
+    const _stat: { [id in QtyControlType]: SalesStat } = {} as any;
     stats.map((s) => (_stat[s.type] = s));
     return _stat;
     // return {

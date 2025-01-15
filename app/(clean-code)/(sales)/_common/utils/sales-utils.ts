@@ -1,5 +1,5 @@
 import { DykeSteps, SalesStat } from "@prisma/client";
-import { DykeDoorType, SalesStatStatus, SalesStatType } from "../../types";
+import { DykeDoorType, SalesStatStatus, QtyControlType } from "../../types";
 import { Colors } from "@/lib/status-badge";
 
 export function inToFt(_in) {
@@ -30,7 +30,7 @@ export function ftToIn(h) {
         .filter(Boolean);
     return `${+_in + +ft * 12}in`;
 }
-export function createSaleStat(type: SalesStatType, score, total, salesId) {
+export function createSaleStat(type: QtyControlType, score, total, salesId) {
     const percentage = (score / total) * 100 || 0;
     return {
         type,

@@ -6,7 +6,7 @@ import { SalesStat } from "@prisma/client";
 import { sum } from "@/lib/utils";
 import { GetAllSales, SalesItem } from "@/data-acces/sales";
 import {
-    SalesStatType,
+    QtyControlType,
     TypedSalesStat,
 } from "@/app/(clean-code)/(sales)/types";
 
@@ -58,7 +58,7 @@ export function composeTotalDeliverables(item: SalesItem) {
     return sum(item.items.filter((i) => i.swing).map((i) => i.qty));
 }
 export function composeSalesStatKeyValue(stats: SalesStat[]) {
-    const resp: { [id in SalesStatType]: TypedSalesStat } = {} as any;
+    const resp: { [id in QtyControlType]: TypedSalesStat } = {} as any;
 
     stats.map((stat) => (resp[stat.type] = stat));
 

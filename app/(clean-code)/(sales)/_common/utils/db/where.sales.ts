@@ -8,7 +8,7 @@ import {
 } from "@/components/(clean-code)/data-table/search-params";
 import { Prisma } from "@prisma/client";
 import { composeQuery } from "../db-utils";
-import { SalesStatType } from "../../../types";
+import { QtyControlType } from "../../../types";
 import { ftToIn } from "../sales-utils";
 
 export function whereSales(query: FilterParams) {
@@ -31,7 +31,7 @@ export function whereSales(query: FilterParams) {
                 },
             },
         });
-    const statType = (type: SalesStatType) => type;
+    const statType = (type: QtyControlType) => type;
 
     if (query["dispatch.status"]) {
         switch (query["dispatch.status"]) {
@@ -39,7 +39,7 @@ export function whereSales(query: FilterParams) {
                 whereAnd.push({
                     stat: {
                         some: {
-                            type: statType("dispatch"),
+                            type: statType("dispatchCompleted"),
                             AND: [
                                 {
                                     percentage: {

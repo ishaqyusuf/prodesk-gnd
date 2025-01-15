@@ -508,7 +508,6 @@ model Taxes {
 }
 
 model SalesStat {
-    id         Int         @unique @default(autoincrement())
     salesId    Int
     status     String?
     type       String // production, dispatch, payment
@@ -517,9 +516,10 @@ model SalesStat {
     percentage Float?
     sales      SalesOrders @relation(fields: [salesId], references: [id])
     createdAt  DateTime?   @default(now()) @db.Timestamp(0)
-    updatedAt  DateTime?   @updatedAt
-    deletedAt  DateTime?   @db.Timestamp(0)
 
+    deletedAt DateTime? @db.Timestamp(0)
+
+    @@unique([salesId, type])
     @@index([salesId])
 }
 

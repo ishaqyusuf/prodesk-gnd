@@ -25,6 +25,7 @@ export async function getSalesItemControllablesInfoAction(salesId) {
         where: { id: salesId },
         select: {
             id: true,
+
             itemControls: {
                 include: {
                     qtyControls: true,
@@ -64,6 +65,7 @@ export async function getSalesItemControllablesInfoAction(salesId) {
             },
             items: {
                 select: {
+                    swing: true,
                     qty: true,
                     id: true,
                     description: true,
@@ -143,40 +145,30 @@ export async function getSalesItemControllablesInfoAction(salesId) {
 export async function updateSalesItemControlAction(salesId) {
     const order = await getSalesItemControllablesInfoAction(salesId);
     const controls = composeControls(order);
-    // const createItemControlsData = controls
-    // .filter((s) => s.create)
-    // .map((s) => s.create);
-    // if (createItemControlsData.length)
-    //     await prisma.salesItemControl.createMany({
-    //         data: createItemControlsData,
-    //     });
-    // const _ = await prisma.qtyControl.deleteMany({
-    //     where: {
-    //         itemControl: {
-    //             salesId: order.id,
-    //         },
-    //     },
-    // });
-    // console.log()
-    const resp = await prisma.$transaction([
-        prisma.qtyControl.deleteMany({
+
+    const resp = await prisma.$transaction((async (tx: typeof prisma) => {
+        const del = await tx.qtyControl.deleteMany({
             where: {
                 itemControl: {
                     salesId: order.id,
                 },
             },
-        }),
-        ...controls.map((c) => {
-            if (c.create)
-                return prisma.salesItemControl.create({ data: c.create });
-            if (c.update)
-                return prisma.salesItemControl.update({
-                    data: c.update,
-                    where: {
-                        uid: c.uid,
-                    },
-                });
-        }),
-    ]);
+        });
+        const arr = await Promise.all(
+            controls.map(async (c) => {
+                if (c.create)
+                    return await tx.salesItemControl.create({ data: c.create });
+                if (c.update)
+                    return await tx.salesItemControl.update({
+                        data: c.update,
+                        where: {
+                            uid: c.uid,
+                        },
+                    });
+            })
+        );
+        return { del, arr };
+    }) as any);
+
     return resp;
 }

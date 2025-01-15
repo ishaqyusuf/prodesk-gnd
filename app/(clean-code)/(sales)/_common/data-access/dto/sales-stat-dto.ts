@@ -1,5 +1,5 @@
 import { SalesStat } from "@prisma/client";
-import { SalesStatType } from "../../../types";
+import { QtyControlType } from "../../../types";
 import { GetFullSalesDataDta } from "../sales-dta";
 import { salesItemGroupOverviewDto } from "./sales-item-dto";
 import { statStatus } from "../../utils/sales-utils";
@@ -35,7 +35,7 @@ export function calculatedStatsDto(
     data: GetFullSalesDataDta
 ) {
     const cs = statToKeyValueDto(data.stat, true);
-    function populate(type: SalesStatType, pending, success) {
+    function populate(type: QtyControlType, pending, success) {
         if (!cs[type])
             cs[type] = {
                 score: 0,
@@ -54,9 +54,9 @@ export function calculatedStatsDto(
 
         grp.items?.map((item) => {
             const { pending, success } = item.analytics;
-            populate("prodAssignment", pending.assignment, success.assignment);
-            populate("prod", pending.production, success.production);
-            populate("dispatch", pending.delivery, success.delivery);
+            populate("prodAssigned", pending.assignment, success.assignment);
+            populate("prodCompleted", pending.production, success.production);
+            populate("dispatchCompleted", pending.delivery, success.delivery);
         });
     });
 
@@ -64,7 +64,7 @@ export function calculatedStatsDto(
 }
 export function statToKeyValueDto(dataStats: SalesStat[], reset = false) {
     // const dataStats = data.stat;
-    const k: { [k in SalesStatType]: SalesStat } = {} as any;
+    const k: { [k in QtyControlType]: SalesStat } = {} as any;
     dataStats?.map(({ score, percentage, total, ...rest }) => {
         if (reset) {
             score = percentage = total = 0;
@@ -81,9 +81,9 @@ export function statToKeyValueDto(dataStats: SalesStat[], reset = false) {
 export function overallStatus(dataStats: SalesStat[]) {
     const sk = statToKeyValueDto(dataStats);
     return {
-        production: statStatus(sk.prod),
-        assignment: statStatus(sk.prodAssignment),
-        payment: statStatus(sk.payment),
-        delivery: statStatus(sk.dispatch),
+        production: statStatus(sk.prodCompleted),
+        assignment: statStatus(sk.prodAssigned),
+        // payment: statStatus(sk.),
+        delivery: statStatus(sk.dispatchCompleted),
     };
 }

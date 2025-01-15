@@ -45,15 +45,6 @@ export type DykeStepTitles =
 export type DykeStepTitleKv = Partial<{
     [title in Partial<DykeStepTitles>]: DykeStepTitles;
 }>;
-export type SalesStatType =
-    | "dispatch"
-    // | "dispatchTransit"
-    // | "dispatchCancelled"
-    | "payment"
-    // | "backorder"
-    | "prodAssignment"
-    | "prod";
-// | "dispatchQueue"
 export type SalesDispatchStatus =
     | "queue"
     | "in progress"
@@ -66,7 +57,7 @@ export type SalesStatStatus =
     | "unknown"
     | "N/A";
 export type TypedSalesStat = Omit<SalesStat, "status" | "type" | "id"> & {
-    type: SalesStatType;
+    type: QtyControlType;
     id?: number;
     status?: SalesStatStatus;
 };

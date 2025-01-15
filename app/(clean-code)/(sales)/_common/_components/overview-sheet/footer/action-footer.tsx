@@ -13,6 +13,7 @@ import { MoveAction } from "./move.action";
 import { PrintAction } from "./print.action";
 import { PayAction } from "./pay.action";
 import { updateSalesItemControlAction } from "../../../data-actions/item-control.action";
+import { updateSalesStatControlAction } from "../../../data-actions/sales-stat-control.action";
 
 export default function ActionFooter({}) {
     const ctx = useSalesOverview();
@@ -59,7 +60,7 @@ export default function ActionFooter({}) {
                 <MoveAction />
                 <Menu.Item
                     onClick={async (c) => {
-                        const r = await updateSalesItemControlAction(
+                        const r = await updateSalesStatControlAction(
                             ctx.item.id
                         );
                         console.log(r);
