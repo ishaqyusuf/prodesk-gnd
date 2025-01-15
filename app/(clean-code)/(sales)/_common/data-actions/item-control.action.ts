@@ -147,6 +147,7 @@ export async function updateSalesItemControl(salesId) {
                         {
                             qty: item.qty,
                             type: "qty",
+                            // itemControlUid: `${controlUid}`,
                         },
                     ],
                 });

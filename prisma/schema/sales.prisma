@@ -122,7 +122,7 @@ model SalesOrderItems {
 }
 
 model QtyControl {
-    uid            String           @unique // type+uid 
+    // uid            String //@unique // type+uid 
     qty            Int?             @default(0)
     lh             Int?             @default(0)
     rh             Int?             @default(0)
@@ -134,7 +134,8 @@ model QtyControl {
     itemControl    SalesItemControl @relation(fields: [itemControlUid], references: [uid])
     itemControlUid String
 
-    @@index([uid])
+    @@unique([itemControlUid, type])
+    // @@index([uid])
     @@index([itemControlUid])
 }
 
