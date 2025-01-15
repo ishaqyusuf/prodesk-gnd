@@ -123,6 +123,7 @@ model SalesOrderItems {
 
 model QtyControl {
     // uid            String //@unique // type+uid 
+    itemControlUid String
     qty            Int?             @default(0)
     lh             Int?             @default(0)
     rh             Int?             @default(0)
@@ -132,11 +133,10 @@ model QtyControl {
     autoComplete   Boolean?
     deletedAt      DateTime?        @db.Timestamp(0)
     itemControl    SalesItemControl @relation(fields: [itemControlUid], references: [uid])
-    itemControlUid String
+    // @@index([uid])
+    // @@index([itemControlUid])
 
     @@unique([itemControlUid, type])
-    // @@index([uid])
-    @@index([itemControlUid])
 }
 
 model SalesItemControl {
@@ -371,6 +371,8 @@ model DykePricingSystem {
     updatedAt       DateTime?  @updatedAt
     deletedAt       DateTime?  @db.Timestamp(0)
     step            DykeSteps? @relation(fields: [dykeStepId], references: [id])
+
+    @@index([dykeStepId])
 }
 
 model DykeDoors {

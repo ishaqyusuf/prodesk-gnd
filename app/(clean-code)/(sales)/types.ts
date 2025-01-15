@@ -573,7 +573,7 @@ export type QtyControlType =
     | "dispatchCompleted"
     | "dispatchCancelled";
 export type QtyControlByType = {
-    [type in QtyControlType]: Omit<Prisma.QtyControlUpdateInput, "type"> & {
+    [type in QtyControlType]: Omit<Prisma.QtyControlCreateManyInput, "type"> & {
         type: QtyControlType;
     };
 };

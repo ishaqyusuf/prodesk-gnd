@@ -1,3 +1,13 @@
+import { Prisma } from "@prisma/client";
+import {
+    QtyControlByType,
+    QtyControlType,
+    SalesDispatchStatus,
+} from "../../types";
+import { percent, sum } from "@/lib/utils";
+import { GetSalesItemControllables } from "../data-actions/item-control.action";
+import { isEqual } from "lodash";
+
 export type ItemControlTypes = "door" | "molding" | "item";
 
 export type ItemControl = {
@@ -50,4 +60,227 @@ export function mouldingItemControlUid(itemId, hptId) {
         itemId,
         hptId,
     });
+}
+
+type ItemControlComposer = {
+    uid;
+    qtyControls: QtyControlByType["qty"][];
+    data: Prisma.SalesItemControlCreateManyInput;
+};
+interface ComposeQtyControlProps {
+    order: GetSalesItemControllables;
+    itemId: number;
+    doorId?: number;
+    controlUid: string;
+    lh?;
+    rh?;
+    qty?;
+}
+export function composeQtyControl(props: ComposeQtyControlProps) {
+    const totalQty = props.qty ? props.qty : sum([props.lh, props.rh]);
+    if (!totalQty) return [];
+    const controls: QtyControlByType = {} as any;
+    controls.qty = {
+        qty: props.qty,
+        lh: props.lh,
+        rh: props.rh,
+        type: "qty",
+        itemControlUid: props.controlUid,
+    };
+    let assignments = props.order.assignments.filter((a) =>
+        props.doorId ? a.salesDoorId == props.doorId : a.itemId == props.itemId
+    );
+    const singleHandle = assignments?.every((a) => !a.lhQty && !a.rhQty);
+    controls.prodAssigned = {
+        lh: sum(assignments, "lhQty"),
+        rh: sum(assignments, "rhQty"),
+        qty: singleHandle ? sum(assignments, "qtyAssigned") : 0,
+        type: "prodAssigned",
+        itemControlUid: props.controlUid,
+    };
+    const submissions = assignments.map((a) => a.submissions).flat();
+    controls.prodCompleted = {
+        lh: sum(submissions, "lhQty"),
+        rh: sum(submissions, "rhQty"),
+        qty: singleHandle ? sum(submissions, "qty") : 0,
+        type: "prodCompleted",
+        itemControlUid: props.controlUid,
+    };
+    const deliveries = props.order.deliveries;
+    const dispatches = submissions.map((s) => s.itemDeliveries).flat();
+    function registerDispatch(
+        status: SalesDispatchStatus,
+        controlType: QtyControlType
+    ) {
+        const dispatchItems = dispatches.filter((d) =>
+            d.status
+                ? d.status == status
+                : deliveries.find((del) => del.id == d.orderDeliveryId)
+                      ?.status == status
+        );
+        controls[controlType] = {
+            lh: sum(dispatchItems, "lhQty"),
+            rh: sum(dispatchItems, "rhQty"),
+            qty: singleHandle ? sum(dispatchItems, "qty") : 0,
+            type: controlType,
+            itemControlUid: props.controlUid,
+        };
+    }
+    registerDispatch("cancelled", "dispatchCancelled");
+    registerDispatch("completed", "dispatchCompleted");
+    registerDispatch("in progress", "dispatchInProgress");
+    registerDispatch("queue", "dispatchAssigned");
+    return Object.values(controls).map((control) => {
+        const _totalQty = sum([control.qty, control.lh, control.rh]);
+        control.total = _totalQty;
+        control.percentage = percent(_totalQty, totalQty);
+        return control;
+    });
+}
+export function composeControls(order: GetSalesItemControllables) {
+    const controls: {
+        uid;
+        itemId;
+        orderId;
+        qtyControls: QtyControlByType["qty"][];
+        data: Prisma.SalesItemControlUpdateInput;
+    }[] = [];
+    order.items.map((item) => {
+        if (item?.housePackageTool) {
+            if (item.housePackageTool?.doors?.length) {
+                item.housePackageTool?.doors.map((door) => {
+                    let controlUid = doorItemControlUid(
+                        door.id,
+                        door.dimension
+                    );
+                    controls.push({
+                        uid: controlUid,
+                        itemId: item.id,
+                        orderId: order.id,
+                        qtyControls: composeQtyControl({
+                            order,
+                            controlUid,
+                            itemId: item.id,
+                            lh: door.lhQty,
+                            rh: door.rhQty,
+                            qty: !door.lhQty && !door.rhQty ? door.totalQty : 0,
+                        }),
+                        data: {
+                            subtitle: `${door.dimension}`,
+                            shippable: true,
+                            produceable: true,
+                        },
+                    });
+                });
+            } else {
+                let controlUid = mouldingItemControlUid(
+                    item.id,
+                    item.housePackageTool.id
+                );
+                controls.push({
+                    uid: controlUid,
+                    itemId: item.id,
+                    orderId: order.id,
+                    data: {
+                        shippable: true,
+                        produceable: true,
+                        title: `${
+                            item.housePackageTool?.stepProduct?.name ||
+                            item.housePackageTool?.stepProduct?.product?.title
+                        }`,
+                    },
+                    qtyControls: composeQtyControl({
+                        order,
+                        controlUid,
+                        itemId: item.id,
+                        qty: item.qty,
+                    }),
+                });
+            }
+        } else {
+            let controlUid = itemItemControlUid(item.id);
+            controls.push({
+                uid: controlUid,
+                itemId: item.id,
+                orderId: order.id,
+                data: {
+                    shippable: true,
+                    produceable: true,
+                    title: `${item.description}`,
+                },
+                qtyControls: composeQtyControl({
+                    order,
+                    controlUid,
+                    itemId: item.id,
+                    qty: item.qty,
+                }),
+            });
+        }
+    });
+    let response: {
+        uid;
+        create?: Prisma.SalesItemControlCreateInput;
+        update?: Prisma.SalesItemControlUpdateInput;
+        // qtyControls: Prisma.QtyControlCreateManyInput[];
+    }[] = [];
+    controls.map((control) => {
+        const prevControl = order.itemControls.find(
+            (c) => c.uid == control.uid
+        );
+        if (prevControl) {
+            let {
+                qtyControls,
+                salesId,
+                orderItemId,
+                deletedAt,
+                uid,
+                sectionTitle,
+                ...rest
+            } = prevControl;
+            const equals = isEqual(rest, control.data);
+            response.push({
+                uid: control.uid,
+                update: {
+                    // uid: control.uid,
+                    produceable: control.data.produceable,
+                    title: control.data.title,
+                    subtitle: control.data.subtitle,
+                    shippable: control.data.shippable,
+                    qtyControls: {
+                        createMany: {
+                            data: control.qtyControls.map((qty) => {
+                                const prevQty = qtyControls.find(
+                                    (c) => c.type == qty.type
+                                );
+                                qty.autoComplete = prevQty?.autoComplete;
+                                if (prevQty?.autoComplete) qty.percentage = 100;
+                                return qty;
+                            }),
+                        },
+                    },
+                },
+            });
+        } else
+            response.push({
+                uid: control.uid,
+                create: {
+                    uid: control.uid,
+                    ...(control.data as any),
+                    item: {
+                        connect: { id: control.itemId },
+                    },
+                    sales: {
+                        connect: { id: control.orderId },
+                    },
+                    qtyControls: {
+                        createMany: {
+                            data: control.qtyControls.map((cont) => ({
+                                ...cont,
+                            })),
+                        },
+                    },
+                },
+            });
+    });
+    return response;
 }
