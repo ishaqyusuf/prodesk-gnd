@@ -12,6 +12,8 @@ interface OpenSalesOverviewProps {
     salesId;
 }
 export function openSalesOverview(props: OpenSalesOverviewProps) {
+    console.log(props);
+
     salesOverviewStore.getState().reset({
         salesId: props.salesId,
         tabs: salesTabs.admin,

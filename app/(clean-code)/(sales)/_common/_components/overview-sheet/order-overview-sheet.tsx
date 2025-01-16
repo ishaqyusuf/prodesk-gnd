@@ -29,11 +29,21 @@ import { SalesDispatchListDto } from "../../data-access/dto/sales-shipping-dto";
 import { PaymentTab, TerminalPay } from "./payments/payment-tab";
 import { SalesItemsOverview } from "./item-view/sales-items-overview";
 import { isProdClient } from "@/lib/is-prod";
+import { useEffect } from "react";
+import { openSalesOverview } from "../sales-overview-sheet";
 export function OrderOverviewSheet({}) {
-    if (isProdClient) return;
+    // if (isProdClient) return;
     const { table, selectedRow } = useInfiniteDataTable();
     const item: SalesItemProp = selectedRow?.original as any;
-    if (!item) return;
+    useEffect(() => {
+        if (item && !isProdClient) {
+            table.setRowSelection({});
+            openSalesOverview({
+                salesId: item.id,
+            });
+        }
+    }, [item]);
+    if (!item || isProdClient) return;
     return (
         <TableItemOverviewSheet>
             <OverviewProvider item={item}>
