@@ -31,8 +31,8 @@ export function SalesItemsTab({}) {
                                 item.sectionTitle && "ml-4",
                                 "border border-transparent border-b-muted-foreground/20 rounded-b-none rounded-lg",
                                 item.itemControlUid != store.itemViewId
-                                    ? "cursor-pointer hover:bg-muted/30 hover:shadow-lg hover:border-muted-foreground/30"
-                                    : "border border-muted-foreground/50  shadow-sm bg-muted/30"
+                                    ? "cursor-pointer hover:bg-muted/80 hover:shadow-lg hover:border-muted-foreground/30"
+                                    : "border border-muted-foreground/60  shadow-sm bg-muted/30"
                             )}
                         >
                             <div
@@ -58,7 +58,7 @@ export function SalesItemsTab({}) {
                                         {item.lineConfigs?.map((c) => (
                                             <Badge
                                                 key={c}
-                                                className="text-muted-foreground font-semibold"
+                                                className="font-mono font-semibold"
                                                 variant="outline"
                                             >
                                                 {c}

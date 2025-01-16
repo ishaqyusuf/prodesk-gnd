@@ -11,6 +11,7 @@ import {
 import { excludeDeleted } from "../utils/db-utils";
 import { Prisma } from "@prisma/client";
 import { formatMoney } from "@/lib/use-number";
+import { sum } from "@/lib/utils";
 
 export type GetSalesItemOverviewAction = AsyncFnType<
     typeof getSalesItemsOverviewAction
@@ -35,6 +36,7 @@ export async function getSalesItemsOverviewAction({
                     ...excludeDeleted.where,
                 },
                 select: {
+                    id: true,
                     itemId: true,
                     dueDate: true,
                     lhQty: true,
@@ -42,6 +44,12 @@ export async function getSalesItemsOverviewAction({
                     salesDoorId: true,
                     qtyAssigned: true,
                     createdAt: true,
+                    assignedTo: {
+                        select: {
+                            id: true,
+                            name: true,
+                        },
+                    },
                     submissions: {
                         where: {
                             ...excludeDeleted.where,
@@ -166,7 +174,42 @@ export async function getSalesItemsOverviewAction({
         lineConfigs?: string[];
         itemId;
         doorId?;
+        assignments: ReturnType<typeof transformAssignments>;
     }[] = [];
+    function transformAssignments(assignments: (typeof order)["assignments"]) {
+        return assignments.map((ass) => {
+            const resp = {
+                id: ass.id,
+                assignedTo: ass.assignedTo?.name,
+                assignedToId: ass.assignedTo?.id,
+                dueDate: ass.dueDate,
+                lh: ass.lhQty,
+                rh: ass.rhQty,
+                qty: !ass.lhQty && !ass.rhQty ? ass.qtyAssigned : null,
+                total: ass.qtyAssigned,
+                pills: [],
+                submissions: ass.submissions.map((s) => {
+                    const resp = {
+                        lh: s.lhQty,
+                        rh: s.rhQty,
+                        qty: !s.lhQty && !s.rhQty ? s.qty : 0,
+                        total: 0,
+                    };
+                    resp.total = sum([resp.lh, resp.rh, resp.qty]);
+                    return resp;
+                }),
+            };
+            resp.pills = ["rh", "lh", "qty"]
+                .map((q) => {
+                    const assigned = resp[q];
+                    if (!assigned) return null;
+                    const submitted = sum(resp.submissions?.map((a) => a[q]));
+                    return `${submitted}/${assigned} ${q}`;
+                })
+                .filter(Boolean);
+            return resp;
+        });
+    }
     order.items.map((item) => {
         const itemIndex = (item.meta as any as SalesItemMeta)?.lineIndex;
         let itemControlUid;
@@ -204,9 +247,13 @@ export async function getSalesItemsOverviewAction({
                 unitCost: item.rate,
                 hidden,
                 primary: hidden,
+                assignments: transformAssignments(assignments),
             });
         } else if (doors?.length) {
             doors.map((door) => {
+                const assignments = order.assignments.filter(
+                    (a) => a.salesDoorId == door.id && a.itemId == item.id
+                );
                 const title = `${
                     hpt.door?.title ||
                     hpt.stepProduct?.name ||
@@ -215,6 +262,7 @@ export async function getSalesItemsOverviewAction({
 
                 itemControlUid = doorItemControlUid(door.id, door.dimension);
                 items.push({
+                    assignments: transformAssignments(assignments),
                     itemIndex,
                     doorId: door.id,
                     itemId: item.id,
@@ -258,6 +306,7 @@ export async function getSalesItemsOverviewAction({
         if (qty?.total > 1)
             item.lineConfigs.push(`$${formatMoney(item.unitCost)}/1`);
         item.lineConfigs = item.lineConfigs.filter(Boolean);
+
         return item;
     });
 

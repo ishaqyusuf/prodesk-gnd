@@ -295,3 +295,5 @@ export function composeControls(order: GetSalesItemControllables) {
     });
     return response;
 }
+
+// export function transformHandlesQty({lhQty,rhQty,qty,})
