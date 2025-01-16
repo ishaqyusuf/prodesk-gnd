@@ -106,6 +106,7 @@ export async function getSalesItemControllablesInfoAction(salesId) {
                     submissions: {
                         where: { deletedAt: null },
                         select: {
+                            deletedAt: true,
                             qty: true,
                             rhQty: true,
                             lhQty: true,
