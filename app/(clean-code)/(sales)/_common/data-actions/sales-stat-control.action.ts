@@ -5,8 +5,30 @@ import { QtyControlType } from "../../types";
 import { updateSalesItemControlAction } from "./item-control.action";
 import { percent, sum } from "@/lib/utils";
 
+export async function validateSalesStatControlAction(salesId) {
+    const order = await prisma.salesOrders.findFirstOrThrow({
+        where: { id: salesId },
+        select: {
+            itemControls: {
+                select: {
+                    qtyControls: {
+                        select: {
+                            type: true,
+                        },
+                    },
+                },
+            },
+        },
+    });
+    const qtyControls = order.itemControls
+        .map((i) => i.qtyControls)
+        .flat().length;
+    if (!qtyControls) {
+        await updateSalesItemControlAction(salesId);
+        await updateSalesStatControlAction(salesId);
+    }
+}
 export async function updateSalesStatControlAction(salesId) {
-    await updateSalesItemControlAction(salesId);
     const order = await prisma.salesOrders.findFirstOrThrow({
         where: {
             id: salesId,
@@ -29,9 +51,7 @@ export async function updateSalesStatControlAction(salesId) {
             ...c,
             type: c.type as QtyControlType,
         }));
-    const totalQty = sum(
-        itemControls.filter((a) => a.type == "qty")?.map((a) => a.total)
-    );
+
     const totalProduceable = sum(
         order.itemControls
             .filter((i) => i.produceable)
