@@ -4,15 +4,73 @@ import { Prisma } from "@prisma/client";
 import {
     composeControls,
     itemControlUidObject,
+    qtyControlsByType,
 } from "../utils/item-control-utils";
 import { prisma } from "@/db";
-import { SalesDispatchStatus } from "../../types";
+import { QtyControlType, SalesDispatchStatus } from "../../types";
 import { AsyncFnType } from "@/types";
+import { updateSalesStatControlAction } from "./sales-stat-control.action";
+import { percent, sum } from "@/lib/utils";
 
 export async function updateItemControlAction(
-    data: Prisma.SalesItemControlCreateManyInput
-) {}
+    uid,
+    data: Prisma.SalesItemControlUpdateInput
+) {
+    const resp = await prisma.salesItemControl.update({
+        where: {
+            uid,
+        },
+        data: {
+            produceable: data.produceable,
+            shippable: data.shippable,
+        },
+    });
+    await updateItemQtyControlsAction(uid);
+    await updateSalesStatControlAction(resp.salesId);
+}
+export async function updateQtyControlAction(
+    uid,
+    type: QtyControlType,
+    { qty, lh, rh, totalQty }
+) {
+    const qtyControl = await prisma.qtyControl.upsert({
+        where: {
+            itemControlUid_type: {
+                itemControlUid: uid,
+                type,
+            },
+        },
+        create: {
+            type,
+            itemControlUid: uid,
+        },
+        update: {},
+    });
+    console.log(qtyControl, { qty, lh, rh, totalQty });
 
+    if (!qtyControl) throw new Error("Not found");
+    qtyControl.rh = sum([qtyControl.rh, rh]);
+    qtyControl.lh = sum([qtyControl.lh, lh]);
+    qtyControl.qty = sum([qtyControl.qty, qty]);
+    qtyControl.total = sum([qtyControl.qty, qtyControl.rh, qtyControl.lh]);
+    qtyControl.percentage = percent(qtyControl.total, totalQty);
+
+    if (qtyControl.percentage > 100 || qtyControl.percentage < 0)
+        throw new Error("Error performing action");
+    await prisma.qtyControl.updateMany({
+        where: {
+            itemControlUid: uid,
+            type,
+        },
+        data: {
+            rh: qtyControl.rh,
+            lh: qtyControl.lh,
+            qty: qtyControl.qty,
+            total: qtyControl.total,
+            percentage: qtyControl.percentage,
+        },
+    });
+}
 export async function getItemControlAction(uid) {
     const obj = itemControlUidObject(uid);
 }
@@ -125,7 +183,6 @@ export async function getSalesItemControllablesInfoAction(salesId) {
         assignments: order.assignments.map((a) => {
             return {
                 ...a,
-
                 submissions: a.submissions.map((s) => {
                     return {
                         ...s,
@@ -141,7 +198,16 @@ export async function getSalesItemControllablesInfoAction(salesId) {
         }),
     };
 }
-
+export async function updateItemQtyControlsAction(uid) {
+    const control = await prisma.salesItemControl.findFirstOrThrow({
+        where: { uid },
+        include: {
+            qtyControls: true,
+        },
+    });
+    const qtyControls = qtyControlsByType(control.qtyControls);
+    const qty = qtyControls.qty;
+}
 export async function updateSalesItemControlAction(salesId) {
     const order = await getSalesItemControllablesInfoAction(salesId);
     const controls = composeControls(order);

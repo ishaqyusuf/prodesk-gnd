@@ -21,6 +21,7 @@ async function createSalesProgressDta(
     total,
     score
 ) {
+    return;
     await prisma.salesStat.create({
         data: {
             score,

@@ -1,4 +1,4 @@
-import { Prisma } from "@prisma/client";
+import { Prisma, QtyControl } from "@prisma/client";
 import {
     QtyControlByType,
     QtyControlType,
@@ -75,6 +75,13 @@ interface ComposeQtyControlProps {
     lh?;
     rh?;
     qty?;
+}
+export function qtyControlsByType(qtyControls: QtyControl[]) {
+    const resp: QtyControlByType = {} as any;
+    qtyControls.map((q) => {
+        resp[q.type] = q;
+    });
+    return resp;
 }
 export function composeQtyControl(props: ComposeQtyControlProps) {
     const totalQty = props.qty ? props.qty : sum([props.lh, props.rh]);

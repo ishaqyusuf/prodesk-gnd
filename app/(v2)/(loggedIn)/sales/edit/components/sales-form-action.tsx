@@ -14,6 +14,7 @@ import useSaveSalesHook from "../hooks/use-save-sales";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { PrintOrderMenuAction } from "@/components/_v1/actions/sales-menu-actions";
+import { openSalesOverview } from "@/app/(clean-code)/(sales)/_common/_components/sales-overview-sheet";
 
 export default function SalesFormAction() {
     const ctx = useContext(SalesFormContext);
@@ -56,6 +57,18 @@ export default function SalesFormAction() {
                         value={date}
                     />
                 </div>
+                {ctx.data.form?.id && (
+                    <Button
+                        onClick={() => {
+                            openSalesOverview({
+                                salesId: ctx.data?.form?.id,
+                            });
+                        }}
+                        size="xs"
+                    >
+                        Overview
+                    </Button>
+                )}
                 <Menu
                     variant={"secondary"}
                     disabled={ctx.toggleMockup}

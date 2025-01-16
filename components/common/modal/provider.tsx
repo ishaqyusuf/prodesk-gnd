@@ -7,7 +7,7 @@ import {
     useState,
     useTransition,
 } from "react";
-import Modal from ".";
+import Modal, { openSecondaryPane } from ".";
 
 export interface ModalContextProps {
     openModal: (content: ReactNode, type?: ModalType) => void;
@@ -18,6 +18,10 @@ export interface ModalContextProps {
     setShowModal;
     loading;
     startTransition;
+    secondaryPaneIds?: string[];
+    closeSecondaryPane;
+    closeSecondaryPanes;
+    openSecondaryPane;
 }
 export type ModalType = "modal" | "sheet";
 const ModalContext = createContext<ModalContextProps | undefined>(undefined);
@@ -35,14 +39,22 @@ const modalUtil: ModalContextProps = {
     setShowModal: null,
     loading: false,
     startTransition: null,
+    secondaryPaneIds: [],
+    closeSecondaryPane: null,
+    closeSecondaryPanes: null,
+    openSecondaryPane: null,
 };
 export function ModalProvider({ children }: { children: ReactNode }) {
     const [modalContent, setModalContent] = useState<ReactNode | null>(null);
+    const [secondaryModalContent, setSecondaryModalContent] =
+        useState<ReactNode | null>(null);
     const [showModal, setShowModal] = useState(false);
     const [data, setData] = useState<DataType>({
         type: "modal",
     });
     const [loading, startTransition] = useTransition();
+    const [secondaryPaneIds, setSeconPanesIds] = useState([]);
+
     const show = (
         content: ReactNode,
         type: ModalType = "modal",
@@ -76,6 +88,20 @@ export function ModalProvider({ children }: { children: ReactNode }) {
         },
         openSheet(content: ReactNode, extras: any = {}) {
             show(content, "sheet", extras);
+        },
+        openSecondaryPane(paneId) {
+            setSeconPanesIds([paneId]);
+        },
+        secondaryPaneIds,
+        closeSecondaryPane(id) {
+            setSeconPanesIds((current) => {
+                return [...current].filter((a) => a != id);
+            });
+        },
+        closeSecondaryPanes() {
+            setSeconPanesIds((current) => {
+                return [];
+            });
         },
     };
     Object.keys(value).map((k) => {

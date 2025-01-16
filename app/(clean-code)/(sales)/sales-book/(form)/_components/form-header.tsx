@@ -17,6 +17,7 @@ import { useSearchParams } from "next/navigation";
 import { Menu } from "@/components/(clean-code)/menu";
 import { PrintAction } from "../../../_common/_components/overview-sheet/footer/print.action";
 import { useMemo } from "react";
+import { openSalesOverview } from "../../../_common/_components/sales-overview-sheet";
 
 export function FormHeader({ sticky }: { sticky: Sticky }) {
     const zus = useFormDataStore();
@@ -40,7 +41,6 @@ export function FormHeader({ sticky }: { sticky: Sticky }) {
             type: zus.metaData.type,
             slug: zus.metaData.salesId,
         });
-
         zus.init(zhInitializeState(data));
     }
     const printData = useMemo(() => {
@@ -155,6 +155,18 @@ export function FormHeader({ sticky }: { sticky: Sticky }) {
                     variant="outline"
                 >
                     <span className="">Settings</span>
+                </Button>
+
+                <Button
+                    size="xs"
+                    disabled={!zus.metaData.id}
+                    onClick={() => {
+                        openSalesOverview({
+                            salesId: zus.metaData.id,
+                        });
+                    }}
+                >
+                    <span className="">Overview</span>
                 </Button>
                 <Button icon="save" size="xs" action={save} variant="default">
                     {/* <Icons.save className="size-4 mr-4" /> */}

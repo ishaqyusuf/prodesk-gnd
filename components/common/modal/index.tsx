@@ -26,6 +26,9 @@ import Btn from "@/components/_v1/btn";
 import { Icons } from "@/components/_v1/icons";
 import { useFormContext } from "react-hook-form";
 import { PrimitiveDivProps } from "@/types/type";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import Portal from "@/components/_v1/portal";
+import { createPortal } from "react-dom";
 
 function BaseModal({
     children,
@@ -85,6 +88,7 @@ const contentVariants = cva(``, {
             lg: "w-full lg:w-[700px]",
             xl: "w-full lg:w-[900px]",
             "2xl": "",
+            none: "w-auto",
         },
     },
     defaultVariants: {
@@ -114,15 +118,29 @@ function Content({ children, size, ...props }: ContentProps) {
         </Content>
     );
 }
-
+function _ScrollArea({ children, className = "" }) {
+    return (
+        <ScrollArea className={cn("flex-1 -mx-6 px-6", className)}>
+            {children}
+        </ScrollArea>
+    );
+}
 interface HeaderProps {
     title?: string | any;
     subtitle?: string | any;
     onBack?;
     icon?: keyof typeof Icons;
     children?;
+    secondary?: boolean;
 }
-function Header({ title, icon, subtitle, onBack, children }: HeaderProps) {
+function Header({
+    title,
+    secondary,
+    icon,
+    subtitle,
+    onBack,
+    children,
+}: HeaderProps) {
     // const modal = useModal();
     const isModal = _modal?.data?.type == "modal";
     const [Header, Title, Subtitle] = isModal
@@ -132,8 +150,8 @@ function Header({ title, icon, subtitle, onBack, children }: HeaderProps) {
     return (
         <Header className="">
             <div className="flex flex-1">
-                <div className={cn(onBack && "flex sm:space-x-4")}>
-                    {onBack && (
+                <div className={cn(onBack && "flex flex-1 sm:space-x-4")}>
+                    {onBack && !secondary && (
                         <div>
                             <Button
                                 onClick={onBack}
@@ -157,6 +175,17 @@ function Header({ title, icon, subtitle, onBack, children }: HeaderProps) {
                             </Subtitle>
                         )}
                     </div>
+                    {onBack && secondary && (
+                        <div className="mr-4">
+                            <Button
+                                onClick={onBack}
+                                variant={"secondary"}
+                                size={"icon"}
+                            >
+                                <Icons.chevronRight className="size-4" />
+                            </Button>
+                        </div>
+                    )}
                 </div>
                 {children}
             </div>
@@ -229,8 +258,48 @@ function Footer({
         </Footer>
     );
 }
+
+function MultiPane({ children }) {
+    return (
+        <Content size="none" className="side-modal-rounded">
+            <div className="flex-1 flex" id="">
+                <div className="" id="multiPane"></div>
+                {children}
+            </div>
+        </Content>
+    );
+}
+function SecondaryPane({ children }) {
+    return (
+        <Portal noDelay nodeId={"multiPane"}>
+            <div className="w-[600px] flex flex-col side-modal-rounded-h-content mr-2">
+                {children}
+            </div>
+        </Portal>
+    );
+}
+function Pane({ children }) {
+    return (
+        <div className="w-[600px] flex flex-col side-modal-rounded-h-content">
+            {children}
+        </div>
+    );
+}
+
+export const multiPaneNode = () => document.getElementById("multiPane");
+export const openSecondaryPane = (component, id) => {
+    const node = multiPaneNode();
+
+    return _modal.secondaryPaneIds?.includes(id)
+        ? createPortal(component, node)
+        : null;
+};
 export default Object.assign(BaseModal, {
     Content,
     Header,
     Footer,
+    ScrollArea: _ScrollArea,
+    MultiPane,
+    Pane,
+    SecondaryPane,
 });

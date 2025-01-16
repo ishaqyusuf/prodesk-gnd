@@ -11,9 +11,7 @@ import { getSalesListByIdUseCase } from "../../use-case/sales-list-use-case";
 import { toast } from "sonner";
 import { usePayment } from "./payments/payment-hooks";
 import { _modal } from "@/components/common/modal/provider";
-import CustomerOverviewSheet, {
-    openCustomerOverviewSheet,
-} from "../customer-overview-sheet";
+import { openCustomerOverviewSheet } from "../customer-overview-sheet";
 
 interface Props {}
 type TabItems = "itemView" | "makePayment" | "createShipping" | "shippingView";

@@ -1,5 +1,5 @@
 import React from "react";
-import { useDataTableContext, useInfiniteDataTable } from "./use-data-table";
+import { useInfiniteDataTable } from "./use-data-table";
 import {
     Sheet,
     SheetClose,
@@ -16,7 +16,7 @@ import {
     TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
-import { ChevronDown, ChevronUp, Pencil, X } from "lucide-react";
+import { ChevronDown, ChevronUp, X } from "lucide-react";
 import { Kbd } from "../kbd";
 import { Separator } from "@/components/ui/separator";
 import { Icons } from "@/components/_v1/icons";

@@ -55,7 +55,7 @@ export function TxForm({}) {
 
     // if (!tx.phoneNo || !tx.payables?.length) return null;
     return (
-        <Modal.Content className="h-[95vh] mt-[2.5vh] mx-4 rounded-xl flex flex-col">
+        <Modal.Content className="side-modal-rounded">
             <Modal.Header onBack={(e) => {}} title="Pay Portal" />
             <CustomerSelector />
             <TxFormContent />

@@ -107,3 +107,10 @@ table.size-sm td {
 .printly .text-primary {
     @apply text-black/90;
 }
+
+.side-modal-rounded-h-content {
+    @apply h-[calc(95vh-3vh)];
+}
+.side-modal-rounded {
+    @apply h-[95vh] mt-[2.5vh] mx-4 rounded-xl flex flex-col;
+}
