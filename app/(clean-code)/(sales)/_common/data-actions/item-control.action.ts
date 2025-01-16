@@ -96,6 +96,7 @@ export async function getSalesItemControllablesInfoAction(salesId) {
                 },
             },
             assignments: {
+                where: { deletedAt: null },
                 select: {
                     lhQty: true,
                     rhQty: true,
@@ -103,6 +104,7 @@ export async function getSalesItemControllablesInfoAction(salesId) {
                     itemId: true,
                     salesDoorId: true,
                     submissions: {
+                        where: { deletedAt: null },
                         select: {
                             qty: true,
                             rhQty: true,
@@ -121,6 +123,7 @@ export async function getSalesItemControllablesInfoAction(salesId) {
                 },
             },
             items: {
+                where: { deletedAt: null },
                 select: {
                     swing: true,
                     qty: true,
@@ -128,16 +131,20 @@ export async function getSalesItemControllablesInfoAction(salesId) {
                     description: true,
                     dykeDescription: true,
                     housePackageTool: {
+                        where: { deletedAt: null },
                         select: {
                             stepProduct: {
+                                where: { deletedAt: null },
                                 select: {
                                     name: true,
                                     product: {
+                                        where: { deletedAt: null },
                                         select: {
                                             title: true,
                                         },
                                     },
                                     door: {
+                                        where: { deletedAt: null },
                                         select: {
                                             title: true,
                                         },
@@ -145,11 +152,13 @@ export async function getSalesItemControllablesInfoAction(salesId) {
                                 },
                             },
                             molding: {
+                                where: { deletedAt: null },
                                 select: {
                                     title: true,
                                 },
                             },
                             door: {
+                                where: { deletedAt: null },
                                 select: {
                                     title: true,
                                 },
@@ -157,6 +166,7 @@ export async function getSalesItemControllablesInfoAction(salesId) {
                             id: true,
                             moldingId: true,
                             doors: {
+                                where: { deletedAt: null },
                                 select: {
                                     dimension: true,
                                     id: true,

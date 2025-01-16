@@ -16,6 +16,7 @@ import FormInput from "@/components/common/controls/form-input";
 import { toast } from "sonner";
 import Button from "@/components/common/button";
 import {
+    deleteItemAssignmentAction,
     deleteSubmissionAction,
     submitItemAssignmentAction,
 } from "../../../data-actions/item-assign-action";
@@ -97,7 +98,19 @@ function AssignmentLine({ assignment, index }) {
                     >
                         Submit
                     </Button>
-                    <ConfirmBtn trash />
+                    <ConfirmBtn
+                        trash
+                        onClick={async () => {
+                            await deleteItemAssignmentAction({
+                                id: ass.id,
+                            });
+                            toast.success("Deleted");
+                            loadPageData({
+                                dataKey: "itemOverview",
+                                reload: true,
+                            });
+                        }}
+                    />
                 </div>
             </div>
             {!show ? (
@@ -117,6 +130,11 @@ function AssignmentLine({ assignment, index }) {
                                     onClick={async () => {
                                         await deleteSubmissionAction({
                                             id: s.id,
+                                        });
+                                        toast.success("Submitted");
+                                        loadPageData({
+                                            dataKey: "itemOverview",
+                                            reload: true,
                                         });
                                     }}
                                     trash
