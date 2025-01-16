@@ -29,6 +29,7 @@ import { SalesDispatchListDto } from "../../data-access/dto/sales-shipping-dto";
 import { PaymentTab, TerminalPay } from "./payments/payment-tab";
 import { SalesItemsOverview } from "./item-view/sales-items-overview";
 export function OrderOverviewSheet({}) {
+    return;
     const { table, selectedRow } = useInfiniteDataTable();
     const item: SalesItemProp = selectedRow?.original as any;
     if (!item) return;

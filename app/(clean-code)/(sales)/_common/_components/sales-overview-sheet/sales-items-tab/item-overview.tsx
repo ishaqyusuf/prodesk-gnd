@@ -16,6 +16,8 @@ import useEffectLoader from "@/lib/use-effect-loader";
 import FormSelect from "@/components/common/controls/form-select";
 import { DatePicker } from "@/components/(clean-code)/custom/controlled/date-picker";
 import { createItemAssignmentAction } from "../../../data-actions/item-assign-action";
+import { Minimize } from "lucide-react";
+import { ItemAssignments } from "./assignments";
 
 export function ItemOverview({}) {
     const store = salesOverviewStore();
@@ -30,7 +32,7 @@ export function ItemOverview({}) {
                 <div className="flex gap-4">
                     <Button
                         onClick={() => setShowForm("assign")}
-                        disabled={!pendingAssignment}
+                        disabled={!pendingAssignment || !!showForm}
                         className="w-full"
                         size="xs"
                     >
@@ -38,7 +40,7 @@ export function ItemOverview({}) {
                         <span>ASSIGN</span>
                         <span className="px-2">({pendingAssignment})</span>
                     </Button>
-                    <Menu>
+                    <Menu disabled={!!showForm}>
                         <Menu.Item onClick={() => setShowForm("config")}>
                             Item Config
                         </Menu.Item>
@@ -46,14 +48,15 @@ export function ItemOverview({}) {
                         <Menu.Item>Mark As Completed</Menu.Item>
                     </Menu>
                     <Button
+                        disabled={!!showForm}
                         onClick={() => {
                             store.update("itemViewId", null);
                         }}
                         size="icon"
-                        variant="destructive"
+                        variant="secondary"
                         className="h-8"
                     >
-                        <Icons.close className="size-4" />
+                        <Minimize className="size-4" />
                     </Button>
                 </div>
                 {showForm == "config" && (
@@ -64,6 +67,11 @@ export function ItemOverview({}) {
                         totalQty={pendingAssignment}
                         onClose={() => setShowForm(null)}
                     />
+                )}
+                {!showForm && (
+                    <>
+                        <ItemAssignments />
+                    </>
                 )}
             </div>
         </div>
@@ -184,7 +192,15 @@ function AssignForm({ onClose, totalQty }: AssignFormProps) {
                             />
                         ))}
                     </div>
-                    <div className="flex justify-end">
+                    <div className="flex  gap-2 justify-end">
+                        <Button
+                            onClick={onClose}
+                            variant="destructive"
+                            className=""
+                            size="xs"
+                        >
+                            Cancel
+                        </Button>
                         <Button onClick={assign} className="" size="xs">
                             Assign
                         </Button>

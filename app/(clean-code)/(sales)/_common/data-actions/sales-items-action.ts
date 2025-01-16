@@ -35,16 +35,20 @@ export async function getSalesItemsOverviewAction({
                     ...excludeDeleted.where,
                 },
                 select: {
+                    itemId: true,
                     dueDate: true,
                     lhQty: true,
                     rhQty: true,
                     salesDoorId: true,
                     qtyAssigned: true,
+                    createdAt: true,
                     submissions: {
                         where: {
                             ...excludeDeleted.where,
                         },
                         select: {
+                            createdAt: true,
+                            note: true,
                             qty: true,
                             rhQty: true,
                             lhQty: true,
@@ -178,8 +182,10 @@ export async function getSalesItemsOverviewAction({
                 value: fs.value,
             });
         });
-
         if (!order.isDyke || (!doors?.length && !hpt?.door)) {
+            const assignments = order.assignments.filter(
+                (a) => !a.salesDoorId && a.itemId == item.id
+            );
             itemControlUid = hpt
                 ? mouldingItemControlUid(item.id, hpt.id)
                 : itemItemControlUid(item.id);
