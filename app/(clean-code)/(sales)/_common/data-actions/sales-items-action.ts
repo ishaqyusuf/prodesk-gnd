@@ -55,6 +55,7 @@ export async function getSalesItemsOverviewAction({
                             ...excludeDeleted.where,
                         },
                         select: {
+                            id: true,
                             createdAt: true,
                             note: true,
                             qty: true,
@@ -194,17 +195,40 @@ export async function getSalesItemsOverviewAction({
                         rh: s.rhQty,
                         qty: !s.lhQty && !s.rhQty ? s.qty : 0,
                         total: 0,
+                        id: s.id,
+                        date: s.createdAt,
+                        description: ``,
                     };
+                    if (resp.qty) resp.description = `${resp.qty} items(s)`;
+                    else {
+                        resp.description = ["lh", "rh"]
+                            .map((a) => ({
+                                qty: resp[a],
+                                text: `${resp[a]} ${a}`?.toUpperCase(),
+                            }))
+                            .filter((a) => a.qty)
+                            .map((a) => a.text)
+                            .join(" & ");
+                    }
                     resp.total = sum([resp.lh, resp.rh, resp.qty]);
                     return resp;
                 }),
+                pendingSubmission: {
+                    lh: 0,
+                    rh: 0,
+                    qty: 0,
+                },
             };
+
             resp.pills = ["rh", "lh", "qty"]
                 .map((q) => {
                     const assigned = resp[q];
                     if (!assigned) return null;
                     const submitted = sum(resp.submissions?.map((a) => a[q]));
-                    return `${submitted}/${assigned} ${q}`;
+                    resp.pendingSubmission[q] = assigned - submitted;
+                    return {
+                        label: `${submitted}/${assigned} ${q}`,
+                    };
                 })
                 .filter(Boolean);
             return resp;

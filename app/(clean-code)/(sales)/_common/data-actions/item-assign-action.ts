@@ -57,3 +57,49 @@ export async function createItemAssignmentAction({
         await updateSalesStatControlAction(salesId);
     }) as any);
 }
+
+export async function submitItemAssignmentAction({
+    uid,
+    totalQty,
+    qty,
+    rh,
+    lh,
+    salesId,
+    assignmentId,
+    salesItemId,
+}) {
+    return await prisma.$transaction((async (tx: typeof prisma) => {
+        await tx.orderProductionSubmissions.create({
+            data: {
+                lhQty: lh,
+                rhQty: rh,
+                qty,
+                assignment: {
+                    connect: {
+                        id: assignmentId,
+                    },
+                },
+                order: {
+                    connect: {
+                        id: salesId,
+                    },
+                },
+                item: {
+                    connect: {
+                        id: salesItemId,
+                    },
+                },
+            },
+        });
+        await updateQtyControlAction(uid, "prodCompleted", {
+            totalQty,
+            qty,
+            rh,
+            lh,
+        });
+        await updateSalesStatControlAction(salesId);
+    }) as any);
+}
+export async function deleteSubmissionAction({ id }) {
+    return await prisma.$transaction((async (tx: typeof prisma) => {}) as any);
+}

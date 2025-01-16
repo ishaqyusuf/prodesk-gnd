@@ -46,8 +46,7 @@ export async function updateQtyControlAction(
         },
         update: {},
     });
-    console.log(qtyControl, { qty, lh, rh, totalQty });
-
+    // console.log(qtyControl, { qty, lh, rh, totalQty });
     if (!qtyControl) throw new Error("Not found");
     qtyControl.rh = sum([qtyControl.rh, rh]);
     qtyControl.lh = sum([qtyControl.lh, lh]);

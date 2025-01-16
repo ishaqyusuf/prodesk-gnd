@@ -1,9 +1,5 @@
 import Modal from "@/components/common/modal";
-import {
-    Collapsible,
-    CollapsibleContent,
-    CollapsibleTrigger,
-} from "@/components/ui/collapsible";
+
 import {
     DropdownMenu,
     DropdownMenuContent,
