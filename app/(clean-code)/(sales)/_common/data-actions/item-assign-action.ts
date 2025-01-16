@@ -124,13 +124,6 @@ export async function deleteSubmissionAction({ id }) {
                 deletedAt: new Date(),
             },
         });
-        // await updateQtyControlAction(uid, "prodCompleted", {
-        //     totalQty,
-        //     qty: !resp.lhQty && !resp.rhQty ? resp.qty * -1 : 0,
-        //     rh: resp.lhQty * -1,
-        //     lh: resp.rhQty * -1,
-        // });
-        // await updateSalesStatControlAction(resp.salesOrderId);
         await updateSalesItemControlAction(resp.salesOrderId);
         await updateSalesStatControlAction(resp.salesOrderId);
     }) as any);

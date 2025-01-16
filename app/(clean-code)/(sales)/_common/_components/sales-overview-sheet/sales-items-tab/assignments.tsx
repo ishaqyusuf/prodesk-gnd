@@ -131,7 +131,7 @@ function AssignmentLine({ assignment, index }) {
                                         await deleteSubmissionAction({
                                             id: s.id,
                                         });
-                                        toast.success("Submitted");
+                                        toast.success("Deleted");
                                         loadPageData({
                                             dataKey: "itemOverview",
                                             reload: true,
