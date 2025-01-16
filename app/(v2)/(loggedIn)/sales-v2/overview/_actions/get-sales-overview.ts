@@ -200,6 +200,7 @@ const SalesIncludes = {
                     stepProduct: {
                         include: {
                             door: true,
+                            product: true,
                         },
                     },
                     casing: true,

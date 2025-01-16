@@ -439,7 +439,12 @@ function getDoorsTable(
                                     door?.dimension?.replaceAll("in", '"')
                                 );
                             case "moulding":
-                                return m.housePackageTool?.molding?.title;
+                                return (
+                                    m.housePackageTool?.molding?.title ||
+                                    m?.housePackageTool?.stepProduct?.name ||
+                                    m?.housePackageTool?.stepProduct?.product
+                                        ?.title
+                                );
                             case "unitPrice":
                                 return formatCurrency.format(
                                     door ? door.unitPrice : (m.rate as any)
