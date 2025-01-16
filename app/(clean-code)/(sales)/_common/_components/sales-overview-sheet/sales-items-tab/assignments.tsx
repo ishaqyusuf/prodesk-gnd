@@ -22,6 +22,7 @@ import {
 } from "../../../data-actions/item-assign-action";
 import { salesOverviewStore } from "../store";
 import { formatDate } from "@/lib/use-day";
+import { isProdClient } from "@/lib/is-prod";
 
 export function ItemAssignments({}) {
     const itemView = getOpenItem();
@@ -127,6 +128,7 @@ function AssignmentLine({ assignment, index }) {
                                 </div>
                                 <div className="flex-1"></div>
                                 <ConfirmBtn
+                                    disabled={isProdClient}
                                     onClick={async () => {
                                         await deleteSubmissionAction({
                                             id: s.id,
