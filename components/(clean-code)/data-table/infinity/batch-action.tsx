@@ -5,6 +5,7 @@ import { Icon, IconKeys, Icons } from "@/components/_v1/icons";
 import { Menu } from "../../menu";
 import { cn } from "@/lib/utils";
 import ConfirmBtn from "@/components/_v1/confirm-btn";
+import { toast } from "sonner";
 
 export function BatchAction({ children = null }) {
     const ctx = useInfiniteDataTable();
@@ -59,9 +60,15 @@ export function BatchBtn(props: BatchBtnProps) {
     return <Button>{props.children}</Button>;
 }
 export function BatchDelete(props: BatchBtnProps) {
+    let ctx = useInfiniteDataTable();
     return (
         <ConfirmBtn
-            onClick={props.onClick}
+            onClick={async () => {
+                await props?.onClick();
+                toast.success("Delete successful");
+                ctx.table.toggleAllPageRowsSelected(false);
+                ctx.refetch();
+            }}
             variant="ghost"
             trash
             className="text-red-600"

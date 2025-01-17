@@ -29,6 +29,7 @@ import {
 import { PrintAction } from "../../../_common/_components/overview-sheet/footer/print.action";
 import { useInfiniteDataTable } from "@/components/(clean-code)/data-table/use-data-table";
 import { useMemo } from "react";
+import { deleteSalesByOrderIds } from "../../../_common/data-actions/sales-actions";
 
 export default function OrdersPageClient({
     filterFields,
@@ -125,7 +126,6 @@ function BatchActions() {
         const slugs = ctx.selectedRows?.map(
             (r) => (r.original as any)?.orderId
         );
-        console.log(slugs);
         return slugs;
     }, [ctx.selectedRows]);
     return (
@@ -160,7 +160,11 @@ function BatchActions() {
                 Print
             </BatchBtn>
 
-            <BatchDelete />
+            <BatchDelete
+                onClick={async () => {
+                    await deleteSalesByOrderIds(slugs);
+                }}
+            />
         </DataTable.BatchAction>
     );
 }

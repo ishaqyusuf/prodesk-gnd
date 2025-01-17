@@ -48,6 +48,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { DoorSizeSelectContext, useCtx, useInitContext } from "./ctx";
 import { Door } from "../door-swap-modal";
+import FormSelect from "@/components/common/controls/form-select";
 
 interface Props {
     cls: ComponentHelperClass;
@@ -169,10 +170,12 @@ function Row({ variant }) {
             </TableCell>
             {config.hasSwing && (
                 <TableCell>
-                    <FormInput
-                        control={ctx.form.control}
+                    <FormSelect
                         size="sm"
+                        options={["IN-SWING", "OUT-SWING", "None"]}
+                        label={"Swing"}
                         name={`selections.${variant.path}.swing`}
+                        control={ctx.form.control}
                     />
                 </TableCell>
             )}

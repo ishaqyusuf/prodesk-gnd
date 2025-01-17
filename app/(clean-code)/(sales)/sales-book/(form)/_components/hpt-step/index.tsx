@@ -193,14 +193,7 @@ function DoorSizeRow({ size }: { size }) {
     const lineUid = size.path;
     const ctx = useCtx();
     const sizeForm = ctx.itemForm?.groupItem.form[size.path];
-    if (sizeForm)
-        console.log({
-            sizeForm,
-        });
-    // useEffect(() => {
-    //     console.log("ADDON CHANGED>");
-    //     ctx.ctx.updateGroupedCost();
-    // }, [sizeForm?.pricing?.addon, sizeForm?.qty]);
+
     const valueChanged = () => {
         ctx.ctx.updateGroupedCost();
         ctx.ctx.calculateTotalPrice();
@@ -210,7 +203,11 @@ function DoorSizeRow({ size }: { size }) {
             <TableCell className="font-mono font-semibold text-sm">
                 {size.title}
             </TableCell>
-            {ctx.config.hasSwing && <TableCell>Swing</TableCell>}
+            {ctx.config.hasSwing && (
+                <TableCell>
+                    <LineInput cls={ctx.ctx} name="swing" lineUid={lineUid} />
+                </TableCell>
+            )}
             {ctx.config.noHandle ? (
                 <TableCell>
                     <LineInput

@@ -7,16 +7,17 @@ import { salesPdf } from "@/app/(v2)/printer/_action/sales-pdf";
 
 interface Props {
     pdf?: boolean;
-    data?: {};
+    data?;
 }
 export function PrintAction({ data, pdf }: Props) {
     let ctx = useSalesOverview();
     if (data) ctx = data as any;
+    const slugs = data?.slugs;
     const dispatchList = ctx.item.dispatchList || [];
     const type = ctx.item.type;
     function print(params?: SalesPrintProps["searchParams"]) {
         const query = {
-            slugs: ctx.item?.slug,
+            slugs: slugs ? slugs?.join(",") : ctx.item?.slug,
             mode: type,
             preview: false,
             ...(params || {}),
