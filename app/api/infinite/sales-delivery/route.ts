@@ -10,6 +10,7 @@ export async function GET(req: NextRequest) {
     req.nextUrl.searchParams.forEach((value, key) => _search.set(key, value));
     const search = searchParamsCache.parse({
         ...Object.fromEntries(_search),
+        "sales.type": "order",
         // pk: generateRandomString(),
         // delivery: "delivery" as DeliveryOption,
     });

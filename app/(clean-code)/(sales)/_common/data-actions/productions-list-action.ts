@@ -21,19 +21,21 @@ export async function getProductionListPageAction(query: SearchParamsType) {
     const prodList = await getProductionListAction(query);
     const dueToday = !query.start
         ? await getProductionListAction({
+              "sales.type": query["sales.type"],
               "production.assignedToId": query["production.assignedToId"],
               "production.status": "due today",
           })
         : [];
     const pastDue = !query.start
         ? await getProductionListAction({
+              "sales.type": query["sales.type"],
               "production.assignedToId": query["production.assignedToId"],
               "production.status": "past due",
           })
         : [];
+    const excludesIds = [...dueToday, ...pastDue].map((a) => a.id);
     const others = prodList.filter((p) => !excludesIds?.includes(p.id));
 
-    const excludesIds = [...dueToday, ...pastDue].map((a) => a.id);
     const result = await inifinitePageInfo(
         query,
         whereSales(query),
@@ -44,6 +46,7 @@ export async function getProductionListPageAction(query: SearchParamsType) {
 }
 export async function getProductionListAction(query: SearchParamsType) {
     const where = whereSales(query);
+
     const whereAssignments: Prisma.OrderItemProductionAssignmentsWhereInput[] =
         (
             Array.isArray(where?.AND)
