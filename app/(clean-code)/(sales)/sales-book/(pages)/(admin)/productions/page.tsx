@@ -33,7 +33,7 @@ export default async function SalesBookPage({ searchParams }) {
     const { queryKey, filterFields } = props;
     await queryClient.prefetchInfiniteQuery(dataOptions(search, queryKey));
     return (
-        <FPage className="" title="Productions">
+        <FPage can={["viewOrders"]} className="" title="Productions">
             <Portal nodeId={"navRightSlot"}>
                 <NewFeatureBtn href="/sales-v2/productions">
                     Old Site

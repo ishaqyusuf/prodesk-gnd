@@ -22,7 +22,7 @@ export default async function SalesBookQuotePage({ searchParams }) {
     await queryClient.prefetchInfiniteQuery(dataOptions(search, queryKey));
 
     return (
-        <FPage title="Quotes">
+        <FPage can={["viewEstimates"]} title="Quotes">
             <Portal nodeId={"navRightSlot"}>
                 <NewFeatureBtn href="/sales/quotes">Old Site</NewFeatureBtn>
             </Portal>

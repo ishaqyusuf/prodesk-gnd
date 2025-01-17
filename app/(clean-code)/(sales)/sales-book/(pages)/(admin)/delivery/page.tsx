@@ -15,7 +15,7 @@ export default async function DispatchPage({ searchParams }) {
     );
     await queryClient.prefetchInfiniteQuery(dataOptions(search, queryKey));
     return (
-        <FPage className="" title="Sales Delivery">
+        <FPage can={["viewOrders"]} title="Sales Delivery">
             <DeliveryPageClient
                 queryKey={queryKey}
                 filterFields={filterFields}
