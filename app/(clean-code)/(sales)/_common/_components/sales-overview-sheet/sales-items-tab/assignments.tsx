@@ -23,6 +23,13 @@ import {
 import { salesOverviewStore } from "../store";
 import { formatDate } from "@/lib/use-day";
 import { isProdClient } from "@/lib/is-prod";
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
+import { useState } from "react";
 
 export function ItemAssignments({}) {
     const itemView = getOpenItem();
@@ -79,6 +86,7 @@ function AssignmentLine({ assignment, index }) {
                 <span>{index + 1}.</span>
                 <span>{ass?.assignedTo || "Not Assigned"}</span>
 
+                <DueDate date={ass.dueDate} dateChanged={(e) => {}} />
                 {ass.pills.map((pill, pillId) => (
                     <Badge
                         variant="outline"
@@ -201,6 +209,34 @@ function AssignmentLine({ assignment, index }) {
                 </Form>
             )}
         </div>
+    );
+}
+function DueDate({ date, dateChanged }) {
+    const [_date, setDate] = useState(date);
+    function onChange(__date) {
+        // setDate(__date);
+        // onOpenChange(false);
+    }
+    const [open, onOpenChange] = useState(false);
+    return (
+        <Popover open={open} onOpenChange={onOpenChange}>
+            <PopoverTrigger>
+                <Badge variant="secondary" className="text-xs py-1">
+                    {_date ? formatDate(_date) : "Due Date"}
+                </Badge>
+            </PopoverTrigger>
+            <PopoverContent className="" align="end">
+                <Calendar
+                    mode="single"
+                    selected={_date}
+                    onSelect={onChange}
+                    // disabled={(date) =>
+                    //     date > new Date() || date < new Date("1900-01-01")
+                    // }
+                    initialFocus
+                />
+            </PopoverContent>
+        </Popover>
     );
 }
 function QtyInput({ label, submitable }) {
