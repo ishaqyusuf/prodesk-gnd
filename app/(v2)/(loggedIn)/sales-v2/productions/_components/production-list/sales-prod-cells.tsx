@@ -11,6 +11,7 @@ import {
     MenuItem,
     RowActionMoreMenu,
 } from "@/components/_v1/data-table/data-table-row-actions";
+import { openSalesProductionModal } from "@/app/(clean-code)/(sales)/_common/_components/sales-overview-sheet";
 
 interface Props {
     item: ProductionListItemType;
@@ -131,13 +132,13 @@ function AssignedTo({ item }: Props) {
     );
 }
 function Actions({ item }: Props) {
-    const assignment = useAssignment();
-
     return (
         <>
             <Button
                 onClick={() => {
-                    assignment.open(item.id);
+                    openSalesProductionModal({
+                        salesId: item.id,
+                    });
                 }}
                 size={"sm"}
                 className="h-8"
