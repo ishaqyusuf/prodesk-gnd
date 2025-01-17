@@ -62,7 +62,7 @@ function Status({ item }: ItemProps) {
 function Action({ item }: ItemProps) {
     return (
         <>
-            <ConfirmBtn trash size="icon" variant="ghost" />
+            {/* <ConfirmBtn trash size="icon" variant="ghost" /> */}
             {/* <div>a</div>
             <div>a</div> */}
         </>
