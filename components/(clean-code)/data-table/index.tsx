@@ -87,7 +87,10 @@ export type InfiniteDataTablePageProps = {
     filterFields;
     queryKey;
 };
-function Infinity({ children, ...props }: { children; queryKey } & TableProps) {
+function Infinity({
+    children,
+    ...props
+}: { children; queryKey; itemViewFn? } & TableProps) {
     const ctx = useInfiniteDataTableContext(props);
 
     return (

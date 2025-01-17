@@ -99,5 +99,6 @@ function transformProductionList(item: GetProductionList[number]) {
         assignedTo: Array.from(
             new Set(item.assignments.map((a) => a.assignedTo?.name))
         ).join(" & "),
+        uuid: item.orderId,
     };
 }

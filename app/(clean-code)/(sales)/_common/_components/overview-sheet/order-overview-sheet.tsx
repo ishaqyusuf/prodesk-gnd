@@ -35,15 +35,8 @@ export function OrderOverviewSheet({}) {
     // if (isProdClient) return;
     const { table, selectedRow } = useInfiniteDataTable();
     const item: SalesItemProp = selectedRow?.original as any;
-    useEffect(() => {
-        if (item && isProdClient) {
-            table.setRowSelection({});
-            openSalesOverview({
-                salesId: item.id,
-            });
-        }
-    }, [item]);
-    if (!item || isProdClient) return;
+
+    if (!item) return;
     return (
         <TableItemOverviewSheet>
             <OverviewProvider item={item}>

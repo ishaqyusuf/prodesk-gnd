@@ -52,6 +52,9 @@ export default function ProductionsPageClient({
                 checkable
                 ActionCell={Cells.Action}
                 queryKey={queryKey}
+                itemViewFn={(item) => {
+                    //
+                }}
                 {...table.props}
             >
                 <DataTable.BatchAction>

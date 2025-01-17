@@ -38,8 +38,9 @@ export function useInfiniteDataTableContext({
     filterFields: __filterFields,
     checkable,
     queryKey,
+    itemViewFn,
     ...props
-}: TableProps & { queryKey }) {
+}: TableProps & { queryKey; itemViewFn? }) {
     // const [search] = useQueryStates(searchParamsParser);
     const [search, setSearch] = useQueryStates(searchParamsParser);
     const {
@@ -224,10 +225,17 @@ export function useInfiniteDataTableContext({
         if (checkMode) {
             const checks = Object.keys(rowSelection).length > 0;
             if (!checks) setCheckMode(checks);
-
             return;
         }
-        if (Object.keys(rowSelection)?.length && !selectedRow) {
+        const selectedKeys = Object.keys(rowSelection)?.length;
+        const selected = selectedRow;
+
+        if (itemViewFn && selected) {
+            itemViewFn(selected.original);
+            setRowSelection({});
+            return;
+        }
+        if (selectedKeys && !selectedRow) {
             setSearch({ uuid: null });
             setRowSelection({});
         } else {

@@ -20,6 +20,8 @@ import { QueryTabAction } from "@/app/(clean-code)/_common/query-tab/query-tab-e
 import { Menu } from "@/components/(clean-code)/menu";
 import { openPayPortal } from "../../../_common/_components/pay-portal";
 import { openTxForm } from "../../../_common/_components/tx-form";
+import { openSalesOverview } from "../../../_common/_components/sales-overview-sheet";
+import { isProdClient } from "@/lib/is-prod";
 
 export default function OrdersPageClient({
     filterFields,
@@ -58,6 +60,15 @@ export default function OrdersPageClient({
         <div className="bg-white">
             <DataTable.Infinity
                 checkable
+                itemViewFn={
+                    isProdClient
+                        ? (data) => {
+                              openSalesOverview({
+                                  salesId: data.id,
+                              });
+                          }
+                        : undefined
+                }
                 ActionCell={Cells.Action}
                 queryKey={queryKey}
                 {...table.props}
