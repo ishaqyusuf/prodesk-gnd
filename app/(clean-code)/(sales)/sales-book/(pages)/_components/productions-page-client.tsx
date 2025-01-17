@@ -28,6 +28,9 @@ export default function ProductionsPageClient({
                 ctx.Column("Due Date", "date", Cells.Date),
                 ctx.Column("", "alert", Cells.Alert),
                 ctx.Column("Order #", "order.no", Cells.Order),
+                ctx.Column("Sales Rep", "sales.rep", Cells.SalesRep),
+                ctx.Column("Assigned To", "assignments", Cells.Assignments),
+                ctx.Column("Status", "status", Cells.Status),
 
                 ...__filters()["sales-productions"].filterColumns,
             ];
@@ -89,7 +92,6 @@ export default function ProductionsPageClient({
                 </DataTable.Header>
                 <DataTable.Table />
                 <DataTable.LoadMore />
-                <OrderOverviewSheet />
             </DataTable.Infinity>
         </div>
     );

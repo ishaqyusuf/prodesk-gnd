@@ -1,6 +1,7 @@
 import { TCell } from "@/components/(clean-code)/data-table/table-cells";
 import ConfirmBtn from "@/components/_v1/confirm-btn";
 import { GetProductionListPage } from "../../../_common/data-actions/productions-list-action";
+import { OrderCells } from "./orders-page-cells";
 
 export interface ItemProps {
     item: GetProductionListPage["data"][number];
@@ -41,6 +42,22 @@ function Alert({ item }: ItemProps) {
         </TCell>
     );
 }
+function Assignments({ item }: ItemProps) {
+    return (
+        <TCell>
+            <TCell.Secondary className="font-mono flex gap-4">
+                <TCell.Status status={item.assignedTo} color={"gray"} />
+            </TCell.Secondary>
+        </TCell>
+    );
+}
+function Status({ item }: ItemProps) {
+    return (
+        <TCell>
+            <TCell.Secondary className="font-mono flex gap-4"></TCell.Secondary>
+        </TCell>
+    );
+}
 
 function Action({ item }: ItemProps) {
     return (
@@ -56,4 +73,7 @@ export let Cells = {
     Date,
     Alert,
     Order,
+    SalesRep: OrderCells.SalesRep,
+    Assignments,
+    Status,
 };

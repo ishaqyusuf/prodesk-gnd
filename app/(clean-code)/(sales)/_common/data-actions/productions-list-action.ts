@@ -32,9 +32,6 @@ export async function getProductionListPageAction(query: SearchParamsType) {
           })
         : [];
     const others = prodList.filter((p) => !excludesIds?.includes(p.id));
-    console.log(pastDue.length);
-    console.log(dueToday.length);
-    console.log(others.length);
 
     const excludesIds = [...dueToday, ...pastDue].map((a) => a.id);
     const result = await inifinitePageInfo(
@@ -61,6 +58,9 @@ export async function getProductionListAction(query: SearchParamsType) {
         select: {
             id: true,
             orderId: true,
+            salesRep: {
+                select: { name: true },
+            },
             assignments: {
                 where: {
                     deletedAt: null,
@@ -76,6 +76,11 @@ export async function getProductionListAction(query: SearchParamsType) {
                     lhQty: true,
                     rhQty: true,
                     dueDate: true,
+                    assignedTo: {
+                        select: {
+                            name: true,
+                        },
+                    },
                 },
             },
         },
@@ -90,5 +95,9 @@ function transformProductionList(item: GetProductionList[number]) {
     return {
         orderId: item.orderId,
         alert,
+        salesRep: item?.salesRep?.name,
+        assignedTo: Array.from(
+            new Set(item.assignments.map((a) => a.assignedTo?.name))
+        ).join(" & "),
     };
 }
