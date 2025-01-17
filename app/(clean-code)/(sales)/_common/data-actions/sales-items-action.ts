@@ -332,7 +332,7 @@ export async function getSalesItemsOverviewAction({
             if (qty?.qty) item.lineConfigs.push(`QTY X ${qty.qty}`);
             if (qty?.lh) item.lineConfigs.push(`${qty.lh} LH`);
             if (qty?.rh) item.lineConfigs.push(`${qty.rh} RH`);
-            if (qty?.total > 1)
+            if (qty?.total > 1 && adminMode)
                 item.lineConfigs.push(`$${formatMoney(item.unitCost)} each`);
             item.lineConfigs = item.lineConfigs.filter(Boolean);
 

@@ -123,7 +123,7 @@ function TabContent({ children, tabName }: { children?; tabName: SalesTabs }) {
 }
 function SecondaryTab({}) {
     return (
-        <div className="w-[600px] flex flex-col side-modal-rounded-h-content">
+        <div className="sm:w-[600px] flex flex-col side-modal-rounded-h-content">
             <Modal.Header title="Title" subtitle={"LOREM IPSUM"} />
             <Modal.ScrollArea>
                 <div className="min-h-screen">abc</div>

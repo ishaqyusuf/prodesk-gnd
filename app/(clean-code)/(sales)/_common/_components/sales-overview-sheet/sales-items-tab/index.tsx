@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { loadPageData } from "../helper";
+import { AdminOnly, loadPageData } from "../helper";
 
 import { salesOverviewStore } from "../store";
 import { cn } from "@/lib/utils";
@@ -50,7 +50,9 @@ export function SalesItemsTab({}) {
                                         {item.title}
                                     </div>
                                     <div className="font-mono text-sm font-medium">
-                                        <Money value={item.totalCost} />
+                                        <AdminOnly>
+                                            <Money value={item.totalCost} />
+                                        </AdminOnly>
                                     </div>
                                 </div>
                                 {item.lineConfigs?.length && (
