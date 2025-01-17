@@ -7,6 +7,7 @@ import { ItemHelperClass } from "./item-helper-class";
 import { generateRandomString } from "@/lib/utils";
 import { redirect } from "next/navigation";
 import { AddressClass } from "./address-class";
+import { composeSalesUrl } from "../../utils/sales-utils";
 
 export interface SaverData {
     tx?;
@@ -74,7 +75,11 @@ export class SaveSalesClass extends SaveSalesHelper {
         const isUpdate = data.sales.data?.id == null;
         const redirectTo =
             (!isUpdate || this.query?.restoreMode) && salesResp
-                ? `/sales-book/edit-${this.form.metaData.type}/${salesResp.slug}`
+                ? composeSalesUrl({
+                      slug: salesResp.slug,
+                      type: this.form.metaData.type,
+                      isDyke: true,
+                  })
                 : null;
         if (redirectTo && (__redirect || this.query?.restoreMode))
             redirect(redirectTo);

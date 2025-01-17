@@ -121,3 +121,7 @@ export function isComponentType(type: DykeDoorType) {
 export function isNewSales(orderId) {
     return ["quo-", "ord-"].some((a) => orderId?.toLowerCase()?.startsWith(a));
 }
+export const composeSalesUrl = (props) =>
+    props.isDyke || props.dyke
+        ? `/sales-book/edit-${props.type}/${props.orderId || props.slug}`
+        : `/sales/edit/${props.type}/${props.orderId || props.slug}`;

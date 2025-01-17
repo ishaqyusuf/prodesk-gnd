@@ -7,6 +7,7 @@ import { buttonVariants } from "@/components/ui/button";
 import Link from "next/link";
 import Money from "@/components/_v1/money";
 import { Label } from "@/components/ui/label";
+import { composeSalesUrl } from "../../../utils/sales-utils";
 
 export function SalesInfoTab({}) {
     const store = salesOverviewStore();
@@ -22,7 +23,7 @@ export function SalesInfoTab({}) {
                             variant: "link",
                         })
                     )}
-                    href=""
+                    href={composeSalesUrl(overview)}
                     target="_blank"
                 >
                     Edit

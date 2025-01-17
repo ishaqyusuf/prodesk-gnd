@@ -6,6 +6,7 @@ import { SalesItemStatus } from "../sales-item-status";
 import { ExternalLink } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { composeSalesUrl } from "../../../utils/sales-utils";
 
 export function SalesGeneralOverview({}) {
     const { item, overview, ...ctx } = useSalesOverview();
@@ -24,11 +25,7 @@ export function SalesGeneralOverview({}) {
                                 asChild
                             >
                                 <Link
-                                    href={
-                                        item.isDyke
-                                            ? `/sales-book/edit-${item.type}/${item.orderId}`
-                                            : `/sales/edit/${item.type}/${item.orderId}`
-                                    }
+                                    href={composeSalesUrl(item)}
                                     className="inline-flex gap-2"
                                     target="_blank"
                                 >
