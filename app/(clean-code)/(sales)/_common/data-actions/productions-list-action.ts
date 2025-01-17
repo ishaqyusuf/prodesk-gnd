@@ -100,5 +100,6 @@ function transformProductionList(item: GetProductionList[number]) {
             new Set(item.assignments.map((a) => a.assignedTo?.name))
         ).join(" & "),
         uuid: item.orderId,
+        id: item.id,
     };
 }
