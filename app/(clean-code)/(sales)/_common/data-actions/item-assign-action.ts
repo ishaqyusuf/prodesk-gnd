@@ -116,6 +116,16 @@ export async function submitItemAssignmentAction({
         await updateSalesStatControlAction(salesId);
     }) as any);
 }
+export async function updateAssignmentDueDateAction(assignmentId, dueDate) {
+    await prisma.orderItemProductionAssignments.update({
+        where: {
+            id: assignmentId,
+        },
+        data: {
+            dueDate,
+        },
+    });
+}
 export async function deleteSubmissionAction({ id }) {
     return await prisma.$transaction((async (tx: typeof prisma) => {
         const resp = await tx.orderProductionSubmissions.update({

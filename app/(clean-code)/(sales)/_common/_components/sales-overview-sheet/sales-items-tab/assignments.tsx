@@ -19,6 +19,7 @@ import {
     deleteItemAssignmentAction,
     deleteSubmissionAction,
     submitItemAssignmentAction,
+    updateAssignmentDueDateAction,
 } from "../../../data-actions/item-assign-action";
 import { salesOverviewStore } from "../store";
 import { formatDate } from "@/lib/use-day";
@@ -80,16 +81,22 @@ function AssignmentLine({ assignment, index }) {
         toast.success("Submitted");
         loadPageData({ dataKey: "itemOverview", reload: true });
     }
+    async function dateChanged(date) {
+        await updateAssignmentDueDateAction(ass.id, date);
+        toast.success("Updated!.");
+    }
     return (
-        <div key={ass.id} className="py-2  space-y-4 border-b">
+        <div key={ass.id} className="py-2 text-sm space-y-4 border-b">
             <div className="flex items-center gap-4">
                 <span>{index + 1}.</span>
-                <span>{ass?.assignedTo || "Not Assigned"}</span>
+                <span className="uppercase">
+                    {ass?.assignedTo || "Not Assigned"}
+                </span>
 
                 <DueDate
                     disabled={!store.adminMode}
                     date={ass.dueDate}
-                    dateChanged={(e) => {}}
+                    dateChanged={dateChanged}
                 />
 
                 {/* <GuestOnly>
@@ -225,9 +232,10 @@ function AssignmentLine({ assignment, index }) {
 }
 function DueDate({ date, dateChanged, disabled }) {
     const [_date, setDate] = useState(date);
-    function onChange(__date) {
-        // setDate(__date);
-        // onOpenChange(false);
+    async function onChange(__date) {
+        setDate(__date);
+        onOpenChange(false);
+        dateChanged(__date);
     }
     const [open, onOpenChange] = useState(false);
     return (
