@@ -10,7 +10,10 @@ import {
 // Note: import from 'nuqs/server' to avoid the "use client" directive
 import { SORT_DELIMITER } from "@/lib/delimiters";
 import { z } from "zod";
-import { DISPATCH_FILTER_OPTIONS } from "@/app/(clean-code)/(sales)/_common/utils/contants";
+import {
+    DISPATCH_FILTER_OPTIONS,
+    PRODUCTION_STATUS,
+} from "@/app/(clean-code)/(sales)/_common/utils/contants";
 // import { REGIONS } from "@/constants/region";
 // import { METHODS } from "@/constants/method";
 
@@ -68,6 +71,8 @@ export const searchParamsParser: {
     invoice: parseAsString,
     "sales.rep": parseAsString,
     "production.assignment": parseAsString,
+    "production.assignedToId": parseAsInteger,
+    "production.status": parseAsInteger,
     // ": parseAsString,
     "order.no": parseAsString,
     po: parseAsString,
@@ -90,7 +95,9 @@ export const searchSchema = z.object({
     po: z.string().optional(),
     phone: z.string().optional(),
     "dispatch.status": z.enum(DISPATCH_FILTER_OPTIONS).optional(),
+    "production.status": z.enum(PRODUCTION_STATUS).optional(),
     "production.assignment": z.string().optional(),
+    "production.assignedToId": z.number().optional(),
     production: z.string().optional(),
     invoice: z.string().optional(),
     "sales.rep": z.string().optional(),

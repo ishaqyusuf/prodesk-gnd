@@ -32,6 +32,22 @@ export const whereNotTrashed = {
         deletedAt: null,
     },
 };
+export async function inifinitePageInfo<T>(
+    input,
+    where,
+    model,
+    data: T[] = []
+) {
+    const info = await getPageInfo(input, where, model);
+    return {
+        data,
+        pageCount: info.pageCount,
+        pageInfo: info,
+        meta: {
+            totalRowCount: info.totalItems,
+        },
+    };
+}
 export async function getPageInfo(input, where, model) {
     const { page = 1, perPage = 20 } = input;
     const skip = (page - 1) * Number(perPage);

@@ -16,7 +16,7 @@ interface Props {
 }
 export default function StatusBadge({ status, color, children, sm }: Props) {
     if (!status) status = children;
-    const _color = statusColor(status);
+    const _color = color || statusColor(status);
     return (
         <div className="inline-flex items-center gap-2 font-semibold">
             <div className={cn("w-1.5 h-1.5", `bg-${_color}-500`)}></div>

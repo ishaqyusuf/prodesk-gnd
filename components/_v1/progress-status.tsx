@@ -34,6 +34,7 @@ export default function ProgressStatus({
                         className="h-2"
                     />
                 </p>
+
                 {/* )} */}
                 {status && (
                     <p className="text-sm text-muted-foreground">{status}</p>

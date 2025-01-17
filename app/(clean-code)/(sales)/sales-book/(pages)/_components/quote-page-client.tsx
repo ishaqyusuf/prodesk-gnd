@@ -7,14 +7,14 @@ import { DataTableFilterCommand } from "@/components/(clean-code)/data-table/fil
 
 import { DataTableInfinityToolbar } from "@/components/(clean-code)/data-table/infinity/data-table-toolbar";
 import { _modal } from "@/components/common/modal/provider";
-import { OrderOverviewSheet } from "../overview-sheet/order-overview-sheet";
-import { QuotesCell } from "../quotes-page-cells";
+import { OrderOverviewSheet } from "../../../_common/_components/overview-sheet/order-overview-sheet";
+import { QuotesCell } from "./quotes-page-cells";
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/_v1/icons";
 import Link from "next/link";
 import QueryTab from "@/app/(clean-code)/_common/query-tab";
 import { QueryTabAction } from "@/app/(clean-code)/_common/query-tab/query-tab-edit";
-import { __filters } from "../../utils/contants";
+import { __filters } from "../../../_common/utils/contants";
 
 interface Props {
     // promise;

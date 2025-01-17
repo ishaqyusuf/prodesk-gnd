@@ -1,7 +1,7 @@
 import { TCell } from "@/components/(clean-code)/data-table/table-cells";
-import { GetSalesDispatchList } from "../use-case/sales-dispatch-use-case";
+import { GetSalesDispatchList } from "../../../_common/use-case/sales-dispatch-use-case";
 import { Progress } from "@/components/(clean-code)/progress";
-import { SalesDispatchListDto } from "../data-access/dto/sales-shipping-dto";
+import { SalesDispatchListDto } from "../../../_common/data-access/dto/sales-shipping-dto";
 type ItemProps = {
     item: SalesDispatchListDto;
 };

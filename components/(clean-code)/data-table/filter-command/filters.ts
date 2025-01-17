@@ -8,6 +8,7 @@ export const queryKeys = [
     "quotes",
     "sales-delivery",
     "customers",
+    "sales-productions",
 ] as const;
 export type QueryKeys = (typeof queryKeys)[number];
 export type Filters = Partial<{
@@ -64,7 +65,7 @@ export const filterFields: Partial<{
 };
 const getFilter = (k) => __filters()[k];
 export const composeFilter = (queryKey: QueryKeys, loadedFilters?) => {
-    const { fields, options } = getFilter(queryKey);
+    const { fields, options } = getFilter(queryKey) || {};
 
     const f = fields?.map((filter: any) => {
         const filterData =
@@ -80,7 +81,7 @@ export const composeFilter = (queryKey: QueryKeys, loadedFilters?) => {
     });
     return {
         queryKey,
-        filterFields: f,
+        filterFields: f || [],
     };
 };
 

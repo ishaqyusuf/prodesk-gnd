@@ -5,23 +5,19 @@ import {
     DataTable,
     InfiniteDataTablePageProps,
 } from "@/components/(clean-code)/data-table";
-import { OrderCells as Cells } from "../orders-page-cells";
 import { DataTableFilterCommand } from "@/components/(clean-code)/data-table/filter-command";
 
 import { DataTableInfinityToolbar } from "@/components/(clean-code)/data-table/infinity/data-table-toolbar";
 import { _modal } from "@/components/common/modal/provider";
-import { OrderOverviewSheet } from "../overview-sheet/order-overview-sheet";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { Icons } from "@/components/_v1/icons";
-import { __filters } from "../../utils/contants";
+import { OrderOverviewSheet } from "../../../_common/_components/overview-sheet/order-overview-sheet";
+
+import { __filters } from "../../../_common/utils/contants";
 import QueryTab from "@/app/(clean-code)/_common/query-tab";
 import { QueryTabAction } from "@/app/(clean-code)/_common/query-tab/query-tab-edit";
-import { Menu } from "@/components/(clean-code)/menu";
-import { openPayPortal } from "../pay-portal";
-import { openTxForm } from "../tx-form";
 
-export default function OrdersPageClient({
+import { Cells } from "./production-page-cells";
+
+export default function ProductionsPageClient({
     filterFields,
     queryKey,
 }: InfiniteDataTablePageProps) {
@@ -29,18 +25,11 @@ export default function OrdersPageClient({
     const table = useTableCompose({
         cells(ctx) {
             return [
-                ctx.Column("Date", "date", Cells.Date),
+                ctx.Column("Due Date", "date", Cells.Date),
+                ctx.Column("", "alert", Cells.Alert),
                 ctx.Column("Order #", "order.no", Cells.Order),
-                ctx.Column("P.O", "po", Cells.Po),
-                ctx.Column("Customer", "customer", Cells.Customer),
-                ctx.Column("Phone", "phone", Cells.CustomerPhone),
-                ctx.Column("Address", "address", Cells.Address),
-                ctx.Column("Rep", "rep", Cells.SalesRep),
-                ctx.Column("Invoice", "invoice", Cells.Invoice),
-                ctx.Column("Pending", "pending", Cells.InvoicePending),
-                ctx.Column("Dispatch", "dispatch", Cells.Dispatch),
-                ctx.Column("Production", "production", Cells.Production),
-                ...__filters().orders.filterColumns,
+
+                ...__filters()["sales-productions"].filterColumns,
             ];
         },
         filterFields,
@@ -63,9 +52,9 @@ export default function OrdersPageClient({
                 {...table.props}
             >
                 <DataTable.BatchAction>
-                    <Menu>
+                    {/* <Menu>
                         <Menu.Trash action={() => {}}>Delete</Menu.Trash>
-                    </Menu>
+                    </Menu> */}
                 </DataTable.BatchAction>
                 <DataTable.Header top="lg" className="bg-white">
                     <div className="flex justify-between items-end mb-2 gap-2 sm:sticky">
@@ -74,7 +63,7 @@ export default function OrdersPageClient({
                         </div>
                         <div className="flex-1"></div>
                         <QueryTabAction />
-                        <Button
+                        {/* <Button
                             onClick={() => {
                                 openTxForm({});
                             }}
@@ -89,7 +78,7 @@ export default function OrdersPageClient({
                                 <Icons.add className="size-4 mr-2" />
                                 <span>New</span>
                             </Link>
-                        </Button>
+                        </Button> */}
                     </div>
                     <div className="flex justify-between">
                         <div className="flex-1">

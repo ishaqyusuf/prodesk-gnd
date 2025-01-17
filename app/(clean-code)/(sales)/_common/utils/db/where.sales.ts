@@ -10,6 +10,9 @@ import { Prisma } from "@prisma/client";
 import { composeQuery } from "../db-utils";
 import { QtyControlType } from "../../../types";
 import { ftToIn } from "../sales-utils";
+import { dateEquals, fixDbTime } from "@/app/(v1)/_actions/action-utils";
+import { formatDate } from "@/lib/use-day";
+import dayjs from "dayjs";
 
 export function whereSales(query: FilterParams) {
     const whereAnd: Prisma.SalesOrdersWhereInput[] = [];
@@ -64,7 +67,6 @@ export function whereSales(query: FilterParams) {
     const keys = Object.keys(query) as FilterKeys[];
     keys.map((k) => {
         const val = query?.[k] as any;
-
         if (!query?.[k]) return;
         switch (k) {
             case "id":
@@ -145,9 +147,44 @@ export function whereSales(query: FilterParams) {
                     },
                 });
                 break;
+            case "production.assignedToId":
+                whereAnd.push({
+                    assignments: {
+                        some: {
+                            deletedAt: null,
+                            assignedById: val,
+                        },
+                    },
+                });
+                break;
         }
     });
-
+    const prodStatus = query["production.status"];
+    switch (prodStatus) {
+        case "due today":
+            whereAnd.push({
+                assignments: {
+                    some: {
+                        deletedAt: null,
+                        dueDate: dateEquals(formatDate(dayjs(), "YYYY-MM-DD")),
+                    },
+                },
+            });
+            break;
+        case "past due":
+            whereAnd.push({
+                assignments: {
+                    some: {
+                        deletedAt: null,
+                        dueDate: {
+                            lt: fixDbTime(dayjs()).toISOString(),
+                        },
+                    },
+                },
+            });
+            // case ''
+            break;
+    }
     return composeQuery(whereAnd);
 }
 function whereSearch(query): Prisma.SalesOrdersWhereInput | null {

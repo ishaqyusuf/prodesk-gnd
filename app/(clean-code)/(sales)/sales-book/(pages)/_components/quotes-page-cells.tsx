@@ -1,5 +1,5 @@
 import { TCell } from "@/components/(clean-code)/data-table/table-cells";
-import { GetSalesQuotesDta } from "../data-access/sales-dta";
+import { GetSalesQuotesDta } from "../../../_common/data-access/sales-dta";
 import { cn } from "@/lib/utils";
 import {
     useInfiniteDataTable,
@@ -8,7 +8,7 @@ import {
 import { useTheme } from "next-themes";
 import TextWithTooltip from "@/components/(clean-code)/custom/text-with-tooltip";
 import ConfirmBtn from "@/components/_v1/confirm-btn";
-import { deleteSalesUseCase } from "../use-case/sales-use-case";
+import { deleteSalesUseCase } from "../../../_common/use-case/sales-use-case";
 import { toast } from "sonner";
 
 export interface ItemProps {

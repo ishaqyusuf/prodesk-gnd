@@ -13,10 +13,11 @@ import { generateRandomString } from "@/lib/utils";
 import Portal from "@/components/_v1/portal";
 import NewFeatureBtn from "@/components/common/new-feature-btn";
 import { prisma } from "@/db";
+import ProductionsPageClient from "../_components/productions-page-client";
 
 export async function generateMetadata({}) {
     return constructMetadata({
-        title: `Sales List - gndprodesk.com`,
+        title: `Sales Production - gndprodesk.com`,
     });
 }
 export default async function SalesBookPage({ searchParams }) {
@@ -25,15 +26,23 @@ export default async function SalesBookPage({ searchParams }) {
 
     const search = searchParamsCache.parse(searchParams);
     const queryClient = getQueryClient();
-    const props = composeFilter("orders", await getSalesPageQueryDataDta());
+    const props = composeFilter(
+        "sales-productions"
+        // await getSalesPageQueryDataDta()
+    );
     const { queryKey, filterFields } = props;
     await queryClient.prefetchInfiniteQuery(dataOptions(search, queryKey));
     return (
-        <FPage className="" title="Orders">
+        <FPage className="" title="Productions">
             <Portal nodeId={"navRightSlot"}>
-                <NewFeatureBtn href="/sales/orders">Old Site</NewFeatureBtn>
+                <NewFeatureBtn href="/sales-v2/productions">
+                    Old Site
+                </NewFeatureBtn>
             </Portal>
-            <OrdersPageClient queryKey={queryKey} filterFields={filterFields} />
+            <ProductionsPageClient
+                queryKey={queryKey}
+                filterFields={filterFields}
+            />
         </FPage>
     );
 }

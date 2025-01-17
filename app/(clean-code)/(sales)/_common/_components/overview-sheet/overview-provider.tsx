@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { SalesItemProp } from "../orders-page-cells";
+import { SalesItemProp } from "../../../sales-book/(pages)/_components/orders-page-cells";
 import { generateRandomString } from "@/lib/utils";
 import {
     getSalesItemOverviewUseCase,

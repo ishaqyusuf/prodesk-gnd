@@ -12,19 +12,30 @@ export const dispatchStatusList: SalesDispatchStatus[] = [
     "in progress",
     "cancelled",
     "completed",
-];
+] as const;
 
-export const INVOICE_FILTER_OPTIONS = ["paid", "pending", "late", "part-paid"];
+export const INVOICE_FILTER_OPTIONS = [
+    "paid",
+    "pending",
+    "late",
+    "part-paid",
+] as const;
 export const PRODUCTION_FILTER_OPTIONS = [
     "pending",
     "in progress",
     "completed",
-];
+] as const;
+export const PRODUCTION_STATUS = [
+    "not assigned",
+    "part assigned",
+    "due today",
+    "past due",
+] as const;
 export const PRODUCTION_ASSIGNMENT_FILTER_OPTIONS = [
     "not assigned",
     "part assigned",
     "all assigned",
-];
+] as const;
 export const DISPATCH_FILTER_OPTIONS = [
     "delivered",
     "pending delivery",
@@ -51,6 +62,10 @@ export const widthList = [
     "6-8",
 ];
 export const __filters = (): Filters => ({
+    "sales-productions": {
+        fields: [],
+        filterColumns: [],
+    },
     customers: {
         fields: [
             filterFields.search,

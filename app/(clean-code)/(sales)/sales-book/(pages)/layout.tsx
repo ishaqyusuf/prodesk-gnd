@@ -1,4 +1,4 @@
-import PagesTab from "../../_common/_components/pages-tab";
+import PagesTab from "./_components/pages-tab";
 
 export default async function Layout({ children }) {
     return (

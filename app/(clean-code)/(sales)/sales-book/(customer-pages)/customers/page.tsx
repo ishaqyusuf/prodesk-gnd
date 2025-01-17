@@ -4,7 +4,7 @@ import { searchParamsCache } from "@/components/(clean-code)/data-table/search-p
 import FPage from "@/components/(clean-code)/fikr-ui/f-page";
 import { constructMetadata } from "@/lib/(clean-code)/construct-metadata";
 import { getQueryClient } from "@/providers/get-query-client";
-import CustomersPageClient from "../../../_common/_components/page-clients/customers-page-client";
+import CustomersPageClient from "../../(pages)/_components/customers-page-client";
 import Portal from "@/components/_v1/portal";
 import NewFeatureBtn from "@/components/common/new-feature-btn";
 
