@@ -20,7 +20,7 @@ export const metadata: Metadata = {
 };
 interface Props {}
 export default async function SalesProductionPage({ searchParams }) {
-    if (env.NODE_ENV == "production") redirect(`/tasks/sales-productions-2`);
+    if (env.NODE_ENV == "production") redirect(`/sales-books/production-tasks`);
     const response = await getSalesProductionsAction(queryParams(searchParams));
 
     const todaysProd = await prodsDueToday();

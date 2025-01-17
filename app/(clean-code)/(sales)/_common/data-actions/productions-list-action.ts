@@ -12,11 +12,20 @@ import {
 import { SalesProductionListSelect } from "../contants/sales-includes";
 import { Prisma } from "@prisma/client";
 import { dueDateAlert } from "../utils/production-utils";
+import { authId } from "@/app/(v1)/_actions/utils";
 
 export type GetProductionListPage = AsyncFnType<
     typeof getProductionListPageAction
 >;
 export type GetProductionList = AsyncFnType<typeof getProductionListAction>;
+export async function getProductionTasksListPageAction(
+    query: SearchParamsType
+) {
+    const q = { ...query };
+    q["production.assignedToId"] = await authId();
+
+    return await getProductionListPageAction(q);
+}
 export async function getProductionListPageAction(query: SearchParamsType) {
     const prodList = await getProductionListAction(query);
     const dueToday = !query.start
@@ -40,7 +49,17 @@ export async function getProductionListPageAction(query: SearchParamsType) {
         query,
         whereSales(query),
         prisma.salesOrders,
-        [...dueToday, ...pastDue, ...others].map(transformProductionList)
+        [
+            ...[...dueToday, ...pastDue]
+                .map(transformProductionList)
+                .sort(
+                    (a, b) =>
+                        (new Date(b.alert.date) as any) -
+                        (new Date(a.alert.date) as any)
+                ),
+            ...others.map(transformProductionList),
+        ]
+        // [...dueToday, ...pastDue, ...others].map(transformProductionList)
     );
     return result;
 }
@@ -55,6 +74,7 @@ export async function getProductionListAction(query: SearchParamsType) {
                 ? [where?.assignments]
                 : []
         ) as any;
+
     const data = await prisma.salesOrders.findMany({
         where,
         ...pageQueryFilter(query),

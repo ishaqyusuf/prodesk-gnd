@@ -12,6 +12,7 @@ import { excludeDeleted } from "../utils/db-utils";
 import { Prisma } from "@prisma/client";
 import { formatMoney } from "@/lib/use-number";
 import { sum } from "@/lib/utils";
+import { authId } from "@/app/(v1)/_actions/utils";
 
 export type GetSalesItemOverviewAction = AsyncFnType<
     typeof getSalesItemsOverviewAction
@@ -19,11 +20,14 @@ export type GetSalesItemOverviewAction = AsyncFnType<
 interface GetSalesItemOverviewActionProps {
     salesId;
     producerId?;
+    adminMode?: boolean;
 }
 export async function getSalesItemsOverviewAction({
     salesId,
     producerId,
+    adminMode,
 }: GetSalesItemOverviewActionProps) {
+    if (!adminMode) producerId = await authId();
     if (!salesId) throw new Error("Id is required");
     const order = await prisma.salesOrders.findFirstOrThrow({
         where: { id: salesId },
@@ -304,35 +308,45 @@ export async function getSalesItemsOverviewAction({
         }
     });
     items = items.sort((a, b) => a.itemIndex - b.itemIndex);
-    items = items.map((item, index) => {
-        if (
-            index ==
-            items.findIndex(
-                (a) => a.itemIndex >= 0 && item.itemIndex == a.itemConfigs
+    items = items
+        .map((item, index) => {
+            if (
+                index ==
+                items.findIndex(
+                    (a) => a.itemIndex >= 0 && item.itemIndex == a.itemConfigs
+                )
             )
-        )
-            item.primary = true;
+                item.primary = true;
 
-        const control = order.itemControls.find(
-            (c) => c.uid == item.itemControlUid
-        );
-        item.produceable = control?.produceable;
-        item.shippable = control?.shippable;
-        control?.qtyControls?.map((c) => {
-            item.status[c.type] = c;
+            const control = order.itemControls.find(
+                (c) => c.uid == item.itemControlUid
+            );
+            item.produceable = control?.produceable;
+            item.shippable = control?.shippable;
+            control?.qtyControls?.map((c) => {
+                item.status[c.type] = c;
+            });
+            item.lineConfigs = [];
+            const qty = item.status?.qty;
+            item.lineConfigs.push(item.subtitle);
+            if (qty?.qty) item.lineConfigs.push(`QTY X ${qty.qty}`);
+            if (qty?.lh) item.lineConfigs.push(`${qty.lh} LH`);
+            if (qty?.rh) item.lineConfigs.push(`${qty.rh} RH`);
+            if (qty?.total > 1)
+                item.lineConfigs.push(`$${formatMoney(item.unitCost)} each`);
+            item.lineConfigs = item.lineConfigs.filter(Boolean);
+
+            return item;
+        })
+        .filter((item) => {
+            if (!adminMode) {
+                item.assignments = item.assignments.filter(
+                    (a) => a.assignedToId == producerId
+                );
+                return item.assignments.length;
+            }
+            return true;
         });
-        item.lineConfigs = [];
-        const qty = item.status?.qty;
-        item.lineConfigs.push(item.subtitle);
-        if (qty?.qty) item.lineConfigs.push(`QTY X ${qty.qty}`);
-        if (qty?.lh) item.lineConfigs.push(`${qty.lh} LH`);
-        if (qty?.rh) item.lineConfigs.push(`${qty.rh} RH`);
-        if (qty?.total > 1)
-            item.lineConfigs.push(`$${formatMoney(item.unitCost)} each`);
-        item.lineConfigs = item.lineConfigs.filter(Boolean);
-
-        return item;
-    });
 
     return {
         items,

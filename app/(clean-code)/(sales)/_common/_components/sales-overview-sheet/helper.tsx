@@ -20,6 +20,7 @@ export const loaders: Partial<{ [k in keyof Data]: any }> = {
     itemOverview: async () => {
         return getSalesItemsOverviewAction({
             salesId: salesOverviewStore.getState().salesId,
+            adminMode: salesOverviewStore.getState().adminMode,
         });
     },
 };
@@ -84,4 +85,14 @@ export async function loadPageData({ dataKey, reload }: LoadPageDataProps) {
             store.update("tabPageLoading", false);
             store.update("tabPageLoadingTitle", null);
         });
+}
+export function AdminOnly({ children }) {
+    const store = salesOverviewStore();
+    if (store.adminMode) return children;
+    return null;
+}
+export function GuestOnly({ children }) {
+    const store = salesOverviewStore();
+    if (!store.adminMode) return children;
+    return null;
 }

@@ -27,6 +27,7 @@ const data = {
     tabPageLoadingTitle: null as any,
     tabLoadFailed: false,
     showFooter: false,
+    adminMode: false,
 };
 function createTab(name: SalesTabs, label?) {
     return { name, label: label || name?.split("_")?.join(" ") };

@@ -1,5 +1,5 @@
 import { Badge } from "@/components/ui/badge";
-import { getOpenItem, loadPageData } from "../helper";
+import { AdminOnly, getOpenItem, GuestOnly, loadPageData } from "../helper";
 import { useForm, useFormContext } from "react-hook-form";
 import ConfirmBtn from "@/components/_v1/confirm-btn";
 import { Form, FormField } from "@/components/ui/form";
@@ -86,7 +86,17 @@ function AssignmentLine({ assignment, index }) {
                 <span>{index + 1}.</span>
                 <span>{ass?.assignedTo || "Not Assigned"}</span>
 
-                <DueDate date={ass.dueDate} dateChanged={(e) => {}} />
+                <DueDate
+                    disabled={!store.adminMode}
+                    date={ass.dueDate}
+                    dateChanged={(e) => {}}
+                />
+
+                {/* <GuestOnly>
+                    <Badge variant="secondary" className="text-xs py-1">
+                        {_date ? formatDate(_date) : "Due Date"}
+                    </Badge>
+                </GuestOnly> */}
                 {ass.pills.map((pill, pillId) => (
                     <Badge
                         variant="outline"
@@ -107,19 +117,21 @@ function AssignmentLine({ assignment, index }) {
                     >
                         Submit
                     </Button>
-                    <ConfirmBtn
-                        trash
-                        onClick={async () => {
-                            await deleteItemAssignmentAction({
-                                id: ass.id,
-                            });
-                            toast.success("Deleted");
-                            loadPageData({
-                                dataKey: "itemOverview",
-                                reload: true,
-                            });
-                        }}
-                    />
+                    <AdminOnly>
+                        <ConfirmBtn
+                            trash
+                            onClick={async () => {
+                                await deleteItemAssignmentAction({
+                                    id: ass.id,
+                                });
+                                toast.success("Deleted");
+                                loadPageData({
+                                    dataKey: "itemOverview",
+                                    reload: true,
+                                });
+                            }}
+                        />
+                    </AdminOnly>
                 </div>
             </div>
             {!show ? (
@@ -211,7 +223,7 @@ function AssignmentLine({ assignment, index }) {
         </div>
     );
 }
-function DueDate({ date, dateChanged }) {
+function DueDate({ date, dateChanged, disabled }) {
     const [_date, setDate] = useState(date);
     function onChange(__date) {
         // setDate(__date);
@@ -220,7 +232,7 @@ function DueDate({ date, dateChanged }) {
     const [open, onOpenChange] = useState(false);
     return (
         <Popover open={open} onOpenChange={onOpenChange}>
-            <PopoverTrigger>
+            <PopoverTrigger disabled={disabled}>
                 <Badge variant="secondary" className="text-xs py-1">
                     {_date ? formatDate(_date) : "Due Date"}
                 </Badge>

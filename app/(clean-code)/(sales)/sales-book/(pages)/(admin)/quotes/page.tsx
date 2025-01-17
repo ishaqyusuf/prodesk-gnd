@@ -3,7 +3,7 @@ import { searchParamsCache } from "@/components/(clean-code)/data-table/search-p
 import FPage from "@/components/(clean-code)/fikr-ui/f-page";
 import { getQueryClient } from "@/providers/get-query-client";
 
-import QuotesPageClient from "../_components/quote-page-client";
+import QuotesPageClient from "../../_components/quote-page-client";
 
 import { composeFilter } from "@/components/(clean-code)/data-table/filter-command/filters";
 import { constructMetadata } from "@/lib/(clean-code)/construct-metadata";

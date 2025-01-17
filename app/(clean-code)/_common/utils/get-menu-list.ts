@@ -75,6 +75,7 @@ export function getMenuList(pathname: string, session: Session): Group[] {
         .menu("Productions", "/sales-book/productions", "production", canSales)
         .commit();
     const viewHrm = or("viewHrm", "viewEmployee");
+
     addGroup("HRM")
         .menu("Employees", "/hrm/employees", "hrm", viewHrm)
         .menu("Profiles", "/hrm/profiles", "menu", viewHrm)

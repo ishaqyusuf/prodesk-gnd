@@ -62,6 +62,10 @@ export const widthList = [
     "6-8",
 ];
 export const __filters = (): Filters => ({
+    "production-tasks": {
+        fields: [filterFields["production.assignedToId"]],
+        filterColumns: [],
+    },
     "sales-productions": {
         fields: [],
         filterColumns: [],

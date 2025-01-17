@@ -16,9 +16,11 @@ import {
     TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { LayoutGrid, LogOut, User } from "lucide-react";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 
 export function UserNav() {
+    const { data: session } = useSession();
     return (
         <DropdownMenu>
             <TooltipProvider disableHoverableContent>
@@ -46,16 +48,16 @@ export function UserNav() {
                 <DropdownMenuLabel className="font-normal">
                     <div className="flex flex-col space-y-1">
                         <p className="text-sm font-medium leading-none">
-                            John Doe
+                            {session.user?.name}
                         </p>
                         <p className="text-xs leading-none text-muted-foreground">
-                            johndoe@example.com
+                            {session.user?.email}
                         </p>
                     </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
-                    <DropdownMenuItem className="hover:cursor-pointer" asChild>
+                    {/* <DropdownMenuItem className="hover:cursor-pointer" asChild>
                         <Link href="/dashboard" className="flex items-center">
                             <LayoutGrid className="size-4 mr-3 text-muted-foreground" />
                             Dashboard
@@ -66,7 +68,7 @@ export function UserNav() {
                             <User className="size-4 mr-3 text-muted-foreground" />
                             Account
                         </Link>
-                    </DropdownMenuItem>
+                    </DropdownMenuItem> */}
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem

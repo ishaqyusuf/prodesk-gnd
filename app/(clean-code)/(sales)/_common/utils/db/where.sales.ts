@@ -152,7 +152,7 @@ export function whereSales(query: FilterParams) {
                     assignments: {
                         some: {
                             deletedAt: null,
-                            assignedById: val,
+                            assignedToId: val,
                         },
                     },
                 });

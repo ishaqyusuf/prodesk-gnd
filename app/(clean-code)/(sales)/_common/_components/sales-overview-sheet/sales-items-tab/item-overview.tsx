@@ -10,7 +10,12 @@ import { Form } from "@/components/ui/form";
 import FormCheckbox from "@/components/common/controls/form-checkbox";
 import { updateItemControlAction } from "../../../data-actions/item-control.action";
 import { toast } from "sonner";
-import { getOpenItem, getPendingAssignments, loadPageData } from "../helper";
+import {
+    AdminOnly,
+    getOpenItem,
+    getPendingAssignments,
+    loadPageData,
+} from "../helper";
 import { getSalesProdWorkersAsSelectOption } from "../../../use-case/sales-prod-workers-use-case";
 import useEffectLoader from "@/lib/use-effect-loader";
 import FormSelect from "@/components/common/controls/form-select";
@@ -30,34 +35,36 @@ export function ItemOverview({}) {
         <div className="p-4">
             <div>
                 <div className="flex gap-4">
-                    <Button
-                        onClick={() => setShowForm("assign")}
-                        disabled={!pendingAssignment || !!showForm}
-                        className="w-full"
-                        size="xs"
-                    >
-                        <Icons.add className="size-4 mr-2" />
-                        <span>ASSIGN</span>
-                        <span className="px-2">({pendingAssignment})</span>
-                    </Button>
-                    <Menu disabled={!!showForm}>
-                        <Menu.Item onClick={() => setShowForm("config")}>
-                            Item Config
-                        </Menu.Item>
-                        <Menu.Item>Assign All</Menu.Item>
-                        <Menu.Item>Mark As Completed</Menu.Item>
-                    </Menu>
-                    <Button
-                        disabled={!!showForm}
-                        onClick={() => {
-                            store.update("itemViewId", null);
-                        }}
-                        size="icon"
-                        variant="secondary"
-                        className="h-8"
-                    >
-                        <Minimize className="size-4" />
-                    </Button>
+                    <AdminOnly>
+                        <Button
+                            onClick={() => setShowForm("assign")}
+                            disabled={!pendingAssignment || !!showForm}
+                            className="w-full"
+                            size="xs"
+                        >
+                            <Icons.add className="size-4 mr-2" />
+                            <span>ASSIGN</span>
+                            <span className="px-2">({pendingAssignment})</span>
+                        </Button>
+                        <Menu disabled={!!showForm}>
+                            <Menu.Item onClick={() => setShowForm("config")}>
+                                Item Config
+                            </Menu.Item>
+                            <Menu.Item>Assign All</Menu.Item>
+                            <Menu.Item>Mark As Completed</Menu.Item>
+                        </Menu>
+                        <Button
+                            disabled={!!showForm}
+                            onClick={() => {
+                                store.update("itemViewId", null);
+                            }}
+                            size="icon"
+                            variant="secondary"
+                            className="h-8"
+                        >
+                            <Minimize className="size-4" />
+                        </Button>
+                    </AdminOnly>
                 </div>
                 {showForm == "config" && (
                     <ConfigForm onClose={() => setShowForm(null)} />
