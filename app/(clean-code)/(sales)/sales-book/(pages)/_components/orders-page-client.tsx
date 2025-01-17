@@ -22,6 +22,13 @@ import { openPayPortal } from "../../../_common/_components/pay-portal";
 import { openTxForm } from "../../../_common/_components/tx-form";
 import { openSalesOverview } from "../../../_common/_components/sales-overview-sheet";
 import { isProdClient } from "@/lib/is-prod";
+import {
+    BatchBtn,
+    BatchDelete,
+} from "@/components/(clean-code)/data-table/infinity/batch-action";
+import { PrintAction } from "../../../_common/_components/overview-sheet/footer/print.action";
+import { useInfiniteDataTable } from "@/components/(clean-code)/data-table/use-data-table";
+import { useMemo } from "react";
 
 export default function OrdersPageClient({
     filterFields,
@@ -73,11 +80,7 @@ export default function OrdersPageClient({
                 queryKey={queryKey}
                 {...table.props}
             >
-                <DataTable.BatchAction>
-                    <Menu>
-                        <Menu.Trash action={() => {}}>Delete</Menu.Trash>
-                    </Menu>
-                </DataTable.BatchAction>
+                <BatchActions />
                 <DataTable.Header top="lg" className="bg-white">
                     <div className="flex justify-between items-end mb-2 gap-2 sm:sticky">
                         <div className="">
@@ -114,5 +117,50 @@ export default function OrdersPageClient({
                 <OrderOverviewSheet />
             </DataTable.Infinity>
         </div>
+    );
+}
+function BatchActions() {
+    const ctx = useInfiniteDataTable();
+    const slugs = useMemo(() => {
+        const slugs = ctx.selectedRows?.map(
+            (r) => (r.original as any)?.orderId
+        );
+        console.log(slugs);
+        return slugs;
+    }, [ctx.selectedRows]);
+    return (
+        <DataTable.BatchAction>
+            <BatchBtn
+                icon="print"
+                menu={
+                    <>
+                        <PrintAction
+                            data={{
+                                slugs: slugs,
+                                item: {
+                                    type: "order",
+                                },
+                            }}
+                        />
+                        <PrintAction
+                            pdf
+                            data={{
+                                slugs: [],
+                                item: {
+                                    type: "order",
+                                },
+                            }}
+                        />
+                        {/* <Menu.Trash action={() => {}}>
+                                    Delete
+                                </Menu.Trash> */}
+                    </>
+                }
+            >
+                Print
+            </BatchBtn>
+
+            <BatchDelete />
+        </DataTable.BatchAction>
     );
 }
