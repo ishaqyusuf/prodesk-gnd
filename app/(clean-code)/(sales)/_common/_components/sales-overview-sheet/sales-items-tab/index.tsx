@@ -10,11 +10,11 @@ import { ItemOverview } from "./item-overview";
 export function SalesItemsTab({}) {
     const store = salesOverviewStore();
     const itemOverview = store.itemOverview;
-    useEffect(() => {
-        loadPageData({
-            dataKey: "overview",
-        });
-    }, []);
+    // useEffect(() => {
+    //     loadPageData({
+    //         dataKey: "overview",
+    //     });
+    // }, []);
     if (!itemOverview) return;
     return (
         <div>

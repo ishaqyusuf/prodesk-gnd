@@ -58,6 +58,7 @@ export async function getProductionListAction(query: SearchParamsType) {
     const data = await prisma.salesOrders.findMany({
         where,
         ...pageQueryFilter(query),
+
         select: {
             id: true,
             orderId: true,

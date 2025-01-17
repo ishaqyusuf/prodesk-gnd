@@ -7,10 +7,13 @@ export function useSalesOverview() {
     useEffect(() => {
         const tab = ctx.currentTab;
         const loaders = tabLoaders[tab];
-        loaders?.map((dataKey) => {
-            loadPageData({
-                dataKey,
-            });
+
+        loaders?.map((dataKey, index) => {
+            setTimeout(() => {
+                loadPageData({
+                    dataKey,
+                });
+            }, 300 * (index + 1));
         });
     }, [ctx.currentTab]);
 }

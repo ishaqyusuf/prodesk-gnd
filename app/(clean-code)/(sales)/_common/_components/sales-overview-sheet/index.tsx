@@ -16,7 +16,16 @@ export function openSalesOverview(props: OpenSalesOverviewProps) {
         salesId: props.salesId,
         tabs: salesTabs.admin,
         showTabs: true,
-        currentTab: "sales_info",
+        // currentTab: "sales_info",
+        showFooter: true,
+    });
+    _modal.openSheet(<SalesOverviewModal />);
+}
+export function openSalesProductionModal(props: OpenSalesOverviewProps) {
+    salesOverviewStore.getState().reset({
+        salesId: props.salesId,
+        tabs: salesTabs.admin,
+        currentTab: "items",
     });
     _modal.openSheet(<SalesOverviewModal />);
 }
@@ -89,9 +98,11 @@ function PrimaryTab({}) {
                     <SalesItemsTab />
                 </TabContent>
             </Modal.ScrollArea>
-            <Modal.Footer>
-                <Footer />
-            </Modal.Footer>
+            {store.showFooter && (
+                <Modal.Footer>
+                    <Footer />
+                </Modal.Footer>
+            )}
         </>
     );
 }

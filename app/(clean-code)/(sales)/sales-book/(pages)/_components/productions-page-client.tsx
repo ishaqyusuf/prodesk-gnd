@@ -16,6 +16,7 @@ import QueryTab from "@/app/(clean-code)/_common/query-tab";
 import { QueryTabAction } from "@/app/(clean-code)/_common/query-tab/query-tab-edit";
 
 import { Cells } from "./production-page-cells";
+import { openSalesProductionModal } from "../../../_common/_components/sales-overview-sheet";
 
 export default function ProductionsPageClient({
     filterFields,
@@ -53,7 +54,9 @@ export default function ProductionsPageClient({
                 ActionCell={Cells.Action}
                 queryKey={queryKey}
                 itemViewFn={(item) => {
-                    //
+                    openSalesProductionModal({
+                        salesId: item.id,
+                    });
                 }}
                 {...table.props}
             >

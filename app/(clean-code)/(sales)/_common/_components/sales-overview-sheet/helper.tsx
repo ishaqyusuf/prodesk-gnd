@@ -64,15 +64,14 @@ export async function loadPageData({ dataKey, reload }: LoadPageDataProps) {
     const store = salesOverviewStore.getState();
     if (store.tabPageLoading && store.tabPageLoadingTitle == dataKey) return;
     if (store[dataKey as any] && !reload) {
-        console.log("ALREADY LOADED");
         return;
     }
-    console.log("LOADING:", dataKey);
 
     store.update("tabLoadFailed", false);
     await loadFn()
         .then((result) => {
             store.update(dataKey as any, result);
+
             store.update("tabLoadFailed", false);
             store.update("tabPageLoading", false);
             store.update("tabPageLoadingTitle", null);

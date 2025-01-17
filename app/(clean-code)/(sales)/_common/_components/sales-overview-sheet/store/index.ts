@@ -20,12 +20,13 @@ const data = {
     payment: null,
     shipping: null,
     notification: null,
-    currentTab: null as SalesTabs,
+    currentTab: "sales_info" as SalesTabs,
     tabs: [] as { name: SalesTabs; label? }[],
-    showTabs: true,
+    showTabs: false,
     tabPageLoading: false,
     tabPageLoadingTitle: null as any,
     tabLoadFailed: false,
+    showFooter: false,
 };
 function createTab(name: SalesTabs, label?) {
     return { name, label: label || name?.split("_")?.join(" ") };
