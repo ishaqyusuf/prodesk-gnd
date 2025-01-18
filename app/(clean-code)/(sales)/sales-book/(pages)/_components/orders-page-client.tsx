@@ -17,8 +17,7 @@ import { Icons } from "@/components/_v1/icons";
 import { __filters } from "../../../_common/utils/contants";
 import QueryTab from "@/app/(clean-code)/_common/query-tab";
 import { QueryTabAction } from "@/app/(clean-code)/_common/query-tab/query-tab-edit";
-import { Menu } from "@/components/(clean-code)/menu";
-import { openPayPortal } from "../../../_common/_components/pay-portal";
+
 import { openTxForm } from "../../../_common/_components/tx-form";
 import { openSalesOverview } from "../../../_common/_components/sales-overview-sheet";
 import { isProdClient } from "@/lib/is-prod";

@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/table";
 import { TCell } from "@/components/(clean-code)/data-table/table-cells";
 import { formatMoney } from "@/lib/use-number";
-import { cn } from "@/lib/utils";
+import { cn, sum } from "@/lib/utils";
 
 interface Props {}
 export function openTxForm({
@@ -30,11 +30,18 @@ export function openTxForm({
     paymentMethod?: PaymentMethods;
     payables?: Payables[];
 }) {
-    txStore.getState().initialize({
+    const selections = {};
+    payables?.map((p) => (selections[p.orderId] = true));
+    const store = txStore.getState();
+    store.initialize({
         phoneNo,
         paymentMethod,
-        payables,
+        selections,
+        totalPay: formatMoney(sum(payables?.map((p) => p.amountDue))),
     });
+    // setTimeout(() => {
+    //     store.dotUpdate("paymentMethod", paymentMethod);
+    // }, 500);
     _modal.openSheet(<TxForm />);
 }
 export function TxForm({}) {
@@ -53,11 +60,16 @@ export function TxForm({}) {
         }
     }, [tx.phoneNo]);
 
+    const profile = tx.customerProfiles[tx.phoneNo];
     // if (!tx.phoneNo || !tx.payables?.length) return null;
     return (
         <Modal.Content className="side-modal-rounded">
-            <Modal.Header onBack={(e) => {}} title="Pay Portal" />
-            <CustomerSelector />
+            <Modal.Header
+                // onBack={(e) => {}}
+                title={profile?.profile?.displayName || "Pay Portal"}
+                subtitle={profile?.profile?.phoneNo}
+            />
+            {tx.phoneNo ? <></> : <CustomerSelector />}
             <TxFormContent />
             <PayForm />
             {/* {!tx.totalPay} */}

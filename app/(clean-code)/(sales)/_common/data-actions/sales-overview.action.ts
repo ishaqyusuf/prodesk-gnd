@@ -65,6 +65,7 @@ export async function loadSalesOverviewAction(id) {
         type: order.type,
         id: order.id,
         dyke: order.isDyke,
+        due: order.amountDue,
         po: meta?.po,
         orderId: order.orderId,
         salesRep: order.salesRep,

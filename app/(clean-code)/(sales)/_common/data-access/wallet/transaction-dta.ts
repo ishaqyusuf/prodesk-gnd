@@ -9,49 +9,59 @@ import { getCustomerIdByPhoneNo } from "../customer.dta";
 
 // transactions -> payments -> checkout
 export async function createTransactionDta(data: SalesTransaction) {
-    const wallet = await getCustomerWalletDta(data.accountNo);
-    const saleslist = await getSalesPendingPayments(data.salesIds);
-    switch (data.paymentMode) {
-        case "terminal":
-            break;
-        case "link":
-            break;
-        default:
-            let balance = +data.amount;
-            const tx = await fundCustomerWalletDta(
-                wallet.id,
-                balance,
-                data.paymentMode,
-                data.description
-            );
-            const transactionIds = await Promise.all(
-                saleslist.map(async (orderItem) => {
-                    let payAmount =
-                        balance > orderItem.amountDue
-                            ? orderItem.amountDue
-                            : balance;
-                    balance -= payAmount;
-                    let customerId =
-                        orderItem.customerId ||
-                        (await getCustomerIdByPhoneNo(data.accountNo));
-                    if (!customerId)
-                        throw Error(`Customer not found for ${data.accountNo}`);
-                    if (payAmount) {
-                        const res = await createSalesPaymentTransactionDta({
-                            amount: payAmount,
-                            customerId,
-                            orderId: orderItem.id,
-                            paymentMethod: data.paymentMode,
-                            transactionId: tx.id,
-                            status: "created",
-                        });
-                        return res.id;
-                    }
-                })
-            );
-            await applyPaymentDta(wallet.id, transactionIds.filter(Boolean));
-            break;
-    }
+    return await prisma.$transaction((async (tx) => {
+        const wallet = await getCustomerWalletDta(data.accountNo);
+        const saleslist = await getSalesPendingPayments(data.salesIds);
+
+        switch (data.paymentMode) {
+            case "terminal":
+                break;
+            case "link":
+                break;
+            default:
+                let balance = +data.amount;
+                const tx = await fundCustomerWalletDta(
+                    wallet.id,
+                    balance,
+                    data.paymentMode,
+                    data.description
+                );
+                const transactionIds = await Promise.all(
+                    saleslist.map(async (orderItem) => {
+                        let payAmount =
+                            balance > orderItem.amountDue
+                                ? orderItem.amountDue
+                                : balance;
+                        balance -= payAmount;
+                        let customerId =
+                            orderItem.customerId ||
+                            (await getCustomerIdByPhoneNo(data.accountNo));
+                        if (!customerId)
+                            throw Error(
+                                `Customer not found for ${data.accountNo}`
+                            );
+                        if (payAmount) {
+                            const res = await createSalesPaymentTransactionDta({
+                                amount: payAmount,
+                                customerId,
+                                orderId: orderItem.id,
+                                paymentMethod: data.paymentMode,
+                                transactionId: tx.id,
+                                status: "created",
+                            });
+                            return res.id;
+                        }
+                    })
+                );
+                console.log(transactionIds);
+
+                await applyPaymentDta(
+                    wallet.id,
+                    transactionIds.filter(Boolean)
+                );
+                break;
+        }
+    }) as any);
 }
 
 export async function getSalesPendingPayments(salesIds) {

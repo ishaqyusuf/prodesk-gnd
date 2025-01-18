@@ -10,6 +10,7 @@ import {
 export interface Payables {
     id;
     amountDue;
+    orderId;
 }
 const data = {
     paymentMethod: null as PaymentMethods,
@@ -28,7 +29,7 @@ export type ZusFormSet = (update: (state: Data) => Partial<Data>) => void;
 
 function funcs(set: ZusFormSet) {
     return {
-        initialize: (state) =>
+        initialize: (state: Partial<Data>) =>
             set(() => ({
                 ...data,
                 ...state,

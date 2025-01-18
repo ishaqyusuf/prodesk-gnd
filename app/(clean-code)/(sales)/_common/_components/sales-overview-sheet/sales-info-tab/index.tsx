@@ -8,6 +8,7 @@ import Link from "next/link";
 import Money from "@/components/_v1/money";
 import { Label } from "@/components/ui/label";
 import { composeSalesUrl } from "../../../utils/sales-utils";
+import { openCustomerOverviewSheet } from "../../customer-overview-sheet";
 
 export function SalesInfoTab({}) {
     const store = salesOverviewStore();
@@ -35,6 +36,10 @@ export function SalesInfoTab({}) {
                 value={
                     <Button
                         size="xs"
+                        disabled={!overview?.phoneNo}
+                        onClick={() => {
+                            openCustomerOverviewSheet(overview.phoneNo);
+                        }}
                         variant={overview?.phoneNo ? "destructive" : "outline"}
                     >
                         {overview?.displayName || overview?.phoneNo}

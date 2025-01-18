@@ -67,6 +67,8 @@ export async function applyPaymentDta(walletId, transactionIds) {
         },
     });
     const total = sum(transactions, "amount") * -1;
+    console.log(total);
+
     const customerTx = await prisma.customerTransaction.create({
         data: {
             amount: total,

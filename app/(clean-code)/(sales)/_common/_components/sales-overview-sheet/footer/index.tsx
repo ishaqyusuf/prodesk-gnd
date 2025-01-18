@@ -10,6 +10,9 @@ import { Menu } from "@/components/(clean-code)/menu";
 import { PrintMenuAction } from "./print.menu.action";
 import { MoveMenuAction } from "./move.menu.action";
 import { CopyMenuAction } from "./copy.menu.action";
+import { Button } from "@/components/ui/button";
+import Money from "@/components/_v1/money";
+import { openTxForm } from "../../tx-form";
 
 export function Footer({}) {
     const store = salesOverviewStore();
@@ -37,6 +40,33 @@ export function Footer({}) {
                 trash
                 variant="destructive"
             />
+            {store.adminMode && (
+                <>
+                    <Button
+                        onClick={() => {
+                            if (!store.overview?.phoneNo)
+                                toast.error("Payment requires phone number.");
+                            else
+                                openTxForm({
+                                    phoneNo: store.overview?.phoneNo,
+                                    paymentMethod: "terminal",
+                                    payables: [
+                                        {
+                                            amountDue: store.overview.due,
+                                            id: store.overview.id,
+                                            orderId: store.overview.orderId,
+                                        },
+                                    ],
+                                });
+                        }}
+                        size="xs"
+                        disabled={!store.overview?.due}
+                    >
+                        <Icons.dollar className="size-4 mr-2" />
+                        <Money value={store.overview?.due}></Money>
+                    </Button>
+                </>
+            )}
             <Menu variant="outline">
                 <PrintMenuAction />
                 <PrintMenuAction pdf />

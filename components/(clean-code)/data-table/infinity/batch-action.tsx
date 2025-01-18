@@ -1,7 +1,7 @@
 import { Label } from "@/components/ui/label";
 import { useInfiniteDataTable } from "../use-data-table";
 import { Button } from "@/components/ui/button";
-import { Icon, IconKeys, Icons } from "@/components/_v1/icons";
+import { IconKeys, Icons } from "@/components/_v1/icons";
 import { Menu } from "../../menu";
 import { cn } from "@/lib/utils";
 import ConfirmBtn from "@/components/_v1/confirm-btn";
@@ -15,7 +15,7 @@ export function BatchAction({ children = null }) {
 
     return (
         <div className="fixed left-1/2 transform -translate-x-1/2  m-4 bottom-10 z-10">
-            <div className="border flex sgap-4 items-center rounded-xl bg-muted border-muted-foreground/50 divide-x divide-muted-foreground/50 shadow-xl  relative ">
+            <div className="border flex sgap-4 items-center rounded-xl bg-white overflow-hidden border-muted-foreground/50 divide-x divide-muted-foreground/50 shadow-xl  relative ">
                 <Label className="font-mono px-2">
                     <span className="font-bold">{selectCount}</span>
                     {" of "}
@@ -48,7 +48,7 @@ export function BatchBtn(props: BatchBtnProps) {
         return (
             <Menu
                 Trigger={
-                    <Button variant="ghost">
+                    <Button className="rounded-none" variant="ghost">
                         {Icon && <Icon className={cn("size-3.5 mr-2")} />}
                         {props.children}
                     </Button>
@@ -71,7 +71,7 @@ export function BatchDelete(props: BatchBtnProps) {
             }}
             variant="ghost"
             trash
-            className="text-red-600"
+            className="text-red-600 rounded-none"
         >
             {/* <div className="flex items-center"> */}
             {/* <Icons.trash className="size-3.5 mr-2" /> */}

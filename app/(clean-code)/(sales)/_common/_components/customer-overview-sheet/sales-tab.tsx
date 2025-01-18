@@ -11,7 +11,7 @@ import { TCell } from "@/components/(clean-code)/data-table/table-cells";
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/_v1/icons";
 import { _modal } from "@/components/common/modal/provider";
-import { openPayPortal } from "../pay-portal";
+import { openTxForm } from "../tx-form";
 
 export default function SalesTab() {
     const ctx = customerStore();
@@ -22,9 +22,12 @@ export default function SalesTab() {
                     <Button
                         onClick={() => {
                             _modal.close();
-                            setTimeout(() => {
-                                openPayPortal(ctx.profile?.phoneNo);
-                            }, 500);
+                            // setTimeout(() => {
+                            openTxForm({
+                                phoneNo: ctx?.profile?.phoneNo,
+                            });
+                            // openPayPortal(ctx.profile?.phoneNo);
+                            // }, 500);
                         }}
                         size="xs"
                     >
