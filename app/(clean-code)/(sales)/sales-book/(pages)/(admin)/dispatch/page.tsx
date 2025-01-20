@@ -2,7 +2,7 @@ import { dataOptions } from "@/components/(clean-code)/data-table/query-options"
 import { searchParamsCache } from "@/components/(clean-code)/data-table/search-params";
 import { getQueryClient } from "@/providers/get-query-client";
 import FPage from "@/components/(clean-code)/fikr-ui/f-page";
-import DeliveryPageClient from "../../_components/delivery-page-client";
+import DeliveryPageClient from "../../_components/dispatch-page-client";
 import { composeFilter } from "@/components/(clean-code)/data-table/filter-command/filters";
 import { constructMetadata } from "@/lib/(clean-code)/construct-metadata";
 export async function generateMetadata({}) {

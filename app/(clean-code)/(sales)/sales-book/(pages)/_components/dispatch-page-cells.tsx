@@ -1,9 +1,10 @@
 import { TCell } from "@/components/(clean-code)/data-table/table-cells";
-import { GetSalesDispatchList } from "../../../_common/use-case/sales-dispatch-use-case";
+
 import { Progress } from "@/components/(clean-code)/progress";
-import { SalesDispatchListDto } from "../../../_common/data-access/dto/sales-shipping-dto";
+
+import { ShippingListItem } from "../../../_common/data-actions/shipping-actions/get-shipping-list-action";
 type ItemProps = {
-    item: SalesDispatchListDto;
+    item: ShippingListItem;
 };
 function Status({ item }: ItemProps) {
     return (
@@ -32,21 +33,41 @@ function CustomerPhone({ item }: ItemProps) {
 function Address({ item }: ItemProps) {
     return (
         <TCell>
-            <TCell.Secondary>{item.shipping.address}</TCell.Secondary>
+            {/* <TCell.Secondary>{item.shipping.address}</TCell.Secondary> */}
         </TCell>
     );
 }
 function SalesRep({ item }: ItemProps) {
     return (
         <TCell>
-            <TCell.Secondary>{item.salesRep}</TCell.Secondary>
+            <TCell.Secondary>{item.createdBy?.name}</TCell.Secondary>
         </TCell>
     );
 }
 function DispatchId({ item }: ItemProps) {
     return (
         <TCell>
-            <TCell.Secondary>#000-{item.dispatchId}</TCell.Secondary>
+            <TCell.Secondary>{item.dispatchId}</TCell.Secondary>
+        </TCell>
+    );
+}
+function DispatchMode({ item }: ItemProps) {
+    return (
+        <TCell>
+            <TCell.Status
+                status={item.deliveryMode}
+                color={item.deliveryMode == "pickup" ? "red" : "purple"}
+            />
+        </TCell>
+    );
+}
+function Dispatcher({ item }: ItemProps) {
+    return (
+        <TCell>
+            <TCell.Status
+                status={item.driver?.name || "Not Assigned"}
+                color={item.driver?.id ? "red" : null}
+            />
         </TCell>
     );
 }
@@ -56,6 +77,8 @@ function Action({ item }: ItemProps) {
 export let DispatchCells = {
     Status,
     Action,
+    DispatchMode,
+    Dispatcher,
     SalesRep,
     Address,
     CustomerPhone,

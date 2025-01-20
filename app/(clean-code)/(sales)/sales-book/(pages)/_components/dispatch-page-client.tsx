@@ -16,7 +16,7 @@ interface Props {
     queryKey?;
     filterFields;
 }
-export default function DeliveryPageClient({ queryKey, filterFields }: Props) {
+export default function DispatchPageClient({ queryKey, filterFields }: Props) {
     const table = useTableCompose({
         cells(ctx) {
             return [
@@ -27,12 +27,19 @@ export default function DeliveryPageClient({ queryKey, filterFields }: Props) {
                     DispatchCells.DispatchId
                 ),
                 ctx.Column("Order #", "orderId", DispatchCells.Order),
-                // ctx.Column("Customer", "customer", DispatchCells.Customer),
-                // ctx.Column("Phone", "phone", DispatchCells.CustomerPhone),
+                ctx.Column(
+                    "Dispatch Mode",
+                    "orderId",
+                    DispatchCells.DispatchMode
+                ),
                 ctx.Column("Address", "address", DispatchCells.Address),
-                ctx.Column("Rep", "rep", DispatchCells.SalesRep),
+                ctx.Column("Created By", "rep", DispatchCells.SalesRep),
+                ctx.Column(
+                    "Assigned To",
+                    "dispatcher",
+                    DispatchCells.Dispatcher
+                ),
                 ctx.Column("Status", "status", DispatchCells.Status),
-
                 ...__filters()["sales-delivery"].filterColumns,
             ];
         },
@@ -52,12 +59,6 @@ export default function DeliveryPageClient({ queryKey, filterFields }: Props) {
                 queryKey={queryKey}
                 {...table.props}
             >
-                <div className="flex justify-between">
-                    <div className="w-1/2">
-                        <DataTableFilterCommand />
-                    </div>
-                    <DataTableInfinityToolbar />
-                </div>
                 <DataTable.Header top="lg" className="bg-white">
                     <div className="flex justify-between items-end mb-2 gap-2 sm:sticky">
                         <div className="">
