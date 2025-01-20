@@ -33,12 +33,12 @@ export const whereNotTrashed = {
     },
 };
 export async function inifinitePageInfo<T>(
-    input,
+    query,
     where,
     model,
     data: T[] = []
 ) {
-    const info = await getPageInfo(input, where, model);
+    const info = await getPageInfo(query, where, model);
     return {
         data,
         pageCount: info.pageCount,
@@ -48,8 +48,8 @@ export async function inifinitePageInfo<T>(
         },
     };
 }
-export async function getPageInfo(input, where, model) {
-    const { page = 1, perPage = 20 } = input;
+export async function getPageInfo(query, where, model) {
+    const { page = 1, perPage = 20 } = query;
     const skip = (page - 1) * Number(perPage);
     const count = await model.count({
         where,
@@ -71,20 +71,20 @@ export async function getPageInfo(input, where, model) {
     return pageInfo;
 }
 
-export function pageQueryFilter(input) {
-    let { page = 1, perPage = 20 } = input;
+export function pageQueryFilter(query) {
+    let { page = 1, perPage = 20 } = query;
 
-    const keys = Object.keys(input);
+    const keys = Object.keys(query);
     let skip = null;
     if (keys.includes("start")) {
-        skip = input.start;
-        perPage = input.size;
+        skip = query.start;
+        perPage = query.size;
     } else {
         skip = (page - 1) * perPage;
     }
 
     let orderBy = {};
-    const { sort_order = "desc", sort = "id" } = input;
+    const { sort_order = "desc", sort = "id" } = query;
     if (sort == "customer")
         orderBy = {
             customer: {

@@ -1,7 +1,6 @@
-import { useEffect } from "react";
-import { AdminOnly, loadPageData } from "../helper";
+import { AdminOnly } from "../../helper";
 
-import { salesOverviewStore } from "../store";
+import { salesOverviewStore } from "../../store";
 import { cn } from "@/lib/utils";
 import Money from "@/components/_v1/money";
 import { Badge } from "@/components/ui/badge";
@@ -10,11 +9,6 @@ import { ItemOverview } from "./item-overview";
 export function SalesItemsTab({}) {
     const store = salesOverviewStore();
     const itemOverview = store.itemOverview;
-    // useEffect(() => {
-    //     loadPageData({
-    //         dataKey: "overview",
-    //     });
-    // }, []);
     if (!itemOverview) return;
     return (
         <div>

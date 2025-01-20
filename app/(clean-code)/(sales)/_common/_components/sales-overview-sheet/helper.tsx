@@ -27,6 +27,7 @@ export const loaders: Partial<{ [k in keyof Data]: any }> = {
 export const tabLoaders: Partial<{ [k in SalesTabs]: (keyof Data)[] }> = {
     sales_info: ["overview"],
     items: ["overview", "itemOverview"],
+    shipping: ["overview", "shipping"],
 };
 export const getOpenItem = () => {
     const state = salesOverviewStore.getState();

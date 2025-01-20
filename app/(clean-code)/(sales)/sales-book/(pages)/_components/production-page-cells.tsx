@@ -1,6 +1,6 @@
 import { TCell } from "@/components/(clean-code)/data-table/table-cells";
 import ConfirmBtn from "@/components/_v1/confirm-btn";
-import { GetProductionListPage } from "../../../_common/data-actions/productions-list-action";
+import { GetProductionListPage } from "../../../_common/data-actions/production-actions/productions-list-action";
 import { OrderCells } from "./orders-page-cells";
 
 export interface ItemProps {

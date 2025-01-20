@@ -50,9 +50,12 @@ function DispatchId({ item }: ItemProps) {
         </TCell>
     );
 }
+function Action({ item }: ItemProps) {
+    return <TCell></TCell>;
+}
 export let DispatchCells = {
     Status,
-
+    Action,
     SalesRep,
     Address,
     CustomerPhone,

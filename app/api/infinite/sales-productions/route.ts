@@ -1,5 +1,5 @@
 import { getSalesOrdersDta } from "@/app/(clean-code)/(sales)/_common/data-access/sales-dta";
-import { getProductionListPageAction } from "@/app/(clean-code)/(sales)/_common/data-actions/productions-list-action";
+import { getProductionListPageAction } from "@/app/(clean-code)/(sales)/_common/data-actions/production-actions/productions-list-action";
 
 import {
     FilterParams,

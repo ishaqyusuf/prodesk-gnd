@@ -8,6 +8,9 @@ import { DataTableInfinityToolbar } from "@/components/(clean-code)/data-table/i
 
 import { DispatchCells } from "./dispatch-page-cells";
 import { DispatchOverviewSheet } from "../../../_common/_components/overview-sheet/order-overview-sheet";
+import { __filters } from "../../../_common/utils/contants";
+import { QueryTabAction } from "@/app/(clean-code)/_common/query-tab/query-tab-edit";
+import QueryTab from "@/app/(clean-code)/_common/query-tab";
 
 interface Props {
     queryKey?;
@@ -29,7 +32,8 @@ export default function DeliveryPageClient({ queryKey, filterFields }: Props) {
                 ctx.Column("Address", "address", DispatchCells.Address),
                 ctx.Column("Rep", "rep", DispatchCells.SalesRep),
                 ctx.Column("Status", "status", DispatchCells.Status),
-                // ctx.Column("Progress", "progress", DispatchCells.Progress),
+
+                ...__filters()["sales-delivery"].filterColumns,
             ];
         },
         checkable: true,
@@ -41,14 +45,34 @@ export default function DeliveryPageClient({ queryKey, filterFields }: Props) {
     });
 
     return (
-        <div>
-            <DataTable.Infinity queryKey={queryKey} {...table.props}>
+        <div className="bg-white">
+            <DataTable.Infinity
+                checkable
+                ActionCell={DispatchCells.Action}
+                queryKey={queryKey}
+                {...table.props}
+            >
                 <div className="flex justify-between">
                     <div className="w-1/2">
                         <DataTableFilterCommand />
                     </div>
                     <DataTableInfinityToolbar />
                 </div>
+                <DataTable.Header top="lg" className="bg-white">
+                    <div className="flex justify-between items-end mb-2 gap-2 sm:sticky">
+                        <div className="">
+                            <QueryTab page="orders" />
+                        </div>
+                        <div className="flex-1"></div>
+                        <QueryTabAction />
+                    </div>
+                    <div className="flex justify-between">
+                        <div className="flex-1">
+                            <DataTableFilterCommand />
+                        </div>
+                        <DataTableInfinityToolbar />
+                    </div>
+                </DataTable.Header>
                 <DataTable.Table />
                 <DataTable.LoadMore />
                 <DispatchOverviewSheet />

@@ -1,4 +1,4 @@
-import { salesOverviewStore } from "../store";
+import { salesOverviewStore } from "../../store";
 import Button from "@/components/common/button";
 import { Icons } from "@/components/_v1/icons";
 import { ExternalLink } from "lucide-react";
@@ -7,8 +7,8 @@ import { buttonVariants } from "@/components/ui/button";
 import Link from "next/link";
 import Money from "@/components/_v1/money";
 import { Label } from "@/components/ui/label";
-import { composeSalesUrl } from "../../../utils/sales-utils";
-import { openCustomerOverviewSheet } from "../../customer-overview-sheet";
+import { composeSalesUrl } from "../../../../utils/sales-utils";
+import { openCustomerOverviewSheet } from "../../../customer-overview-sheet";
 
 export function SalesInfoTab({}) {
     const store = salesOverviewStore();

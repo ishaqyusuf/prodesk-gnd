@@ -66,6 +66,10 @@ export const __filters = (): Filters => ({
         fields: [filterFields["production.assignedToId"]],
         filterColumns: [],
     },
+    "sales-delivery": {
+        fields: [],
+        filterColumns: [],
+    },
     "sales-productions": {
         fields: [],
         filterColumns: [],
@@ -119,10 +123,6 @@ export const __filters = (): Filters => ({
             filterCol("search"),
             //
         ],
-    },
-    ["sales-delivery"]: {
-        fields: [],
-        options: {},
     },
 });
 

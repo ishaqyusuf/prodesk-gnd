@@ -3,15 +3,13 @@
 import { SearchParamsType } from "@/components/(clean-code)/data-table/search-params";
 import { prisma } from "@/db";
 import { AsyncFnType } from "@/types";
-import { whereSales } from "../utils/db/where.sales";
+import { whereSales } from "../../utils/db/where.sales";
 import {
-    getPageInfo,
     inifinitePageInfo,
     pageQueryFilter,
 } from "@/app/(clean-code)/_common/utils/db-utils";
-import { SalesProductionListSelect } from "../contants/sales-includes";
 import { Prisma } from "@prisma/client";
-import { dueDateAlert } from "../utils/production-utils";
+import { dueDateAlert } from "../../utils/production-utils";
 import { authId } from "@/app/(v1)/_actions/utils";
 
 export type GetProductionListPage = AsyncFnType<

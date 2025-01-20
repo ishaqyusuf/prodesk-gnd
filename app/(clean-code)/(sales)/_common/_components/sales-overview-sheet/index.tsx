@@ -3,10 +3,10 @@ import { salesOverviewStore, SalesTabs, salesTabs } from "./store";
 import Modal from "@/components/common/modal";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
-import { SalesInfoTab } from "./sales-info-tab";
+import { SalesInfoTab } from "./tabs/sales-info-tab";
 import { useSalesOverview } from "./hook";
 import { Footer } from "./footer";
-import { SalesItemsTab } from "./sales-items-tab";
+import { SalesItemsTab } from "./tabs/sales-items-tab";
 
 interface OpenSalesOverviewProps {
     salesId;

@@ -9,6 +9,7 @@ export const queryKeys = [
     "sales-delivery",
     "customers",
     "sales-productions",
+    "sales-dispatch",
     "production-tasks",
 ] as const;
 export type QueryKeys = (typeof queryKeys)[number];

@@ -36,7 +36,7 @@ export const salesTabs = {
     admin: [
         createTab("sales_info"),
         createTab("items"),
-        createTab("payments"),
+        // createTab("payments"),
         createTab("shipping"),
         createTab("notification"),
     ],

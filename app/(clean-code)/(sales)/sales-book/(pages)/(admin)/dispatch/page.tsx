@@ -4,18 +4,23 @@ import { getQueryClient } from "@/providers/get-query-client";
 import FPage from "@/components/(clean-code)/fikr-ui/f-page";
 import DeliveryPageClient from "../../_components/delivery-page-client";
 import { composeFilter } from "@/components/(clean-code)/data-table/filter-command/filters";
-
+import { constructMetadata } from "@/lib/(clean-code)/construct-metadata";
+export async function generateMetadata({}) {
+    return constructMetadata({
+        title: `Sales Dispatch - gndprodesk.com`,
+    });
+}
 export default async function DispatchPage({ searchParams }) {
     const search = searchParamsCache.parse(searchParams);
     const queryClient = getQueryClient();
-    // const queryKey = "sales-delivery";
-    const { queryKey, filterFields } = composeFilter(
-        "sales-delivery"
-        //  await getSalesPageQueryDataDta()
+    const props = composeFilter(
+        "sales-dispatch"
+        // await getSalesPageQueryDataDta()
     );
+    const { queryKey, filterFields } = props;
     await queryClient.prefetchInfiniteQuery(dataOptions(search, queryKey));
     return (
-        <FPage can={["viewOrders"]} title="Sales Delivery">
+        <FPage can={["viewOrders"]} title="Sales Dispatch">
             <DeliveryPageClient
                 queryKey={queryKey}
                 filterFields={filterFields}

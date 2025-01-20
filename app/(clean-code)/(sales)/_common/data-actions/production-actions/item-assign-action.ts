@@ -6,8 +6,8 @@ import { sum } from "@/lib/utils";
 import {
     updateQtyControlAction,
     updateSalesItemControlAction,
-} from "./item-control.action";
-import { updateSalesStatControlAction } from "./sales-stat-control.action";
+} from "../item-control.action";
+import { updateSalesStatControlAction } from "../sales-stat-control.action";
 
 export async function createItemAssignmentAction({
     salesItemId,

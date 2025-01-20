@@ -9,7 +9,6 @@ import { DataTableFilterCommand } from "@/components/(clean-code)/data-table/fil
 
 import { DataTableInfinityToolbar } from "@/components/(clean-code)/data-table/infinity/data-table-toolbar";
 import { _modal } from "@/components/common/modal/provider";
-import { OrderOverviewSheet } from "../../../_common/_components/overview-sheet/order-overview-sheet";
 
 import { __filters } from "../../../_common/utils/contants";
 import QueryTab from "@/app/(clean-code)/_common/query-tab";
