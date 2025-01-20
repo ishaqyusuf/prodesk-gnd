@@ -40,6 +40,13 @@ export const salesTabs = {
         createTab("shipping"),
         createTab("notification"),
     ],
+    quotes: [
+        createTab("sales_info"),
+        createTab("items"),
+        // createTab("payments"),
+        // createTab("shipping"),
+        createTab("notification"),
+    ],
 };
 type Action = ReturnType<typeof funcs>;
 export type Data = typeof data;

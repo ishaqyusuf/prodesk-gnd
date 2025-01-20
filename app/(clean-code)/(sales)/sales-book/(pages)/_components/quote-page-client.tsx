@@ -15,6 +15,8 @@ import Link from "next/link";
 import QueryTab from "@/app/(clean-code)/_common/query-tab";
 import { QueryTabAction } from "@/app/(clean-code)/_common/query-tab/query-tab-edit";
 import { __filters } from "../../../_common/utils/contants";
+import { isProdClient } from "@/lib/is-prod";
+import { openQuoteOVerview } from "../../../_common/_components/sales-overview-sheet";
 
 interface Props {
     // promise;
@@ -54,6 +56,15 @@ export default function QuotesPageClient({ filterFields, queryKey }: Props) {
                 queryKey={queryKey}
                 {...table.props}
                 ActionCell={QuotesCell.Action}
+                itemViewFn={
+                    isProdClient
+                        ? (data) => {
+                              openQuoteOVerview({
+                                  salesId: data.id,
+                              });
+                          }
+                        : undefined
+                }
             >
                 <DataTable.Header top="lg" className="bg-white">
                     <div className="flex justify-between items-end mb-2 gap-2 sm:sticky">

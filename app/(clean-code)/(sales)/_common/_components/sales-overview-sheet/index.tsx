@@ -11,6 +11,17 @@ import { SalesItemsTab } from "./tabs/sales-items-tab";
 interface OpenSalesOverviewProps {
     salesId;
 }
+export function openQuoteOVerview(props: OpenSalesOverviewProps) {
+    salesOverviewStore.getState().reset({
+        salesId: props.salesId,
+        tabs: salesTabs.quotes,
+        showTabs: true,
+        // currentTab: "sales_info",
+        showFooter: true,
+        adminMode: true,
+    });
+    _modal.openSheet(<SalesOverviewModal />);
+}
 export function openSalesOverview(props: OpenSalesOverviewProps) {
     salesOverviewStore.getState().reset({
         salesId: props.salesId,
