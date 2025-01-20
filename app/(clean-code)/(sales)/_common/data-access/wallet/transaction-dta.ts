@@ -12,20 +12,20 @@ export async function createTransactionDta(data: SalesTransaction) {
     return await prisma.$transaction((async (tx) => {
         const wallet = await getCustomerWalletDta(data.accountNo);
         const saleslist = await getSalesPendingPayments(data.salesIds);
-
         switch (data.paymentMode) {
-            case "terminal":
-                break;
+            // case "terminal":
+            //     break;
             case "link":
                 break;
             default:
                 let balance = +data.amount;
-                const tx = await fundCustomerWalletDta(
-                    wallet.id,
-                    balance,
-                    data.paymentMode,
-                    data.description
-                );
+                const tx = await fundCustomerWalletDta({
+                    accountId: wallet.id,
+                    amount: balance,
+                    paymentMethod: data.paymentMode,
+                    description: data.description,
+                    squarePaymentId: data.squarePaymentId,
+                });
                 const transactionIds = await Promise.all(
                     saleslist.map(async (orderItem) => {
                         let payAmount =
@@ -53,8 +53,6 @@ export async function createTransactionDta(data: SalesTransaction) {
                         }
                     })
                 );
-                console.log(transactionIds);
-
                 await applyPaymentDta(
                     wallet.id,
                     transactionIds.filter(Boolean)

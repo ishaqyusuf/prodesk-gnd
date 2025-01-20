@@ -7,6 +7,7 @@ export async function errorHandler<T extends (...args: any) => any>(fn: T) {
     try {
         rep = await fn();
     } catch (error) {
+        let message = error.message;
         if (error instanceof ApiError) {
             // if (error instanceof ApiError) {
             //     return {
@@ -20,9 +21,10 @@ export async function errorHandler<T extends (...args: any) => any>(fn: T) {
         //     error: "",
         // };
         error = error.message;
+        err = error;
     }
     return {
         resp: rep,
-        error: err,
+        error: err as Error,
     };
 }

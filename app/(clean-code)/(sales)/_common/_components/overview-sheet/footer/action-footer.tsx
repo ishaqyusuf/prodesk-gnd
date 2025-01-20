@@ -14,6 +14,8 @@ import { PrintAction } from "./print.action";
 import { PayAction } from "./pay.action";
 import { updateSalesItemControlAction } from "../../../data-actions/item-control.action";
 import { updateSalesStatControlAction } from "../../../data-actions/sales-stat-control.action";
+import { Button } from "@/components/ui/button";
+import { openSalesOverview } from "../../sales-overview-sheet";
 
 export default function ActionFooter({}) {
     const ctx = useSalesOverview();
@@ -21,6 +23,16 @@ export default function ActionFooter({}) {
     return (
         <div className="absolute flex gap-4 bottom-0 px-4 py-2 bg-white border-t sbg-muted w-full shadow-sm">
             <div className="flex-1"></div>
+            <Button
+                onClick={() => {
+                    ctx.closeModal();
+                    openSalesOverview({
+                        salesId: ctx.item?.id,
+                    });
+                }}
+            >
+                NEW SHEET
+            </Button>
             <PayAction />
             <ConfirmBtn
                 size="icon"

@@ -13,8 +13,11 @@ model CustomerTransaction {
     wallet        CustomerWallet?      @relation(fields: [walletId], references: [id], onDelete: Cascade)
     salesPayments SalesPayments[]
     refundTx      RefundTransactions[]
+    squarePayment SquarePayments?      @relation(fields: [squarePID], references: [id])
+    squarePID     String?
 
     @@index([walletId])
+    @@index([squarePID])
 }
 
 model CustomerWallet {
@@ -52,6 +55,39 @@ model SalesPayments {
     @@index([orderId])
     @@index([customerId])
     @@index([transactionId])
+}
+
+model SquarePayments {
+    id              String                @id @default(cuid())
+    paymentId       String?               @unique
+    status          String                @default("created")
+    squareOrderId   String?
+    paymentMethod   String //link,terminal
+    paymentLink     String?
+    amount          Float
+    tip             Float?
+    meta            Json?                 @db.Json
+    deletedAt       DateTime?             @db.Timestamp(0)
+    createdAt       DateTime?             @default(now()) @db.Timestamp(0)
+    updatedAt       DateTime?             @updatedAt
+    terminalId      String?
+    createdById     Int
+    paymentTerminal PaymentTerminals?     @relation(fields: [terminalId], references: [terminalId])
+    customerTxs     CustomerTransaction[]
+    createdBy       Users                 @relation(fields: [createdById], references: [id])
+
+    @@index([terminalId])
+    @@index([createdById])
+}
+
+model PaymentTerminals {
+    terminalId   String    @unique
+    terminalName String
+    deletedAt    DateTime? @db.Timestamp(0)
+    createdAt    DateTime? @default(now()) @db.Timestamp(0)
+    updatedAt    DateTime? @updatedAt
+
+    payments SquarePayments[]
 }
 
 model SalesCheckout {

@@ -16,12 +16,13 @@ export async function getCustomerWalletDta(accountNo) {
     });
     return wallet;
 }
-export async function fundCustomerWalletDta(
+export async function fundCustomerWalletDta({
     accountId,
     amount,
     paymentMethod,
-    description
-) {
+    description,
+    squarePaymentId = null,
+}) {
     const tx = await prisma.customerTransaction.create({
         data: {
             amount,
@@ -30,6 +31,7 @@ export async function fundCustomerWalletDta(
             paymentMethod,
             description,
             status: "success" as SalesPaymentStatus,
+            squarePaymentId: squarePaymentId ? squarePaymentId : undefined,
         },
     });
     return tx;

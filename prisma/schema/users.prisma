@@ -50,6 +50,7 @@ model Users {
     approvedRequests            DealerSalesRequest[]
     checkouts                   SalesCheckout[]
     exportConfigs               ExportConfig[]
+    squarePayments              SquarePayments[]
 
     @@index([createdAt, deletedAt, name])
     @@index([employeeProfileId])

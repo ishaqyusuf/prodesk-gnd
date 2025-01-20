@@ -21,7 +21,7 @@ export default function SalesTab() {
                 <div className="flex gap-4 justify-end">
                     <Button
                         onClick={() => {
-                            _modal.close();
+                            // _modal.close();
                             // setTimeout(() => {
                             openTxForm({
                                 phoneNo: ctx?.profile?.phoneNo,

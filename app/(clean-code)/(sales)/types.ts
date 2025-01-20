@@ -25,6 +25,7 @@ export type PaymentMethods =
     | "zelle"
     | "credit-card"
     | "wire";
+export type SquarePaymentMethods = "terminal" | "link";
 export type DykeStepTitles =
     | "Category"
     | "Shelf Items"
@@ -203,7 +204,7 @@ export interface HousePackageToolSettings {
 }
 export type SalesTransaction = {
     squarePaymentType?: SalesPaymentType;
-    squareTerminalId?: string;
+    squarePaymentId?;
     paymentMode: PaymentMethods;
     amount;
     salesIds: Number[];

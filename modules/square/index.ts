@@ -39,9 +39,34 @@ export async function getSquareDevices() {
 }
 export interface CreateTerminalCheckoutProps {
     deviceId;
+    deviceName?;
     allowTipping?: boolean;
     amount;
     idempotencyKey?;
+}
+export async function createSquareTerminalCheckout(
+    props: CreateTerminalCheckoutProps
+) {
+    const resp = await client.terminalApi.createTerminalCheckout({
+        idempotencyKey: props.idempotencyKey,
+        checkout: {
+            amountMoney: {
+                amount: BigInt(Number(props.amount) * 100),
+                currency: "USD",
+            },
+            deviceOptions: {
+                deviceId: props.deviceId,
+                tipSettings: {
+                    allowTipping: props.allowTipping,
+                },
+            },
+        },
+    });
+    const checkout = resp.result.checkout;
+    return {
+        id: checkout.id,
+        squareOrderId: checkout.orderId,
+    };
 }
 export async function createTerminalCheckout({
     deviceId,
@@ -63,6 +88,7 @@ export async function createTerminalCheckout({
                         allowTipping,
                     },
                 },
+                referenceId: "",
             },
         });
         return {
@@ -89,3 +115,9 @@ export async function getTerminalPaymentStatus(checkoutId) {
 export async function cancelSquareTerminalPayment(paymentId) {
     await client.terminalApi.cancelTerminalCheckout(paymentId);
 }
+
+// export async function squarePaymentUpdated(props: SquarePayment) {
+//     const response = await client.terminalApi.createTerminalCheckout(
+//         checkoutId
+//     );
+// }
