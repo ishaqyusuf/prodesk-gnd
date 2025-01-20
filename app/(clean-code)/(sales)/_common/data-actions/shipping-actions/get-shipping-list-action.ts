@@ -19,6 +19,7 @@ export async function getShippingListAction(query: SearchParamsType) {
         where,
         ...pageQueryFilter(query),
         select: {
+            createdAt: true,
             id: true,
             status: true,
             createdBy: {

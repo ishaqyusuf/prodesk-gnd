@@ -15,7 +15,11 @@ function Status({ item }: ItemProps) {
 }
 
 function Date({ item }: ItemProps) {
-    return <TCell></TCell>;
+    return (
+        <TCell>
+            <TCell.Date>{item.createdAt}</TCell.Date>
+        </TCell>
+    );
 }
 function Order({ item }: ItemProps) {
     return (
