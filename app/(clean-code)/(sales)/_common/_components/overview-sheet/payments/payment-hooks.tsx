@@ -160,7 +160,7 @@ const usePaymentContext = (ctx) => {
                         },
                     });
 
-                    if (resp.error) toast.error(resp.error);
+                    if (resp.error) toast.error(resp.error.message);
                     else {
                         form.setValue("checkoutId", resp.resp.salesPayment.id);
                         // setWaitingForPayment(true);

@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useCombobox } from "downshift";
 import { Label } from "../../ui/label";
 import { PrimitiveDivProps } from "@/types/type";
-import { cn, uniqueBy } from "@/lib/utils";
+import { cn, listFilter, uniqueBy } from "@/lib/utils";
 import { Input } from "../../ui/input";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import JsonSearch from "@/_v2/lib/json-search";
@@ -158,7 +158,7 @@ export default function AutoComplete({
         },
         onInputValueChange({ inputValue }) {
             setItems(
-                filter(
+                listFilter(
                     transformItems(
                         dataLoader.items || options || [],
                         itemText,
@@ -194,7 +194,7 @@ export default function AutoComplete({
         onIsOpenChange(changes) {
             if (changes.isOpen) {
                 setItems(
-                    filter(
+                    listFilter(
                         transformItems(
                             dataLoader.items || options || [],
                             itemText,
@@ -338,23 +338,7 @@ export default function AutoComplete({
         </div>
     );
 }
-function filter(items, query, fuzzy) {
-    if (fuzzy) {
-        // const jsEarch = require("search-array");
-        const s = new JsonSearch(items || [], {
-            sort: true,
-        });
-        let res = s.queryWithScore(query || "");
-        return res;
-    }
-    const escapedText = !query
-        ? ""
-        : query?.toString().replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&");
 
-    const pattern = new RegExp(escapedText, "i");
-    let filteredOptions = items?.filter((option) => pattern.test(option.title));
-    return uniqueBy(filteredOptions, "title");
-}
 function transformItems(items, itemText, itemValue) {
     return items
         ?.map((item) => {

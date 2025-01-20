@@ -4,6 +4,7 @@ import slugify from "slugify";
 
 import { toast } from "sonner";
 import { formatMoney } from "./use-number";
+import JsonSearch from "@/_v2/lib/json-search";
 
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
@@ -481,4 +482,21 @@ export function swap(array, indexA, indexB) {
     let tmp = array[indexA];
     array[indexA] = array[indexB];
     array[indexB] = tmp;
+}
+export function listFilter(items, query, fuzzy) {
+    if (fuzzy) {
+        // const jsEarch = require("search-array");
+        const s = new JsonSearch(items || [], {
+            sort: true,
+        });
+        let res = s.queryWithScore(query || "");
+        return res;
+    }
+    const escapedText = !query
+        ? ""
+        : query?.toString().replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&");
+
+    const pattern = new RegExp(escapedText, "i");
+    let filteredOptions = items?.filter((option) => pattern.test(option.title));
+    return uniqueBy(filteredOptions, "title");
 }

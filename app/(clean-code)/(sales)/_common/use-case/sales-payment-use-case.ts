@@ -34,6 +34,8 @@ interface CreatePayment {
 }
 export async function createTerminalPaymentUseCase(data: CreatePayment) {
     const salesPayment = await createSalesPaymentDta(data.salesPayment);
+    console.log(salesPayment);
+
     data.terminal.idempotencyKey = salesPayment.id;
     const terminalCheckout = await createTerminalCheckout(data.terminal);
     return terminalCheckout;

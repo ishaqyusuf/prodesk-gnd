@@ -19,10 +19,11 @@ import { UsePayForm, usePayForm } from "./pay-form-ctx";
 export default function PayForm({}) {
     const ctx = usePayForm();
     const { form, terminal, tx, pm, pay, terminalPay, totalPay } = ctx;
+    if (!tx.phoneNo) return null;
     return (
         <Form {...form}>
             <div className="border-t p-4 -m-4 sm:-m-6 grid gap-2 rounded-b-lg shadow-lg bg-white">
-                {!terminal ? (
+                {terminal ? (
                     <>
                         <ReceivingPayment ctx={ctx} />
                     </>

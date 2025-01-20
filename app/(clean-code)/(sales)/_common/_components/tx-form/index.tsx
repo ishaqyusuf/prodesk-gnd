@@ -65,7 +65,13 @@ export function TxForm({}) {
     return (
         <Modal.Content className="side-modal-rounded">
             <Modal.Header
-                // onBack={(e) => {}}
+                onBack={
+                    tx.phoneNo
+                        ? (e) => {
+                              tx.dotUpdate("phoneNo", null);
+                          }
+                        : null
+                }
                 title={profile?.profile?.displayName || "Pay Portal"}
                 subtitle={profile?.profile?.phoneNo}
             />

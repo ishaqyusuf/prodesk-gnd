@@ -14,6 +14,7 @@ import {
 } from "../../use-case/sales-payment-use-case";
 import { toast } from "sonner";
 import { _modal } from "@/components/common/modal/provider";
+import { isProdClient } from "@/lib/is-prod";
 
 export type UsePayForm = ReturnType<typeof usePayForm>;
 export const usePayForm = () => {
@@ -52,31 +53,48 @@ export const usePayForm = () => {
                 });
         }
     }, [pm, tx.terminals]);
-    if (!tx.phoneNo) return null;
+
     async function terminalPay() {
+        setWaitSeconds(null);
         const data = form.getValues();
+        const deviceName = tx.terminals?.find(
+            (t) => t.value == data.deviceId
+        )?.label;
+        const amount = +tx.totalPay;
+
         const resp = await createTerminalPaymentAction({
-            amount: +tx.totalPay,
+            amount,
             deviceId: data.deviceId,
             allowTipping: data.enableTip,
-            deviceName: tx.terminals?.find((t) => t.value == data.deviceId)
-                ?.name,
+            deviceName,
         });
+
         if (resp.error) {
             toast.error(resp.error.message);
         } else {
             form.setValue("terminal", resp.resp);
             setWaitSeconds(0);
-            await terminalPaymentUpdate();
+            // await terminalPaymentUpdate();
         }
     }
-    const [waitSeconds, setWaitSeconds] = useState(0);
+    const [waitSeconds, setWaitSeconds] = useState(null);
+    useEffect(() => {
+        const status = terminal?.status;
+        if (status == "PENDING") {
+            console.log(waitSeconds);
+            // if (waitSeconds) {
+            //     return;
+            // }
+            // console.log("TERMINAL CHANGED", terminal);
+            terminalPaymentUpdate();
+        }
+    }, [terminal, waitSeconds]);
     async function paymentReceived() {
         const { resp, error } = await paymentReceivedAction(
             terminal?.squarePaymentId,
-            terminal?.tip
+            terminal?.squareCheckout?.id
         );
-        if (resp) {
+        if (resp || !isProdClient) {
             await pay();
         } else {
             toast.error(error?.message);
@@ -87,37 +105,45 @@ export const usePayForm = () => {
             terminal?.squareCheckout?.id,
             terminal?.squarePaymentId
         );
+        console.log(error, resp, terminal);
+
         if (error) {
             toast.error(error.message);
         } else form.setValue("terminal", null);
     }
     async function terminalPaymentUpdate() {
         return new Promise((resolve, reject) => {
-            setTimeout(async () => {
-                const status = terminal.status;
-                if (status == "PENDING") {
-                    const response = await checkTerminalPaymentStatusAction({
-                        checkoutId: terminal.squareCheckout?.id,
-                    });
-                    // form.setValue('terminal.status',response.status)
-                    switch (response.status) {
-                        case "COMPLETED":
-                            form.setValue("terminal.tip", response.tip);
-                            form.setValue("terminal.status", "COMPLETED");
-                            await paymentReceived();
-                            break;
-                        case "CANCELED":
-                        case "CANCEL_REQUESTED":
-                            form.setValue("terminal.status", "CANCELED");
-                            await cancelTerminalPayment();
-                            break;
-                        default:
-                            await terminalPaymentUpdate();
-                            setWaitSeconds(waitSeconds + 1);
-                            break;
+            setTimeout(
+                async () => {
+                    // console.log(terminal);
+                    // if (waitSeconds > 10) return;
+                    const status = terminal?.status;
+                    if (status == "PENDING") {
+                        const response = await checkTerminalPaymentStatusAction(
+                            {
+                                checkoutId: terminal.squareCheckout?.id,
+                            }
+                        );
+                        // form.setValue('terminal.status',response.status)
+                        switch (response.status) {
+                            case "COMPLETED":
+                                form.setValue("terminal.tip", response.tip);
+                                form.setValue("terminal.status", "COMPLETED");
+                                await paymentReceived();
+                                break;
+                            case "CANCELED":
+                            case "CANCEL_REQUESTED":
+                                form.setValue("terminal.status", "CANCELED");
+                                await cancelTerminalPayment();
+                                break;
+                            default:
+                                setWaitSeconds((waitSeconds || 0) + 1);
+                                break;
+                        }
                     }
-                }
-            }, 1000);
+                },
+                waitSeconds > 5 ? 2000 : waitSeconds > 10 ? 3000 : 1500
+            );
         });
     }
     async function pay() {

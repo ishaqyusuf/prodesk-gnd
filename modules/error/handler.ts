@@ -20,8 +20,8 @@ export async function errorHandler<T extends (...args: any) => any>(fn: T) {
         // return {
         //     error: "",
         // };
-        error = error.message;
-        err = error;
+        // error = error.message;
+        err = { message: error.message };
     }
     return {
         resp: rep,

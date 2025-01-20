@@ -2,6 +2,7 @@ import { env } from "@/env.mjs";
 import { Client, Environment } from "square";
 import { errorHandler } from "../error/handler";
 import { squareSalesPaymentCreatedDta } from "@/app/(clean-code)/(sales)/_common/data-access/wallet/sales-payment-dta";
+import { formatMoney } from "@/lib/use-number";
 
 export type TerminalCheckoutStatus =
     | "PENDING"
@@ -47,11 +48,15 @@ export interface CreateTerminalCheckoutProps {
 export async function createSquareTerminalCheckout(
     props: CreateTerminalCheckoutProps
 ) {
+    const amt = formatMoney(props.amount);
+    const cent = Math.round(props.amount * 100);
+    const amount = BigInt(cent);
+
     const resp = await client.terminalApi.createTerminalCheckout({
-        idempotencyKey: props.idempotencyKey,
+        idempotencyKey: props.idempotencyKey || new Date().toISOString(),
         checkout: {
             amountMoney: {
-                amount: BigInt(Number(props.amount) * 100),
+                amount,
                 currency: "USD",
             },
             deviceOptions: {

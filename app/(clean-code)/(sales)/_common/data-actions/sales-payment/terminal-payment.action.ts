@@ -9,7 +9,7 @@ import {
 } from "@/modules/square";
 import { SquarePaymentMethods } from "../../../types";
 import { authId } from "@/app/(v1)/_actions/utils";
-import { cancelTerminalPayment, SquarePaymentStatus } from "@/_v2/lib/square";
+import { __cancelTerminalPayment, SquarePaymentStatus } from "@/_v2/lib/square";
 import { AsyncFnType } from "@/types";
 
 interface Props extends CreateTerminalCheckoutProps {}
@@ -19,6 +19,7 @@ export type CreateTerminalPaymentAction = AsyncFnType<
 export async function createTerminalPaymentAction(props: Props) {
     return await errorHandler(async () => {
         const checkout = await createSquareTerminalCheckout(props);
+
         const squarePayment = await prisma.squarePayments.create({
             data: {
                 paymentId: checkout.id,
@@ -44,8 +45,9 @@ export async function createTerminalPaymentAction(props: Props) {
                 },
             },
         });
+        console.log(squarePayment);
         return {
-            squarePaymentId: squarePayment.paymentId,
+            squarePaymentId: squarePayment.id,
             squareCheckout: checkout,
             status: squarePayment.status as SquarePaymentStatus,
             tip: null,
@@ -68,12 +70,21 @@ export async function cancelTerminalCheckoutAction(
     return await errorHandler(async () => {
         if (checkoutId) {
             const { status, tip } = await getTerminalPaymentStatus(checkoutId);
+
             if (status == "COMPLETED")
                 throw new Error("Payment already received!");
-            await cancelTerminalPayment(checkoutId);
+            await __cancelTerminalPayment(checkoutId);
+            // await prisma.squarePayments.update({
+            //     where: {
+            //         id: checkoutId,
+            //     },
+            //     data: {
+            //         status: "CANCELED" as SquarePaymentStatus,
+            //     },
+            // });
         }
         if (squarePaymentId) {
-            await prisma.squarePayments.update({
+            const r = await prisma.squarePayments.update({
                 where: {
                     id: squarePaymentId,
                     status: {

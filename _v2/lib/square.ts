@@ -420,6 +420,17 @@ export async function squarePaymentSuccessful(id) {
     if (p.status == "success") return;
     await paymentSuccess(p);
 }
+export async function __cancelTerminalPayment(checkoutId) {
+    // const p = await prisma.salesCheckout.findUnique({
+    //     where: {
+    //         id,
+    //     },
+    //     include: {
+    //         order: true,
+    //     },
+    // });
+    await client.terminalApi.cancelTerminalCheckout(checkoutId);
+}
 export async function cancelTerminalPayment(id) {
     const p = await prisma.salesCheckout.findUnique({
         where: {

@@ -26,12 +26,24 @@ export async function fundCustomerWalletDta({
     const tx = await prisma.customerTransaction.create({
         data: {
             amount,
-            walletId: accountId,
+            // walletId: accountId,
+            wallet: {
+                connect: {
+                    id: accountId,
+                },
+            },
             authorId: await userId(),
             paymentMethod,
             description,
             status: "success" as SalesPaymentStatus,
-            squarePaymentId: squarePaymentId ? squarePaymentId : undefined,
+            // squarePID: squarePaymentId ? squarePaymentId : undefined,
+            squarePayment: squarePaymentId
+                ? {
+                      connect: {
+                          id: squarePaymentId,
+                      },
+                  }
+                : undefined,
         },
     });
     return tx;
