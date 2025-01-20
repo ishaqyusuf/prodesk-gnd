@@ -7,9 +7,12 @@ import { SalesInfoTab } from "./tabs/sales-info-tab";
 import { useSalesOverview } from "./hook";
 import { Footer } from "./footer";
 import { SalesItemsTab } from "./tabs/sales-items-tab";
+import { SalesShippingOverview } from "./tabs/sales-shipping-form";
+import { SalesShippingForm } from "./tabs/sales-shipping-tab";
 
 interface OpenSalesOverviewProps {
     salesId;
+    shippingId?;
 }
 export function openQuoteOVerview(props: OpenSalesOverviewProps) {
     salesOverviewStore.getState().reset({
@@ -46,7 +49,8 @@ export function openDispatchModal(props: OpenSalesOverviewProps) {
     salesOverviewStore.getState().reset({
         salesId: props.salesId,
         tabs: salesTabs.admin,
-        currentTab: "items",
+        currentTab: "shipping_overview",
+        shippingViewId: props.shippingId,
         adminMode: true,
         showTabs: true,
     });
@@ -127,6 +131,15 @@ function PrimaryTab({}) {
                 </TabContent>
                 <TabContent tabName="items">
                     <SalesItemsTab />
+                </TabContent>
+                <TabContent tabName="shipping">
+                    <SalesItemsTab />
+                </TabContent>
+                <TabContent tabName="shipping_form">
+                    <SalesShippingForm />
+                </TabContent>
+                <TabContent tabName="shipping_overview">
+                    <SalesShippingOverview />
                 </TabContent>
             </Modal.ScrollArea>
             {store.showFooter && (

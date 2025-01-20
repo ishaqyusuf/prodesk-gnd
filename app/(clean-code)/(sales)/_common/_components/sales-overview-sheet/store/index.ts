@@ -11,6 +11,7 @@ export type SalesTabs =
     | "payments"
     | "shipping"
     | "shipping_overview"
+    | "shipping_form"
     | "notification";
 const data = {
     salesId: null,
@@ -20,6 +21,7 @@ const data = {
     itemView: null as GetSalesItemOverviewAction["items"][number],
     payment: null,
     shipping: null,
+    shippingViewId: null,
     notification: null,
     currentTab: "sales_info" as SalesTabs,
     tabs: [] as { name: SalesTabs; label?; show?: boolean }[],
@@ -40,6 +42,7 @@ export const salesTabs = {
         // createTab("payments"),
         createTab("shipping"),
         createTab("shipping_overview", null, false),
+        createTab("shipping_form", null, false),
         createTab("notification"),
     ],
     quotes: [
