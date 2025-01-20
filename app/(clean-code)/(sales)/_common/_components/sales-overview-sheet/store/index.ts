@@ -10,6 +10,7 @@ export type SalesTabs =
     | "items"
     | "payments"
     | "shipping"
+    | "shipping_overview"
     | "notification";
 const data = {
     salesId: null,
@@ -21,7 +22,7 @@ const data = {
     shipping: null,
     notification: null,
     currentTab: "sales_info" as SalesTabs,
-    tabs: [] as { name: SalesTabs; label? }[],
+    tabs: [] as { name: SalesTabs; label?; show?: boolean }[],
     showTabs: false,
     tabPageLoading: false,
     tabPageLoadingTitle: null as any,
@@ -29,8 +30,8 @@ const data = {
     showFooter: false,
     adminMode: false,
 };
-function createTab(name: SalesTabs, label?) {
-    return { name, label: label || name?.split("_")?.join(" ") };
+function createTab(name: SalesTabs, label?, show = true) {
+    return { name, label: label || name?.split("_")?.join(" "), show };
 }
 export const salesTabs = {
     admin: [
@@ -38,6 +39,7 @@ export const salesTabs = {
         createTab("items"),
         // createTab("payments"),
         createTab("shipping"),
+        createTab("shipping_overview", null, false),
         createTab("notification"),
     ],
     quotes: [

@@ -48,6 +48,7 @@ export function openDispatchModal(props: OpenSalesOverviewProps) {
         tabs: salesTabs.admin,
         currentTab: "items",
         adminMode: true,
+        showTabs: true,
     });
     _modal.openSheet(<SalesOverviewModal />);
 }
@@ -111,7 +112,7 @@ function PrimaryTab({}) {
                 <TabsList className={cn("w-full", !store.showTabs && "hidden")}>
                     {store.tabs?.map((tab) => (
                         <TabsTrigger
-                            className="uppercase"
+                            className={cn("uppercase", !tab.show && "hidden")}
                             key={tab.name}
                             value={tab.name}
                         >

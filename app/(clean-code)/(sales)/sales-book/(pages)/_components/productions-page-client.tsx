@@ -45,7 +45,6 @@ export default function ProductionsPageClient({
             },
         },
     });
-
     return (
         <div className="bg-white">
             <DataTable.Infinity
