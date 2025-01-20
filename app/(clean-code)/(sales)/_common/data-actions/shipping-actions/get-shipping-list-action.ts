@@ -35,6 +35,7 @@ export async function getShippingListAction(query: SearchParamsType) {
             order: {
                 select: {
                     orderId: true,
+                    id: true,
                 },
             },
         },

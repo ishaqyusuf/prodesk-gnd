@@ -42,6 +42,15 @@ export function openSalesProductionModal(props: OpenSalesOverviewProps) {
     });
     _modal.openSheet(<SalesOverviewModal />);
 }
+export function openDispatchModal(props: OpenSalesOverviewProps) {
+    salesOverviewStore.getState().reset({
+        salesId: props.salesId,
+        tabs: salesTabs.admin,
+        currentTab: "items",
+        adminMode: true,
+    });
+    _modal.openSheet(<SalesOverviewModal />);
+}
 export function openSalesProductionTasksModal(props: OpenSalesOverviewProps) {
     salesOverviewStore.getState().reset({
         salesId: props.salesId,

@@ -11,6 +11,7 @@ import { DispatchOverviewSheet } from "../../../_common/_components/overview-she
 import { __filters } from "../../../_common/utils/contants";
 import { QueryTabAction } from "@/app/(clean-code)/_common/query-tab/query-tab-edit";
 import QueryTab from "@/app/(clean-code)/_common/query-tab";
+import { openDispatchModal } from "../../../_common/_components/sales-overview-sheet";
 
 interface Props {
     queryKey?;
@@ -58,6 +59,11 @@ export default function DispatchPageClient({ queryKey, filterFields }: Props) {
                 ActionCell={DispatchCells.Action}
                 queryKey={queryKey}
                 {...table.props}
+                itemViewFn={(item) => {
+                    openDispatchModal({
+                        salesId: item.order.id,
+                    });
+                }}
             >
                 <DataTable.Header top="lg" className="bg-white">
                     <div className="flex justify-between items-end mb-2 gap-2 sm:sticky">
