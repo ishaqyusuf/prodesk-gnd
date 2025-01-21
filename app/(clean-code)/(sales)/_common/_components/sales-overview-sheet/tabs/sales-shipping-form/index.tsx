@@ -1,6 +1,6 @@
 import { useForm, useFormContext } from "react-hook-form";
 import { salesOverviewStore } from "../../store";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Form } from "@/components/ui/form";
 import FormSelect from "@/components/common/controls/form-select";
 import { dispatchModes } from "../../../../utils/contants";
@@ -37,7 +37,11 @@ type ItemShippable = {
         formKey: string;
     }[];
 };
-type SelectionType = { [uid in string]: Partial<QtyControlByType["qty"]> };
+type SelectionType = {
+    [uid in string]: Partial<QtyControlByType["qty"]> & {
+        selectionError?: boolean;
+    };
+};
 export function SalesShippingForm({}) {
     const store = salesOverviewStore();
     const shipping = store.shipping;
@@ -49,9 +53,17 @@ export function SalesShippingForm({}) {
             assignedToId: "",
             selection: {} as SelectionType,
             loaded: false,
+            markAll: false,
+            totalSelected: 0,
+            selectionError: false,
         },
     });
-    const [loaded] = form.watch(["loaded"]);
+    const [loaded, markAll, totalSelected] = form.watch([
+        "loaded",
+        "markAll",
+        "totalSelected",
+        "selectionError",
+    ]);
     useEffect(() => {
         const selection: SelectionType = {};
         itemView?.items?.map((k) => {
@@ -68,6 +80,7 @@ export function SalesShippingForm({}) {
         });
     }, [itemView]);
     if (!itemView) return null;
+    function selectAllAvailable() {}
     return (
         <Form {...form}>
             <div className="">
@@ -118,12 +131,15 @@ function ShippingItem({ item }: { item: Shippable["item"] }) {
         `${uid}.qty`,
         `${uid}.total`,
     ]);
+    const [shipInfo, setShipInfo] = useState<ItemShippable>({} as any);
+    // const totalShippables=  useMemo(() => {
+    //     return sum(shipInfo.deliveryCreatedQty)
+    // },[shipInfo])
     useEffect(() => {
         const _total = sum([lh, rh, qty]);
-        console.log(_total);
+        const deliverableQty = shipInfo.deliverableQty;
         form.setValue(`${uid}.total`, _total);
-    }, [lh, rh, qty]);
-    const [shipInfo, setShipInfo] = useState<ItemShippable>({} as any);
+    }, [lh, rh, qty, shipInfo]);
     useEffect(() => {
         // console.log(item?.status);
         let shipping: ItemShippable = {
@@ -135,7 +151,6 @@ function ShippingItem({ item }: { item: Shippable["item"] }) {
             pendingProductionQty: 0,
             qty: 0,
         };
-
         function qtyShip(k: "lh" | "rh" | "qty") {
             function getValue(fromStatus: keyof typeof status) {
                 return status?.[fromStatus]?.[k] || 0;

@@ -246,16 +246,27 @@ export async function getSalesItemsOverviewAction({
         let itemControlUid;
         const hpt = item.housePackageTool;
         const doors = hpt?.doors;
-        const itemConfigs: { label; value }[] = [];
+        const itemConfigs: { label; value; color? }[] = [];
         let sectionTitle = item.dykeDescription;
         item.formSteps.map((fs) => {
-            if (!sectionTitle && fs.step.title?.toLowerCase() == "item type")
-                sectionTitle = fs.value;
+            const title = fs.step.title?.toLowerCase();
+            if (!sectionTitle && title == "item type") sectionTitle = fs.value;
+            if (!fs.value) return;
             itemConfigs.push({
+                color:
+                    title == "hinge finish" &&
+                    !fs.value?.toLowerCase().startsWith("us15")
+                        ? "red"
+                        : null,
                 label: fs.step?.title,
                 value: fs.value,
             });
         });
+        // us15
+        console.log(item.formSteps?.length);
+
+        console.log(itemConfigs);
+
         if (!order.isDyke || (!doors?.length && !hpt?.door)) {
             const assignments = order.assignments.filter(
                 (a) => !a.salesDoorId && a.itemId == item.id
@@ -269,6 +280,7 @@ export async function getSalesItemsOverviewAction({
             items.push({
                 itemId: item.id,
                 sectionTitle,
+                itemConfigs,
                 itemIndex,
                 itemControlUid,
                 status: {},

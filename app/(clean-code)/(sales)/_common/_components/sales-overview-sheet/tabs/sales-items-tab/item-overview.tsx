@@ -23,6 +23,7 @@ import { DatePicker } from "@/components/(clean-code)/custom/controlled/date-pic
 import { Minimize } from "lucide-react";
 import { ItemAssignments } from "./assignments";
 import { createItemAssignmentAction } from "../../../../data-actions/production-actions/item-assign-action";
+import { cn } from "@/lib/utils";
 
 export function ItemOverview({}) {
     const store = salesOverviewStore();
@@ -34,6 +35,21 @@ export function ItemOverview({}) {
     return (
         <div className="p-4">
             <div>
+                <div className="grid grid-cols-2 gap-2">
+                    {itemView.itemConfigs?.map((config, index) => (
+                        <div className="font-mono text-sm" key={index}>
+                            <span className="uppercase">{config?.label}: </span>
+                            <span
+                                className={cn(
+                                    "font-mono uppercase font-bold",
+                                    config.color == "red" && "text-red-700"
+                                )}
+                            >
+                                {config?.value}
+                            </span>
+                        </div>
+                    ))}
+                </div>
                 <div className="flex gap-4">
                     <AdminOnly>
                         <Button
