@@ -18,7 +18,7 @@ import {
 import { MenuOption, useSalesMenu } from "../../utils/use-sales-menu";
 import { deleteOrderAction } from "@/app/(v1)/(loggedIn)/sales/_actions/sales";
 import { cn, sum } from "@/lib/utils";
-import { GetSales } from "@/data-acces/sales";
+import { GetSales } from "@/data-access/sales";
 import { useAssignment } from "../../../sales-v2/productions/_components/_modals/assignment-modal/use-assignment";
 import { Button } from "@/components/ui/button";
 import FStatusBadge from "@/components/(clean-code)/fikr-ui/f-status-badge";

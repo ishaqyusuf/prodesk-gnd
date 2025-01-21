@@ -1,6 +1,6 @@
 "use server";
 
-import { getSales } from "@/data-acces/sales";
+import { getSales } from "@/data-access/sales";
 import { BaseQuery } from "@/types/action";
 import { DeliveryOption, ISalesType } from "@/types/sales";
 import { Prisma } from "@prisma/client";

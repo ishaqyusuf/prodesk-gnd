@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import { useForm, useFormContext } from "react-hook-form";
 import { salesOverviewStore } from "../../store";
 import { useEffect, useState } from "react";
 import { Form } from "@/components/ui/form";
@@ -14,6 +14,7 @@ import Portal from "@/components/_v1/portal";
 import { GetSalesItemOverviewAction } from "../../../../data-actions/sales-items-action";
 import { Menu } from "@/components/(clean-code)/menu";
 import { sum } from "@/lib/utils";
+import FormInput from "@/components/common/controls/form-input";
 
 type Shippable = {
     item: GetSalesItemOverviewAction["items"][number];
@@ -84,9 +85,11 @@ export function SalesShippingForm({}) {
                             <FormSelect
                                 size="xs"
                                 className=""
-                                options={dispatchModes}
+                                options={store.dispatchUsers}
+                                titleKey="name"
+                                valueKey="id"
                                 control={form.control}
-                                name="dispatchMode"
+                                name="assignedToId"
                                 placeholder={"Assigned To"}
                             />
                         </div>
@@ -167,17 +170,26 @@ function ShippingItem({ item }: { item: Shippable["item"] }) {
     return (
         <div className="border-b">
             <div className="flex">
-                <div className="flex-1 cursor-pointer">
-                    <div className="text-sm font-semibold">{item?.title}</div>
-                    <div className="uppercase text-muted-foreground text-xs font-bold space-x-2">
-                        <span>{item.sectionTitle}</span>
+                <div className="space-y-4 py-2 flex-1">
+                    <div className="flex-1 cursor-pointer">
+                        <div className="text-sm font-semibold">
+                            {item?.title}
+                        </div>
+                        <div className="uppercase text-muted-foreground text-xs font-bold space-x-2">
+                            <span>{item.sectionTitle}</span>
+                        </div>
+                    </div>
+                    <div className="flex gap-2">
+                        {shipInfo?.inputs?.map((input, ii) => (
+                            <QtyInput
+                                uid={item.itemControlUid}
+                                input={input}
+                                key={ii}
+                            />
+                        ))}
                     </div>
                 </div>
-                <div className="">
-                    {shipInfo?.inputs?.map((input) => (
-                        <div>{input.available}</div>
-                    ))}
-                </div>
+
                 <div className="">
                     <Menu>
                         <Menu.Item>Submit All Pending</Menu.Item>
@@ -185,6 +197,44 @@ function ShippingItem({ item }: { item: Shippable["item"] }) {
                     </Menu>
                 </div>
             </div>
+        </div>
+    );
+}
+function QtyInput({ uid, input }) {
+    let available = input.available;
+    available = 100;
+    if (!available) return null;
+    // console.log(available);
+
+    const form = useFormContext();
+
+    const inputOptions = Array(available + 1)
+        ?.fill(0)
+        .map((a, i) => i?.toString());
+
+    return (
+        <div className="flex items-center">
+            <span className="uppercase text-xs font-semibold">
+                {input.label}:
+            </span>
+            {inputOptions.length > 15 ? (
+                <FormInput
+                    className="w-20"
+                    type="number"
+                    size="sm"
+                    control={form.control}
+                    name={`${uid}.${input.formKey}`}
+                />
+            ) : (
+                <FormSelect
+                    size="sm"
+                    className="w-20"
+                    control={form.control}
+                    name={`${uid}.${input.formKey}`}
+                    options={inputOptions}
+                />
+            )}
+            <span className="text-xs font-bold">/{available}</span>
         </div>
     );
 }

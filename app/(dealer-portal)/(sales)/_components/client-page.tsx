@@ -4,7 +4,7 @@ import FPageNav from "@/components/(clean-code)/fikr-ui/f-page-nav";
 import PageHeader from "@/components/_v1/page-header";
 import { useDataTableColumn2 } from "@/components/common/data-table/columns/use-data-table-columns";
 
-import { GetSales } from "@/data-acces/sales";
+import { GetSales } from "@/data-access/sales";
 import { use } from "react";
 import { DataTable } from "@/app/_components/data-table";
 import { TableToolbar } from "@/app/_components/data-table/toolbar";

@@ -1,4 +1,4 @@
-import { getAllSales, SalesQueryParam2 } from "@/data-acces/sales";
+import { getAllSales, SalesQueryParam2 } from "@/data-access/sales";
 import { composeListOrders } from "@/data/compose-sales";
 import { AsyncFnType } from "@/types";
 

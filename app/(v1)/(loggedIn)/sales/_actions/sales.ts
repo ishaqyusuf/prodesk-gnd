@@ -19,7 +19,7 @@ import { _revalidate } from "../../../_actions/_revalidate";
 import { _saveSales } from "@/app/(v2)/(loggedIn)/sales/_data-access/save-sales.persistence";
 import { _updateProdQty } from "@/app/(v2)/(loggedIn)/sales/_data-access/update-prod-qty.dac";
 import { redirect } from "next/navigation";
-import { getSales } from "@/data-acces/sales";
+import { getSales } from "@/data-access/sales";
 import { isNewSales } from "@/app/(clean-code)/(sales)/_common/utils/sales-utils";
 
 export async function getSalesOrder(query: SalesQueryParams) {

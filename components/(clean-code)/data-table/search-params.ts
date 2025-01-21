@@ -2,18 +2,21 @@ import {
     createParser,
     createSearchParamsCache,
     createSerializer,
+    parseAsArrayOf,
     parseAsBoolean,
     parseAsInteger,
     parseAsString,
+    parseAsStringLiteral,
     type inferParserType,
 } from "nuqs/server";
 // Note: import from 'nuqs/server' to avoid the "use client" directive
-import { SORT_DELIMITER } from "@/lib/delimiters";
+import { ARRAY_DELIMITER, SORT_DELIMITER } from "@/lib/delimiters";
 import { z } from "zod";
 import {
     DISPATCH_FILTER_OPTIONS,
     PRODUCTION_STATUS,
 } from "@/app/(clean-code)/(sales)/_common/utils/contants";
+import { PERMISSIONS } from "@/data/contants/permissions";
 // import { REGIONS } from "@/constants/region";
 // import { METHODS } from "@/constants/method";
 
@@ -85,6 +88,10 @@ export const searchParamsParser: {
     "sales.id": parseAsInteger,
     _q: parseAsString,
     id: parseAsInteger,
+    "user.permissions": parseAsArrayOf(
+        parseAsStringLiteral(PERMISSIONS),
+        ARRAY_DELIMITER
+    ),
 };
 export const searchSchema = z.object({
     id: z.number().optional(),
@@ -105,6 +112,7 @@ export const searchSchema = z.object({
     "sales.type": z.enum(["order", "quote"]).optional(),
     "dealer.id": z.number().optional(),
     "sales.id": z.number().optional(),
+    "user.permissions": z.enum(PERMISSIONS).optional(),
 });
 export const searchParamsCache = createSearchParamsCache(searchParamsParser);
 export const searchParamsSerializer = createSerializer(searchParamsParser);

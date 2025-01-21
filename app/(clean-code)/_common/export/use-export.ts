@@ -1,5 +1,5 @@
 import useEffectLoader from "@/lib/use-effect-loader";
-import { getExportConfigs } from "../../../../data-acces/(clean-code)/export";
+import { getExportConfigs } from "../../../../data-access/(clean-code)/export";
 import { ExportForm, TypedExport } from "./type";
 import { useForm } from "react-hook-form";
 import { useEffect } from "react";

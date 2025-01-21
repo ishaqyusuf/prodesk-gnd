@@ -1,16 +1,10 @@
 import { Label } from "@/components/ui/label";
 import { ModelFormProps } from "./model-form";
 import { Input } from "@/components/ui/input";
-import { UseFormRegister } from "react-hook-form";
 import { HomeTemplateDesign } from "@/types/community";
 import { addSpacesToCamelCase, cn, dotArray } from "@/lib/utils";
 import { _useId } from "@/hooks/use-id";
-import { Popover, PopoverContent } from "@/components/ui/popover";
 import { useState } from "react";
-import { Checkbox } from "@/components/ui/checkbox";
-import { useAppSelector } from "@/store";
-import AutoComplete from "@/components/_v1/auto-complete-tw";
-import { useDataPage } from "@/lib/data-page-context";
 
 interface ModelFormSectionProps<T> {
     section?;

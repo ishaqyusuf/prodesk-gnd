@@ -4,6 +4,7 @@ import { loadSalesOverviewAction } from "../../data-actions/sales-overview.actio
 import { validateSalesStatControlAction } from "../../data-actions/sales-stat-control.action";
 import { getSalesItemsOverviewAction } from "../../data-actions/sales-items-action";
 import { salesDispatchListOverview } from "../../data-actions/dispatch-actions/dispatch-overview-action";
+import { getDispatchUsersListAction } from "@/data-actions/users/get-users";
 
 interface LoadPageDataProps {
     dataKey: keyof Data;
@@ -27,17 +28,15 @@ export const loaders: Partial<{ [k in keyof Data]: any }> = {
     shipping: async () => {
         return salesDispatchListOverview(salesOverviewStore.getState().salesId);
     },
-    // shippingForm: async () => {
-    //     return dispatchOverviewAction(
-    //         salesOverviewStore.getState().shippingViewId
-    //     );
-    // },
+    dispatchUsers: async () => {
+        return getDispatchUsersListAction();
+    },
 };
 export const tabLoaders: Partial<{ [k in SalesTabs]: (keyof Data)[] }> = {
     sales_info: ["overview"],
     items: ["overview", "itemOverview"],
     shipping: ["overview", "shipping"],
-    shipping_form: ["overview", "shipping", "itemOverview"],
+    shipping_form: ["overview", "dispatchUsers", "shipping", "itemOverview"],
 };
 export const getOpenItem = () => {
     const state = salesOverviewStore.getState();
@@ -60,7 +59,6 @@ export const getPendingAssignments = () => {
         if (!v) data[k] = null;
         else {
             data[k] = String(v);
-
             forms.push({
                 label: k,
                 options: Array(v)
@@ -83,7 +81,6 @@ export async function loadPageData({ dataKey, reload }: LoadPageDataProps) {
     await loadFn()
         .then((result) => {
             store.update(dataKey as any, result);
-
             store.update("tabLoadFailed", false);
             store.update("tabPageLoading", false);
             store.update("tabPageLoadingTitle", null);

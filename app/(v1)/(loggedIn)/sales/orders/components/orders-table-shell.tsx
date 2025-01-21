@@ -38,7 +38,7 @@ import { TableCol } from "@/components/common/data-table/table-cells";
 import { ServerPromiseType } from "@/types";
 import useDataTableColumn from "@/components/common/data-table/columns/use-data-table-columns";
 import { SalesCells } from "./cells";
-import { GetSales } from "@/data-acces/sales";
+import { GetSales } from "@/data-access/sales";
 
 // type DataServerPromiseType = ServerPromiseType<typeof getSalesOrder>;
 export type SalesTableItem = GetSales["data"][number];

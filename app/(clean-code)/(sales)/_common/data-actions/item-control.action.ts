@@ -82,14 +82,15 @@ export async function getSalesItemControllablesInfoAction(salesId) {
         where: { id: salesId },
         select: {
             id: true,
-
             itemControls: {
+                where: { deletedAt: null },
                 include: {
                     qtyControls: true,
                 },
             },
             stat: true,
             deliveries: {
+                where: { deletedAt: null },
                 select: {
                     id: true,
                     status: true,
@@ -111,6 +112,7 @@ export async function getSalesItemControllablesInfoAction(salesId) {
                             rhQty: true,
                             lhQty: true,
                             itemDeliveries: {
+                                where: { deletedAt: null },
                                 select: {
                                     status: true,
                                     orderDeliveryId: true,

@@ -4,6 +4,7 @@ import { create } from "zustand";
 import { LoadSalesOverviewAction } from "../../../data-actions/sales-overview.action";
 import { GetSalesItemOverviewAction } from "../../../data-actions/sales-items-action";
 import { DispatchOverviewAction } from "../../../data-actions/dispatch-actions/dispatch-overview-action";
+import { GetUsersList } from "@/data-actions/users/get-users";
 
 export type SalesTabs =
     | "sales_info"
@@ -21,6 +22,7 @@ const data = {
     itemViewId: null as any,
     itemView: null as GetSalesItemOverviewAction["items"][number],
     payment: null,
+    dispatchUsers: null as GetUsersList,
     shipping: null as DispatchOverviewAction,
     shippingForm: null as DispatchOverviewAction,
     shippingViewId: null,

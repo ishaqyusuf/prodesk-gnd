@@ -2,7 +2,7 @@
 
 import { prisma } from "@/db";
 import { ExportTypes } from "./type";
-import { SalesQueryParams, whereSales } from "@/data-acces/sales";
+import { SalesQueryParams, whereSales } from "@/data-access/sales";
 
 export async function getExportData(type: ExportTypes, query, includes) {
     switch (type) {

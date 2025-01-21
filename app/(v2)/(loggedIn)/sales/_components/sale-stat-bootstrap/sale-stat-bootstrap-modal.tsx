@@ -5,7 +5,7 @@ import { loadSales } from "./action";
 import { Table, TableBody, TableRow } from "@/components/ui/table";
 import { TableCell } from "@/app/_components/data-table/table-cells";
 import { useModal } from "@/components/common/modal/provider";
-import { updateSalesStat } from "@/data-acces/sales.stats";
+import { updateSalesStat } from "@/data-access/sales.stats";
 import { toast } from "sonner";
 import { useEffect, useState } from "react";
 import { Checkbox } from "@/components/ui/checkbox";

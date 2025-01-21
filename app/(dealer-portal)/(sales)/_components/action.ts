@@ -1,7 +1,7 @@
 "use server";
 
 import { userId } from "@/app/(v1)/_actions/utils";
-import { getSales, SalesQueryParams } from "@/data-acces/sales";
+import { getSales, SalesQueryParams } from "@/data-access/sales";
 import { ISalesType } from "@/types/sales";
 
 export async function getDealerSales(

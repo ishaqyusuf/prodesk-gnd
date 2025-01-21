@@ -1,4 +1,4 @@
-import { SalesItem } from "@/data-acces/sales";
+import { SalesItem } from "@/data-access/sales";
 import { sum } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import { composeTotalDeliverables } from "@/data/compose-sales";

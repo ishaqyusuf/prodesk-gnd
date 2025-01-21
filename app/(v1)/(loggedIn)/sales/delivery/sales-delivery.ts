@@ -3,7 +3,7 @@
 import { SalesQueryParams } from "@/types/sales";
 import { prisma } from "@/db";
 import { _revalidate } from "../../../_actions/_revalidate";
-import { getSales } from "@/data-acces/sales";
+import { getSales } from "@/data-access/sales";
 
 export async function getSalesDelivery(query: SalesQueryParams) {
     query.deliveryOption = "delivery";
