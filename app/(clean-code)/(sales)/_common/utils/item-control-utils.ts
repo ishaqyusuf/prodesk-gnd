@@ -86,6 +86,12 @@ export function qtyControlsByType(qtyControls: QtyControl[]) {
 export function composeQtyControl(props: ComposeQtyControlProps) {
     const totalQty = props.qty ? props.qty : sum([props.lh, props.rh]);
     if (!totalQty) return [];
+    const previousControls = qtyControlsByType(
+        props.order?.itemControls?.filter(
+            (c) => c.uid == props.controlUid
+        ) as any
+    );
+
     const controls: QtyControlByType = {} as any;
     controls.qty = {
         qty: props.qty,
@@ -93,6 +99,7 @@ export function composeQtyControl(props: ComposeQtyControlProps) {
         rh: props.rh,
         type: "qty",
         itemControlUid: props.controlUid,
+        autoComplete: previousControls?.qty?.autoComplete,
     };
     let assignments = props.order.assignments.filter((a) =>
         props.doorId ? a.salesDoorId == props.doorId : a.itemId == props.itemId
@@ -104,6 +111,7 @@ export function composeQtyControl(props: ComposeQtyControlProps) {
         qty: singleHandle ? sum(assignments, "qtyAssigned") : 0,
         type: "prodAssigned",
         itemControlUid: props.controlUid,
+        autoComplete: previousControls?.prodAssigned?.autoComplete,
     };
     const submissions = assignments.map((a) => a.submissions).flat();
     controls.prodCompleted = {
@@ -112,6 +120,7 @@ export function composeQtyControl(props: ComposeQtyControlProps) {
         qty: singleHandle ? sum(submissions, "qty") : 0,
         type: "prodCompleted",
         itemControlUid: props.controlUid,
+        autoComplete: previousControls?.prodCompleted?.autoComplete,
     };
     const deliveries = props.order.deliveries;
     const dispatches = submissions.map((s) => s.itemDeliveries).flat();
@@ -131,6 +140,7 @@ export function composeQtyControl(props: ComposeQtyControlProps) {
             qty: singleHandle ? sum(dispatchItems, "qty") : 0,
             type: controlType,
             itemControlUid: props.controlUid,
+            autoComplete: previousControls?.[controlType]?.autoComplete,
         };
     }
     registerDispatch("cancelled", "dispatchCancelled");
@@ -138,7 +148,11 @@ export function composeQtyControl(props: ComposeQtyControlProps) {
     registerDispatch("in progress", "dispatchInProgress");
     registerDispatch("queue", "dispatchAssigned");
     return Object.values(controls).map((control) => {
-        const _totalQty = sum([control.qty, control.lh, control.rh]);
+        const _totalQty = control.autoComplete
+            ? totalQty
+            : sum([control.qty, control.lh, control.rh]);
+        // if (control.autoComplete) control.total = control.qty;
+        // else
         control.total = _totalQty;
         control.percentage = percent(_totalQty, totalQty);
         return control;

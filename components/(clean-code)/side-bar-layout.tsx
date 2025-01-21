@@ -4,6 +4,8 @@ import { useStore } from "../../app/(clean-code)/_common/hooks/use-store";
 import { useSidebarToggle } from "../../app/(clean-code)/_common/hooks/use-sidebar-toggle";
 import { Sidebar } from "./nav/sidebar";
 import { cn } from "@/lib/utils";
+import { useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
 
 export default function SidebarLayout({
     children,
@@ -11,6 +13,13 @@ export default function SidebarLayout({
     children: React.ReactNode;
 }) {
     const sidebar = useStore(useSidebarToggle, (state) => state);
+    const { data: session } = useSession({
+        required: true,
+        onUnauthenticated() {
+            redirect("/login");
+        },
+    });
+    if (!session?.user) return <></>;
     if (!sidebar) return null;
 
     return (

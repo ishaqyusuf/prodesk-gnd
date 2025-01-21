@@ -221,8 +221,6 @@ export async function updateItemQtyControlsAction(uid) {
 export async function updateSalesItemControlAction(salesId) {
     const order = await getSalesItemControllablesInfoAction(salesId);
 
-    console.log(order.assignments);
-
     const controls = composeControls(order);
 
     const resp = await prisma.$transaction((async (tx: typeof prisma) => {

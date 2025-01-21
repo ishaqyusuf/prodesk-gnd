@@ -1,4 +1,3 @@
-import AuthGuard from "@/app/(v2)/(loggedIn)/_components/auth-guard";
 import { ContentLayout } from "../../../components/(clean-code)/content-layout";
 import SidebarLayout from "../../../components/(clean-code)/side-bar-layout";
 import BackwardCompat from "./_backward-compat";

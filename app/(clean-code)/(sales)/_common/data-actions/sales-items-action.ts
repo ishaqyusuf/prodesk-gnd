@@ -154,6 +154,8 @@ export async function getSalesItemsOverviewAction({
                                     "prodAssigned",
                                     "prodCompleted",
                                     "qty",
+                                    "dispatchAssigned",
+                                    "dispatchInProgress",
                                 ] as QtyControlType[],
                             },
                         },
