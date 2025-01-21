@@ -62,6 +62,7 @@ export default function DispatchPageClient({ queryKey, filterFields }: Props) {
                 itemViewFn={(item) => {
                     openDispatchModal({
                         salesId: item.order.id,
+                        shippingId: item.id,
                     });
                 }}
             >

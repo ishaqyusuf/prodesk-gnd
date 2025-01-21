@@ -3,6 +3,7 @@ import { Data, salesOverviewStore, SalesTabs } from "./store";
 import { loadSalesOverviewAction } from "../../data-actions/sales-overview.action";
 import { validateSalesStatControlAction } from "../../data-actions/sales-stat-control.action";
 import { getSalesItemsOverviewAction } from "../../data-actions/sales-items-action";
+import { dispatchOverviewAction } from "../../data-actions/dispatch-actions/dispatch-overview-action";
 
 interface LoadPageDataProps {
     dataKey: keyof Data;
@@ -22,6 +23,11 @@ export const loaders: Partial<{ [k in keyof Data]: any }> = {
             salesId: salesOverviewStore.getState().salesId,
             adminMode: salesOverviewStore.getState().adminMode,
         });
+    },
+    shippingViewId: async () => {
+        return dispatchOverviewAction(
+            salesOverviewStore.getState().shippingViewId
+        );
     },
 };
 export const tabLoaders: Partial<{ [k in SalesTabs]: (keyof Data)[] }> = {

@@ -31,7 +31,11 @@ export async function loadDispatchListAction(query: SearchParamsType) {
     const data = await prisma.orderDelivery.findMany({
         where,
         ...pageQueryFilter(query),
-        include: {
+        select: {
+            id: true,
+            status: true,
+            createdAt: true,
+            deliveryMode: true,
             driver: true,
             createdBy: true,
             items: {
@@ -69,13 +73,13 @@ export async function loadDispatchListAction(query: SearchParamsType) {
                             },
                         },
                     },
-                    order: {
-                        select: {
-                            orderId: true,
-                            id: true,
-                            amountDue: true,
-                        },
-                    },
+                },
+            },
+            order: {
+                select: {
+                    orderId: true,
+                    id: true,
+                    amountDue: true,
                 },
             },
         },

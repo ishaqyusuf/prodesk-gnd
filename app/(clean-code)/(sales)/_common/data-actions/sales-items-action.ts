@@ -21,6 +21,7 @@ interface GetSalesItemOverviewActionProps {
     salesId;
     producerId?;
     adminMode?: boolean;
+    dispatchId?;
 }
 export async function getSalesItemsOverviewAction({
     salesId,
@@ -347,7 +348,6 @@ export async function getSalesItemsOverviewAction({
             }
             return true;
         });
-
     return {
         items,
     };

@@ -2,9 +2,9 @@ import { TCell } from "@/components/(clean-code)/data-table/table-cells";
 
 import { Progress } from "@/components/(clean-code)/progress";
 
-import { ShippingListItem } from "../../../_common/data-actions/shipping-actions/get-shipping-list-action";
+import { TransformedDispatchListItem } from "../../../_common/data-actions/dispatch-actions/dispatch-list-dto";
 type ItemProps = {
-    item: ShippingListItem;
+    item: TransformedDispatchListItem;
 };
 function Status({ item }: ItemProps) {
     return (
@@ -44,14 +44,14 @@ function Address({ item }: ItemProps) {
 function SalesRep({ item }: ItemProps) {
     return (
         <TCell>
-            <TCell.Secondary>{item.createdBy?.name}</TCell.Secondary>
+            <TCell.Secondary>{item.author?.name}</TCell.Secondary>
         </TCell>
     );
 }
 function DispatchId({ item }: ItemProps) {
     return (
         <TCell>
-            <TCell.Secondary>{item.dispatchId}</TCell.Secondary>
+            <TCell.Secondary>{item.uid}</TCell.Secondary>
         </TCell>
     );
 }
@@ -69,8 +69,8 @@ function Dispatcher({ item }: ItemProps) {
     return (
         <TCell>
             <TCell.Status
-                status={item.driver?.name || "Not Assigned"}
-                color={item.driver?.id ? "red" : null}
+                status={item.assignedTo?.name || "Not Assigned"}
+                color={item.assignedTo?.id ? "red" : null}
             />
         </TCell>
     );

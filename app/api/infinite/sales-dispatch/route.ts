@@ -1,6 +1,4 @@
-import { getSalesOrdersDta } from "@/app/(clean-code)/(sales)/_common/data-access/sales-dta";
-import { getProductionListPageAction } from "@/app/(clean-code)/(sales)/_common/data-actions/production-actions/productions-list-action";
-import { getShippingListPageAction } from "@/app/(clean-code)/(sales)/_common/data-actions/shipping-actions/get-shipping-list-action";
+import { getDispatchListActions } from "@/app/(clean-code)/(sales)/_common/data-actions/dispatch-actions/dispatch-list-action";
 
 import {
     FilterParams,
@@ -18,5 +16,5 @@ export async function GET(req: NextRequest) {
     } as FilterParams;
     const search = searchParamsCache.parse(_ as any);
 
-    return Response.json(await getShippingListPageAction(search as any));
+    return Response.json(await getDispatchListActions(search as any));
 }

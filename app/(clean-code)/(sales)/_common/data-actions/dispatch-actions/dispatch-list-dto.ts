@@ -4,7 +4,7 @@ import { generateDispatchId } from "../../utils/dispatch-utils";
 import { LoadDispatchListAction } from "./dispatch-list-action";
 import { sum } from "@/lib/utils";
 import { formatDate } from "@/lib/use-day";
-type DispatchItem = LoadDispatchListAction[number]["items"][number];
+export type DispatchItem = LoadDispatchListAction[number]["items"][number];
 
 export function transformDispatchList(dispatch: LoadDispatchListAction[0]) {
     const items = dispatch.items.map(transformDispatchListItem);
@@ -26,6 +26,7 @@ export function transformDispatchList(dispatch: LoadDispatchListAction[0]) {
         uid: generateDispatchId(dispatch.id),
         items,
         status: dispatch.status as SalesDispatchStatus,
+        deliveryMode: dispatch.deliveryMode as "pickup" | "delivery",
         assignedTo: {
             id: dispatch.driver?.id,
             name: dispatch.driver?.name,
@@ -35,10 +36,14 @@ export function transformDispatchList(dispatch: LoadDispatchListAction[0]) {
             name: dispatch?.createdBy?.name,
         },
         totalQty: qty.total,
+        createdAt: dispatch.createdAt,
+        order: dispatch.order,
         date: formatDate(dispatch.createdAt),
     };
 }
-
+export type TransformedDispatchListItem = ReturnType<
+    typeof transformDispatchList
+>;
 export function transformDispatchListItem(item: DispatchItem) {
     const {
         lhQty,

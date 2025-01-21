@@ -144,7 +144,7 @@ function BatchActions() {
                         <PrintAction
                             pdf
                             data={{
-                                slugs: [],
+                                slugs: slugs,
                                 item: {
                                     type: "order",
                                 },
