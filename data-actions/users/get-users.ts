@@ -32,7 +32,6 @@ export async function getUsersListAction(props: FilterParams) {
             },
         },
     });
-
     return users.map((user) => {
         return {
             id: user.id,

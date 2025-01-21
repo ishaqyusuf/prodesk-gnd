@@ -13,8 +13,10 @@ import Button from "@/components/common/button";
 import Portal from "@/components/_v1/portal";
 import { GetSalesItemOverviewAction } from "../../../../data-actions/sales-items-action";
 import { Menu } from "@/components/(clean-code)/menu";
-import { sum } from "@/lib/utils";
+import { cn, sum } from "@/lib/utils";
 import FormInput from "@/components/common/controls/form-input";
+import { Icons } from "@/components/_v1/icons";
+import { CheckCircle } from "lucide-react";
 
 type Shippable = {
     item: GetSalesItemOverviewAction["items"][number];
@@ -108,6 +110,19 @@ export function SalesShippingForm({}) {
 }
 function ShippingItem({ item }: { item: Shippable["item"] }) {
     const status = item.status;
+    const uid = item.itemControlUid;
+    const form = useFormContext();
+    const [lh, rh, qty, total] = form.watch([
+        `${uid}.lh`,
+        `${uid}.rh`,
+        `${uid}.qty`,
+        `${uid}.total`,
+    ]);
+    useEffect(() => {
+        const _total = sum([lh, rh, qty]);
+        console.log(_total);
+        form.setValue(`${uid}.total`, _total);
+    }, [lh, rh, qty]);
     const [shipInfo, setShipInfo] = useState<ItemShippable>({} as any);
     useEffect(() => {
         // console.log(item?.status);
@@ -168,9 +183,17 @@ function ShippingItem({ item }: { item: Shippable["item"] }) {
         setShipInfo(shipping);
     }, []);
     return (
-        <div className="border-b">
-            <div className="flex">
-                <div className="space-y-4 py-2 flex-1">
+        <div className={cn("border-b px-4 py-2", total > 0 && "bg-green-50")}>
+            <div className="flex gap-4">
+                <div className="">
+                    <CheckCircle
+                        className={cn(
+                            "size-4",
+                            total > 0 ? "text-green-500" : "opacity-0"
+                        )}
+                    />
+                </div>
+                <div className="space-y-4  flex-1">
                     <div className="flex-1 cursor-pointer">
                         <div className="text-sm font-semibold">
                             {item?.title}
@@ -190,10 +213,10 @@ function ShippingItem({ item }: { item: Shippable["item"] }) {
                     </div>
                 </div>
 
-                <div className="">
+                <div className="mt-2">
                     <Menu>
-                        <Menu.Item>Submit All Pending</Menu.Item>
-                        <Menu.Item>Mark All as Completed</Menu.Item>
+                        <Menu.Item disabled>Submit All Pending</Menu.Item>
+                        <Menu.Item disabled>Mark All as Completed</Menu.Item>
                     </Menu>
                 </div>
             </div>
