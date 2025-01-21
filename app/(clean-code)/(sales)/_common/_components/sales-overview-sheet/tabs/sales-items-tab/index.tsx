@@ -14,15 +14,15 @@ export function SalesItemsTab({}) {
         <div>
             {itemOverview?.items?.map((item) => (
                 <div className="flex flex-col gap-2" key={item.itemControlUid}>
-                    {item.primary && item.sectionTitle && (
+                    {/* {item.primary && item.sectionTitle && (
                         <div className="uppercase py-2 bg-muted text-center font-mono font-semibold">
                             {item.sectionTitle}
                         </div>
-                    )}
+                    )} */}
                     {!item.hidden && (
                         <div
                             className={cn(
-                                item.sectionTitle && "ml-4",
+                                item.sectionTitle && "",
                                 "border border-transparent border-b-muted-foreground/20 rounded-b-none rounded-lg",
                                 item.itemControlUid != store.itemViewId
                                     ? "cursor-pointer hover:bg-muted/80 hover:shadow-lg hover:border-muted-foreground/30"
@@ -39,14 +39,19 @@ export function SalesItemsTab({}) {
                                     store.update("itemView", item);
                                 }}
                             >
-                                <div className="flex gap-6 justify-between">
-                                    <div className="flex-1 font-medium uppercase">
-                                        {item.title}
+                                <div className="">
+                                    <div className="flex gap-6 justify-between">
+                                        <div className="flex-1 font-semibold font-mono uppercase">
+                                            {item.title}
+                                        </div>
+                                        <div className="font-mono text-sm font-medium">
+                                            <AdminOnly>
+                                                <Money value={item.totalCost} />
+                                            </AdminOnly>
+                                        </div>
                                     </div>
-                                    <div className="font-mono text-sm font-medium">
-                                        <AdminOnly>
-                                            <Money value={item.totalCost} />
-                                        </AdminOnly>
+                                    <div className="uppercase font-mono text-muted-foreground font-semibold">
+                                        {item.sectionTitle}
                                     </div>
                                 </div>
                                 {item.lineConfigs?.length && (

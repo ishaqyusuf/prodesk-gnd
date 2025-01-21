@@ -133,6 +133,7 @@ model QtyControl {
     autoComplete   Boolean?
     deletedAt      DateTime?        @db.Timestamp(0)
     itemControl    SalesItemControl @relation(fields: [itemControlUid], references: [uid])
+
     // @@index([uid])
     // @@index([itemControlUid])
 
@@ -140,18 +141,19 @@ model QtyControl {
 }
 
 model SalesItemControl {
-    uid          String           @unique // item-1, door-234, moulding-1
+    uid          String                           @unique // item-1, door-234, moulding-1
     title        String?
     subtitle     String?
     sectionTitle String?
     salesId      Int
     produceable  Boolean?
     shippable    Boolean?
-    deletedAt    DateTime?        @db.Timestamp(0)
+    deletedAt    DateTime?                        @db.Timestamp(0)
     orderItemId  Int?
-    sales        SalesOrders?     @relation(fields: [salesId], references: [id])
-    item         SalesOrderItems? @relation(fields: [orderItemId], references: [id])
+    sales        SalesOrders?                     @relation(fields: [salesId], references: [id])
+    item         SalesOrderItems?                 @relation(fields: [orderItemId], references: [id])
     qtyControls  QtyControl[]
+    assignments  OrderItemProductionAssignments[]
 
     @@index([salesId])
     @@index([orderItemId])
@@ -539,4 +541,61 @@ model SalesNote {
     deletedAt  DateTime? @db.Timestamp(0)
     createdAt  DateTime? @default(now()) @db.Timestamp(0)
     updatedAt  DateTime? @updatedAt
+}
+
+model OrderItemProductionAssignments {
+    id                  Int                          @unique @default(autoincrement())
+    itemId              Int
+    orderId             Int
+    assignedToId        Int?
+    assignedById        Int
+    qtyAssigned         Int?
+    qtyCompleted        Int?
+    lhQty               Int?
+    rhQty               Int?
+    note                String?
+    salesDoorId         Int?
+    startedAt           DateTime?                    @db.Timestamp(0)
+    dueDate             DateTime?                    @db.Timestamp(0)
+    deletedAt           DateTime?                    @db.Timestamp(0)
+    createdAt           DateTime?                    @default(now()) @db.Timestamp(0)
+    updatedAt           DateTime?                    @updatedAt
+    submissions         OrderProductionSubmissions[]
+    order               SalesOrders                  @relation(fields: [orderId], references: [id])
+    item                SalesOrderItems              @relation(fields: [itemId], references: [id])
+    assignedTo          Users?                       @relation(name: "orderItemAssignments", fields: [assignedToId], references: [id])
+    assignedBy          Users                        @relation(name: "orderItemAssignedByMe", fields: [assignedById], references: [id])
+    salesDoor           DykeSalesDoors?              @relation(fields: [salesDoorId], references: [id])
+    salesItemControlUid String?
+    itemControl         SalesItemControl?            @relation(fields: [salesItemControlUid], references: [uid])
+
+    @@index([salesItemControlUid])
+    @@index([orderId])
+    @@index([itemId])
+    @@index([assignedToId])
+    @@index([assignedById])
+    @@index([salesDoorId])
+}
+
+model OrderProductionSubmissions {
+    id               Int                             @unique @default(autoincrement())
+    salesOrderId     Int?
+    salesOrderItemId Int?
+    qty              Int
+    lhQty            Int?                            @default(0)
+    rhQty            Int?                            @default(0)
+    note             String?                         @db.Text
+    deletedAt        DateTime?                       @db.Timestamp(0)
+    createdAt        DateTime?                       @default(now()) @db.Timestamp(0)
+    updatedAt        DateTime?                       @updatedAt
+    assignmentId     Int?
+    meta             Json?                           @db.Json
+    order            SalesOrders?                    @relation(fields: [salesOrderId], references: [id], onDelete: Cascade)
+    item             SalesOrderItems?                @relation(fields: [salesOrderItemId], references: [id], onDelete: Cascade)
+    assignment       OrderItemProductionAssignments? @relation(fields: [assignmentId], references: [id])
+    itemDeliveries   OrderItemDelivery[]
+
+    @@index([salesOrderId])
+    @@index([salesOrderItemId])
+    @@index([assignmentId])
 }

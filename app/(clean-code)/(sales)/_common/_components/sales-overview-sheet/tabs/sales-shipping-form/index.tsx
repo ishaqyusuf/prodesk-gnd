@@ -1,13 +1,12 @@
 import { useForm, useFormContext } from "react-hook-form";
 import { salesOverviewStore } from "../../store";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { Form } from "@/components/ui/form";
 import FormSelect from "@/components/common/controls/form-select";
 import { dispatchModes } from "../../../../utils/contants";
 import {
     DeliveryOption,
     QtyControlByType,
-    QtyControlType,
 } from "@/app/(clean-code)/(sales)/types";
 import Button from "@/components/common/button";
 import Portal from "@/components/_v1/portal";
@@ -15,7 +14,6 @@ import { GetSalesItemOverviewAction } from "../../../../data-actions/sales-items
 import { Menu } from "@/components/(clean-code)/menu";
 import { cn, sum } from "@/lib/utils";
 import FormInput from "@/components/common/controls/form-input";
-import { Icons } from "@/components/_v1/icons";
 import { CheckCircle } from "lucide-react";
 
 type Shippable = {
@@ -44,9 +42,7 @@ type SelectionType = {
 };
 export function SalesShippingForm({}) {
     const store = salesOverviewStore();
-    const shipping = store.shipping;
     const itemView = store.itemOverview;
-    const [shippables, setShippables] = useState<Shippable[]>([]);
     const form = useForm({
         defaultValues: {
             dispatchMode: "" as DeliveryOption,
@@ -58,7 +54,7 @@ export function SalesShippingForm({}) {
             selectionError: false,
         },
     });
-    const [loaded, markAll, totalSelected] = form.watch([
+    const [loaded, markAll, totalSelected, selectionError] = form.watch([
         "loaded",
         "markAll",
         "totalSelected",
@@ -81,6 +77,9 @@ export function SalesShippingForm({}) {
     }, [itemView]);
     if (!itemView) return null;
     function selectAllAvailable() {}
+    async function createShipping() {
+        const data = form.getValues();
+    }
     return (
         <Form {...form}>
             <div className="">
@@ -108,10 +107,16 @@ export function SalesShippingForm({}) {
                                 placeholder={"Assigned To"}
                             />
                         </div>
-                        <Button variant="secondary" className="">
+                        <Button
+                            disabled={!totalSelected || selectionError}
+                            variant="secondary"
+                            className=""
+                        >
                             Select All Available
                         </Button>
-                        <Button className="">Save</Button>
+                        <Button onClick={createShipping} className="">
+                            Save
+                        </Button>
                     </div>
                 </Portal>
                 {itemView?.items?.map((item, uid) => (
