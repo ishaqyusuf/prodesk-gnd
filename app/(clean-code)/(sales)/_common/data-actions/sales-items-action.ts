@@ -175,7 +175,7 @@ export async function getSalesItemsOverviewAction({
         produceable?: boolean;
         shippable?: boolean;
         itemControlUid;
-        itemConfigs?: { label; value }[];
+        itemConfigs?: { label; value; color? }[];
         sectionTitle;
         primary?: boolean;
         hidden?: boolean;
