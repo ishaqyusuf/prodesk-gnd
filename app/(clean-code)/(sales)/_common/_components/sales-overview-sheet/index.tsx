@@ -7,8 +7,9 @@ import { SalesInfoTab } from "./tabs/sales-info-tab";
 import { useSalesOverview } from "./hook";
 import { Footer } from "./footer";
 import { SalesItemsTab } from "./tabs/sales-items-tab";
-import { SalesShippingOverview } from "./tabs/sales-shipping-form";
-import { SalesShippingForm } from "./tabs/sales-shipping-tab";
+import { SalesShippingForm } from "./tabs/sales-shipping-form";
+import { SalesShippingTab } from "./tabs/sales-shipping-tab";
+import { SalesShippingOverview } from "./tabs/sales-shipping-overview";
 
 interface OpenSalesOverviewProps {
     salesId;
@@ -125,6 +126,7 @@ function PrimaryTab({}) {
                     ))}
                 </TabsList>
             </Tabs>
+            <div id="tabHeader"></div>
             <Modal.ScrollArea className="my-2">
                 <TabContent tabName="sales_info">
                     <SalesInfoTab />
@@ -133,7 +135,7 @@ function PrimaryTab({}) {
                     <SalesItemsTab />
                 </TabContent>
                 <TabContent tabName="shipping">
-                    <SalesItemsTab />
+                    <SalesShippingTab />
                 </TabContent>
                 <TabContent tabName="shipping_form">
                     <SalesShippingForm />

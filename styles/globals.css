@@ -114,3 +114,20 @@ table.size-sm td {
 .side-modal-rounded {
     @apply sm:h-[95vh] mt-[2.5vh] mx-4 rounded-xl flex flex-col;
 }
+
+table.styled thead {
+    @apply bg-muted;
+}
+table.table-sm th {
+    @apply h-auto px-2 py-2;
+}
+table.table-sm td {
+    @apply px-2 py-2;
+}
+table.styled tr,
+table.styled thead {
+    @apply border-b !important;
+}
+table.styled td.action {
+    @apply flex gap-2 justify-end items-center;
+}

@@ -1,9 +1,18 @@
 "use server";
 
 import { AsyncFnType } from "@/types";
-import { getDispatchListActions } from "./dispatch-list-action";
+import { getSaleDispatchListOverview } from "./dispatch-list-action";
 
-export type DispatchOverviewAction = AsyncFnType<typeof dispatchOverviewAction>;
-export async function dispatchOverviewAction(id) {
-    const listOverview = await getDispatchListActions;
+export type DispatchOverviewAction = AsyncFnType<
+    typeof salesDispatchListOverview
+>;
+export async function salesDispatchListOverview(id) {
+    const listOverview = await getSaleDispatchListOverview(id);
+    return {
+        dispatches: listOverview,
+    };
+    // return listOverview.data;
+}
+export async function salesDispatchForm(id) {
+    //
 }

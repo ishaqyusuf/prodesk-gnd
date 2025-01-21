@@ -3,7 +3,7 @@ import { Data, salesOverviewStore, SalesTabs } from "./store";
 import { loadSalesOverviewAction } from "../../data-actions/sales-overview.action";
 import { validateSalesStatControlAction } from "../../data-actions/sales-stat-control.action";
 import { getSalesItemsOverviewAction } from "../../data-actions/sales-items-action";
-import { dispatchOverviewAction } from "../../data-actions/dispatch-actions/dispatch-overview-action";
+import { salesDispatchListOverview } from "../../data-actions/dispatch-actions/dispatch-overview-action";
 
 interface LoadPageDataProps {
     dataKey: keyof Data;
@@ -24,16 +24,20 @@ export const loaders: Partial<{ [k in keyof Data]: any }> = {
             adminMode: salesOverviewStore.getState().adminMode,
         });
     },
-    shippingViewId: async () => {
-        return dispatchOverviewAction(
-            salesOverviewStore.getState().shippingViewId
-        );
+    shipping: async () => {
+        return salesDispatchListOverview(salesOverviewStore.getState().salesId);
     },
+    // shippingForm: async () => {
+    //     return dispatchOverviewAction(
+    //         salesOverviewStore.getState().shippingViewId
+    //     );
+    // },
 };
 export const tabLoaders: Partial<{ [k in SalesTabs]: (keyof Data)[] }> = {
     sales_info: ["overview"],
     items: ["overview", "itemOverview"],
     shipping: ["overview", "shipping"],
+    shipping_form: ["overview", "shipping", "itemOverview"],
 };
 export const getOpenItem = () => {
     const state = salesOverviewStore.getState();

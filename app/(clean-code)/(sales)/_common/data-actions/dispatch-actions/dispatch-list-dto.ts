@@ -49,14 +49,12 @@ export function transformDispatchListItem(item: DispatchItem) {
         lhQty,
         rhQty,
         qty,
-        salesItem: {
-            description,
-            housePackageTool: { stepProduct: { name: productName } = {} } = {},
-        },
-        submission: {
-            assignment: { salesDoor: { dimension, swing } = {} },
-        },
+        salesItem: { description, housePackageTool } = {},
+        submission: { assignment: { salesDoor } = {} } = {},
     } = item;
+    const { dimension, swing } = salesDoor || {};
+    const stepProduct = housePackageTool?.stepProduct;
+    const productName = stepProduct?.name;
     return {
         lh: lhQty,
         rh: rhQty,

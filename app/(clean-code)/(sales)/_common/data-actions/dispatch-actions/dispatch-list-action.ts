@@ -25,6 +25,12 @@ export async function getDispatchListActions(query: SearchParamsType) {
         },
     };
 }
+export async function getSaleDispatchListOverview(salesId) {
+    const dispatches = await loadDispatchListAction({
+        "sales.id": salesId,
+    });
+    return dispatches.map((d) => transformDispatchList(d));
+}
 
 export async function loadDispatchListAction(query: SearchParamsType) {
     const where = whereDispatch(query);

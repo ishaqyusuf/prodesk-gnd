@@ -3,6 +3,7 @@ import { FieldPath, FieldPathValue } from "react-hook-form";
 import { create } from "zustand";
 import { LoadSalesOverviewAction } from "../../../data-actions/sales-overview.action";
 import { GetSalesItemOverviewAction } from "../../../data-actions/sales-items-action";
+import { DispatchOverviewAction } from "../../../data-actions/dispatch-actions/dispatch-overview-action";
 
 export type SalesTabs =
     | "sales_info"
@@ -20,7 +21,8 @@ const data = {
     itemViewId: null as any,
     itemView: null as GetSalesItemOverviewAction["items"][number],
     payment: null,
-    shipping: null,
+    shipping: null as DispatchOverviewAction,
+    shippingForm: null as DispatchOverviewAction,
     shippingViewId: null,
     notification: null,
     currentTab: "sales_info" as SalesTabs,

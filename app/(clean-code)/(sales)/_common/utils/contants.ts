@@ -1,4 +1,8 @@
-import { PaymentMethods, SalesDispatchStatus } from "../../types";
+import {
+    DeliveryOption,
+    PaymentMethods,
+    SalesDispatchStatus,
+} from "../../types";
 import {
     filterCol,
     filterFields,
@@ -137,4 +141,8 @@ export const paymentMethods: {
     { label: "Credit Card", value: "credit-card" },
     { label: "Zelle", value: "zelle" },
     { label: "Cash", value: "cash" },
+];
+export const dispatchModes: { label?: string; value?: DeliveryOption }[] = [
+    { label: "Delivery", value: "delivery" },
+    { label: "Pickup", value: "pickup" },
 ];
