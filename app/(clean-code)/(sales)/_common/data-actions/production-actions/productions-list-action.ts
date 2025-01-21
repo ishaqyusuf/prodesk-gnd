@@ -11,6 +11,7 @@ import {
 import { Prisma } from "@prisma/client";
 import { dueDateAlert } from "../../utils/production-utils";
 import { authId } from "@/app/(v1)/_actions/utils";
+import { sum } from "@/lib/utils";
 
 export type GetProductionListPage = AsyncFnType<
     typeof getProductionListPageAction
@@ -95,8 +96,19 @@ export async function getProductionListAction(query: SearchParamsType) {
                         : {}),
                 },
                 select: {
+                    submissions: {
+                        where: {
+                            deletedAt: null,
+                        },
+                        select: {
+                            lhQty: true,
+                            qty: true,
+                            rhQty: true,
+                        },
+                    },
                     lhQty: true,
                     rhQty: true,
+                    qtyAssigned: true,
                     dueDate: true,
                     assignedTo: {
                         select: {
@@ -114,7 +126,19 @@ function transformProductionList(item: GetProductionList[number]) {
     const dueDate = item.assignments.map((d) => d.dueDate).filter(Boolean);
 
     const alert = dueDateAlert(dueDate);
+
+    const totalAssigned = sum(
+        item.assignments.map((p) => p.qtyAssigned || sum([p.lhQty, p.rhQty]))
+    );
+    const totalCompleted = sum(
+        item.assignments.map((a) =>
+            sum(a.submissions.map((s) => s.qty || sum([s.lhQty, s.rhQty])))
+        )
+    );
+    const completed = totalAssigned == totalCompleted;
+    if (completed) alert.date = null;
     return {
+        completed,
         orderId: item.orderId,
         alert,
         salesRep: item?.salesRep?.name,

@@ -34,10 +34,14 @@ function Alert({ item }: ItemProps) {
     return (
         <TCell>
             <TCell.Secondary className="font-mono flex gap-4">
-                <TCell.Status
-                    color={item.alert.color}
-                    status={item.alert.text}
-                />
+                {item.completed ? (
+                    <></>
+                ) : (
+                    <TCell.Status
+                        color={item.alert.color}
+                        status={item.alert.text}
+                    />
+                )}
             </TCell.Secondary>
         </TCell>
     );
