@@ -202,7 +202,7 @@ function ShippingItem({ item }: { item: Shippable["item"] }) {
 }
 function QtyInput({ uid, input }) {
     let available = input.available;
-    available = 100;
+    // available = 100;
     if (!available) return null;
     // console.log(available);
 
@@ -213,8 +213,8 @@ function QtyInput({ uid, input }) {
         .map((a, i) => i?.toString());
 
     return (
-        <div className="flex items-center">
-            <span className="uppercase text-xs font-semibold">
+        <div className="flex items-center gap-1">
+            <span className="uppercase font-mono text-xs font-semibold">
                 {input.label}:
             </span>
             {inputOptions.length > 15 ? (
@@ -234,7 +234,7 @@ function QtyInput({ uid, input }) {
                     options={inputOptions}
                 />
             )}
-            <span className="text-xs font-bold">/{available}</span>
+            <span className="text-xs font-mono font-bold">/{available}</span>
         </div>
     );
 }

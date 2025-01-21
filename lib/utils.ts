@@ -197,7 +197,7 @@ export function designDotToObject(object) {
     });
     return tr;
 }
-export function addSpacesToCamelCase(input) {
+export function addSpacesToCamelCase(input): string {
     return input.replace(/([a-z])([A-Z])/g, "$1 $2");
 }
 export function toDotNotation(obj, res = {}, current = "") {

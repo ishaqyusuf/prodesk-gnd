@@ -5,12 +5,13 @@ import { addSpacesToCamelCase } from "@/lib/utils";
 
 export function whereUsers(query: FilterParams) {
     const wheres: Prisma.UsersWhereInput[] = [];
+
     const permissions = query["user.permissions"]?.split(",");
 
     if (permissions?.length) {
         const wherePermissions: Prisma.PermissionsWhereInput[] = [];
         permissions.map((permission) => {
-            const name = addSpacesToCamelCase(permission);
+            const name = addSpacesToCamelCase(permission).toLocaleLowerCase();
             wherePermissions.push({
                 name,
             });
@@ -18,18 +19,24 @@ export function whereUsers(query: FilterParams) {
         wheres.push({
             roles: {
                 some: {
-                    role: {
-                        RoleHasPermissions: {
-                            some: {
-                                permission:
-                                    wherePermissions?.length > 1
-                                        ? {
-                                              AND: wherePermissions,
-                                          }
-                                        : wherePermissions[0],
-                            },
-                        },
-                    },
+                    role:
+                        wherePermissions?.length > 1
+                            ? {
+                                  AND: wherePermissions.map((permission) => ({
+                                      RoleHasPermissions: {
+                                          some: {
+                                              permission,
+                                          },
+                                      },
+                                  })),
+                              }
+                            : {
+                                  RoleHasPermissions: {
+                                      some: {
+                                          permission: wherePermissions[0],
+                                      },
+                                  },
+                              },
                 },
             },
         });
