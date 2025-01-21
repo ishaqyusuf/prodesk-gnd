@@ -37,16 +37,19 @@ export function ItemOverview({}) {
             <div>
                 <div className="grid grid-cols-2 gap-2">
                     {itemView.itemConfigs?.map((config, index) => (
-                        <div className="font-mono text-sm" key={index}>
-                            <span className="uppercase">{config?.label}: </span>
-                            <span
+                        <div
+                            className={cn("font-mono text-sm", "bg-white p-1")}
+                            key={index}
+                        >
+                            <div className="uppercase">{config?.label}: </div>
+                            <div
                                 className={cn(
                                     "font-mono uppercase font-bold",
                                     config.color == "red" && "text-red-700"
                                 )}
                             >
                                 {config?.value}
-                            </span>
+                            </div>
                         </div>
                     ))}
                 </div>
