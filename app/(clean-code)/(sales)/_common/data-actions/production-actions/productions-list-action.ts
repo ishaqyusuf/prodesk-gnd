@@ -139,6 +139,8 @@ function transformProductionList(item: GetProductionList[number]) {
     if (completed) alert.date = null;
     return {
         completed,
+        totalAssigned,
+        totalCompleted,
         orderId: item.orderId,
         alert,
         salesRep: item?.salesRep?.name,
