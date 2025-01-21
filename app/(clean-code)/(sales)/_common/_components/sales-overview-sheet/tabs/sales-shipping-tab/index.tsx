@@ -1,4 +1,3 @@
-import Button from "@/components/common/button";
 import { salesOverviewStore } from "../../store";
 import { Icons } from "@/components/_v1/icons";
 import {
@@ -10,6 +9,8 @@ import {
 } from "@/components/ui/table";
 import { TCell } from "@/components/(clean-code)/data-table/table-cells";
 import { Menu } from "@/components/(clean-code)/menu";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 export function SalesShippingTab({}) {
     const store = salesOverviewStore();
@@ -19,9 +20,14 @@ export function SalesShippingTab({}) {
         <div className="flex-col gap-4">
             <div className="border-b gap-4 py-2 flex">
                 <div className="flex-1"></div>
-                <Button size="xs" variant="secondary">
-                    <Icons.print className="size-4 mr-2" />
-                    <span>Print All</span>
+                <Button asChild size="xs" variant="secondary">
+                    <Link
+                        target="_blank"
+                        href={`/printer/sales?slugs=${store.overview?.orderId}&mode=packing list&dispatchId=all`}
+                    >
+                        <Icons.print className="size-4 mr-2" />
+                        <span>Print All</span>
+                    </Link>
                 </Button>
                 <Button
                     onClick={() => {

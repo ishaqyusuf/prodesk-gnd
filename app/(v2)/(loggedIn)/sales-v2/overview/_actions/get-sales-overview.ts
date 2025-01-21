@@ -231,12 +231,24 @@ const SalesIncludes = {
     productions: true,
     payments: true,
     deliveries: {
+        where: {
+            deletedAt: null,
+        },
         include: {
             items: {
+                where: {
+                    deletedAt: null,
+                },
                 include: {
                     submission: {
+                        where: {
+                            deletedAt: null,
+                        },
                         select: {
                             assignment: {
+                                where: {
+                                    deletedAt: null,
+                                },
                                 select: {
                                     salesDoorId: true,
                                 },

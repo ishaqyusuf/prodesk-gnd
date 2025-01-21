@@ -225,15 +225,21 @@ function packingInfo(data: PrintData, itemId, doorId?) {
             ? deliveries?.map((d) => d.items).flat()
             : deliv?.items;
     if (!items) return "N/A";
-    const filtered = items.filter(
-        (item) =>
-            ((doorId
-                ? item.submission?.assignment?.salesDoorId == doorId &&
-                  item.orderItemId == itemId
-                : item.orderItemId == itemId) &&
-                item.orderDeliveryId == deliveryId) ||
-            deliveryId == "all"
-    );
+    const filtered = items.filter((item) => {
+        //   ((doorId
+        //       ? item.submission?.assignment?.salesDoorId == doorId &&
+        //         item.orderItemId == itemId
+        //       : item.orderItemId == itemId) &&
+        //       item.orderDeliveryId == deliveryId) ||
+        //       deliveryId == "all";
+        const boooleans = [item.orderItemId == itemId];
+        if (doorId)
+            boooleans.push(item.submission?.assignment?.salesDoorId == doorId);
+        if (deliveryId != "all")
+            boooleans.push(item.orderDeliveryId == deliveryId);
+        return boooleans.every(Boolean);
+    });
+    console.log([filtered, filtered.length]);
     if (!filtered?.length) return `N/A`;
     // return `N/A - ${items.length}-  ${items
     //     // .filter((d) => d.orderDeliveryId == deliveryId)

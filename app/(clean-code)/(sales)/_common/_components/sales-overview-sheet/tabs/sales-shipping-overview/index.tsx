@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/table";
 import { TCell } from "@/components/(clean-code)/data-table/table-cells";
 import { Menu } from "@/components/(clean-code)/menu";
+import Link from "next/link";
 
 export function SalesShippingOverview({}) {
     const store = salesOverviewStore();
@@ -19,9 +20,11 @@ export function SalesShippingOverview({}) {
         <div className="flex-col gap-4">
             <div className="border-b gap-4 py-2 flex">
                 <div className="flex-1"></div>
-                <Button size="xs" variant="secondary">
-                    <Icons.print className="size-4 mr-2" />
-                    <span>Print All</span>
+                <Button asChild size="xs" variant="secondary">
+                    <Link href={``}>
+                        <Icons.print className="size-4 mr-2" />
+                        <span>Print Alls</span>
+                    </Link>
                 </Button>
                 <Button
                     onClick={() => {
