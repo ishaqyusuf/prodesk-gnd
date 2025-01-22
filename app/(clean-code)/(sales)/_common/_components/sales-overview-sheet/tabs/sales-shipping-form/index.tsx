@@ -10,13 +10,19 @@ import { cn, sum } from "@/lib/utils";
 import FormInput from "@/components/common/controls/form-input";
 import { CheckCircle } from "lucide-react";
 import ProgressStatus from "@/components/_v1/progress-status";
-import { ItemShippable, Shippable, useSalesShipmentForm } from "./ctx";
+import {
+    ItemShippable,
+    Shippable,
+    UseSalesShipmentForm,
+    useSalesShipmentForm,
+} from "./ctx";
 import { createSalesShipment } from "./create-shipment";
+import { salesOverviewStore } from "../../store";
 
 export function SalesShippingForm({}) {
     const ctx = useSalesShipmentForm();
     const { form, itemView, store, totalSelected, selectionError } = ctx;
-    if (!itemView) return null;
+    if (!itemView || !ctx.loaded) return null;
 
     return (
         <Form {...form}>
@@ -53,7 +59,7 @@ export function SalesShippingForm({}) {
                             Select All Available
                         </Button>
                         <Button
-                            onClick={async () => {
+                            action={async () => {
                                 await createSalesShipment(ctx);
                             }}
                             className=""
@@ -65,28 +71,41 @@ export function SalesShippingForm({}) {
                 {itemView?.items
                     ?.filter((a) => !a.hidden)
                     .map((item, uid) => (
-                        <ShippingItem key={uid} item={item} />
+                        <ShippingItem ctx={ctx} key={uid} item={item} />
                     ))}
             </div>
         </Form>
     );
 }
-function ShippingItem({ item }: { item: Shippable["item"] }) {
+function ShippingItem({
+    item,
+    ctx,
+}: {
+    ctx: UseSalesShipmentForm;
+    item: Shippable["item"];
+}) {
     const status = item.status;
-
+    const store = salesOverviewStore();
+    const form = ctx.form;
     const uid = item.itemControlUid;
-    const form = useFormContext();
+    const selectData = store.shippingForm?.selection?.[uid];
+    useEffect(() => {
+        console.log(selectData);
+    }, [selectData]);
     const [lh, rh, qty, total, shipInfo] = form.watch([
-        `${uid}.lh`,
-        `${uid}.rh`,
-        `${uid}.qty`,
-        `${uid}.total`,
-        `${uid}.shipInfo`,
+        `selection.${uid}.lh`,
+        `selection.${uid}.rh`,
+        `selection.${uid}.qty`,
+        `selection.${uid}.total`,
+        `selection.${uid}.shipInfo` as any,
     ]);
+    // const { lh, rh, qty, total, shipInfo } = selectData || {};
     useEffect(() => {
         const _total = sum([lh, rh, qty]);
-        const deliverableQty = shipInfo.deliverableQty;
-        form.setValue(`${uid}.total`, _total);
+        const deliverableQty = shipInfo?.deliverableQty;
+        form.setValue(`selection.${uid}.total`, _total);
+        // ctx.updateSelection(uid, "total", _total);
+        console.log({ total });
     }, [lh, rh, qty, shipInfo]);
     useEffect(() => {
         // console.log(item?.status);
@@ -145,10 +164,17 @@ function ShippingItem({ item }: { item: Shippable["item"] }) {
         qtyShip("lh");
         qtyShip("rh");
         qtyShip("qty");
-        form.setValue(`${uid}.shipInfo`, shipping);
+        console.log({ shipping });
+
+        // ctx.updateSelection(uid, "shipInfo", shipping);
+        form.setValue(`selection.${uid}.shipInfo`, shipping);
     }, []);
+    // const form = useFormContext();
+
     return (
         <div className={cn("border-b px-4 py-2", total > 0 && "bg-green-50")}>
+            {/* {JSON.stringify(shipInfo || {})} */}
+
             <div className="flex gap-4">
                 <div className="">
                     <CheckCircle
@@ -177,24 +203,26 @@ function ShippingItem({ item }: { item: Shippable["item"] }) {
                             ?.length ? null : (
                             <>
                                 {/* {!shipInfo.deliveryCreatedQty || ( */}
-                                <ProgressStatus
-                                    noDot
-                                    color={"blue"}
-                                    status={`${shipInfo.deliveryCreatedQty}/${shipInfo.qty} item shipped`}
-                                />
+                                {!!!shipInfo?.qty || (
+                                    <ProgressStatus
+                                        noDot
+                                        color={"blue"}
+                                        status={`${shipInfo?.deliveryCreatedQty}/${shipInfo?.qty} item shipped`}
+                                    />
+                                )}
                                 {/* )} */}
-                                {!shipInfo.pendingAssignmentQty || (
+                                {!!!shipInfo?.pendingAssignmentQty || (
                                     <ProgressStatus
                                         color={"red"}
                                         noDot
-                                        status={`${shipInfo.pendingAssignmentQty} not assigned`}
+                                        status={`${shipInfo?.pendingAssignmentQty} not assigned`}
                                     />
                                 )}
-                                {!shipInfo.pendingProductionQty || (
+                                {!!!shipInfo?.pendingProductionQty || (
                                     <ProgressStatus
                                         color={"orange"}
                                         noDot
-                                        status={`${shipInfo.pendingProductionQty} pending production`}
+                                        status={`${shipInfo?.pendingProductionQty} pending production`}
                                     />
                                 )}
                                 {/* {shipInfo. && (
@@ -224,15 +252,15 @@ function ShippingItem({ item }: { item: Shippable["item"] }) {
                                 <>
                                     <Menu.Item
                                         disabled={
-                                            !shipInfo.pendingProductionQty
+                                            !shipInfo?.pendingProductionQty
                                         }
                                     >
                                         Assigned Productions
                                     </Menu.Item>
                                     <Menu.Item
                                         disabled={
-                                            !shipInfo.pendingProductionQty &&
-                                            !shipInfo.pendingAssignmentQty
+                                            !shipInfo?.pendingProductionQty &&
+                                            !shipInfo?.pendingAssignmentQty
                                         }
                                     >
                                         All Pending Productions
@@ -272,14 +300,14 @@ function QtyInput({ uid, input }) {
                     type="number"
                     size="sm"
                     control={form.control}
-                    name={`${uid}.${input.formKey}`}
+                    name={`selection.${uid}.${input.formKey}`}
                 />
             ) : (
                 <FormSelect
                     size="sm"
                     className="w-20"
                     control={form.control}
-                    name={`${uid}.${input.formKey}`}
+                    name={`selection.${uid}.${input.formKey}`}
                     options={inputOptions}
                 />
             )}

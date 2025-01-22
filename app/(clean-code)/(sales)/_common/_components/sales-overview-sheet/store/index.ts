@@ -5,6 +5,8 @@ import { LoadSalesOverviewAction } from "../../../data-actions/sales-overview.ac
 import { GetSalesItemOverviewAction } from "../../../data-actions/sales-items-action";
 import { DispatchOverviewAction } from "../../../data-actions/dispatch-actions/dispatch-overview-action";
 import { GetUsersList } from "@/data-actions/users/get-users";
+import { DeliveryOption } from "@/types/sales";
+import { SelectionType } from "../tabs/sales-shipping-form/ctx";
 
 export type SalesTabs =
     | "sales_info"
@@ -24,7 +26,15 @@ const data = {
     payment: null,
     dispatchUsers: null as GetUsersList,
     shipping: null as DispatchOverviewAction,
-    shippingForm: null as DispatchOverviewAction,
+    shippingForm: {
+        dispatchMode: "" as DeliveryOption,
+        assignedToId: "",
+        selection: {} as SelectionType,
+        loaded: false,
+        markAll: false,
+        totalSelected: 0,
+        selectionError: false,
+    },
     shippingViewId: null,
     notification: null,
     currentTab: "sales_info" as SalesTabs,

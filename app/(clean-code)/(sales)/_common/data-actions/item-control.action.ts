@@ -130,7 +130,12 @@ export async function updateQtyControlAction(
     });
 }
 export async function getItemControlAction(uid) {
-    const obj = itemControlUidObject(uid);
+    const control = await prisma.salesItemControl.findUnique({
+        where: {
+            uid,
+        },
+    });
+    return control;
 }
 
 export type GetSalesItemControllables = AsyncFnType<

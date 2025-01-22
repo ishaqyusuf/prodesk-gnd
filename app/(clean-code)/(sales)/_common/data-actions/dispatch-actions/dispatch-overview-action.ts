@@ -13,6 +13,3 @@ export async function salesDispatchListOverview(id) {
     };
     // return listOverview.data;
 }
-export async function salesDispatchForm(id) {
-    //
-}

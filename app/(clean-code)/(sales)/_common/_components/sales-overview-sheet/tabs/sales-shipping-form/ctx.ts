@@ -1,8 +1,11 @@
-import { useForm } from "react-hook-form";
+import { FieldPath, useForm } from "react-hook-form";
 import { salesOverviewStore } from "../../store";
 import { DeliveryOption } from "@/types/sales";
 import { GetSalesItemOverviewAction } from "../../../../data-actions/sales-items-action";
-import { QtyControlByType } from "@/app/(clean-code)/(sales)/types";
+import {
+    QtyControlByType,
+    SalesDispatchStatus,
+} from "@/app/(clean-code)/(sales)/types";
 import { useEffect } from "react";
 
 export type Shippable = {
@@ -44,6 +47,7 @@ export function useSalesShipmentForm() {
             markAll: false,
             totalSelected: 0,
             selectionError: false,
+            status: "queue" as SalesDispatchStatus,
         },
     });
     const [loaded, markAll, totalSelected, selectionError] = form.watch([
@@ -52,6 +56,8 @@ export function useSalesShipmentForm() {
         "totalSelected",
         "selectionError",
     ]);
+    // const { loaded, markAll, totalSelected, selectionError } =
+    //     store.shippingForm;
     useEffect(() => {
         const selection: SelectionType = {};
         itemView?.items?.map((k) => {
@@ -64,16 +70,28 @@ export function useSalesShipmentForm() {
                 shipInfo: {} as any,
             };
         });
+        // store.update("shippingForm", {
+        //     selection,
+        // } as any);
         form.reset({
             selection,
+            loaded: false,
         });
-    }, [itemView]);
+        setTimeout(() => {
+            form.setValue("loaded", true);
+        }, 100);
+    }, [itemView, store.currentTab]);
 
     return {
         itemView,
+        loaded,
         form,
         store,
         totalSelected,
         selectionError,
+        updateSelection(uid, dot: FieldPath<SelectionType[number]>, value) {
+            console.log({ dot, uid, value });
+            store.update(`shippingForm.selection.${uid}.${dot}`, value);
+        },
     };
 }
