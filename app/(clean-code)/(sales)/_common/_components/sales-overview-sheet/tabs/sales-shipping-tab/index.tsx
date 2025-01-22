@@ -20,7 +20,12 @@ export function SalesShippingTab({}) {
         <div className="flex-col gap-4">
             <div className="border-b gap-4 py-2 flex">
                 <div className="flex-1"></div>
-                <Button asChild size="xs" variant="secondary">
+                <Button
+                    disabled={!shipping?.dispatches?.length}
+                    asChild
+                    size="xs"
+                    variant="secondary"
+                >
                     <Link
                         target="_blank"
                         href={`/printer/sales?slugs=${store.overview?.orderId}&mode=packing list&dispatchId=all`}

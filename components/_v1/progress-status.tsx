@@ -11,6 +11,7 @@ interface Props {
     total?;
     fallBackStatus?;
     color?;
+    noDot?: boolean;
 }
 export default function ProgressStatus({
     status,
@@ -18,6 +19,7 @@ export default function ProgressStatus({
     total,
     color,
     fallBackStatus = "Unknown",
+    noDot,
 }: Props) {
     const [progress, setProgress] = useState<Progressor | null>({} as any);
     useEffect(() => {
@@ -41,5 +43,11 @@ export default function ProgressStatus({
                 )}
             </div>
         );
-    return <StatusBadge color={color} status={status || fallBackStatus} />;
+    return (
+        <StatusBadge
+            color={color}
+            noDot={noDot}
+            status={status || fallBackStatus}
+        />
+    );
 }

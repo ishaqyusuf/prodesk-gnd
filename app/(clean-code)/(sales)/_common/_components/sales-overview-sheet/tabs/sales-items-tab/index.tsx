@@ -51,7 +51,11 @@ export function SalesItemsTab({}) {
                                         </div>
                                     </div>
                                     <div className="uppercase font-mono text-muted-foreground font-semibold">
-                                        {item.sectionTitle}
+                                        <span>
+                                            {[item.sectionTitle, item.subtitle]
+                                                ?.filter(Boolean)
+                                                .join(" | ")}
+                                        </span>
                                     </div>
                                 </div>
                                 {item.lineConfigs?.length && (

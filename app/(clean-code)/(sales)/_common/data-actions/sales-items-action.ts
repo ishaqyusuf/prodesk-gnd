@@ -275,7 +275,7 @@ export async function getSalesItemsOverviewAction({
                 ? mouldingItemControlUid(item.id, hpt.id)
                 : itemItemControlUid(item.id);
             let title = item.description;
-            let hidden = title?.includes("***") && !item.qty;
+            let hidden = !order.isDyke && (title?.includes("***") || !item.qty);
             if (hidden) sectionTitle = title?.replaceAll("*", "");
             items.push({
                 itemId: item.id,

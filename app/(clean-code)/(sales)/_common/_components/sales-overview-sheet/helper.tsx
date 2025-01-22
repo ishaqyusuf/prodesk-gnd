@@ -104,3 +104,11 @@ export function GuestOnly({ children }) {
     if (!store.adminMode) return children;
     return null;
 }
+export const helpers = {
+    submitAllPendingAssignment: async (itemUid) => {},
+    markAllPendingAsCompleted: async (itemUid) => {},
+    markItemAsProductionCompleted: async (itemUid) => {},
+    markSalesAsProductionCompleted: async () => {},
+    submitAllOrderPendingAssignments: async () => {},
+    markAllPendingProductionAsCompleted: async () => {},
+};

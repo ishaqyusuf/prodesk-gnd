@@ -185,6 +185,7 @@ export function composeControls(order: GetSalesItemControllables) {
                             lh: door.lhQty,
                             rh: door.rhQty,
                             qty: !door.lhQty && !door.rhQty ? door.totalQty : 0,
+                            doorId: door.id,
                         }),
                         data: {
                             subtitle: `${door.dimension}`,

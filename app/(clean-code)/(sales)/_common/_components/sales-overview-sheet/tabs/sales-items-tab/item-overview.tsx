@@ -114,9 +114,17 @@ function ConfigForm({ onClose }) {
     });
     async function save() {
         const data = form.getValues();
-        await updateItemControlAction(itemView.itemControlUid, {
-            ...data,
-        });
+        await updateItemControlAction(
+            itemView.itemControlUid,
+            {
+                ...data,
+            },
+            {
+                totalQty: itemView?.status?.qty?.total,
+                produceableChanged: itemView.produceable != data.produceable,
+                shippableChanged: itemView.shippable != data.shippable,
+            }
+        );
         onClose();
         toast.success("saved");
         loadPageData({ dataKey: "itemOverview", reload: true });

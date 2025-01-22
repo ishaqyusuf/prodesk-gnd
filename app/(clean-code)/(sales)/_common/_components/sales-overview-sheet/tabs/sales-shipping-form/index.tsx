@@ -15,6 +15,9 @@ import { Menu } from "@/components/(clean-code)/menu";
 import { cn, sum } from "@/lib/utils";
 import FormInput from "@/components/common/controls/form-input";
 import { CheckCircle } from "lucide-react";
+import ProgressStatus from "@/components/_v1/progress-status";
+import FStatusBadge from "@/components/(clean-code)/fikr-ui/f-status-badge";
+import Badge from "../../../overview-sheet/components/badge";
 
 type Shippable = {
     item: GetSalesItemOverviewAction["items"][number];
@@ -119,15 +122,18 @@ export function SalesShippingForm({}) {
                         </Button>
                     </div>
                 </Portal>
-                {itemView?.items?.map((item, uid) => (
-                    <ShippingItem key={uid} item={item} />
-                ))}
+                {itemView?.items
+                    ?.filter((a) => !a.hidden)
+                    .map((item, uid) => (
+                        <ShippingItem key={uid} item={item} />
+                    ))}
             </div>
         </Form>
     );
 }
 function ShippingItem({ item }: { item: Shippable["item"] }) {
     const status = item.status;
+
     const uid = item.itemControlUid;
     const form = useFormContext();
     const [lh, rh, qty, total] = form.watch([
@@ -158,6 +164,7 @@ function ShippingItem({ item }: { item: Shippable["item"] }) {
         };
         function qtyShip(k: "lh" | "rh" | "qty") {
             function getValue(fromStatus: keyof typeof status) {
+                // status.prodAssigned?.autoComplete
                 return status?.[fromStatus]?.[k] || 0;
             }
             function getValues(fromStatus: (keyof typeof status)[]) {
@@ -173,6 +180,8 @@ function ShippingItem({ item }: { item: Shippable["item"] }) {
             let totalQty = getValue("qty");
             let producedQty = getValue("prodCompleted");
             let assignProdQty = getValue("prodAssigned");
+            console.log({ assignProdQty });
+
             shipping.deliveryCreatedQty += shippedQty;
             shipping.qty += totalQty;
             shipping.pendingAssignmentQty += sum([
@@ -200,6 +209,8 @@ function ShippingItem({ item }: { item: Shippable["item"] }) {
         qtyShip("lh");
         qtyShip("rh");
         qtyShip("qty");
+        console.log({ shipping });
+
         setShipInfo(shipping);
     }, []);
     return (
@@ -213,14 +224,50 @@ function ShippingItem({ item }: { item: Shippable["item"] }) {
                         )}
                     />
                 </div>
-                <div className="space-y-4  flex-1">
+                <div className="space-y-2  flex-1">
                     <div className="flex-1 cursor-pointer">
-                        <div className="text-sm font-semibold">
+                        <div className="uppercase text-muted-foreground text-sm font-normal space-x-2">
+                            <span>{item.sectionTitle}</span>
+                            <span>{item.subtitle}</span>
+                            <span>{item.swing}</span>
+                        </div>
+                        <div className="text-sm uppercase font-semibold">
                             {item?.title}
                         </div>
-                        <div className="uppercase text-muted-foreground text-xs font-bold space-x-2">
-                            <span>{item.sectionTitle}</span>
-                        </div>
+                    </div>
+                    <div className="flex gap-2">
+                        {shipInfo?.inputs?.filter((a) => a.available)
+                            ?.length ? null : (
+                            <>
+                                {/* {!shipInfo.deliveryCreatedQty || ( */}
+                                <ProgressStatus
+                                    noDot
+                                    color={"blue"}
+                                    status={`${shipInfo.deliveryCreatedQty}/${shipInfo.qty} item shipped`}
+                                />
+                                {/* )} */}
+                                {!shipInfo.pendingAssignmentQty || (
+                                    <ProgressStatus
+                                        color={"red"}
+                                        noDot
+                                        status={`${shipInfo.pendingAssignmentQty} not assigned`}
+                                    />
+                                )}
+                                {!shipInfo.pendingProductionQty || (
+                                    <ProgressStatus
+                                        color={"orange"}
+                                        noDot
+                                        status={`${shipInfo.pendingProductionQty} pending production`}
+                                    />
+                                )}
+                                {/* {shipInfo. && (
+                                    <ProgressStatus
+                                        color={"blue"}
+                                        status={`${shipInfo.pendingAssignmentQty} pending production`}
+                                    />
+                                )} */}
+                            </>
+                        )}
                     </div>
                     <div className="flex gap-2">
                         {shipInfo?.inputs?.map((input, ii) => (
@@ -235,7 +282,29 @@ function ShippingItem({ item }: { item: Shippable["item"] }) {
 
                 <div className="mt-2">
                     <Menu>
-                        <Menu.Item disabled>Submit All Pending</Menu.Item>
+                        <Menu.Item
+                            SubMenu={
+                                <>
+                                    <Menu.Item
+                                        disabled={
+                                            !shipInfo.pendingProductionQty
+                                        }
+                                    >
+                                        Assigned Productions
+                                    </Menu.Item>
+                                    <Menu.Item
+                                        disabled={
+                                            !shipInfo.pendingProductionQty &&
+                                            !shipInfo.pendingAssignmentQty
+                                        }
+                                    >
+                                        All Pending Productions
+                                    </Menu.Item>
+                                </>
+                            }
+                        >
+                            Submit
+                        </Menu.Item>
                         <Menu.Item disabled>Mark All as Completed</Menu.Item>
                     </Menu>
                 </div>

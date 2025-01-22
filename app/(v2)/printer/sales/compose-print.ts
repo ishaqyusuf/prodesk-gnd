@@ -239,7 +239,7 @@ function packingInfo(data: PrintData, itemId, doorId?) {
             boooleans.push(item.orderDeliveryId == deliveryId);
         return boooleans.every(Boolean);
     });
-    console.log([filtered, filtered.length]);
+    // console.log([filtered, filtered.length]);
     if (!filtered?.length) return `N/A`;
     // return `N/A - ${items.length}-  ${items
     //     // .filter((d) => d.orderDeliveryId == deliveryId)

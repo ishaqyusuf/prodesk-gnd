@@ -14,7 +14,8 @@ import { percent, sum } from "@/lib/utils";
 
 export async function updateItemControlAction(
     uid,
-    data: Prisma.SalesItemControlUpdateInput
+    data: Prisma.SalesItemControlUpdateInput,
+    { totalQty, produceableChanged, shippableChanged }
 ) {
     const resp = await prisma.salesItemControl.update({
         where: {
@@ -25,13 +26,62 @@ export async function updateItemControlAction(
             shippable: data.shippable,
         },
     });
+    await updateQtyControlAutoComplete(data, uid, {
+        totalQty,
+        produceableChanged,
+        shippableChanged,
+    });
     await updateItemQtyControlsAction(uid);
     await updateSalesStatControlAction(resp.salesId);
+}
+export async function updateQtyControlAutoComplete(
+    data,
+    uid,
+    { totalQty, produceableChanged, shippableChanged }
+) {
+    const { produceable, shippable } = data;
+    await Promise.all(
+        [
+            {
+                changed: produceableChanged,
+                types: ["prodAssigned", "prodCompleted"] as QtyControlType[],
+                newValue: produceable,
+            },
+            {
+                changed: shippableChanged,
+                types: [
+                    "dispatchAssigned",
+                    "dispatchCompleted",
+                    "dispatchInProgress",
+                ] as QtyControlType[],
+                newValue: shippable,
+            },
+        ].map(async (p) => {
+            if (p.changed) {
+                await prisma.qtyControl.updateMany({
+                    where: {
+                        itemControlUid: uid,
+                        type: {
+                            in: p.types,
+                        },
+                    },
+                    data: {
+                        autoComplete: !p.newValue,
+                    },
+                });
+                await Promise.all(
+                    p.types?.map(async (type) => {
+                        await updateQtyControlAction(uid, type);
+                    })
+                );
+            }
+        })
+    );
 }
 export async function updateQtyControlAction(
     uid,
     type: QtyControlType,
-    { qty, lh, rh, totalQty }
+    { qty, lh, rh, totalQty } = {} as any
 ) {
     const qtyControl = await prisma.qtyControl.upsert({
         where: {
@@ -43,6 +93,7 @@ export async function updateQtyControlAction(
         create: {
             type,
             itemControlUid: uid,
+            // autoComplete,
         },
         update: {},
     });
@@ -51,7 +102,10 @@ export async function updateQtyControlAction(
     qtyControl.rh = sum([qtyControl.rh, rh]);
     qtyControl.lh = sum([qtyControl.lh, lh]);
     qtyControl.qty = sum([qtyControl.qty, qty]);
-    qtyControl.total = sum([qtyControl.qty, qtyControl.rh, qtyControl.lh]);
+
+    qtyControl.total = qtyControl.autoComplete
+        ? totalQty
+        : sum([qtyControl.qty, qtyControl.rh, qtyControl.lh]);
     qtyControl.percentage = percent(qtyControl.total, totalQty);
 
     if (qtyControl.percentage > 100 || qtyControl.percentage < 0)
