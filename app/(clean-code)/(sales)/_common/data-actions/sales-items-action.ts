@@ -38,7 +38,7 @@ export async function getSalesItemsOverviewAction({
             assignments: {
                 where: {
                     assignedToId: !producerId ? undefined : producerId,
-                    ...excludeDeleted.where,
+                    deletedAt: null,
                 },
                 select: {
                     id: true,
@@ -57,7 +57,7 @@ export async function getSalesItemsOverviewAction({
                     },
                     submissions: {
                         where: {
-                            ...excludeDeleted.where,
+                            deletedAt: null,
                         },
                         select: {
                             id: true,
@@ -103,6 +103,9 @@ export async function getSalesItemsOverviewAction({
                         select: {
                             id: true,
                             stepProduct: {
+                                where: {
+                                    deletedAt: null,
+                                },
                                 select: {
                                     id: true,
                                     name: true,

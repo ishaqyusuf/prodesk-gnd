@@ -21,7 +21,7 @@ export async function getSalesAssignmentsByUidAction(cuid) {
                           }
                         : undefined,
                     item: {
-                        id: uidobjt.itemId,
+                        id: uidobjt.itemId || undefined,
                         housePackageTool: uidobjt.hptId
                             ? {
                                   id: uidobjt.hptId,
@@ -30,6 +30,31 @@ export async function getSalesAssignmentsByUidAction(cuid) {
                     },
                 },
             ],
+        },
+        select: {
+            qtyAssigned: true,
+            rhQty: true,
+            lhQty: true,
+            id: true,
+            itemId: true,
+            submissions: {
+                where: { deletedAt: null },
+                select: {
+                    id: true,
+                    qty: true,
+                    rhQty: true,
+                    lhQty: true,
+                    itemDeliveries: {
+                        where: { deletedAt: null },
+                        select: {
+                            id: true,
+                            qty: true,
+                            lhQty: true,
+                            rhQty: true,
+                        },
+                    },
+                },
+            },
         },
     });
     return {

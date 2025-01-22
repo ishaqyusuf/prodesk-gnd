@@ -33,11 +33,11 @@ export function itemControlUidObject(str) {
         str.split("-");
     const obj: ItemControl = { type };
     if (type == "door") {
-        obj.doorId = x;
+        obj.doorId = +x;
         obj.dim = y.join("-");
     } else {
-        obj.itemId = x;
-        if (type == "molding") obj.hptId = y?.[0];
+        obj.itemId = +x;
+        if (type == "molding") obj.hptId = +y?.[0];
     }
     return obj;
 }

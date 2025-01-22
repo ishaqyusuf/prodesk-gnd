@@ -69,6 +69,14 @@ export const getPendingAssignments = () => {
     });
     return { forms, data };
 };
+export async function refreshTabData(tab: SalesTabs) {
+    await Promise.all(
+        tabLoaders?.[tab]?.map(
+            async (dataKey) => await loadPageData({ dataKey, reload: true })
+        )
+    );
+}
+
 export async function loadPageData({ dataKey, reload }: LoadPageDataProps) {
     const loadFn = loaders[dataKey];
     const store = salesOverviewStore.getState();
