@@ -184,10 +184,9 @@ function ShippingItem({ item }: { item: Shippable["item"] }) {
 
             shipping.deliveryCreatedQty += shippedQty;
             shipping.qty += totalQty;
-            shipping.pendingAssignmentQty += sum([
-                totalQty,
-                -1 * assignProdQty,
-            ]);
+            shipping.pendingAssignmentQty += status?.prodAssigned?.autoComplete
+                ? 0
+                : sum([totalQty, -1 * assignProdQty]);
             const pendingDelivery = sum([totalQty, -1 * shippedQty]);
             shipping.pendingDeliveryQty += pendingDelivery;
             shipping.pendingProductionQty += sum([
@@ -226,11 +225,14 @@ function ShippingItem({ item }: { item: Shippable["item"] }) {
                 </div>
                 <div className="space-y-2  flex-1">
                     <div className="flex-1 cursor-pointer">
-                        <div className="uppercase text-muted-foreground text-sm font-normal space-x-2">
+                        <div className="uppercase font-mono text-muted-foreground font-semibold">
+                            <span>{item.inlineSubtitle}</span>
+                        </div>
+                        {/* <div className="uppercase text-muted-foreground text-sm font-normal space-x-2">
                             <span>{item.sectionTitle}</span>
                             <span>{item.subtitle}</span>
                             <span>{item.swing}</span>
-                        </div>
+                        </div> */}
                         <div className="text-sm uppercase font-semibold">
                             {item?.title}
                         </div>

@@ -1,7 +1,7 @@
 import { AdminOnly } from "../../helper";
 
 import { salesOverviewStore } from "../../store";
-import { cn } from "@/lib/utils";
+import { cn, percent } from "@/lib/utils";
 import Money from "@/components/_v1/money";
 import { Badge } from "@/components/ui/badge";
 import { ItemOverview } from "./item-overview";
@@ -51,11 +51,7 @@ export function SalesItemsTab({}) {
                                         </div>
                                     </div>
                                     <div className="uppercase font-mono text-muted-foreground font-semibold">
-                                        <span>
-                                            {[item.sectionTitle, item.subtitle]
-                                                ?.filter(Boolean)
-                                                .join(" | ")}
-                                        </span>
+                                        <span>{item.inlineSubtitle}</span>
                                     </div>
                                 </div>
                                 {item.lineConfigs?.length && (
@@ -112,11 +108,29 @@ export function SalesItemsTab({}) {
         </div>
     );
 }
-function ItemDetails() {}
 function Pill({ label, value }) {
+    const [score, total] = value
+        ?.split(" ")
+        ?.filter(Boolean)
+        ?.reverse()?.[0]
+        ?.split("/");
+    const _percent = percent(score, total);
     return (
-        <div className="flex whitespace-nowrap uppercase font-semibold font-mono text-xs text-muted-foreground">
-            {label}: {value}
+        <div
+            className={cn(
+                "flex whitespace-nowrap uppercase font-semibold font-mono text-xs text-muted-foreground"
+            )}
+        >
+            <span
+                className={cn(
+                    "px-1 rounded-sm",
+                    _percent < 100 && "text-cyan-600 bg-cyan-100",
+                    !_percent && "text-red-600 bg-red-100",
+                    _percent >= 100 && "text-emerald-600 bg-emerald-100"
+                )}
+            >
+                {label}: {value}
+            </span>
         </div>
     );
 }

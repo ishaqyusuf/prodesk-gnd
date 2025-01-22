@@ -170,6 +170,7 @@ export async function getSalesItemsOverviewAction({
         itemIndex;
         totalCost?;
         subtitle?;
+        inlineSubtitle?: string;
         unitCost?;
         status: Partial<QtyControlByType>;
         produceable?: boolean;
@@ -184,6 +185,12 @@ export async function getSalesItemsOverviewAction({
         doorId?;
         assignments: ReturnType<typeof transformAssignments>;
     }[] = [];
+    function addItem(item: (typeof items)[number]) {
+        item.inlineSubtitle = [item.sectionTitle, item.subtitle, item.swing]
+            ?.filter(Boolean)
+            .join(" | ");
+        items.push(item);
+    }
     function transformAssignments(assignments: (typeof order)["assignments"]) {
         return assignments.map((ass) => {
             const resp = {
@@ -262,10 +269,6 @@ export async function getSalesItemsOverviewAction({
                 value: fs.value,
             });
         });
-        // us15
-        console.log(item.formSteps?.length);
-
-        console.log(itemConfigs);
 
         if (!order.isDyke || (!doors?.length && !hpt?.door)) {
             const assignments = order.assignments.filter(
@@ -277,7 +280,7 @@ export async function getSalesItemsOverviewAction({
             let title = item.description;
             let hidden = !order.isDyke && (title?.includes("***") || !item.qty);
             if (hidden) sectionTitle = title?.replaceAll("*", "");
-            items.push({
+            addItem({
                 itemId: item.id,
                 sectionTitle,
                 itemConfigs,
@@ -304,7 +307,7 @@ export async function getSalesItemsOverviewAction({
                 }`;
 
                 itemControlUid = doorItemControlUid(door.id, door.dimension);
-                items.push({
+                addItem({
                     assignments: transformAssignments(assignments),
                     itemIndex,
                     doorId: door.id,

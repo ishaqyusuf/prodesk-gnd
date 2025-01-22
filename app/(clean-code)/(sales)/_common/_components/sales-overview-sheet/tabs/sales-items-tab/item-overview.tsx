@@ -120,6 +120,7 @@ function ConfigForm({ onClose }) {
                 ...data,
             },
             {
+                qty: itemView?.status?.qty || {},
                 totalQty: itemView?.status?.qty?.total,
                 produceableChanged: itemView.produceable != data.produceable,
                 shippableChanged: itemView.shippable != data.shippable,

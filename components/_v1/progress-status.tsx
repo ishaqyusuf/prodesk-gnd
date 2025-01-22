@@ -4,6 +4,7 @@ import { Progressor, getProgress } from "@/lib/status";
 import { useEffect, useState } from "react";
 import { Progress } from "../ui/progress";
 import StatusBadge from "./status-badge";
+import { cva } from "class-variance-authority";
 
 interface Props {
     status?;
@@ -13,6 +14,7 @@ interface Props {
     color?;
     noDot?: boolean;
 }
+
 export default function ProgressStatus({
     status,
     score,

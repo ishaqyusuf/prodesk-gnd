@@ -15,7 +15,7 @@ import { percent, sum } from "@/lib/utils";
 export async function updateItemControlAction(
     uid,
     data: Prisma.SalesItemControlUpdateInput,
-    { totalQty, produceableChanged, shippableChanged }
+    { totalQty, produceableChanged, shippableChanged, qty }
 ) {
     const resp = await prisma.salesItemControl.update({
         where: {
@@ -30,6 +30,7 @@ export async function updateItemControlAction(
         totalQty,
         produceableChanged,
         shippableChanged,
+        qty,
     });
     await updateItemQtyControlsAction(uid);
     await updateSalesStatControlAction(resp.salesId);
@@ -37,7 +38,7 @@ export async function updateItemControlAction(
 export async function updateQtyControlAutoComplete(
     data,
     uid,
-    { totalQty, produceableChanged, shippableChanged }
+    { totalQty, produceableChanged, shippableChanged, qty }
 ) {
     const { produceable, shippable } = data;
     await Promise.all(
@@ -71,7 +72,11 @@ export async function updateQtyControlAutoComplete(
                 });
                 await Promise.all(
                     p.types?.map(async (type) => {
-                        await updateQtyControlAction(uid, type);
+                        await updateQtyControlAction(uid, type, {
+                            totalQty,
+                            ...qty,
+                            reset: true,
+                        });
                     })
                 );
             }
@@ -81,7 +86,7 @@ export async function updateQtyControlAutoComplete(
 export async function updateQtyControlAction(
     uid,
     type: QtyControlType,
-    { qty, lh, rh, totalQty } = {} as any
+    { qty, lh, rh, totalQty, reset = false } = { reset: false } as any
 ) {
     const qtyControl = await prisma.qtyControl.upsert({
         where: {
@@ -99,9 +104,9 @@ export async function updateQtyControlAction(
     });
     // console.log(qtyControl, { qty, lh, rh, totalQty });
     if (!qtyControl) throw new Error("Not found");
-    qtyControl.rh = sum([qtyControl.rh, rh]);
-    qtyControl.lh = sum([qtyControl.lh, lh]);
-    qtyControl.qty = sum([qtyControl.qty, qty]);
+    qtyControl.rh = reset ? rh : sum([qtyControl.rh, rh]);
+    qtyControl.lh = reset ? lh : sum([qtyControl.lh, lh]);
+    qtyControl.qty = reset ? qty : sum([qtyControl.qty, qty]);
 
     qtyControl.total = qtyControl.autoComplete
         ? totalQty
