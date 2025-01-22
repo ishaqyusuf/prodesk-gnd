@@ -178,7 +178,7 @@ export async function loginAction({ email, password }) {
                 name: true,
             },
         });
-        let can: ICan = {};
+        let can: ICan = {} as any;
         if (role.name == "Admin") {
             can = adminPermissions;
         } else
