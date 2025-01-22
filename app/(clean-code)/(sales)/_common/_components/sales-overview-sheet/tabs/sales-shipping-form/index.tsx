@@ -280,10 +280,10 @@ function ShippingItem({
 function QtyInput({ uid, input }) {
     let available = input.available;
     // available = 100;
-    if (!available) return null;
     // console.log(available);
 
     const form = useFormContext();
+    if (!available) return null;
 
     const inputOptions = Array(available + 1)
         ?.fill(0)
