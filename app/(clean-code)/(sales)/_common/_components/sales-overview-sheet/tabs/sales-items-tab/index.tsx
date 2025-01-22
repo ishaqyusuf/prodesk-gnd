@@ -123,10 +123,12 @@ function Pill({ label, value }) {
         >
             <span
                 className={cn(
-                    "px-1 rounded-sm",
-                    _percent < 100 && "text-cyan-600 bg-cyan-100",
-                    !_percent && "text-red-600 bg-red-100",
-                    _percent >= 100 && "text-emerald-600 bg-emerald-100"
+                    "px-1 rounded-full shadow border",
+                    _percent < 100 &&
+                        "text-cyan-600 bg-cyan-100 border-cyan-200",
+                    !_percent && "text-red-600 bg-red-100 border-red-200",
+                    _percent >= 100 &&
+                        "text-emerald-600 bg-emerald-100 border-emerald-200"
                 )}
             >
                 {label}: {value}

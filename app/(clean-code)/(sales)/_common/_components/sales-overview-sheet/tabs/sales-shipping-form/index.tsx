@@ -1,88 +1,23 @@
-import { useForm, useFormContext } from "react-hook-form";
-import { salesOverviewStore } from "../../store";
-import { useEffect, useState } from "react";
+import { useFormContext } from "react-hook-form";
+import { useEffect } from "react";
 import { Form } from "@/components/ui/form";
 import FormSelect from "@/components/common/controls/form-select";
 import { dispatchModes } from "../../../../utils/contants";
-import {
-    DeliveryOption,
-    QtyControlByType,
-} from "@/app/(clean-code)/(sales)/types";
 import Button from "@/components/common/button";
 import Portal from "@/components/_v1/portal";
-import { GetSalesItemOverviewAction } from "../../../../data-actions/sales-items-action";
 import { Menu } from "@/components/(clean-code)/menu";
 import { cn, sum } from "@/lib/utils";
 import FormInput from "@/components/common/controls/form-input";
 import { CheckCircle } from "lucide-react";
 import ProgressStatus from "@/components/_v1/progress-status";
-import FStatusBadge from "@/components/(clean-code)/fikr-ui/f-status-badge";
-import Badge from "../../../overview-sheet/components/badge";
+import { ItemShippable, Shippable, useSalesShipmentForm } from "./ctx";
+import { createSalesShipment } from "./create-shipment";
 
-type Shippable = {
-    item: GetSalesItemOverviewAction["items"][number];
-};
-type ItemShippable = {
-    pendingAssignmentQty?: number;
-    pendingProductionQty?: number;
-    deliveryCreatedQty?: number;
-    pendingDeliveryQty?: number;
-    deliverableQty?: number;
-    qty?: number;
-    inputs: {
-        label: string;
-        available: number;
-        total: number;
-        delivered: number;
-        unavailable: number;
-        formKey: string;
-    }[];
-};
-type SelectionType = {
-    [uid in string]: Partial<QtyControlByType["qty"]> & {
-        selectionError?: boolean;
-    };
-};
 export function SalesShippingForm({}) {
-    const store = salesOverviewStore();
-    const itemView = store.itemOverview;
-    const form = useForm({
-        defaultValues: {
-            dispatchMode: "" as DeliveryOption,
-            assignedToId: "",
-            selection: {} as SelectionType,
-            loaded: false,
-            markAll: false,
-            totalSelected: 0,
-            selectionError: false,
-        },
-    });
-    const [loaded, markAll, totalSelected, selectionError] = form.watch([
-        "loaded",
-        "markAll",
-        "totalSelected",
-        "selectionError",
-    ]);
-    useEffect(() => {
-        const selection: SelectionType = {};
-        itemView?.items?.map((k) => {
-            selection[k.itemControlUid] = {
-                itemControlUid: k.itemControlUid,
-                lh: 0,
-                rh: 0,
-                total: 0,
-                qty: 0,
-            };
-        });
-        form.reset({
-            selection,
-        });
-    }, [itemView]);
+    const ctx = useSalesShipmentForm();
+    const { form, itemView, store, totalSelected, selectionError } = ctx;
     if (!itemView) return null;
-    function selectAllAvailable() {}
-    async function createShipping() {
-        const data = form.getValues();
-    }
+
     return (
         <Form {...form}>
             <div className="">
@@ -117,7 +52,12 @@ export function SalesShippingForm({}) {
                         >
                             Select All Available
                         </Button>
-                        <Button onClick={createShipping} className="">
+                        <Button
+                            onClick={async () => {
+                                await createSalesShipment(ctx);
+                            }}
+                            className=""
+                        >
                             Save
                         </Button>
                     </div>
@@ -136,16 +76,13 @@ function ShippingItem({ item }: { item: Shippable["item"] }) {
 
     const uid = item.itemControlUid;
     const form = useFormContext();
-    const [lh, rh, qty, total] = form.watch([
+    const [lh, rh, qty, total, shipInfo] = form.watch([
         `${uid}.lh`,
         `${uid}.rh`,
         `${uid}.qty`,
         `${uid}.total`,
+        `${uid}.shipInfo`,
     ]);
-    const [shipInfo, setShipInfo] = useState<ItemShippable>({} as any);
-    // const totalShippables=  useMemo(() => {
-    //     return sum(shipInfo.deliveryCreatedQty)
-    // },[shipInfo])
     useEffect(() => {
         const _total = sum([lh, rh, qty]);
         const deliverableQty = shipInfo.deliverableQty;
@@ -208,9 +145,7 @@ function ShippingItem({ item }: { item: Shippable["item"] }) {
         qtyShip("lh");
         qtyShip("rh");
         qtyShip("qty");
-        console.log({ shipping });
-
-        setShipInfo(shipping);
+        form.setValue(`${uid}.shipInfo`, shipping);
     }, []);
     return (
         <div className={cn("border-b px-4 py-2", total > 0 && "bg-green-50")}>
@@ -225,7 +160,7 @@ function ShippingItem({ item }: { item: Shippable["item"] }) {
                 </div>
                 <div className="space-y-2  flex-1">
                     <div className="flex-1 cursor-pointer">
-                        <div className="uppercase font-mono text-muted-foreground font-semibold">
+                        <div className="uppercase font-mono text-muted-foreground text-sm font-semibold">
                             <span>{item.inlineSubtitle}</span>
                         </div>
                         {/* <div className="uppercase text-muted-foreground text-sm font-normal space-x-2">
