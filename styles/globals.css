@@ -109,10 +109,10 @@ table.size-sm td {
 }
 
 .side-modal-rounded-h-content {
-    @apply h-[calc(95vh)] sm:h-[calc(95vh-3vh)];
+    @apply h-[calc(95vh)] lg:h-[calc(95vh-3vh)];
 }
 .side-modal-rounded {
-    @apply sm:h-[95vh] sm:mt-[2.5vh] sm:mx-4 sm:rounded-xl flex flex-col;
+    @apply lg:h-[95vh] lg:mt-[2.5vh] lg:mx-4 lg:rounded-xl flex flex-col;
 }
 
 table.styled thead {

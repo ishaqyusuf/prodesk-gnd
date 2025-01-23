@@ -86,7 +86,7 @@ const contentVariants = cva(``, {
             lg: "w-full lg:w-[700px]",
             xl: "w-full lg:w-[900px]",
             "2xl": "",
-            none: "w-full sm:w-auto",
+            none: "w-full lg:w-auto",
         },
     },
     defaultVariants: {
