@@ -83,27 +83,29 @@ const hiddenDisplaySteps = [
     "Width",
 ];
 export const composeStepFormDisplay = (stepForms, sectionTitle = null) => {
-    const configs = stepForms?.map((stepForm) => {
-        let color = null;
-        let label = stepForm?.step?.title?.toLowerCase();
-        let value = stepForm?.step?.value?.toLowerCase();
-        let hidden =
-            hiddenDisplaySteps
-                ?.map((a) => a.toLocaleLowerCase())
-                .includes(value) || !value;
-        if (label == "item type" && !sectionTitle) sectionTitle = value;
-        let red = [
-            label == "hinge finish" && !value?.startsWith("us15"),
-            label?.includes("jamb") && !value?.startsWith("4-5/8"),
-        ];
-        if (red.every(Boolean)) color = "red";
-        return {
-            color,
-            label,
-            value,
-            hidden,
-        };
-    });
+    const configs = stepForms
+        ?.map((stepForm) => {
+            let color = null;
+            let label = stepForm?.step?.title?.toLowerCase();
+            let value = stepForm?.value?.toLowerCase();
+            let hidden =
+                hiddenDisplaySteps
+                    ?.map((a) => a.toLowerCase())
+                    .includes(value) || !value;
+            if (label == "item type" && !sectionTitle) sectionTitle = value;
+            let red = [
+                label == "hinge finish" && !value?.startsWith("us15"),
+                label?.includes("jamb") && !value?.startsWith("4-5/8"),
+            ];
+            if (red.some(Boolean)) color = "red";
+            return {
+                color,
+                label,
+                value,
+                hidden,
+            };
+        })
+        .filter((a) => !a.hidden);
     return {
         configs,
         sectionTitle,
