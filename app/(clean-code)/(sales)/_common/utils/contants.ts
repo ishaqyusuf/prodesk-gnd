@@ -67,16 +67,22 @@ export const widthList = [
 ];
 export const __filters = (): Filters => ({
     "production-tasks": {
-        fields: [filterFields["production.assignedToId"]],
-        filterColumns: [],
+        fields: [
+            filterFields["production.assignedToId"],
+            filterFields["order.no"],
+        ],
+        filterColumns: [
+            filterCol("production.assignedToId"),
+            filterCol("order.no"),
+        ],
     },
     "sales-delivery": {
         fields: [],
         filterColumns: [],
     },
     "sales-productions": {
-        fields: [],
-        filterColumns: [],
+        fields: [filterFields["order.no"], filterFields.search],
+        filterColumns: [filterCol("order.no"), filterCol("search")],
     },
     customers: {
         fields: [

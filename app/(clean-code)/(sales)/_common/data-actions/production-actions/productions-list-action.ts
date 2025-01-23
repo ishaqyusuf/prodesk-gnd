@@ -27,6 +27,20 @@ export async function getProductionTasksListPageAction(
 }
 export async function getProductionListPageAction(query: SearchParamsType) {
     const prodList = await getProductionListAction(query);
+    console.log(query.start);
+    const excludes: (keyof SearchParamsType)[] = [
+        "sort",
+        "size",
+        "start",
+        "production.assignedToId",
+        "sales.type",
+    ];
+    const q = Object.entries(query)?.filter(
+        ([a, b]) => b && !excludes.includes(a as any)
+    );
+    const queryCount = q?.length;
+    // console.log({ queryCount, query, q });
+
     const dueToday = !query.start
         ? await getProductionListAction({
               "sales.type": query["sales.type"],

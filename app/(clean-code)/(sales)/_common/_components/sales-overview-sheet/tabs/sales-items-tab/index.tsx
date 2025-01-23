@@ -5,6 +5,7 @@ import { cn, percent } from "@/lib/utils";
 import Money from "@/components/_v1/money";
 import { Badge } from "@/components/ui/badge";
 import { ItemOverview } from "./item-overview";
+import { ProductionHeader } from "./header";
 
 export function SalesItemsTab({}) {
     const store = salesOverviewStore();
@@ -12,6 +13,9 @@ export function SalesItemsTab({}) {
     if (!itemOverview) return;
     return (
         <div>
+            <AdminOnly>
+                <ProductionHeader />
+            </AdminOnly>
             {itemOverview?.items?.map((item) => (
                 <div className="flex flex-col gap-2" key={item.itemControlUid}>
                     {/* {item.primary && item.sectionTitle && (
