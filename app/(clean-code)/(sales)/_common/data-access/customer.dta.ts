@@ -80,11 +80,15 @@ export async function saveCustomerDta(data: Prisma.CustomersCreateInput) {
     return customer;
 }
 export async function getCustomerProfileDta(phoneNo) {
-    const customer = await prisma.customers.findFirst({
+    const customer = await prisma.customers.upsert({
         where: {
             phoneNo,
-            OR: [{ name: { not: null } }, { businessName: { not: null } }],
+            // OR: [{ name: { not: null } }, { businessName: { not: null } }],
         },
+        create: {
+            phoneNo,
+        },
+        update: {},
         select: {
             name: true,
             businessName: true,
