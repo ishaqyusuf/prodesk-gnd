@@ -3,11 +3,11 @@
 import { authId } from "@/app/(v1)/_actions/utils";
 import { prisma } from "@/db";
 import { sum } from "@/lib/utils";
+import { updateQtyControlAction } from "../item-control.action";
 import {
-    updateQtyControlAction,
-    updateSalesItemControlAction,
-} from "../item-control.action";
-import { updateSalesStatControlAction } from "../sales-stat-control.action";
+    resetSalesStatAction,
+    updateSalesStatControlAction,
+} from "../sales-stat-control.action";
 
 export async function createItemAssignmentAction({
     salesItemId,
@@ -70,8 +70,7 @@ export async function deleteItemAssignmentAction({ id }) {
                 deletedAt: new Date(),
             },
         });
-        await updateSalesItemControlAction(a.orderId);
-        await updateSalesStatControlAction(a.orderId);
+        await resetSalesStatAction(a.orderId);
     }) as any);
 }
 export async function submitItemAssignmentAction({
@@ -134,7 +133,6 @@ export async function deleteSubmissionAction({ id }) {
                 deletedAt: new Date(),
             },
         });
-        await updateSalesItemControlAction(resp.salesOrderId);
-        await updateSalesStatControlAction(resp.salesOrderId);
+        await resetSalesStatAction(resp.salesOrderId);
     }) as any);
 }

@@ -24,8 +24,7 @@ export async function validateSalesStatControlAction(salesId) {
         .map((i) => i.qtyControls)
         .flat().length;
     if (!qtyControls) {
-        await updateSalesItemControlAction(salesId);
-        await updateSalesStatControlAction(salesId);
+        await resetSalesStatAction(salesId);
     }
 }
 export async function updateSalesStatControlAction(salesId) {
@@ -100,4 +99,8 @@ export async function updateSalesStatControlAction(salesId) {
     await createStat("dispatchInProgress", totalShippable);
     await createStat("prodAssigned", totalProduceable);
     await createStat("prodCompleted", totalProduceable);
+}
+export async function resetSalesStatAction(salesId) {
+    await updateSalesItemControlAction(salesId);
+    await updateSalesStatControlAction(salesId);
 }

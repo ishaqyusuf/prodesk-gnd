@@ -69,7 +69,7 @@ export function SalesShippingForm({}) {
                     </div>
                 </Portal>
                 {itemView?.items
-                    ?.filter((a) => !a.hidden)
+                    ?.filter((a, i) => !a.hidden && i == 0)
                     .map((item, uid) => (
                         <ShippingItem ctx={ctx} key={uid} item={item} />
                     ))}
@@ -105,6 +105,7 @@ function ShippingItem({
         const deliverableQty = shipInfo?.deliverableQty;
         form.setValue(`selection.${uid}.total`, _total);
         // ctx.updateSelection(uid, "total", _total);
+        console.log({ status });
         console.log({ total });
     }, [lh, rh, qty, shipInfo]);
     useEffect(() => {
@@ -133,6 +134,8 @@ function ShippingItem({
                     "dispatchInProgress",
                 ])
             );
+            if (shippedQty) console.log(shippedQty);
+
             let totalQty = getValue("qty");
             let producedQty = getValue("prodCompleted");
             let assignProdQty = getValue("prodAssigned");

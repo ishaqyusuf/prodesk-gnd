@@ -11,6 +11,10 @@ import { TCell } from "@/components/(clean-code)/data-table/table-cells";
 import { Menu } from "@/components/(clean-code)/menu";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { deleteDispatchAction } from "../../../../data-actions/dispatch-actions/delete-dispatch-action";
+import { refreshTabData } from "../../helper";
+import { toast } from "sonner";
+import { openSalesPrint } from "@/app/(v2)/printer/utils";
 
 export function SalesShippingTab({}) {
     const store = salesOverviewStore();
@@ -81,9 +85,46 @@ export function SalesShippingTab({}) {
                                 <TCell align="right" className="action">
                                     {/* <ConfirmBtn trash /> */}
                                     <Menu>
-                                        <Menu.Item>Print</Menu.Item>
+                                        <Menu.Item
+                                            _blank
+                                            onClick={() => {
+                                                openSalesPrint({
+                                                    slugs: store.overview
+                                                        ?.orderId,
+                                                    mode: "packing list",
+                                                    dispatchId: dispatch.id,
+                                                });
+                                            }}
+                                        >
+                                            Print
+                                        </Menu.Item>
                                         <Menu.Item>Status</Menu.Item>
-                                        <Menu.Trash>Delete</Menu.Trash>
+                                        <Menu.Trash
+                                            action={async () => {
+                                                toast.promise(
+                                                    async () => {
+                                                        await deleteDispatchAction(
+                                                            dispatch.id
+                                                        );
+                                                        return true;
+                                                    },
+                                                    {
+                                                        loading: "Deleting....",
+                                                        async success(data) {
+                                                            refreshTabData(
+                                                                "shipping"
+                                                            );
+                                                            return "Deleted";
+                                                            // toast.success(
+                                                            //     "deleted!"
+                                                            // );
+                                                        },
+                                                    }
+                                                );
+                                            }}
+                                        >
+                                            Delete
+                                        </Menu.Trash>
                                     </Menu>
                                 </TCell>
                             </TableRow>

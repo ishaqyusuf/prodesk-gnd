@@ -128,12 +128,24 @@ export function composeQtyControl(props: ComposeQtyControlProps) {
         status: SalesDispatchStatus,
         controlType: QtyControlType
     ) {
-        const dispatchItems = dispatches.filter((d) =>
-            d.status
-                ? d.status == status
-                : deliveries.find((del) => del.id == d.orderDeliveryId)
-                      ?.status == status
-        );
+        const dispatchItems = dispatches.filter((d) => {
+            const _status =
+                d.status ||
+                deliveries.find((del) => del.id == d.orderDeliveryId)?.status;
+            switch (status) {
+                case "queue":
+                    return _status == status || !_status;
+                    break;
+                default:
+                    return _status == status;
+                    break;
+            }
+            // d.status
+            //     ? d.status == status
+            //     : deliveries.find((del) => del.id == d.orderDeliveryId)
+            //           ?.status == status;
+        });
+        if (dispatchItems.length) console.log(dispatchItems);
         controls[controlType] = {
             lh: sum(dispatchItems, "lhQty"),
             rh: sum(dispatchItems, "rhQty"),

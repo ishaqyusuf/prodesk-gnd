@@ -3,13 +3,10 @@
 import { authId } from "@/app/(v1)/_actions/utils";
 import { prisma } from "@/db";
 import { getSalesAssignmentsByUidAction } from "../production-actions/item-assignments-action";
-import {
-    getItemControlAction,
-    updateSalesItemControlAction,
-} from "../item-control.action";
+import { getItemControlAction } from "../item-control.action";
 import { Prisma } from "@prisma/client";
 import { sum } from "@/lib/utils";
-import { updateSalesStatControlAction } from "../sales-stat-control.action";
+import { resetSalesStatAction } from "../sales-stat-control.action";
 
 export interface CreateSalesDispatchData {
     items: {
@@ -64,8 +61,7 @@ export async function createSalesDispatchAction(data: CreateSalesDispatchData) {
         });
         console.log(resp);
 
-        await updateSalesItemControlAction(salesId);
-        await updateSalesStatControlAction(salesId);
+        await resetSalesStatAction(salesId);
     }) as any);
 }
 async function getItemDispatchableSubmissions(

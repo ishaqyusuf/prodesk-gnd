@@ -13,6 +13,10 @@ import { CopyMenuAction } from "./copy.menu.action";
 import { Button } from "@/components/ui/button";
 import Money from "@/components/_v1/money";
 import { openTxForm } from "../../tx-form";
+import DevOnly from "@/_v2/components/common/dev-only";
+import { resetSalesStatAction } from "../../../data-actions/sales-stat-control.action";
+import { refreshTabData } from "../helper";
+import { RefreshCcw } from "lucide-react";
 
 export function Footer({}) {
     const store = salesOverviewStore();
@@ -72,6 +76,18 @@ export function Footer({}) {
                 <PrintMenuAction pdf />
                 <CopyMenuAction />
                 <MoveMenuAction />
+                <DevOnly>
+                    <Menu.Item
+                        Icon={RefreshCcw}
+                        onClick={async () => {
+                            await resetSalesStatAction(store.overview?.id);
+                            toast.success("stat reset complete");
+                            refreshTabData(store.currentTab);
+                        }}
+                    >
+                        Reset Item Stats
+                    </Menu.Item>
+                </DevOnly>
             </Menu>
         </div>
     );

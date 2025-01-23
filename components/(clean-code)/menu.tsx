@@ -36,7 +36,7 @@ type MenuItemProps = {
     Icon?;
     SubMenu?;
     shortCut?;
-    _blank?: Boolean;
+    _blank?: boolean;
     icon?: IconKeys;
 } & DropdownMenuItemProps;
 interface RowActionMoreMenuProps {
@@ -169,7 +169,7 @@ function LinkableNode({
     children,
     _blank,
     ...props
-}: PrimitiveDivProps & { href?; className?; As?; _blank?: Boolean }) {
+}: PrimitiveDivProps & { href?; className?; As?; _blank?: boolean }) {
     if (href)
         return (
             <Link
