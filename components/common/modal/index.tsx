@@ -27,8 +27,6 @@ import { Icons } from "@/components/_v1/icons";
 import { useFormContext } from "react-hook-form";
 import { PrimitiveDivProps } from "@/types/type";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import Portal from "@/components/_v1/portal";
-import { createPortal } from "react-dom";
 
 function BaseModal({
     children,
@@ -88,7 +86,7 @@ const contentVariants = cva(``, {
             lg: "w-full lg:w-[700px]",
             xl: "w-full lg:w-[900px]",
             "2xl": "",
-            none: "w-auto",
+            none: "w-full sm:w-auto",
         },
     },
     defaultVariants: {
@@ -270,17 +268,18 @@ function MultiPane({ children }) {
     );
 }
 function SecondaryPane({ children }) {
-    return (
-        <Portal noDelay nodeId={"multiPane"}>
-            <div className="w-[600px] flex flex-col side-modal-rounded-h-content mr-2">
-                {children}
-            </div>
-        </Portal>
-    );
+    return { children };
+    // return (
+    //     <Portal noDelay nodeId={"multiPane"}>
+    //         <div className="w-[600px] flex flex-col side-modal-rounded-h-content mr-2">
+    //             {children}
+    //         </div>
+    //     </Portal>
+    // );
 }
 function Pane({ children }) {
     return (
-        <div className="h-auto sm:w-[600px] flex flex-col side-modal-rounded-h-content">
+        <div className="h-auto w-full sm:w-[600px] flex flex-col side-modal-rounded-h-content">
             {children}
         </div>
     );
@@ -290,9 +289,9 @@ export const multiPaneNode = () => document.getElementById("multiPane");
 export const openSecondaryPane = (component, id) => {
     const node = multiPaneNode();
 
-    return _modal.secondaryPaneIds?.includes(id)
-        ? createPortal(component, node)
-        : null;
+    // return _modal.secondaryPaneIds?.includes(id)
+    //     ? createPortal(component, node)
+    //     : null;
 };
 export default Object.assign(BaseModal, {
     Content,
