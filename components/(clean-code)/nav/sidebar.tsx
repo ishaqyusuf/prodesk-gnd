@@ -10,6 +10,7 @@ import { Icons } from "@/components/_v1/icons";
 export function Sidebar() {
     const sidebar = useStore(useSidebarToggle, (state) => state);
     if (!sidebar) return null;
+
     return (
         <aside
             className={cn(

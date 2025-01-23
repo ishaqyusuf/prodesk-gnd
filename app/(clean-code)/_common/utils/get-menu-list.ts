@@ -1,5 +1,5 @@
 import { IconKeys, Icons } from "@/components/_v1/icons";
-import { LayoutGrid, LucideIcon } from "lucide-react";
+import { LucideIcon } from "lucide-react";
 import { Session } from "next-auth";
 
 type Submenu = {
@@ -18,7 +18,7 @@ type Menu = {
     module?: (typeof modules)[number]["title"];
 };
 
-type Group = {
+export type NavGroup = {
     groupLabel: string;
     menus: Menu[];
 };
@@ -27,14 +27,14 @@ const modules = [
     { title: "sales", path: "sales-book" },
 ] as const;
 
-export function getMenuList(pathname: string, session: Session): Group[] {
-    const menuList: Group[] = [];
+export function getMenuList(pathname: string, session: Session): NavGroup[] {
+    const menuList: NavGroup[] = [];
     // session.can
     type T = keyof NonNullable<typeof session.can>;
     const isAdmin = session?.role?.name == "Admin";
 
     function addGroup(groupLabel?: string) {
-        let group: Group = { groupLabel, menus: [] };
+        let group: NavGroup = { groupLabel, menus: [] };
         const ctx = {
             menu(label, href, icon: IconKeys, permission?, submenus = []) {
                 group.menus.push({
@@ -112,19 +112,5 @@ export function getMenuList(pathname: string, session: Session): Group[] {
             and("viewProject", "viewInvoice")
         )
         .commit();
-    return menuList;
-    // return [
-    //     {
-    //         groupLabel: "",
-    //         menus: [
-    //             {
-    //                 href: "/dashboard",
-    //                 label: "Dashboard",
-    //                 active: pathname.includes("/dashboard"),
-    //                 icon: LayoutGrid,
-    //                 submenus: [],
-    //             },
-    //         ],
-    //     },
-    // ];
+    return menuList.filter((ml) => ml.menus?.filter((a) => a.visible)?.length);
 }
