@@ -264,8 +264,10 @@ export async function getSalesItemsOverviewAction({
             if (!fs.value) return;
             itemConfigs.push({
                 color:
-                    title == "hinge finish" &&
-                    !fs.value?.toLowerCase().startsWith("us15")
+                    (title == "hinge finish" &&
+                        !fs.value?.toLowerCase().startsWith("us15")) ||
+                    (title?.includes("jamb") &&
+                        !fs?.value?.toLowerCase()?.startsWith("4-5/8"))
                         ? "red"
                         : null,
                 label: fs.step?.title,
