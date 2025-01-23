@@ -8,6 +8,7 @@ import {
     DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
+    DropdownMenuShortcut,
 } from "@/components/ui/dropdown-menu";
 import {
     Tooltip,
@@ -71,13 +72,22 @@ export function UserNav() {
                     </DropdownMenuItem> */}
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem
+                <Link href={`/signout`}>
+                    <DropdownMenuItem onClick={() => {}}>
+                        <LogOut className="mr-2 h-4 w-4" />
+                        <span>Log out</span>
+                        <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
+                    </DropdownMenuItem>
+                </Link>
+                {/* <DropdownMenuItem
                     className="hover:cursor-pointer"
-                    onClick={() => {}}
+                    onClick={() => {
+
+                    }}
                 >
                     <LogOut className="size-4 mr-3 text-muted-foreground" />
                     Sign out
-                </DropdownMenuItem>
+                </DropdownMenuItem> */}
             </DropdownMenuContent>
         </DropdownMenu>
     );

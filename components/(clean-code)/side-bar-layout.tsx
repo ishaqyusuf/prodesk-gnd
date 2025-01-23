@@ -9,7 +9,6 @@ import { redirect } from "next/navigation";
 import { useNavStore } from "./nav/store";
 import { usePathname } from "next/navigation";
 import { getMenuList } from "@/app/(clean-code)/_common/utils/get-menu-list";
-
 export default function SidebarLayout({
     children,
 }: {
