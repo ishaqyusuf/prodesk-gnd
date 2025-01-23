@@ -6,7 +6,6 @@ import {
 } from "../../types";
 import { transformSalesStepMeta } from "../data-access/dto/sales-step-dto";
 import { LoadSalesFormData } from "../data-access/sales-form-settings.dta";
-import { GetStepsForRoutingProps } from "../data-access/sales-form-step-dta";
 
 export function composeStepRouting(fdata: LoadSalesFormData) {
     const sectionKeys = Object.keys(fdata.setting?.data?.route || [])?.map(
@@ -74,98 +73,39 @@ export function composeStepRouting(fdata: LoadSalesFormData) {
         rootComponentsByKey,
     };
 }
-
-const customSteps: Partial<{
-    [section in DykeDoorType | "DEFAULT"]: DykeStepTitleKv;
-}> = {
-    DEFAULT: {
-        "Shelf Items": "Shelf Items",
-        "Cutdown Height": "House Package Tool",
-        "Jamb Species": "Jamb Size",
-        Door: "Jamb Species",
-        "Jamb Size": "Jamb Type",
-        "Door Type": "Door",
-    },
-    Bifold: {
-        "Item Type": "Height",
-        // "Door Configuration": "Height",
-        Height: "Door Type",
-        "Door Type": "Door",
-        Door: "House Package Tool",
-    },
-    Exterior: {
-        "Door Type": "Category",
-        Category: "Door",
-    },
-    Moulding: {
-        "Item Type": "Specie",
-        Specie: "Moulding",
-        Moulding: "Line Item",
-    },
-    Services: {
-        "Item Type": "Line Item",
-    },
-    "Door Slabs Only": {
-        Door: "House Package Tool",
-        "Item Type": "Height",
-        Height: "Door Type",
-    },
+const hiddenDisplaySteps = [
+    "Door",
+    "Item Type",
+    "Moulding",
+    "House Package Tool",
+    "Height",
+    "Hand",
+    "Width",
+];
+export const composeStepFormDisplay = (stepForms, sectionTitle = null) => {
+    const configs = stepForms?.map((stepForm) => {
+        let color = null;
+        let label = stepForm?.step?.title?.toLowerCase();
+        let value = stepForm?.step?.value?.toLowerCase();
+        let hidden =
+            hiddenDisplaySteps
+                ?.map((a) => a.toLocaleLowerCase())
+                .includes(value) || !value;
+        if (label == "item type" && !sectionTitle) sectionTitle = value;
+        let red = [
+            label == "hinge finish" && !value?.startsWith("us15"),
+            label?.includes("jamb") && !value?.startsWith("4-5/8"),
+        ];
+        if (red.every(Boolean)) color = "red";
+        return {
+            color,
+            label,
+            value,
+            hidden,
+        };
+    });
+    return {
+        configs,
+        sectionTitle,
+    };
 };
-function isEnd(stepTitle) {
-    const end: DykeStepTitles[] = ["House Package Tool", "Line Item"];
-    return end.includes(stepTitle);
-}
-function isStepHidden(stepTitle, doorType: DykeDoorType) {
-    let title = stepTitle?.toLowerCase();
-
-    let steps = [...hiddenSteps];
-
-    switch (doorType) {
-        case "Bifold":
-            steps.push(...bifoldHiddenSteps);
-            break;
-        case "Door Slabs Only":
-            steps.push(...doorSlabHiddenSteps);
-            break;
-    }
-    return steps.includes(title?.toLowerCase());
-}
-const hiddenSteps = [
-    "width",
-    "hand",
-    "casing 1x4 setup",
-    "--jamb stop",
-    "rip jamb",
-    "jamb size",
-    "jamb species",
-];
-const bifoldHiddenSteps = [
-    // "door configuration",
-    // "door type",
-    "bore",
-    "jamb size",
-    "casing",
-    "jamb species",
-    "jamb type",
-    "cutdown height",
-    "casing y/n",
-    "hinge finish",
-    "casing side choice",
-    "casing species",
-    "cutdown height",
-];
-const doorSlabHiddenSteps = [
-    "door configuration",
-    "bore",
-    "jamb size",
-    "casing",
-    "jamb species",
-    "jamb type",
-    "cutdown height",
-    "casing y/n",
-    "hinge finish",
-    "door type",
-    "casing side choice",
-    "casing species",
-    "cutdown height",
-];

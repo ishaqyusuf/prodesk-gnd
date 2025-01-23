@@ -143,15 +143,17 @@ function Item({
         <DropdownMenuItem
             {...props}
             onClick={link || href ? null : (onClick as any)}
+            className="gap-2"
         >
-            {Icon && (
-                <Icon className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-            )}
+            {Icon && <Icon className="h-3.5 w-3.5 text-muted-foreground/70" />}
             {children}
             {!!shortCut && (
-                <DropdownMenuShortcut className="">
-                    {shortCut}
-                </DropdownMenuShortcut>
+                <>
+                    <div className="flex-1"></div>
+                    <DropdownMenuShortcut className="">
+                        {shortCut}
+                    </DropdownMenuShortcut>
+                </>
             )}
         </DropdownMenuItem>
     );

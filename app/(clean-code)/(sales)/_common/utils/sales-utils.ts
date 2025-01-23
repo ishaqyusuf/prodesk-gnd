@@ -80,44 +80,13 @@ export function statStatus(stat: SalesStat): {
     };
 }
 
-const DontShowComponents = [
-    "Door",
-    "Item Type",
-    "Moulding",
-    "House Package Tool",
-    "Height",
-    "Hand",
-    "Width",
-];
-export function validateShowComponentStyle(formStep) {
-    const step: DykeSteps = formStep.step;
-    const title = step?.title;
-    return DontShowComponents.every((s) => s != title) && title != null;
-}
 export function itemLineIndex(line) {
     return Number(line?.meta?.line_index || line?.meta?.uid || 0);
 }
 export function sortSalesItems(a, b) {
     return itemLineIndex(a) - itemLineIndex(b);
 }
-export function isComponentType(type: DykeDoorType) {
-    const resp = {
-        slab: type == "Door Slabs Only",
-        bifold: type == "Bifold",
-        service: type == "Services",
-        garage: type == "Garage",
-        shelf: type == "Shelf Items",
-        exterior: type == "Exterior",
-        interior: type == "Interior",
-        moulding: type == "Moulding",
-        hasSwing: false,
-        multiHandles: false,
-    };
-    resp.hasSwing = resp.garage;
-    resp.multiHandles = resp.interior || resp.exterior || resp.garage;
-    // resp.interior || resp.exterior || resp.garage || !type;
-    return resp;
-}
+
 export function isNewSales(orderId) {
     return ["quo-", "ord-"].some((a) => orderId?.toLowerCase()?.startsWith(a));
 }

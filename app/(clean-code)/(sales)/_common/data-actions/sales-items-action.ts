@@ -8,11 +8,10 @@ import {
     itemItemControlUid,
     mouldingItemControlUid,
 } from "../utils/item-control-utils";
-import { excludeDeleted } from "../utils/db-utils";
-import { Prisma } from "@prisma/client";
 import { formatMoney } from "@/lib/use-number";
 import { sum } from "@/lib/utils";
 import { authId } from "@/app/(v1)/_actions/utils";
+import { composeStepFormDisplay } from "../utils/sales-step-utils";
 
 export type GetSalesItemOverviewAction = AsyncFnType<
     typeof getSalesItemsOverviewAction
@@ -256,24 +255,10 @@ export async function getSalesItemsOverviewAction({
         let itemControlUid;
         const hpt = item.housePackageTool;
         const doors = hpt?.doors;
-        const itemConfigs: { label; value; color? }[] = [];
-        let sectionTitle = item.dykeDescription;
-        item.formSteps.map((fs) => {
-            const title = fs.step.title?.toLowerCase();
-            if (!sectionTitle && title == "item type") sectionTitle = fs.value;
-            if (!fs.value) return;
-            itemConfigs.push({
-                color:
-                    (title == "hinge finish" &&
-                        !fs.value?.toLowerCase().startsWith("us15")) ||
-                    (title?.includes("jamb") &&
-                        !fs?.value?.toLowerCase()?.startsWith("4-5/8"))
-                        ? "red"
-                        : null,
-                label: fs.step?.title,
-                value: fs.value,
-            });
-        });
+        let { configs, sectionTitle } = composeStepFormDisplay(
+            item.formSteps,
+            item.dykeDescription
+        );
 
         if (!order.isDyke || (!doors?.length && !hpt?.door)) {
             const assignments = order.assignments.filter(
@@ -288,7 +273,7 @@ export async function getSalesItemsOverviewAction({
             addItem({
                 itemId: item.id,
                 sectionTitle,
-                itemConfigs,
+                itemConfigs: configs,
                 itemIndex,
                 itemControlUid,
                 status: {},
@@ -325,7 +310,7 @@ export async function getSalesItemsOverviewAction({
                     subtitle: door.dimension,
                     totalCost: door.lineTotal,
                     unitCost: door.unitPrice,
-                    itemConfigs,
+                    itemConfigs: configs,
                 });
             });
         }

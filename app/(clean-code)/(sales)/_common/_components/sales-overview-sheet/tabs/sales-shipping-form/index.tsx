@@ -8,7 +8,13 @@ import Portal from "@/components/_v1/portal";
 import { Menu } from "@/components/(clean-code)/menu";
 import { cn, sum } from "@/lib/utils";
 import FormInput from "@/components/common/controls/form-input";
-import { CheckCircle } from "lucide-react";
+import {
+    CheckCircle,
+    ClipboardList,
+    ClipboardX,
+    PackageCheck,
+    Send,
+} from "lucide-react";
 import ProgressStatus from "@/components/_v1/progress-status";
 import {
     ItemShippable,
@@ -18,6 +24,11 @@ import {
 } from "./ctx";
 import { createSalesShipment } from "./create-shipment";
 import { salesOverviewStore } from "../../store";
+import {
+    DropdownMenuGroup,
+    DropdownMenuLabel,
+} from "@/components/ui/dropdown-menu";
+import { ItemControlMenu } from "../../components/item-control-menu";
 
 export function SalesShippingForm({}) {
     const ctx = useSalesShipmentForm();
@@ -69,7 +80,7 @@ export function SalesShippingForm({}) {
                     </div>
                 </Portal>
                 {itemView?.items
-                    ?.filter((a, i) => !a.hidden && i == 0)
+                    ?.filter((a, i) => !a.hidden)
                     .map((item, uid) => (
                         <ShippingItem ctx={ctx} key={uid} item={item} />
                     ))}
@@ -89,9 +100,7 @@ function ShippingItem({
     const form = ctx.form;
     const uid = item.itemControlUid;
     const selectData = store.shippingForm?.selection?.[uid];
-    useEffect(() => {
-        console.log(selectData);
-    }, [selectData]);
+
     const [lh, rh, qty, total, shipInfo] = form.watch([
         `selection.${uid}.lh`,
         `selection.${uid}.rh`,
@@ -105,8 +114,6 @@ function ShippingItem({
         const deliverableQty = shipInfo?.deliverableQty;
         form.setValue(`selection.${uid}.total`, _total);
         // ctx.updateSelection(uid, "total", _total);
-        console.log({ status });
-        console.log({ total });
     }, [lh, rh, qty, shipInfo]);
     useEffect(() => {
         // console.log(item?.status);
@@ -139,7 +146,6 @@ function ShippingItem({
             let totalQty = getValue("qty");
             let producedQty = getValue("prodCompleted");
             let assignProdQty = getValue("prodAssigned");
-            console.log({ assignProdQty });
 
             shipping.deliveryCreatedQty += shippedQty;
             shipping.qty += totalQty;
@@ -167,13 +173,12 @@ function ShippingItem({
         qtyShip("lh");
         qtyShip("rh");
         qtyShip("qty");
-        console.log({ shipping });
 
         // ctx.updateSelection(uid, "shipInfo", shipping);
         form.setValue(`selection.${uid}.shipInfo`, shipping);
     }, []);
     // const form = useFormContext();
-
+    async function submitAllPendingProduction() {}
     return (
         <div className={cn("border-b px-4 py-2", total > 0 && "bg-green-50")}>
             {/* {JSON.stringify(shipInfo || {})} */}
@@ -251,29 +256,60 @@ function ShippingItem({
                 <div className="mt-2">
                     <Menu>
                         <Menu.Item
+                            Icon={Send}
                             SubMenu={
                                 <>
                                     <Menu.Item
-                                        disabled={
-                                            !shipInfo?.pendingProductionQty
+                                        Icon={PackageCheck}
+                                        shortCut={
+                                            <>
+                                                {shipInfo?.pendingProductionQty +
+                                                    shipInfo?.pendingAssignmentQty}
+                                            </>
                                         }
-                                    >
-                                        Assigned Productions
-                                    </Menu.Item>
-                                    <Menu.Item
                                         disabled={
                                             !shipInfo?.pendingProductionQty &&
                                             !shipInfo?.pendingAssignmentQty
                                         }
                                     >
-                                        All Pending Productions
+                                        All Productions
+                                    </Menu.Item>
+                                    <Menu.Item
+                                        Icon={ClipboardList}
+                                        disabled={
+                                            !shipInfo?.pendingProductionQty
+                                        }
+                                        shortCut={
+                                            <>
+                                                {shipInfo?.pendingProductionQty}
+                                            </>
+                                        }
+                                    >
+                                        Assigned Productions
+                                    </Menu.Item>
+                                    <Menu.Item
+                                        Icon={ClipboardX}
+                                        disabled={
+                                            !shipInfo?.pendingAssignmentQty
+                                        }
+                                        shortCut={
+                                            <>
+                                                {shipInfo?.pendingAssignmentQty}
+                                            </>
+                                        }
+                                    >
+                                        Unassigned Productions
                                     </Menu.Item>
                                 </>
                             }
                         >
                             Submit
                         </Menu.Item>
-                        <Menu.Item disabled>Mark All as Completed</Menu.Item>
+                        <ItemControlMenu
+                            totalQty={item?.status?.qty?.total}
+                            produceable={item?.produceable}
+                            shippable={item?.shippable}
+                        />
                     </Menu>
                 </div>
             </div>

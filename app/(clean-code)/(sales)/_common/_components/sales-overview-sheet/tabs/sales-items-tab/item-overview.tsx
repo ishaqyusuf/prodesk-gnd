@@ -24,6 +24,7 @@ import { Minimize } from "lucide-react";
 import { ItemAssignments } from "./assignments";
 import { createItemAssignmentAction } from "../../../../data-actions/production-actions/item-assign-action";
 import { cn } from "@/lib/utils";
+import { ItemControlMenu } from "../../components/item-control-menu";
 
 export function ItemOverview({}) {
     const store = salesOverviewStore();
@@ -66,11 +67,16 @@ export function ItemOverview({}) {
                             <span className="px-2">({pendingAssignment})</span>
                         </Button>
                         <Menu disabled={!!showForm}>
-                            <Menu.Item onClick={() => setShowForm("config")}>
+                            {/* <Menu.Item onClick={() => setShowForm("config")}>
                                 Item Config
-                            </Menu.Item>
+                            </Menu.Item> */}
                             <Menu.Item>Assign All</Menu.Item>
                             <Menu.Item>Mark As Completed</Menu.Item>
+                            <ItemControlMenu
+                                totalQty={itemView?.status?.qty?.total}
+                                produceable={itemView?.produceable}
+                                shippable={itemView?.shippable}
+                            />
                         </Menu>
                         <Button
                             disabled={!!showForm}

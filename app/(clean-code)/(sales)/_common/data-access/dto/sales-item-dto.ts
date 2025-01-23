@@ -1,15 +1,10 @@
 import { formatCurrency, sum } from "@/lib/utils";
 import { GetFullSalesDataDta } from "../sales-dta";
-import {
-    inToFt,
-    sortSalesItems,
-    validateShowComponentStyle,
-} from "../../utils/sales-utils";
+import { inToFt, sortSalesItems } from "../../utils/sales-utils";
 import { salesItemAssignmentsDto } from "./sales-item-assignment-dto";
 import { salesItemsStatsDto } from "./sales-stat-dto";
 import { deliveryBreakdownDto } from "./sales-shipping-dto";
-import { calculateDeliveryBreakdownPercentage } from "../../utils/dispatch-utils";
-import { SalesItemControl } from "@prisma/client";
+
 import { SalesDispatchStatus } from "../../../types";
 import {
     doorItemControlUid,
@@ -17,6 +12,7 @@ import {
     itemItemControlUid,
     mouldingItemControlUid,
 } from "../../utils/item-control-utils";
+import { SalesItemControl } from "@prisma/client";
 
 interface Pill {
     label?: string;
@@ -491,9 +487,9 @@ export function qtyDiff(rh: Qty, lh: Qty, add = false): Qty {
 
 function componentStyle(item: Item) {
     let styles: Pill[] = [];
-    item.formSteps?.filter(validateShowComponentStyle).map((fs) => {
-        styles.push(createPill(fs.step.title, fs.value));
-    });
+    // item.formSteps?.filter(validateShowComponentStyle).map((fs) => {
+    //     styles.push(createPill(fs.step.title, fs.value));
+    // });
     return styles?.filter((s) => s.value);
 }
 
