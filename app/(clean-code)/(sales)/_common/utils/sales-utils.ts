@@ -1,6 +1,7 @@
 import { DykeSteps, SalesStat } from "@prisma/client";
 import { DykeDoorType, SalesStatStatus, QtyControlType } from "../../types";
 import { Colors } from "@/lib/status-badge";
+import { sum } from "@/lib/utils";
 
 export function inToFt(_in) {
     if (_in.includes("-")) return _in;
@@ -94,3 +95,12 @@ export const composeSalesUrl = (props) =>
     props.isDyke || props.dyke
         ? `/sales-book/edit-${props.type}/${props.orderId || props.slug}`
         : `/sales/edit/${props.type}/${props.orderId || props.slug}`;
+
+export const qtyControlDifference = <T>(from: T, sub): T => {
+    let result: any = {};
+    Object.entries(from).map(([k, v]) => {
+        result[k] = sum([v, sub[k]]);
+    });
+    // result.total =
+    return result as any;
+};

@@ -8,21 +8,24 @@ import {
     resetSalesStatAction,
     updateSalesStatControlAction,
 } from "../sales-stat-control.action";
+import { itemControlUidObject } from "../../utils/item-control-utils";
 
 export async function createItemAssignmentAction({
     salesItemId,
-    assignedToId,
+    assignedToId = null,
     doorId = null,
     salesId,
     lh,
     rh,
     qty,
-    dueDate,
+    dueDate = null,
     uid,
     totalQty,
 }) {
-    return await prisma.$transaction((async (tx: typeof prisma) => {
-        await tx.orderItemProductionAssignments.create({
+    const obj = itemControlUidObject(uid);
+    doorId = obj.doorId;
+    return (await prisma.$transaction((async (tx: typeof prisma) => {
+        const assignment = await tx.orderItemProductionAssignments.create({
             data: {
                 salesDoor: doorId
                     ? {
@@ -58,7 +61,8 @@ export async function createItemAssignmentAction({
             lh,
         });
         await updateSalesStatControlAction(salesId);
-    }) as any);
+        return assignment.id;
+    }) as any)) as any;
 }
 export async function deleteItemAssignmentAction({ id }) {
     return await prisma.$transaction((async (tx: typeof prisma) => {
