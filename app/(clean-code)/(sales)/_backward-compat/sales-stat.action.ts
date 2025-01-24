@@ -14,7 +14,80 @@ import { typedFullSale } from "../_common/data-access/sales-dta";
 import { salesOverviewDto } from "../_common/data-access/dto/sales-item-dto";
 import { lastId } from "@/lib/nextId";
 import dayjs from "dayjs";
+import { resetSalesStatAction } from "../_common/data-actions/sales-stat-control.action";
 
+export async function loadSalesWithoutStats() {
+    const sales = await prisma.salesOrders.findMany({
+        where: {
+            type: "order",
+            // assignments: {
+            //     some: {},
+            // },
+            // OR: [
+            //     {
+            //         itemControls: {
+            //             none: {},
+            //         },
+            //     },
+            //     {
+            //         itemControls: {
+            //             every: {
+            //                 qtyControls: {
+            //                     none: {},
+            //                 },
+            //             },
+            //         },
+            //     },
+            // ],
+        },
+        select: {
+            _count: {
+                select: {
+                    assignments: true,
+                    itemControls: true,
+                },
+            },
+            id: true,
+            createdAt: true,
+            itemControls: {
+                select: {
+                    _count: {
+                        select: {
+                            qtyControls: true,
+                        },
+                    },
+                },
+            },
+        },
+        orderBy: {
+            createdAt: "desc",
+        },
+    });
+    console.log(sales);
+    // console.log(sales.filter(a => a.itemControls?.));
+    const transformed = sales.map((s) => {
+        return {
+            ...s,
+            qtyCounts: sum(s.itemControls.map((a) => a._count.qtyControls)),
+        };
+    });
+    console.log(
+        "NO QTY CONTROLS",
+        transformed.filter((a) => !a.qtyCounts && !a._count.assignments)
+    );
+    console.log(
+        "HAS QTY CONTROLs",
+        transformed.filter((a) => a.qtyCounts)
+    );
+    return transformed.filter((a) => !a.qtyCounts)?.map((a) => a.id);
+}
+export async function updateSalesStats(ids) {
+    return await Promise.all(
+        ids.map(async (id) => {
+            await resetSalesStatAction(id);
+        })
+    );
+}
 async function loadSalesOverviews() {
     const sales = await prisma.salesOrders.findMany({
         where: {

@@ -5,7 +5,7 @@ import { salesItemGroupOverviewDto } from "./sales-item-dto";
 import { statStatus } from "../../utils/sales-utils";
 import { Colors } from "@/lib/status-badge";
 import { overallDeliveryBreakdown } from "../../utils/dispatch-utils";
-import { percent } from "@/lib/utils";
+import { percent, sum, sumArrayKeys } from "@/lib/utils";
 
 type ItemGroup = ReturnType<typeof salesItemGroupOverviewDto>;
 export function salesItemsStatsDto(
@@ -79,11 +79,18 @@ export function statToKeyValueDto(dataStats: SalesStat[], reset = false) {
     return k;
 }
 export function overallStatus(dataStats: SalesStat[]) {
+    console.log(dataStats);
+
     const sk = statToKeyValueDto(dataStats);
+    const dispatch = sumArrayKeys(
+        [sk.dispatchAssigned, sk.dispatchInProgress, sk.dispatchCompleted],
+        ["score", "total", "percentage"]
+    );
+
     return {
         production: statStatus(sk.prodCompleted),
         assignment: statStatus(sk.prodAssigned),
         // payment: statStatus(sk.),
-        delivery: statStatus(sk.dispatchCompleted),
+        delivery: statStatus(dispatch as any),
     };
 }

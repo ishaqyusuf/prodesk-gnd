@@ -49,7 +49,7 @@ DataTableToolbarProps<TData>) {
 
     return (
         <div className="flex flex-wrap items-center justify-between gap-4">
-            <div className="flex flex-wrap items-center gap-2 hidden">
+            <div className="sflex flex-wrap items-center gap-2 hidden">
                 <TooltipProvider>
                     <Tooltip>
                         <TooltipTrigger asChild>

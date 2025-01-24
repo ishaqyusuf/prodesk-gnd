@@ -35,6 +35,9 @@ export async function updateSalesStatControlAction(salesId) {
         select: {
             stat: true,
             itemControls: {
+                where: {
+                    deletedAt: null,
+                },
                 select: {
                     produceable: true,
                     shippable: true,
@@ -43,6 +46,8 @@ export async function updateSalesStatControlAction(salesId) {
             },
         },
     });
+    console.log(order.itemControls);
+
     const itemControls = order.itemControls
         .map((a) => a.qtyControls)
         .flat()
@@ -56,17 +61,22 @@ export async function updateSalesStatControlAction(salesId) {
             .filter((i) => i.produceable)
             .map((a) => a.qtyControls)
             .flat()
-            .filter((a) => a.qty),
+            .filter((a) => a.total),
         "total"
     );
     const totalShippable = sum(
         order.itemControls
-            .filter((i) => i.produceable)
+            .filter((i) => i.shippable)
             .map((a) => a.qtyControls)
             .flat()
-            .filter((a) => a.qty),
+            .filter((a) => a.total),
         "total"
     );
+    console.log({
+        totalProduceable,
+        totalShippable,
+    });
+
     async function createStat(type: QtyControlType, total) {
         const score = sum(
             itemControls.filter((a) => a.type == type),
@@ -101,6 +111,18 @@ export async function updateSalesStatControlAction(salesId) {
     await createStat("prodCompleted", totalProduceable);
 }
 export async function resetSalesStatAction(salesId) {
+    // const resp = await prisma.qtyControl.deleteMany({
+    //     where: {
+    //         itemControl: {
+    //             salesId,
+    //         },
+    //     },
+    // });
+    // const _resp = await prisma.salesItemControl.deleteMany({
+    //     where: { salesId },
+    // });
+    // console.log({ resp, _resp });
+
     await updateSalesItemControlAction(salesId);
     await updateSalesStatControlAction(salesId);
 }

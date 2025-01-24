@@ -107,6 +107,19 @@ export async function slugModel(value, model, c = 0, id = null) {
 
     return slug;
 }
+export function sumArrayKeys<T>(
+    array?: T[],
+    keys: (keyof T | undefined)[] = undefined,
+    subtract = false
+) {
+    if (!array?.length) return array;
+    let [first, ...others] = array;
+    let ret: T = {} as any;
+    keys?.map((k) => {
+        ret[k] = sum(array, k) as any;
+    });
+    return ret;
+}
 export function sum<T>(array?: T[], key: keyof T | undefined = undefined) {
     if (!array) return 0;
     return (

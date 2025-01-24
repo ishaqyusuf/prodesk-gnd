@@ -46,7 +46,9 @@ export function chunker({ worker, list, chunkSize = 50 }: Props) {
         index += chunkSize;
 
         toastId = toast(
-            `Processing items ${index - chunkSize + 1} to ${index}`,
+            `Processing items ${index - chunkSize + 1} to ${index} of ${
+                list?.length
+            }`,
             {
                 action: {
                     label: "Cancel",
