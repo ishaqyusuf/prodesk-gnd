@@ -46,40 +46,34 @@ export async function updateSalesStatControlAction(salesId) {
             },
         },
     });
-    console.log(order.itemControls);
 
-    const itemControls = order.itemControls
-        .map((a) => a.qtyControls)
-        .flat()
-        .map((c) => ({
-            ...c,
-            type: c.type as QtyControlType,
-        }));
+    const qtyControls = order.itemControls
+        .map((a) =>
+            a.qtyControls.map((c) => ({
+                ...c,
+                produceable: a.produceable,
+                shippable: a.shippable,
+                type: c.type as QtyControlType,
+            }))
+        )
+        .flat();
 
     const totalProduceable = sum(
-        order.itemControls
-            .filter((i) => i.produceable)
-            .map((a) => a.qtyControls)
-            .flat()
-            .filter((a) => a.total),
-        "total"
+        qtyControls.filter((t) => t.shippable && t.type == "prodAssigned"),
+        "itemTotal"
     );
     const totalShippable = sum(
-        order.itemControls
-            .filter((i) => i.shippable)
-            .map((a) => a.qtyControls)
-            .flat()
-            .filter((a) => a.total),
-        "total"
+        qtyControls.filter((t) => t.shippable && t.type == "dispatchAssigned"),
+        "itemTotal"
     );
-    console.log({
-        totalProduceable,
-        totalShippable,
-    });
+    // console.log({
+    //     totalProduceable,
+    //     totalShippable,
+    // });
 
     async function createStat(type: QtyControlType, total) {
         const score = sum(
-            itemControls.filter((a) => a.type == type),
+            qtyControls.filter((a) => a.type == type),
             "total"
         );
         const percentage = percent(score, total);

@@ -1,6 +1,5 @@
 import { IconKeys, Icons } from "@/components/_v1/icons";
 import { LucideIcon } from "lucide-react";
-import { Session } from "next-auth";
 
 type Submenu = {
     href: string;
@@ -17,7 +16,6 @@ type Menu = {
     submenus: Submenu[];
     module?: (typeof modules)[number]["title"];
 };
-
 export type NavGroup = {
     groupLabel: string;
     menus: Menu[];
@@ -27,14 +25,16 @@ const modules = [
     { title: "sales", path: "sales-book" },
 ] as const;
 
-export function getMenuList(pathname: string, session: Session): NavGroup[] {
-    const menuList: NavGroup[] = [];
+export function getMenuList(pathname: string, session): any[] {
+    const menuList: any[] = [];
     // session.can
     type T = keyof NonNullable<typeof session.can>;
     const isAdmin = session?.role?.name == "Admin";
 
     function addGroup(groupLabel?: string) {
-        let group: NavGroup = { groupLabel, menus: [] };
+        let group =
+            // : NavGroup
+            { groupLabel, menus: [] };
         const ctx = {
             menu(label, href, icon: IconKeys, permission?, submenus = []) {
                 group.menus.push({

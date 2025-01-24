@@ -6,7 +6,6 @@ import SiteHeader from "@/components/_v1/layouts/site-header";
 import { nav } from "@/lib/navs";
 import SiteNav from "@/components/_v1/layouts/site-nav";
 import Refresher from "@/components/_v1/refresher";
-
 export default function AccountLayout({ children }: any) {
     const { data: session } = useSession({
         required: true,

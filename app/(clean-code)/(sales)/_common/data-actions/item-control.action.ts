@@ -289,29 +289,30 @@ export async function updateSalesItemControlAction(salesId) {
 
     const controls = composeControls(order);
 
-    const resp = await prisma.$transaction((async (tx: typeof prisma) => {
-        const del = await tx.qtyControl.deleteMany({
-            where: {
-                itemControl: {
-                    salesId: order.id,
-                },
+    // const resp = await prisma.$transaction((async (tx: typeof prisma) => {
+    const tx = prisma;
+    const del = await tx.qtyControl.deleteMany({
+        where: {
+            itemControl: {
+                salesId: order.id,
             },
-        });
-        const arr = await Promise.all(
-            controls.map(async (c) => {
-                if (c.create)
-                    return await tx.salesItemControl.create({ data: c.create });
-                if (c.update)
-                    return await tx.salesItemControl.update({
-                        data: c.update,
-                        where: {
-                            uid: c.uid,
-                        },
-                    });
-            })
-        );
-        return { del, arr };
-    }) as any);
+        },
+    });
+    const arr = await Promise.all(
+        controls.map(async (c) => {
+            if (c.create)
+                return await tx.salesItemControl.create({ data: c.create });
+            if (c.update)
+                return await tx.salesItemControl.update({
+                    data: c.update,
+                    where: {
+                        uid: c.uid,
+                    },
+                });
+        })
+    );
+    return { del, arr };
+    // }) as any);
 
-    return resp;
+    // return resp;
 }

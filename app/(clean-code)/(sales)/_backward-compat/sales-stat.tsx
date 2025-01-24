@@ -1,10 +1,6 @@
 import { chunker } from "@/lib/chunker";
 import { Menu } from "../../../../components/(clean-code)/menu";
-import {
-    loadSalesWithoutStats,
-    salesStatUpgrade,
-    updateSalesStats,
-} from "./sales-stat.action";
+import { loadSalesWithoutStats, updateSalesStats } from "./sales-stat.action";
 
 export default function SalesStat({}) {
     async function _salesStatistics() {
@@ -13,7 +9,7 @@ export default function SalesStat({}) {
         chunker({
             worker: updateSalesStats,
             list: resp,
-            chunkSize: 20,
+            chunkSize: 1,
         });
         // const resp = await salesStatisticsAction();
         // console.log(resp);

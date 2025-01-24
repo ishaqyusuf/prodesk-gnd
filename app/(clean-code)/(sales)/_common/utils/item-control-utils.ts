@@ -168,6 +168,7 @@ export function composeQtyControl(props: ComposeQtyControlProps) {
         console.log([_totalQty, control.type]);
 
         control.total = _totalQty;
+        control.itemTotal = totalQty;
         control.percentage = percent(_totalQty, totalQty);
         return control;
     });

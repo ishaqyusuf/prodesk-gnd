@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect } from "react";
-import { useStore } from "../../app/(clean-code)/_common/hooks/use-store";
-import { useSidebarToggle } from "../../app/(clean-code)/_common/hooks/use-sidebar-toggle";
+
 import { Sidebar } from "./nav/sidebar";
 import { cn } from "@/lib/utils";
 import { useSession } from "next-auth/react";
@@ -14,20 +13,20 @@ export default function SidebarLayout({
 }: {
     children: React.ReactNode;
 }) {
-    // const sidebar = useStore(useSidebarToggle, (state) => state);
     const { data: session } = useSession({
         required: true,
         onUnauthenticated() {
             redirect("/login");
         },
     });
+
     const nav = useNavStore();
     const pathname = usePathname();
-    useEffect(() => {
-        const ls = getMenuList(pathname, session);
+    // useEffect(() => {
+    //     const ls = getMenuList(pathname, session);
 
-        nav.update("groupedMenu", ls);
-    }, [pathname, session]);
+    //     nav.update("groupedMenu", ls);
+    // }, [pathname, session]);
     if (!session?.user) return <></>;
     // if (!sidebar) return null;
 

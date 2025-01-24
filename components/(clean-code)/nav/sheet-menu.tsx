@@ -6,16 +6,17 @@ import {
     SheetTitle,
     SheetTrigger,
 } from "@/components/ui/sheet";
-import { MenuIcon, PanelsTopLeft } from "lucide-react";
+import { MenuIcon } from "lucide-react";
 import Link from "next/link";
 import Menu from "./menu";
-import { useStore } from "@/app/(clean-code)/_common/hooks/use-store";
-import { useSidebarToggle } from "@/app/(clean-code)/_common/hooks/use-sidebar-toggle";
+
 import { Icons } from "@/components/_v1/icons";
 import { cn } from "@/lib/utils";
+import { siteNavStore } from "../site-nav/store";
 
 export function SheetMenu() {
-    const sidebar = useStore(useSidebarToggle, (state) => state);
+    const store = siteNavStore();
+    // const sidebar = useStore(useSidebarToggle, (state) => state);
     return (
         <Sheet>
             <SheetTrigger className="lg:hidden" asChild>
@@ -33,7 +34,7 @@ export function SheetMenu() {
                         <Button
                             className={cn(
                                 "transition-transform ease-in-out duration-300 mb-1",
-                                sidebar?.isOpen === false
+                                store?.sideNavOpened === false
                                     ? "translate-x-1"
                                     : "translate-x-0"
                             )}
@@ -44,7 +45,7 @@ export function SheetMenu() {
                                 href="/dashboard"
                                 className="flex items-center gap-2"
                             >
-                                {!sidebar?.isOpen ? (
+                                {!store?.sideNavOpened ? (
                                     <Icons.logo />
                                 ) : (
                                     <Icons.logoLg />

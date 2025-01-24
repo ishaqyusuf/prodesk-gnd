@@ -1,12 +1,11 @@
-import { NavGroup } from "@/app/(clean-code)/_common/utils/get-menu-list";
-import { persist, createJSONStorage } from "zustand/middleware";
-import { dotObject, dotSet } from "@/app/(clean-code)/_common/utils/utils";
+import { dotSet } from "@/app/(clean-code)/_common/utils/utils";
 import { FieldPath, FieldPathValue } from "react-hook-form";
 import { create } from "zustand";
 
 const data = {
-    groupedMenu: [] as NavGroup[],
-    isOpen: false,
+    userId: null,
+    sideNavOpened: false,
+    showSideNav: false,
 };
 type Action = ReturnType<typeof funcs>;
 type Data = typeof data;
@@ -15,10 +14,14 @@ export type ZusFormSet = (update: (state: Data) => Partial<Data>) => void;
 
 function funcs(set: ZusFormSet) {
     return {
-        reset: (resetData) =>
+        toggleSideNav: (value) =>
+            set((state) => ({
+                ...state,
+                showSideNav: value,
+            })),
+        reset: () =>
             set((state) => ({
                 ...data,
-                ...resetData,
             })),
         update: <K extends FieldPath<Data>>(k: K, v: FieldPathValue<Data, K>) =>
             set((state) => {
@@ -31,19 +34,7 @@ function funcs(set: ZusFormSet) {
             }),
     };
 }
-// export const useNavStore = create<Store>(
-//     persist(
-//         (set) => ({
-//             ...data,
-//             ...funcs(set),
-//         }),
-//         {
-//             name: "sidebarOpen",
-//             storage: createJSONStorage(() => localStorage),
-//         }
-//     )
-// );
-export const useNavStore = create<Store>((set) => ({
+export const siteNavStore = create<Store>((set) => ({
     ...data,
     ...funcs(set),
 }));
