@@ -151,7 +151,9 @@ function AssignmentLine({ assignment, index }) {
                             >
                                 <div className="font-mono">
                                     {s.description} {"  submitted on "}
-                                    {formatDate(s.date)}
+                                    <span className="uppercase">
+                                        {formatDate(s.date, "MM/DD/YY hh:mma")}
+                                    </span>
                                 </div>
                                 <div className="flex-1"></div>
                                 <ConfirmBtn
