@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/sidebar";
 import { siteNavStore } from "./store";
 import { navModules } from "./utils";
+import Link from "next/link";
 
 export function ModuleSwitcher({}) {
     const { isMobile } = useSidebar();
@@ -66,16 +67,22 @@ export function ModuleSwitcher({}) {
                         {teams.map((team, index) => (
                             <DropdownMenuItem
                                 key={team.title}
-                                href={team.mainRoute}
-                                className="gap-2 p-2"
+                                asChild={!!team.mainRoute}
+                                // href={team.mainRoute}
+                                className=""
                             >
-                                <div className="flex size-6 items-center justify-center rounded-sm border">
-                                    <team.Icon className="size-4 shrink-0" />
-                                </div>
-                                {team.title}
-                                <DropdownMenuShortcut>
-                                    ⌘{index + 1}
-                                </DropdownMenuShortcut>
+                                <Link
+                                    className="gap-2 p-2"
+                                    href={team.mainRoute}
+                                >
+                                    <div className="flex size-6 items-center justify-center rounded-sm border">
+                                        <team.Icon className="size-4 shrink-0" />
+                                    </div>
+                                    {team.title}
+                                    <DropdownMenuShortcut>
+                                        ⌘{index + 1}
+                                    </DropdownMenuShortcut>
+                                </Link>
                             </DropdownMenuItem>
                         ))}
                         <DropdownMenuSeparator />

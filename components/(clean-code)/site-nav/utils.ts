@@ -61,7 +61,6 @@ export const composeSiteNav = (session) => {
         };
         const visible =
             type == "or" ? rules?.some(checkRule) : rules?.every(checkRule);
-        console.log(visible);
 
         return {
             ...route,
@@ -132,11 +131,10 @@ export const composeSiteNav = (session) => {
             return _mod;
         }
     );
-    console.log(modules);
     const totalLinks = sum(modules, "linkCount");
-    console.log({ totalLinks });
 
     store.update("modules", modules);
+    store.update("showSideNav", totalLinks > 5);
 
     // return modules;
 };
@@ -145,7 +143,7 @@ export type SiteNavModule = {
     groupMenu: GroupMenu[];
     linkCount?;
     mainRoute;
-}; //& (typeof navModules)["community"]; //ReturnType<typeof composeModule>["data"];
+} & ModuleObject; //& (typeof navModules)["community"]; //ReturnType<typeof composeModule>["data"];
 function composeModule(node: keyof typeof navModules) {
     const data: SiteNavModule = {
         // title: modules[node],
