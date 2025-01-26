@@ -16,7 +16,7 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { LayoutGrid, LogOut, User } from "lucide-react";
+import { LogOut } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 
