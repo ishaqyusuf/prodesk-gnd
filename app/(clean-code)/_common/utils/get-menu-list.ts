@@ -13,14 +13,14 @@ type Menu = {
     label: string;
     active?: boolean;
     visible: boolean;
-    icon: LucideIcon;
-    submenus: Submenu[];
-    module?: (typeof modules)[number]["title"];
+    icon: any;
+    submenus: any[];
+    module?: any; //(typeof modules)[number]["title"];
 };
 
 export type NavGroup = {
     groupLabel: string;
-    menus: Menu[];
+    menus: any[];
 };
 const modules = [
     { title: "community", path: "community" },
