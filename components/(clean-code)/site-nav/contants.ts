@@ -1,10 +1,11 @@
+import { Icons } from "@/components/_v1/icons";
 import { Permission, Roles } from "../../../types/auth";
 export interface Rules {
     rule: "is" | "in" | "isNot";
     permissions: Permission[];
     roles: Roles[];
 }
-export type NavRule = ReturnType<typeof rule>["or"];
+export type NavRule = ReturnType<ReturnType<typeof rule>["or"]>;
 function rule() {
     const rules: Rules[] = [];
     function role(values: Rules["roles"], rule: Rules["rule"] = "is") {
@@ -35,12 +36,20 @@ function rule() {
     return ctx;
 }
 const salesPermission = rule().role(["Admin"]).can(["viewSales"]).or();
-function createRoute(path, name, icon, rules) {
-    return { path, name, icon, rules };
+function createRoute(paths, name, icon, rule) {
+    let path = Array.isArray(paths) ? paths : [paths];
+    paths = !Array.isArray(paths) ? [paths] : paths;
+    return { path, name, rule, paths, visible: true, Icon: NavIcon(icon) };
+}
+function NavIcon(icon) {
+    const Icon = Icons[icon];
+    if (!Icon) return null;
+    return Icon;
+    // return <Icon className="siz"
 }
 export const routes = {
     "sales.dashboard": createRoute(
-        "/sales-dashboard",
+        ["/dashboard/sales", "/sales-dashboard"],
         "Sales Dashboard",
         "sales",
         salesPermission
@@ -59,14 +68,14 @@ export const routes = {
     ),
     "sales.customers": createRoute(
         "/sales-books/customers",
-        "Quotes",
-        "estimates",
+        "Customers",
+        "user",
         salesPermission
     ),
     "sales.dealers": createRoute(
         "/sales-books/dealers",
         "Dealers",
-        "dealers",
+        "dealer",
         salesPermission
     ),
     "sales.dispatch": createRoute(

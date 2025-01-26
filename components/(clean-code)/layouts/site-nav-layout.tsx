@@ -1,10 +1,10 @@
 "use client";
 
 import { useSession } from "next-auth/react";
-import { redirect } from "next/navigation";
+import { redirect, usePathname } from "next/navigation";
 import { useEffect } from "react";
 import { siteNavStore } from "../site-nav/store";
-import { composeSiteNav } from "../site-nav/utils";
+import { composeSiteNav, setCurrentModule } from "../site-nav/utils";
 import { cn } from "@/lib/utils";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { SiteSidebarNav } from "../site-nav/side-bar";
@@ -24,6 +24,11 @@ export default function SiteNavLayout({ children }) {
             composeSiteNav(session);
         }
     }, [session]);
+    const path = usePathname();
+    useEffect(() => {
+        console.log(path);
+        setCurrentModule(path);
+    }, [path]);
     return (
         <SidebarProvider>
             <SiteSidebarNav></SiteSidebarNav>

@@ -1,11 +1,14 @@
 import { dotSet } from "@/app/(clean-code)/_common/utils/utils";
 import { FieldPath, FieldPathValue } from "react-hook-form";
 import { create } from "zustand";
+import { SiteNavModule } from "./utils";
 
 const data = {
     userId: null,
     sideNavOpened: false,
     showSideNav: false,
+    modules: [] as SiteNavModule[],
+    activeModule: null as SiteNavModule["moduleName"],
 };
 type Action = ReturnType<typeof funcs>;
 type Data = typeof data;
