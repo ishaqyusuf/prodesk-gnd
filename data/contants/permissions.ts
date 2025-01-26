@@ -61,3 +61,5 @@ export const PERMISSIONS = [
     "viewDecoShutterInstall",
     "editDecoShutterInstall",
 ] as const;
+
+export const ROLES = ["Admin", "Production"] as const;

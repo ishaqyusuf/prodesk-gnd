@@ -10,14 +10,10 @@ import SalesTabLayout from "@/components/_v1/tab-layouts/sales-tab-layout";
 import { _restoreSalesOrder } from "@/app/(v1)/_actions/fix/restore-sales-order";
 import { _mergeConflictCustomers } from "@/app/(v1)/_actions/fix/merge-conflict-customer";
 
-import NewSalesBtn from "./components/new-sales-btn";
 import CopyFn from "./components/copy-fn";
 import OrdersTable from "./components/orders-table";
 import AuthGuard from "@/app/(v2)/(loggedIn)/_components/auth-guard";
-import dayjs from "dayjs";
 import Portal from "@/components/_v1/portal";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import NewFeatureBtn from "@/components/common/new-feature-btn";
 
 export const metadata: Metadata = {
@@ -49,8 +45,8 @@ export default async function SalesOrdersPage({ searchParams }) {
                     </div>
                 </Portal>
                 <CopyFn />
-                <OrdersTable searchParams={searchParams} promise={response} />
                 <OrderPrinter />
+                <OrdersTable searchParams={searchParams} promise={response} />
             </SalesTabLayout>
         </AuthGuard>
     );

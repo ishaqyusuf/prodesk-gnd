@@ -1,14 +1,5 @@
-import { ContentLayout } from "../../../components/(clean-code)/content-layout";
-import SidebarLayout from "../../../components/(clean-code)/side-bar-layout";
-import BackwardCompat from "./_backward-compat";
+import SiteNavLayout from "@/components/(clean-code)/layouts/site-nav-layout";
 
 export default function Layout({ children }) {
-    return (
-        <SidebarLayout>
-            <ContentLayout>
-                <BackwardCompat />
-                {children}
-            </ContentLayout>
-        </SidebarLayout>
-    );
+    return <SiteNavLayout>{children}</SiteNavLayout>;
 }

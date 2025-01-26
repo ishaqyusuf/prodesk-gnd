@@ -2,15 +2,10 @@ import "@/styles/globals.css";
 import { Metadata } from "next";
 
 import { Inter } from "next/font/google";
-// import { siteConfig } from "@/config/site";
-// import { fontSans } from "@/lib/fonts";
 import { Toaster } from "@/components/ui/toaster";
 import AppProvider from "@/components/_v1/app-provider";
 import { env } from "@/env.mjs";
 import Upgrader from "@/components/_v1/upgrader";
-// import { SiteHeader } from "@/components/site-header";
-// import { TailwindIndicator } from "@/components/tailwind-indicator";
-// import { ThemeProvider } from "@/components/theme-provider";
 import { Analytics } from "@vercel/analytics/react";
 import { cn } from "@/lib/utils";
 import { TailwindIndicator } from "@/components/_v1/tailwind-indicator";
@@ -22,6 +17,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { QueryTabProvider } from "./(clean-code)/_common/query-tab/provider";
 import { ThemeProvider } from "next-themes";
 import { constructMetadata } from "@/lib/(clean-code)/construct-metadata";
+import SiteNavLayout from "../components/(clean-code)/layouts/site-nav-layout";
 
 export async function generateMetadata({}) {
     return constructMetadata({
@@ -47,7 +43,6 @@ export default async function RootLayout({
                             <Suspense>
                                 <QueryTabProvider>
                                     {children}
-
                                     <PageAnalytics />
                                 </QueryTabProvider>
                             </Suspense>

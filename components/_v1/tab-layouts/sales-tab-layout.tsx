@@ -34,5 +34,10 @@ export default function SalesTabLayout({
             },
         ].filter(Boolean)
     );
-    return <TabbedLayout tabs={tabs as any}>{children}</TabbedLayout>;
+    return (
+        <>
+            <TabbedLayout tabs={tabs as any}></TabbedLayout>
+            {children}
+        </>
+    );
 }

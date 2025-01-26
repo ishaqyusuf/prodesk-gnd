@@ -6,6 +6,9 @@ import { useEffect } from "react";
 import { siteNavStore } from "../site-nav/store";
 import { composeSiteNav } from "../site-nav/utils";
 import { cn } from "@/lib/utils";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { SiteSidebarNav } from "../site-nav/side-bar";
+import { NavHeader } from "../site-nav/nav-header";
 
 export default function SiteNavLayout({ children }) {
     const { data: session } = useSession({
@@ -20,6 +23,16 @@ export default function SiteNavLayout({ children }) {
         else {
             composeSiteNav(session);
         }
-    }, [session, store]);
-    return <div className={cn("")}>{children}</div>;
+    }, [session]);
+    return (
+        <SidebarProvider>
+            <SiteSidebarNav></SiteSidebarNav>
+            <SidebarInset>
+                <NavHeader />
+                <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
+                    {children}
+                </div>
+            </SidebarInset>
+        </SidebarProvider>
+    );
 }

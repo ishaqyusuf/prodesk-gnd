@@ -11,6 +11,7 @@ import { createPortal } from "react-dom";
 import { cn } from "@/lib/utils";
 import { PrimitiveDivProps } from "@/types/type";
 import { timeout } from "@/lib/timeout";
+import Portal from "../portal";
 
 export default function TabbedLayout({
     children,
@@ -33,21 +34,10 @@ export default function TabbedLayout({
     const _nav = nav(session);
     const path = usePathname();
     const [tab, setTab] = useState<any>(path);
-    // const [tabs, setTabs] = useState<{ label; value }[]>([]);
-    const route = useRouter();
-    const [TabElement, setTabElement] = useState(
-        document?.getElementById("tab")
-    );
-    useEffect(() => {
-        (async () => {
-            await timeout(2000);
-            setTabElement(document?.getElementById("tab"));
-        })();
-    }, []);
-    if (!TabElement) return <></>;
+
     return (
         <div className="space-y-4 ">
-            {createPortal(
+            <Portal nodeId={"tab"}>
                 <div className="flex ">
                     {(tabKey ? _nav?.[tabKey] : tabs).map((c, i) => (
                         <div className="flex flex-col" key={i}>
@@ -70,30 +60,8 @@ export default function TabbedLayout({
                             ></div>
                         </div>
                     ))}
-                </div>,
-                TabElement
-            )}
-            {/* <Tabs
-        defaultValue={tab}
-        onChange={(v) => {
-          console.log(v);
-        }}
-        className=" px-8"
-      >
-        <TabsList className="bg-transparent">
-          {_nav?.[tabKey].map((c, i) => (
-            <TabsTrigger
-              onClick={() => {
-                route.push(c.path);
-              }}
-              key={i}
-              value={c.path}
-            >
-              {c.title}
-            </TabsTrigger>
-          ))}
-        </TabsList>
-      </Tabs> */}
+                </div>
+            </Portal>
             {children && (
                 <div className={cn("px-4 sm:px-8 space-y-4", className)}>
                     {children}

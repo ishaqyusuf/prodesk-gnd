@@ -45,11 +45,12 @@ export default function AuthGuard({
 
         const _visible =
             (permission && rolePermission) || session?.role.name == "Admin";
+
         setVisible(_visible);
         if (!_visible) {
             redirect("/");
         }
-    }, []);
-
-    return <div className={cn(className)}>{visible && children}</div>;
+    }, [session, can]);
+    if (!visible) return null;
+    return <div className={cn(className)}>{children}</div>;
 }
