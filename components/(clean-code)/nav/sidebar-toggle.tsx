@@ -6,7 +6,6 @@ interface SidebarToggleProps {
     isOpen: boolean | undefined;
     setIsOpen?: () => void;
 }
-
 export function SidebarToggle({ isOpen, setIsOpen }: SidebarToggleProps) {
     return (
         <div className="invisible lg:visible absolute top-[12px] -right-[16px] z-20">

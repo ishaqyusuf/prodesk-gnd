@@ -26,12 +26,11 @@ export default function SiteNavLayout({ children }) {
     }, [session]);
     const path = usePathname();
     useEffect(() => {
-        console.log(path);
         setCurrentModule(path);
     }, [path]);
     return (
         <SidebarProvider>
-            <SiteSidebarNav></SiteSidebarNav>
+            <SiteSidebarNav />
             <SidebarInset>
                 <NavHeader />
                 <div className="flex flex-1 flex-col gap-4 p-4 pt-0">

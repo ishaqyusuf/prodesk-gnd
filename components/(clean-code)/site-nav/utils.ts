@@ -17,18 +17,18 @@ interface NavLink {
     rule: NavRule;
     paths: string[];
 }
-// export const modules = {
-//     community: "Community",
-//     sales: "Sales",
-//     jobs: "Jobs",
-//     hrm: "HRM",
-// };
-export const navModules = {
+export type ModuleNames = "community" | "sales" | "jobs" | "hrm";
+export type ModuleObject = {
+    title;
+    Icon;
+};
+export const navModules: { [name in ModuleNames]: ModuleObject } = {
     community: { title: "Community", Icon: Home },
     sales: { title: "Sales", Icon: ShoppingCart },
     jobs: { title: "Jobs", Icon: Briefcase },
     hrm: { title: "HRM", Icon: Users },
 };
+export type NavModule = (typeof navModules)[];
 
 export const composeSiteNav = (session) => {
     const userRole = session?.role?.name;
@@ -140,9 +140,14 @@ export const composeSiteNav = (session) => {
 
     // return modules;
 };
-export type SiteNavModule = ReturnType<typeof composeModule>["data"];
+export type SiteNavModule = {
+    moduleName: string;
+    groupMenu: GroupMenu[];
+    linkCount?;
+    mainRoute;
+}; //& (typeof navModules)["community"]; //ReturnType<typeof composeModule>["data"];
 function composeModule(node: keyof typeof navModules) {
-    const data = {
+    const data: SiteNavModule = {
         // title: modules[node],
         ...navModules[node],
         moduleName: node,
