@@ -1,11 +1,10 @@
-import { NavGroup } from "@/app/(clean-code)/_common/utils/get-menu-list";
 import { persist, createJSONStorage } from "zustand/middleware";
 import { dotObject, dotSet } from "@/app/(clean-code)/_common/utils/utils";
 import { FieldPath, FieldPathValue } from "react-hook-form";
 import { create } from "zustand";
 
 const data = {
-    groupedMenu: [] as NavGroup[],
+    groupedMenu: [] as any[],
     isOpen: false,
 };
 type Action = ReturnType<typeof funcs>;

@@ -5,6 +5,7 @@ import { routes } from "./contants";
 interface GroupMenu {
     title: string;
     links: NavLink[];
+    visibleLinks?: number;
 }
 interface NavLink {
     path: string;
@@ -101,7 +102,9 @@ export const composeSiteNav = (session) => {
         return m;
     });
     console.log({ modules });
+    return modules;
 };
+export type SiteNavModule = ReturnType<typeof composeModule>["data"];
 function composeModule(node: keyof typeof modules) {
     const data = {
         title: modules[node],
