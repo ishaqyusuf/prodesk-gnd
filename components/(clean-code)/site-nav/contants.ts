@@ -4,6 +4,7 @@ export interface Rules {
     permissions: Permission[];
     roles: Roles[];
 }
+export type NavRule = ReturnType<typeof rule>["or"];
 function rule() {
     const rules: Rules[] = [];
     function role(values: Rules["roles"], rule: Rules["rule"] = "is") {

@@ -1,6 +1,6 @@
 import { IconKeys } from "@/components/_v1/icons";
 import { siteNavStore } from "./store";
-import { routes } from "./contants";
+import { NavRule, routes } from "./contants";
 
 interface GroupMenu {
     title: string;
@@ -12,6 +12,7 @@ interface NavLink {
     label: string;
     icon: IconKeys;
     visible?: boolean;
+    rule: NavRule;
 }
 export const modules = {
     community: "Community",
@@ -102,6 +103,16 @@ export const composeSiteNav = (session) => {
         return m;
     });
     console.log({ modules });
+    // store.update(
+    //     "modules",
+    //     modules.map((module) => {
+    //         module.groupMenu = module.groupMenu.map((gm) => {
+    //             gm.links = gm.links.map((lnk) => {
+    //                 // lnk.visible
+    //             });
+    //         });
+    //     })
+    // );
     return modules;
 };
 export type SiteNavModule = ReturnType<typeof composeModule>["data"];
