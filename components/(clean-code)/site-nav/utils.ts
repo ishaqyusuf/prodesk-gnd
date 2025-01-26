@@ -23,31 +23,31 @@ export const composeSiteNav = (session) => {
     function page(routeKey: keyof typeof routes) {
         const route = routes[routeKey];
         const rules = route?.rules?.rules;
-        let fn = Array.isArray(rules)
-            ? route?.rules?.type == "or"
-                ? rules?.some
-                : rules?.every
-            : null;
-        console.log(fn, rules);
-
+        // let fn = Array.isArray(rules)
+        //     ? route?.rules?.type == "or"
+        //         ? rules?.some
+        //         : rules?.every
+        //     : null;
+        // console.log(fn, rules);
+        const type = route?.rules?.type;
         const visible =
             rules &&
-            (fn
-                ? fn?.((rule) => {
-                      let _valid = false;
-                      const isNot = rule.rule == "isNot";
-                      if (rule.roles) {
-                          _valid = isNot
-                              ? !rule.roles.includes(userRole)
-                              : rule.roles.includes(userRole);
-                      } else {
-                          _valid = isNot
-                              ? !rule.permissions.every((p) => can[p])
-                              : rule.permissions.every((p) => can[p]);
-                      }
-                      return _valid;
-                  })
-                : false);
+            (type == "or" ? route?.rules?.some : route?.rules?.every)?.(
+                (rule) => {
+                    let _valid = false;
+                    const isNot = rule.rule == "isNot";
+                    if (rule.roles) {
+                        _valid = isNot
+                            ? !rule.roles.includes(userRole)
+                            : rule.roles.includes(userRole);
+                    } else {
+                        _valid = isNot
+                            ? !rule.permissions.every((p) => can[p])
+                            : rule.permissions.every((p) => can[p]);
+                    }
+                    return _valid;
+                }
+            );
         return {
             ...route,
             visible,
