@@ -28,6 +28,7 @@ export const composeSiteNav = (session) => {
                 ? rules?.some
                 : rules?.every
             : null;
+        console.log(fn, rules);
 
         const visible =
             rules &&
