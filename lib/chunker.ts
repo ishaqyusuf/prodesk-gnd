@@ -58,7 +58,7 @@ export function chunker({ worker, list, chunkSize = 50 }: Props) {
             }
         );
         // await processNextChunk();
-        setTimeout(processNextChunk, 3000); // Automatically process the next chunk
+        setTimeout(processNextChunk, 1000); // Automatically process the next chunk
     }
     toast.promise(
         processNextChunk(),
