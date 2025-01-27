@@ -198,6 +198,7 @@ function AssignForm({ onClose, totalQty }: AssignFormProps) {
             uid: itemView.itemControlUid,
             salesId: store.salesId,
             totalQty: itemView.status.qty.total,
+            produceable: itemView?.produceable,
         });
         onClose();
         toast.success("saved");
