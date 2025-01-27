@@ -526,23 +526,23 @@ model SalesStat {
     @@index([salesId])
 }
 
-model SalesNote {
-    id            Int  @unique @default(autoincrement())
-    noteId        Int  @unique
-    replyToNoteId Int? @unique
+// model SalesNote {
+//     id            Int  @unique @default(autoincrement())
+//     noteId        Int  @unique
+//     replyToNoteId Int? @unique
 
-    salesId      Int
-    salesItemId  Int?
-    assignmentId Int?
-    deliveryId   Int?
+//     salesId      Int
+//     salesItemId  Int?
+//     assignmentId Int?
+//     deliveryId   Int?
 
-    note       Note      @relation(name: "salesNote", fields: [noteId], references: [id])
-    replyNote  Note?     @relation(name: "replySalesNote", fields: [replyToNoteId], references: [id])
-    resolvedAt DateTime? @db.Timestamp(0)
-    deletedAt  DateTime? @db.Timestamp(0)
-    createdAt  DateTime? @default(now()) @db.Timestamp(0)
-    updatedAt  DateTime? @updatedAt
-}
+//     note       Note      @relation(name: "salesNote", fields: [noteId], references: [id])
+//     replyNote  Note?     @relation(name: "replySalesNote", fields: [replyToNoteId], references: [id])
+//     resolvedAt DateTime? @db.Timestamp(0)
+//     deletedAt  DateTime? @db.Timestamp(0)
+//     createdAt  DateTime? @default(now()) @db.Timestamp(0)
+//     updatedAt  DateTime? @updatedAt
+// }
 
 model OrderItemProductionAssignments {
     id                  Int                          @unique @default(autoincrement())

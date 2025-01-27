@@ -617,34 +617,34 @@ model Progress {
     @@index([userId])
 }
 
-model Note {
-    id             Int        @unique @default(autoincrement())
-    note           String?
-    createdById    Int
-    resolvedById   Int?
-    visibility     String? //public,production,delivery,admin
-    flagId         Int
-    replyToNoteId  Int?
-    deletedAt      DateTime?  @db.Timestamp(0)
-    createdAt      DateTime?  @default(now()) @db.Timestamp(0)
-    updatedAt      DateTime?  @updatedAt
-    salesNote      SalesNote? @relation(name: "salesNote")
-    replySalesNote SalesNote? @relation(name: "replySalesNote")
-    flag           NoteFlags? @relation(fields: [flagId], references: [id])
+// model Note {
+//     id             Int        @unique @default(autoincrement())
+//     note           String?
+//     createdById    Int
+//     resolvedById   Int?
+//     visibility     String? //public,production,delivery,admin
+//     flagId         Int
+//     replyToNoteId  Int?
+//     deletedAt      DateTime?  @db.Timestamp(0)
+//     createdAt      DateTime?  @default(now()) @db.Timestamp(0)
+//     updatedAt      DateTime?  @updatedAt
+//     salesNote      SalesNote? @relation(name: "salesNote")
+//     replySalesNote SalesNote? @relation(name: "replySalesNote")
+//     flag           NoteFlags? @relation(fields: [flagId], references: [id])
 
-    @@index([flagId])
-}
+//     @@index([flagId])
+// }
 
-model NoteFlags {
-    id              Int       @unique @default(autoincrement())
-    title           String
-    color           String?
-    resolveRequired Boolean?
-    notes           Note[]
-    deletedAt       DateTime? @db.Timestamp(0)
-    createdAt       DateTime? @default(now()) @db.Timestamp(0)
-    updatedAt       DateTime? @updatedAt
-}
+// model NoteFlags {
+//     id              Int       @unique @default(autoincrement())
+//     title           String
+//     color           String?
+//     resolveRequired Boolean?
+//     notes           Note[]
+//     deletedAt       DateTime? @db.Timestamp(0)
+//     createdAt       DateTime? @default(now()) @db.Timestamp(0)
+//     updatedAt       DateTime? @updatedAt
+// }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model Projects {
