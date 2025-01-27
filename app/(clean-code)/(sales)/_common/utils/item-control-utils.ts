@@ -165,7 +165,6 @@ export function composeQtyControl(props: ComposeQtyControlProps) {
             : sum([control.qty, control.lh, control.rh]);
         // if (control.autoComplete) control.total = control.qty;
         // else
-        console.log([_totalQty, control.type]);
 
         control.total = _totalQty;
         control.itemTotal = totalQty;

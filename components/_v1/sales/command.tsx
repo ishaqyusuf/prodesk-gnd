@@ -2,13 +2,13 @@
 
 import * as React from "react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { Command, CommandDialogProps } from "../../ui/command";
+import { Command } from "../../ui/command";
 
 const CatalogCommandDialog = ({
     children,
     shouldFilter,
     ...props
-}: CommandDialogProps) => {
+}: React.ComponentProps<typeof Command>) => {
     return (
         <Dialog {...props}>
             <DialogContent className="overflow-hidden p-0 shadow-2xl sm:max-w-3xl sm:min-w-3xl">

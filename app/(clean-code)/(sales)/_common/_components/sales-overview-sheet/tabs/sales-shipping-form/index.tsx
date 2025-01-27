@@ -138,7 +138,6 @@ function ShippingItem({
                     "dispatchInProgress",
                 ])
             );
-            if (shippedQty) console.log(shippedQty);
 
             let totalQty = getValue("qty");
             let producedQty = getValue("prodCompleted");
