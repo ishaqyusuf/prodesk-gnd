@@ -138,6 +138,22 @@ function RouteSection({ uid }) {
                         description="Turn on if this section does not have swing attribute"
                     />
                 </div>
+                <div className="">
+                    <div className="grid gap-4 grid-cols-2 pb-4">
+                        <FormCheckbox
+                            switchInput
+                            control={ctx.form.control}
+                            name={`data.setting.data.route.${uid}.config.production`}
+                            label="Activate Production"
+                        />
+                        <FormCheckbox
+                            switchInput
+                            control={ctx.form.control}
+                            name={`data.setting.data.route.${uid}.config.shipping`}
+                            label="Activate Shipping"
+                        />
+                    </div>
+                </div>
                 <Sortable
                     value={arr.fields}
                     onMove={({ activeIndex, overIndex }) =>
