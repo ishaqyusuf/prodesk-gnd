@@ -147,25 +147,21 @@ function ShippingItem({
 
             shipping.deliveryCreatedQty += shippedQty;
             shipping.qty += totalQty;
-            shipping.pendingAssignmentQty += status?.prodAssigned?.autoComplete
+            const pendingAssQty = status?.prodAssigned?.autoComplete
                 ? 0
                 : sum([totalQty, -1 * assignProdQty]);
+            shipping.pendingAssignmentQty += pendingAssQty;
             const pendingDelivery = sum([totalQty, -1 * shippedQty]);
             shipping.pendingDeliveryQty += pendingDelivery;
-            shipping.pendingProductionQty += sum([
-                assignProdQty,
-                -1 * producedQty,
-            ]);
+            const pendingProdQty = sum([assignProdQty, -1 * producedQty]);
+            shipping.pendingProductionQty += pendingProdQty;
             const deliverable = sum([
                 producedQty,
-                item.produceable
-                    ? 0
-                    : sum([
-                          shipping.pendingProductionQty,
-                          shipping.pendingAssignmentQty,
-                      ]),
+                item.produceable ? 0 : sum([pendingProdQty, pendingAssQty]),
                 -1 * shippedQty,
             ]);
+            console.log([k, producedQty, deliverable]);
+
             shipping.deliverableQty += deliverable;
             shipping.inputs.push({
                 delivered: shippedQty,
@@ -260,7 +256,7 @@ function ShippingItem({
                     </div>
                 </div>
 
-                <div className="mt-2">
+                <div className="mt-2 hidden">
                     <Menu>
                         <Menu.Item
                             Icon={Send}

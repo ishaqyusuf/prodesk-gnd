@@ -17,10 +17,16 @@ interface AssignAllPendingToProductionAction {
     submit?: boolean;
 }
 export async function assignAllPendingToProductionAction(
-    props: AssignAllPendingToProductionAction
+    props: AssignAllPendingToProductionAction,
+    produceable
 ) {
     return await prisma.$transaction((async (tx: typeof prisma) => {
-        const overview = await getSalesItemsOverviewAction(props.salesId);
+        const overview = await getSalesItemsOverviewAction({
+            salesId: props.salesId,
+            adminMode: true,
+        });
+        console.log(overview);
+
         return await Promise.all(
             overview.items
                 .filter((item) =>
@@ -35,23 +41,27 @@ export async function assignAllPendingToProductionAction(
                     if (pending.total) {
                         const assignmentId = await createItemAssignmentAction({
                             salesItemId: item.itemId,
-                            salesId: item.doorId,
+                            salesId: props.salesId,
+                            doorId: item.doorId,
                             uid: item.itemControlUid,
                             rh: pending.rh,
                             lh: pending.lh,
                             qty: pending.qty,
                             totalQty: qty.total,
+                            produceable,
                         });
                         if (props.submit)
                             await submitItemAssignmentAction({
                                 salesItemId: item.itemId,
-                                salesId: item.doorId,
+                                salesId: props.salesId,
+                                // doorId: item.doorId,
                                 uid: item.itemControlUid,
                                 rh: pending.rh,
                                 lh: pending.lh,
                                 qty: pending.qty,
                                 totalQty: qty.total,
                                 assignmentId,
+                                produceable,
                             });
                     }
                 })
@@ -65,15 +75,22 @@ interface CompleteAllProductionsAction
     includingUnassigned?: boolean;
 }
 export async function completeAllProductionsAction(
-    props: CompleteAllProductionsAction
+    props: CompleteAllProductionsAction,
+    produceable
 ) {
     return await prisma.$transaction((async (tx: typeof prisma) => {
         if (props.includingUnassigned)
-            await assignAllPendingToProductionAction({
-                ...props,
-                submit: true,
-            });
-        const overview = await getSalesItemsOverviewAction(props.salesId);
+            await assignAllPendingToProductionAction(
+                {
+                    ...props,
+                    submit: true,
+                },
+                produceable
+            );
+        const overview = await getSalesItemsOverviewAction({
+            salesId: props.salesId,
+            adminMode: true,
+        });
         await Promise.all(
             overview.items
                 .filter((item) =>
@@ -106,6 +123,7 @@ export async function completeAllProductionsAction(
                                     qty: qty,
                                     totalQty: total,
                                     assignmentId: l.assignmentId,
+                                    produceable,
                                 });
                             }
                         })

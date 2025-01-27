@@ -7,7 +7,10 @@ import { getItemControlAction } from "../item-control.action";
 import { Prisma } from "@prisma/client";
 import { sum } from "@/lib/utils";
 import { resetSalesStatAction } from "../sales-stat-control.action";
-import { completeAllProductionsAction } from "../production-actions/batch-action";
+import {
+    assignAllPendingToProductionAction,
+    completeAllProductionsAction,
+} from "../production-actions/batch-action";
 
 export interface CreateSalesDispatchData {
     items: {
@@ -74,12 +77,17 @@ async function getItemDispatchableSubmissions(
     const cuid = item.uid;
     //
 
-    if (!item.produceable)
-        await completeAllProductionsAction({
-            salesId,
-            includingUnassigned: true,
-            submit: true,
-        });
+    if (!item.produceable) {
+        await assignAllPendingToProductionAction(
+            {
+                salesId,
+                // includingUnassigned: true,
+                submit: true,
+                controlIds: [cuid],
+            },
+            item.produceable
+        );
+    }
     const control = await getItemControlAction(cuid);
     const { uidObj, assignments } = await getSalesAssignmentsByUidAction(cuid);
     // find submittables

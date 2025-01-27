@@ -21,6 +21,7 @@ export async function createItemAssignmentAction({
     dueDate = null,
     uid,
     totalQty,
+    produceable,
 }) {
     const obj = itemControlUidObject(uid);
     doorId = obj.doorId;
@@ -54,13 +55,15 @@ export async function createItemAssignmentAction({
                 },
             },
         });
-        await updateQtyControlAction(uid, "prodAssigned", {
-            totalQty,
-            qty,
-            rh,
-            lh,
-        });
-        await updateSalesStatControlAction(salesId);
+        if (produceable) {
+            await updateQtyControlAction(uid, "prodAssigned", {
+                totalQty,
+                qty,
+                rh,
+                lh,
+            });
+            await updateSalesStatControlAction(salesId);
+        }
         return assignment.id;
     }) as any)) as any;
 }
@@ -86,6 +89,7 @@ export async function submitItemAssignmentAction({
     salesId,
     assignmentId,
     salesItemId,
+    produceable,
 }) {
     return await prisma.$transaction((async (tx: typeof prisma) => {
         await tx.orderProductionSubmissions.create({
@@ -110,13 +114,15 @@ export async function submitItemAssignmentAction({
                 },
             },
         });
-        await updateQtyControlAction(uid, "prodCompleted", {
-            totalQty,
-            qty,
-            rh,
-            lh,
-        });
-        await updateSalesStatControlAction(salesId);
+        if (produceable) {
+            await updateQtyControlAction(uid, "prodCompleted", {
+                totalQty,
+                qty,
+                rh,
+                lh,
+            });
+            await updateSalesStatControlAction(salesId);
+        }
     }) as any);
 }
 export async function updateAssignmentDueDateAction(assignmentId, dueDate) {

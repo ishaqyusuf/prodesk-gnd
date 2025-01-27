@@ -76,6 +76,7 @@ function AssignmentLine({ assignment, index }) {
             uid: itemView.itemControlUid,
             salesId: store.salesId,
             assignmentId: ass.id,
+            produceable: true,
         });
         form.setValue("showForm", false);
         toast.success("Submitted");
