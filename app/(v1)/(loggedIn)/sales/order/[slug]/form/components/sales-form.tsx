@@ -14,8 +14,6 @@ import { SalesCustomerModal } from "@/components/_v1/modals/sales-address-modal"
 import SalesInvoiceTable from "./sales-invoice-table";
 import { store, useAppSelector } from "@/store";
 
-import CatalogModal from "@/components/_v1/modals/catalog-modal";
-
 import InfoCard from "./sales-info-address-form";
 import { Switch } from "@/components/ui/switch";
 import {
@@ -229,7 +227,6 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
                                 </div>
                             )}
                             <UpdateSalesDate form={form} />
-                            <CatalogModal form={form} ctx={data.ctx} />
                             <Menu
                                 variant={"secondary"}
                                 disabled={mockupMode}

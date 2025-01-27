@@ -154,7 +154,16 @@ function ShippingItem({
                 assignProdQty,
                 -1 * producedQty,
             ]);
-            const deliverable = sum([producedQty, -1 * shippedQty]);
+            const deliverable = sum([
+                producedQty,
+                item.produceable
+                    ? 0
+                    : sum([
+                          shipping.pendingProductionQty,
+                          shipping.pendingAssignmentQty,
+                      ]),
+                -1 * shippedQty,
+            ]);
             shipping.deliverableQty += deliverable;
             shipping.inputs.push({
                 delivered: shippedQty,

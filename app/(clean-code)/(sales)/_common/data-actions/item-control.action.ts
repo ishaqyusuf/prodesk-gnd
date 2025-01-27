@@ -193,6 +193,7 @@ export async function getSalesItemControllablesInfoAction(salesId) {
             items: {
                 where: { deletedAt: null },
                 select: {
+                    multiDykeUid: true,
                     dykeProduction: true,
                     swing: true,
                     qty: true,
@@ -265,6 +266,7 @@ export async function getSalesItemControllablesInfoAction(salesId) {
         },
     });
     const setting = await loadSalesSetting();
+    const groupConfig = {};
     return {
         ...order,
         // setting,
@@ -277,7 +279,12 @@ export async function getSalesItemControllablesInfoAction(salesId) {
         items: order.items.map((item) => {
             const mainStep = item.formSteps?.[0];
             const stepConfigUid = mainStep?.prodUid;
-            const config = setting?.data?.route?.[stepConfigUid]?.config;
+            let config =
+                setting?.data?.route?.[stepConfigUid]?.config ||
+                groupConfig?.[item.multiDykeUid];
+            if (config) groupConfig[item.multiDykeUid] = config;
+            console.log(config);
+
             return {
                 ...item,
                 itemStatConfig: {
