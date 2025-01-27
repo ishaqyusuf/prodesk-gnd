@@ -220,8 +220,8 @@ export function composeControls(order: GetSalesItemControllables) {
                     itemId: item.id,
                     orderId: order.id,
                     data: {
-                        shippable: true,
-                        produceable: true,
+                        shippable: item.itemStatConfig?.shipping,
+                        produceable: item.itemStatConfig?.production,
                         title: `${
                             item.housePackageTool?.stepProduct?.name ||
                             item.housePackageTool?.stepProduct?.product?.title
