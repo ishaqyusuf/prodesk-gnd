@@ -90,30 +90,6 @@ export default function OrdersPageClient({
                         <QueryTabAction />
                         <Button
                             onClick={() => {
-                                if (
-                                    typeof window !== "undefined" &&
-                                    "Notification" in window
-                                ) {
-                                    Notification.requestPermission().then(
-                                        () => {
-                                            console.log(
-                                                Notification.permission
-                                            );
-                                            if (
-                                                Notification.permission ===
-                                                "granted"
-                                            ) {
-                                                new Notification(
-                                                    "New Notification",
-                                                    {
-                                                        body: "HELLO NOTIFICATION!",
-                                                        // icon: "/icons/notification-icon.png", // Optional: Add an icon
-                                                    }
-                                                );
-                                            }
-                                        }
-                                    );
-                                }
                                 openTxForm({});
                             }}
                             variant="destructive"

@@ -9,6 +9,7 @@ import {
     updateSalesStatControlAction,
 } from "../sales-stat-control.action";
 import { itemControlUidObject } from "../../utils/item-control-utils";
+import { _notify } from "@/app/(v1)/_actions/notifications";
 
 export async function createItemAssignmentAction({
     salesItemId,
@@ -55,6 +56,13 @@ export async function createItemAssignmentAction({
                 },
             },
         });
+        await _notify(
+            assignedToId,
+            "assign production",
+            `New Production Assigned`,
+            null,
+            ``
+        );
         if (produceable) {
             await updateQtyControlAction(uid, "prodAssigned", {
                 totalQty,

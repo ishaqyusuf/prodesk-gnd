@@ -25,7 +25,7 @@ import { deepCopy } from "@/lib/deep-copy";
 import { ScrollArea } from "../ui/scroll-area";
 import LinkableNode from "./link-node";
 
-export default function Notification({}) {
+export default function NotificationComponent({}) {
     const [notificationCount, setNotificationCount] = useState(0);
     const notifications = useAppSelector(
         (state) => state.slicers?.notifications
@@ -54,8 +54,17 @@ export default function Notification({}) {
             const { archivedAt, createdAt, updatedAt, ..._item } = item;
             _item.time = dayjs(createdAt).fromNow();
             _item.archived = archivedAt != null;
-            if (_item.alert && !_item.seenAt) {
-                //
+            if (_item.alert && !_item.deliveredAt) {
+                if (typeof window !== "undefined" && "Notification" in window) {
+                    Notification.requestPermission().then(() => {
+                        if (Notification.permission === "granted") {
+                            new Notification(_item.message, {
+                                body: `${item.message}`,
+                                // icon: "/icons/notification-icon.png", // Optional: Add an icon
+                            });
+                        }
+                    });
+                }
             }
             return _item;
         });

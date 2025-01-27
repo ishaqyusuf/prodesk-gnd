@@ -76,10 +76,17 @@ export async function archiveAction(id, seenAt) {
 }
 export type NotificationType =
     | "sales production"
+    | "assign production"
     | "installation"
     | "community task"
     | "punchount";
-async function _notify(_userId, type: NotificationType, message, link?) {
+export async function _notify(
+    _userId,
+    type: NotificationType,
+    message,
+    link?,
+    body?
+) {
     await prisma.notifications.create({
         data: transformData({
             fromUser: {
@@ -92,7 +99,9 @@ async function _notify(_userId, type: NotificationType, message, link?) {
                     id: _userId,
                 },
             },
-            meta: {},
+            meta: {
+                body,
+            },
             message,
             type,
             link,
