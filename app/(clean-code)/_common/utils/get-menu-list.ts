@@ -1,5 +1,4 @@
 import { IconKeys, Icons } from "@/components/_v1/icons";
-import { LucideIcon } from "lucide-react";
 
 type Submenu = {
     href: string;
@@ -12,7 +11,7 @@ type Menu = {
     label: string;
     active?: boolean;
     visible: boolean;
-    icon: LucideIcon;
+    icon;
     submenus: Submenu[];
     module?: (typeof modules)[number]["title"];
 };

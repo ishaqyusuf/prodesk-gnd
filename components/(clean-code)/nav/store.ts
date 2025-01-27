@@ -31,19 +31,19 @@ function funcs(set: ZusFormSet) {
             }),
     };
 }
-// export const useNavStore = create<Store>(
-//     persist(
-//         (set) => ({
-//             ...data,
-//             ...funcs(set),
-//         }),
-//         {
-//             name: "sidebarOpen",
-//             storage: createJSONStorage(() => localStorage),
-//         }
-//     )
-// );
-export const useNavStore = create<Store>((set) => ({
-    ...data,
-    ...funcs(set),
-}));
+export const useNavStore = create<Store>(
+    persist(
+        (set) => ({
+            ...data,
+            ...funcs(set),
+        }),
+        {
+            name: "sidebarOpen",
+            storage: createJSONStorage(() => localStorage),
+        }
+    ) as any
+);
+// export const useNavStore = create<Store>((set) => ({
+//     ...data,
+//     ...funcs(set),
+// }));

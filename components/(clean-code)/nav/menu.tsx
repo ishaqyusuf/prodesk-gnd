@@ -13,7 +13,6 @@ import { CollapseMenuButton } from "./collapse-menu-button";
 import { getMenuList } from "../../../app/(clean-code)/_common/utils/get-menu-list";
 import { Button } from "@/components/ui/button";
 import { useSession } from "next-auth/react";
-import { useNavStore } from "./store";
 
 interface MenuProps {
     isOpen: boolean | undefined;
@@ -22,12 +21,13 @@ interface MenuProps {
 export default function NavMenu({ isOpen }: MenuProps) {
     const pathname = usePathname();
     const { data: session } = useSession();
-    const store = useNavStore();
+    const menuList = getMenuList(pathname, session);
+
     return (
         <ScrollArea className="[&>div>div[style]]:!block">
             <nav className="mt-8 h-full w-full">
                 <ul className="flex flex-col min-h-[calc(100vh-48px-36px-16px-32px)] lg:min-h-[calc(100vh-32px-40px-32px)] items-start space-y-1 px-2">
-                    {store.groupedMenu
+                    {menuList
                         .filter(
                             (ml) => ml.menus.filter((m) => m.visible)?.length
                         )
