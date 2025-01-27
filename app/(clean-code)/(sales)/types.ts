@@ -278,7 +278,6 @@ export interface MultiSalesFormItem {
     components: {
         [doorTitle in string]: {
             checked?: boolean;
-
             _componentsTotalPrice?: number | null;
             _mouldingPriceTag?: number | null;
             mouldingPriceData?: Partial<ComponentPrice>;
@@ -542,6 +541,8 @@ export type SalesSettingsMeta = {
                 noHandle?: boolean;
                 hasSwing?: boolean;
                 addonQty?: boolean;
+                production?: boolean;
+                shipping?: boolean;
             };
         };
     };

@@ -193,6 +193,7 @@ export function composeControls(order: GetSalesItemControllables) {
                         uid: controlUid,
                         itemId: item.id,
                         orderId: order.id,
+
                         qtyControls: composeQtyControl({
                             order,
                             controlUid,

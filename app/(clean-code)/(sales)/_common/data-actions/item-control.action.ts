@@ -7,10 +7,11 @@ import {
     qtyControlsByType,
 } from "../utils/item-control-utils";
 import { prisma } from "@/db";
-import { QtyControlType, SalesDispatchStatus } from "../../types";
+import { QtyControlType, SalesDispatchStatus, StepMeta } from "../../types";
 import { AsyncFnType } from "@/types";
 import { updateSalesStatControlAction } from "./sales-stat-control.action";
 import { percent, sum } from "@/lib/utils";
+import { loadSalesSetting } from "../data-access/sales-form-settings.dta";
 
 export async function updateItemControlAction(
     uid,
@@ -192,11 +193,26 @@ export async function getSalesItemControllablesInfoAction(salesId) {
             items: {
                 where: { deletedAt: null },
                 select: {
+                    dykeProduction: true,
                     swing: true,
                     qty: true,
                     id: true,
                     description: true,
                     dykeDescription: true,
+                    formSteps: {
+                        where: {
+                            step: {
+                                title: "Item Type",
+                            },
+                        },
+                        select: {
+                            prodUid: true,
+                            value: true,
+                            // step: {
+                            //     select: { uid: true, meta: true },
+                            // },
+                        },
+                    },
                     housePackageTool: {
                         where: { deletedAt: null },
                         select: {
@@ -248,12 +264,29 @@ export async function getSalesItemControllablesInfoAction(salesId) {
             },
         },
     });
+    const setting = await loadSalesSetting();
     return {
         ...order,
+        // setting,
         deliveries: order.deliveries.map((d) => {
             return {
                 ...d,
                 status: d.status as SalesDispatchStatus,
+            };
+        }),
+        items: order.items.map((item) => {
+            const mainStep = item.formSteps?.[0];
+            const stepConfigUid = mainStep?.prodUid;
+            const config = setting?.data?.route?.[stepConfigUid]?.config;
+            return {
+                ...item,
+                itemStatConfig: {
+                    production:
+                        mainStep?.value == "Service"
+                            ? item.dykeProduction
+                            : config?.production,
+                    shipping: config?.shipping,
+                },
             };
         }),
         assignments: order.assignments.map((a) => {
