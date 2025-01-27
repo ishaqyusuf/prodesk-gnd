@@ -6,7 +6,7 @@ import {
 import { Menu } from "@/components/(clean-code)/menu";
 import { Icons } from "@/components/_v1/icons";
 import { Button } from "@/components/ui/button";
-import { Command, CommandInput } from "@/components/ui/command";
+import { Command, CommandInput, CommandList } from "@/components/ui/command";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -81,6 +81,8 @@ export function CustomerSearch({ addressType }) {
     }
     useEffect(() => {
         searchAddressUseCase(debouncedQuery).then((res) => {
+            console.log(res);
+
             setResult(res || []);
         });
     }, [debouncedQuery]);
@@ -107,6 +109,7 @@ export function CustomerSearch({ addressType }) {
                             }}
                             placeholder="Search Address..."
                         />
+                        <CommandList></CommandList>
                     </Command>
                     <ScrollArea className="max-h-[30vh] max-w-[400px] overflow-auto">
                         <div className="divide-y">

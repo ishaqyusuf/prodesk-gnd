@@ -7,7 +7,7 @@ import {
     SheetDescription,
     SheetHeader,
     SheetTitle,
-} from "@/components/(clean-code)/custom/sheet";
+} from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 import {
     Tooltip,
@@ -23,6 +23,7 @@ import { Icons } from "@/components/_v1/icons";
 import { cva, VariantProps } from "class-variance-authority";
 import { PrimitiveDivProps } from "@/types/type";
 import "./overview-sheet-style.css";
+// import { SheetHeader } from "@/components/ui/sheet";
 interface Props {
     // title?: string;
     // titleClassName?: string;
