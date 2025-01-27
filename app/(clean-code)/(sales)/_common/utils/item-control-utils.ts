@@ -205,8 +205,8 @@ export function composeControls(order: GetSalesItemControllables) {
                         }),
                         data: {
                             subtitle: `${door.dimension}`,
-                            shippable: true,
-                            produceable: true,
+                            shippable: item.itemStatConfig?.shipping,
+                            produceable: item.itemStatConfig?.production,
                         },
                     });
                 });
@@ -279,6 +279,7 @@ export function composeControls(order: GetSalesItemControllables) {
             const equals = isEqual(rest, control.data);
             response.push({
                 uid: control.uid,
+
                 update: {
                     // uid: control.uid,
                     produceable: control.data.produceable,

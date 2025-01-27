@@ -6,7 +6,6 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover";
-import { Switch } from "@/components/ui/switch";
 import { formatDate } from "@/lib/use-day";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
