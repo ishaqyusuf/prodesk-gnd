@@ -28,7 +28,6 @@ import { cn } from "@/lib/utils";
 import { ScrollArea } from "../ui/scroll-area";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
 
 type MenuItemProps = {
     link?;

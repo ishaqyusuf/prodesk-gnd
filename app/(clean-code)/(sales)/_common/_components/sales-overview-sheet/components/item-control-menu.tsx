@@ -18,6 +18,7 @@ export function ItemControlMenu(props: Props) {
     async function updateItemControl(name, value: boolean) {
         if (props?.[name] != value) {
             refreshTabData(store.currentTab);
+            console.log("CONTROL UPDATED");
         }
     }
     function ItemAction({ name }) {
@@ -50,15 +51,12 @@ export function ItemControlMenu(props: Props) {
                     icon={"production"}
                 >
                     <span>Production</span>
-                    {/* <span> {props?.shippable ? "YES" : "NO"}</span> */}
                 </Menu.Item>
                 <Menu.Item
                     SubMenu={<ItemAction name="shippable" />}
                     icon={"delivery"}
                 >
                     Delivery
-                    {/* {" | "}
-                    {props?.shippable ? "YES" : "NO"} */}
                 </Menu.Item>
             </DropdownMenuGroup>
         </>
