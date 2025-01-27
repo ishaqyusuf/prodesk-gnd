@@ -25,8 +25,6 @@ export async function assignAllPendingToProductionAction(
             salesId: props.salesId,
             adminMode: true,
         });
-        console.log(overview);
-
         return await Promise.all(
             overview.items
                 .filter((item) =>

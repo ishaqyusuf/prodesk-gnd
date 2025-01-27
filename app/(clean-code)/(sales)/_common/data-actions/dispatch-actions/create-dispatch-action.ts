@@ -81,7 +81,6 @@ async function getItemDispatchableSubmissions(
         await assignAllPendingToProductionAction(
             {
                 salesId,
-                // includingUnassigned: true,
                 submit: true,
                 controlIds: [cuid],
             },
