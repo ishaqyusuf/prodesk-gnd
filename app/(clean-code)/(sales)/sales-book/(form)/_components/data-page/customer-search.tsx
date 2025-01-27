@@ -81,8 +81,6 @@ export function CustomerSearch({ addressType }) {
     }
     useEffect(() => {
         searchAddressUseCase(debouncedQuery).then((res) => {
-            console.log(res);
-
             setResult(res || []);
         });
     }, [debouncedQuery]);

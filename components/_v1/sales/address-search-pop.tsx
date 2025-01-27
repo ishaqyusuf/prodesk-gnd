@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Command, CommandInput } from "@/components/ui/command";
+import { Command, CommandInput, CommandList } from "@/components/ui/command";
 import {
     Popover,
     PopoverContent,
@@ -67,6 +67,7 @@ export default function AddressSearchPop({
                             }}
                             placeholder="Search Address..."
                         />
+                        <CommandList></CommandList>
                     </Command>
                     {addressList.list.map((address, key) => (
                         <button
