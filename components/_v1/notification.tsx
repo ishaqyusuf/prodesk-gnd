@@ -54,8 +54,12 @@ export default function Notification({}) {
             const { archivedAt, createdAt, updatedAt, ..._item } = item;
             _item.time = dayjs(createdAt).fromNow();
             _item.archived = archivedAt != null;
+            if (_item.alert && !_item.seenAt) {
+                //
+            }
             return _item;
         });
+
         dispatchSlice("notifications", items);
     }
     return (
