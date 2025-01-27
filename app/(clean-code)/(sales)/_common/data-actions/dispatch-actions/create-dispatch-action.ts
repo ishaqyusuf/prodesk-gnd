@@ -7,6 +7,7 @@ import { getItemControlAction } from "../item-control.action";
 import { Prisma } from "@prisma/client";
 import { sum } from "@/lib/utils";
 import { resetSalesStatAction } from "../sales-stat-control.action";
+import { completeAllProductionsAction } from "../production-actions/batch-action";
 
 export interface CreateSalesDispatchData {
     items: {
@@ -15,6 +16,7 @@ export interface CreateSalesDispatchData {
         lh: number;
         qty: number;
         dispatchItemId?: number;
+        produceable: boolean;
     }[];
     deliveryMode;
     driverId;
@@ -38,7 +40,8 @@ export async function createSalesDispatchAction(data: CreateSalesDispatchData) {
             await Promise.all(
                 data.items.map(async (item) => {
                     const dispatchables = await getItemDispatchableSubmissions(
-                        item
+                        item,
+                        salesId
                     );
                     if (!dispatchables?.length)
                         throw new Error("Insufficient submissions");
@@ -65,10 +68,17 @@ export async function createSalesDispatchAction(data: CreateSalesDispatchData) {
     }) as any);
 }
 async function getItemDispatchableSubmissions(
-    item: CreateSalesDispatchData["items"][number]
+    item: CreateSalesDispatchData["items"][number],
+    salesId
 ) {
     const cuid = item.uid;
     //
+    if (!item.produceable)
+        await completeAllProductionsAction({
+            salesId,
+            includingUnassigned: true,
+            submit: true,
+        });
     const control = await getItemControlAction(cuid);
     const { uidObj, assignments } = await getSalesAssignmentsByUidAction(cuid);
     // find submittables
@@ -141,7 +151,9 @@ async function getItemDispatchableSubmissions(
         });
         console.log(stats.deliveryQty);
 
-        if (stats.deliveryQty) throw new Error("Not enough submitted qty");
+        if (stats.deliveryQty) {
+            throw new Error("Not enough submitted qty");
+        }
     });
     console.log(obj.deliveryItems);
 

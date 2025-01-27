@@ -31,10 +31,10 @@ export async function createSalesShipment(ctx: UseSalesShipmentForm) {
                     lh: +s.lh,
                     qty: +s.qty,
                     produceable: s.shipInfo?.produceable,
-                    pendingProdQty: sum([
-                        s.shipInfo?.pendingAssignmentQty,
-                        s.shipInfo?.pendingProductionQty,
-                    ]),
+                    // pendingProdQty: sum([
+                    //     s.shipInfo?.pendingAssignmentQty,
+                    //     s.shipInfo?.pendingProductionQty,
+                    // ]),
                 };
             })
             .filter((a) => sum([a.rh, a.lh, a.qty]) > 0);
