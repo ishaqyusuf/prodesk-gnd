@@ -147,6 +147,7 @@ export async function getSalesItemControllablesInfoAction(salesId) {
         where: { id: salesId },
         select: {
             id: true,
+            isDyke: true,
             itemControls: {
                 where: { deletedAt: null },
                 include: {
@@ -287,13 +288,18 @@ export async function getSalesItemControllablesInfoAction(salesId) {
 
             return {
                 ...item,
-                itemStatConfig: {
-                    production:
-                        mainStep?.value?.toLowerCase() == "services"
-                            ? item.dykeProduction
-                            : config?.production,
-                    shipping: config?.shipping,
-                },
+                itemStatConfig: order.isDyke
+                    ? {
+                          production:
+                              mainStep?.value?.toLowerCase() == "services"
+                                  ? item.dykeProduction
+                                  : config?.production,
+                          shipping: config?.shipping,
+                      }
+                    : {
+                          production: item.qty && item.swing,
+                          shipping: !!item.qty,
+                      },
             };
         }),
         assignments: order.assignments.map((a) => {

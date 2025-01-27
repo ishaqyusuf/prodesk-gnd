@@ -1,0 +1,37 @@
+model NotePad {
+    id          Int            @unique @default(autoincrement())
+    note        String?
+    type        String //sales
+    status      String //public,admin,dispatch,production
+    createdById Int?
+    comments    NoteComments[]
+    deletedAt   DateTime?      @db.Timestamp(0)
+    createdAt   DateTime?      @default(now()) @db.Timestamp
+    commentNote NoteComments[] @relation(name: "commentNote")
+    tags        NoteTags[]
+}
+
+model NoteTags {
+    id        Int      @unique @default(autoincrement())
+    tagName   String //itemUID, deliveryId
+    tagValue  String
+    NotePad   NotePad? @relation(fields: [notePadId], references: [id])
+    notePadId Int?
+
+    @@index([notePadId])
+}
+
+model NoteComments {
+    id               Int  @unique @default(autoincrement())
+    notePadId        Int?
+    commentNotePadId Int?
+
+    commentToNote NotePad? @relation(fields: [notePadId], references: [id])
+    note          NotePad? @relation(name: "commentNote", fields: [commentNotePadId], references: [id])
+
+    deletedAt DateTime? @db.Timestamp(0)
+    createdAt DateTime? @default(now()) @db.Timestamp
+
+    @@index([notePadId])
+    @@index([commentNotePadId])
+}
