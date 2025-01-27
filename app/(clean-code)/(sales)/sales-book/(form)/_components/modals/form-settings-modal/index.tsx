@@ -29,6 +29,8 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 import FormCheckbox from "@/components/common/controls/form-checkbox";
+import { Menu } from "@/components/(clean-code)/menu";
+import { useEffect } from "react";
 
 export default function FormSettingsModal({}) {
     const value = useSettingsContext();
@@ -96,6 +98,7 @@ function RouteSection({ uid }) {
         name: `data.setting.data.route.${uid}.routeSequence`,
         // keyName: "_id",
     });
+
     return (
         <Card className="">
             <div className="flex flex-col items-center gap-4 sm:flex-row">
