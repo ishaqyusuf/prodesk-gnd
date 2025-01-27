@@ -122,6 +122,8 @@ function ShippingItem({
             deliverableQty: 0,
             pendingProductionQty: 0,
             qty: 0,
+            produceable: item.produceable,
+            shippable: item.shippable,
         };
         function qtyShip(k: "lh" | "rh" | "qty") {
             function getValue(fromStatus: keyof typeof status) {

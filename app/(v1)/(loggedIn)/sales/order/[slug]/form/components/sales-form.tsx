@@ -1,12 +1,11 @@
 "use client";
 import { SalesFormResponse } from "@/app/(v1)/(loggedIn)/sales/_actions/sales-form";
-import { ISalesOrder, ISaveOrder } from "@/types/sales";
+import { ISalesOrder } from "@/types/sales";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
 import { PrintOrderMenuAction } from "@/components/_v1/actions/sales-menu-actions";
 import OrderPrinter from "@/components/_v1/print/order/order-printer";
 import { useCallback, useEffect, useState, useTransition } from "react";
 import { toast } from "sonner";
-import { SalesOrderItems, SalesOrders } from "@prisma/client";
 import { saveOrderAction } from "@/app/(v1)/(loggedIn)/sales/_actions/sales";
 import { useRouter } from "next/navigation";
 

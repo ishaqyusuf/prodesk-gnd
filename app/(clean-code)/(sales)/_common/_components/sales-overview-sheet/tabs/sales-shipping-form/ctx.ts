@@ -17,6 +17,8 @@ export type ItemShippable = {
     deliveryCreatedQty?: number;
     pendingDeliveryQty?: number;
     deliverableQty?: number;
+    produceable?: boolean;
+    shippable?: boolean;
     qty?: number;
     inputs: {
         label: string;
