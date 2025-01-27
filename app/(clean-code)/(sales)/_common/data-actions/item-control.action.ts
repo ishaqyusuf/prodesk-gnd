@@ -282,7 +282,7 @@ export async function getSalesItemControllablesInfoAction(salesId) {
                 ...item,
                 itemStatConfig: {
                     production:
-                        mainStep?.value == "Service"
+                        mainStep?.value?.toLowerCase() == "services"
                             ? item.dykeProduction
                             : config?.production,
                     shipping: config?.shipping,
