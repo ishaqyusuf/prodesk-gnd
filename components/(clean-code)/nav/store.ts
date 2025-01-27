@@ -41,5 +41,5 @@ export const useNavStore = create<Store>(
             name: "sidebarOpen",
             storage: createJSONStorage(() => localStorage),
         }
-    )
+    ) as any
 );
