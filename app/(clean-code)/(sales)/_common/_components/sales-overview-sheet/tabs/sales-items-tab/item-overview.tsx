@@ -8,7 +8,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
 import FormCheckbox from "@/components/common/controls/form-checkbox";
-import { updateItemControlAction } from "../../../../data-actions/item-control.action";
+// import { updateItemControlAction } from "../../../../data-actions/item-control.action";
 import { toast } from "sonner";
 import {
     AdminOnly,
@@ -121,18 +121,18 @@ function ConfigForm({ onClose }) {
     });
     async function save() {
         const data = form.getValues();
-        await updateItemControlAction(
-            itemView.itemControlUid,
-            {
-                ...data,
-            },
-            {
-                qty: itemView?.status?.qty || {},
-                totalQty: itemView?.status?.qty?.total,
-                produceableChanged: itemView.produceable != data.produceable,
-                shippableChanged: itemView.shippable != data.shippable,
-            }
-        );
+        // await updateItemControlAction(
+        //     itemView.itemControlUid,
+        //     {
+        //         ...data,
+        //     },
+        //     {
+        //         qty: itemView?.status?.qty || {},
+        //         totalQty: itemView?.status?.qty?.total,
+        //         produceableChanged: itemView.produceable != data.produceable,
+        //         shippableChanged: itemView.shippable != data.shippable,
+        //     }
+        // );
         onClose();
         toast.success("saved");
         loadPageData({ dataKey: "itemOverview", reload: true });

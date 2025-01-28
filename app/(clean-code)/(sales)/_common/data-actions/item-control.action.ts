@@ -9,37 +9,37 @@ import {
 import { prisma } from "@/db";
 import { QtyControlType, SalesDispatchStatus, StepMeta } from "../../types";
 import { AsyncFnType } from "@/types";
-import { updateSalesStatControlAction } from "./sales-stat-control.action";
+// import { updateSalesStatControlAction } from "./sales-stat-control.action";
 import { percent, sum } from "@/lib/utils";
 import { loadSalesSetting } from "../data-access/sales-form-settings.dta";
 
-export async function updateItemControlAction(
-    uid,
-    data: Prisma.SalesItemControlUpdateInput,
-    { totalQty, produceableChanged, shippableChanged, qty }
-) {
-    const resp = await prisma.salesItemControl.update({
-        where: {
-            uid,
-        },
-        data: {
-            produceable: data.produceable,
-            shippable: data.shippable,
-        },
-    });
-    await updateQtyControlAutoComplete(data, uid, {
-        totalQty,
-        produceableChanged,
-        shippableChanged,
-        qty,
-    });
-    await updateItemQtyControlsAction(uid);
-    await updateSalesStatControlAction(resp.salesId);
-}
+// export async function updateItemControlAction(
+//     uid,
+//     data: Prisma.SalesItemControlUpdateInput,
+//     { totalQty, produceableChanged, shippableChanged, qty }
+// ) {
+//     const resp = await prisma.salesItemControl.update({
+//         where: {
+//             uid,
+//         },
+//         data: {
+//             produceable: data.produceable,
+//             shippable: data.shippable,
+//         },
+//     });
+//     await updateQtyControlAutoComplete(data, uid, {
+//         totalQty,
+//         produceableChanged,
+//         shippableChanged,
+//         qty,
+//     });
+//     await updateItemQtyControlsAction(uid);
+//     await updateSalesStatControlAction(resp.salesId);
+// }
 export async function updateQtyControlAutoComplete(
     data,
     uid,
-    { totalQty, produceableChanged, shippableChanged, qty }
+    { produceableQty, shippableQty, produceableChanged, shippableChanged, qty }
 ) {
     const { produceable, shippable } = data;
     await Promise.all(
@@ -48,6 +48,7 @@ export async function updateQtyControlAutoComplete(
                 changed: produceableChanged,
                 types: ["prodAssigned", "prodCompleted"] as QtyControlType[],
                 newValue: produceable,
+                totalQty: produceableQty,
             },
             {
                 changed: shippableChanged,
@@ -57,6 +58,7 @@ export async function updateQtyControlAutoComplete(
                     "dispatchInProgress",
                 ] as QtyControlType[],
                 newValue: shippable,
+                totalQty: shippableQty,
             },
         ].map(async (p) => {
             if (p.changed) {
@@ -74,7 +76,7 @@ export async function updateQtyControlAutoComplete(
                 await Promise.all(
                     p.types?.map(async (type) => {
                         await updateQtyControlAction(uid, type, {
-                            totalQty,
+                            totalQty: p.totalQty,
                             ...qty,
                             reset: true,
                         });
@@ -103,7 +105,6 @@ export async function updateQtyControlAction(
         },
         update: {},
     });
-    // console.log(qtyControl, { qty, lh, rh, totalQty });
     if (!qtyControl) throw new Error("Not found");
     qtyControl.rh = reset ? rh : sum([qtyControl.rh, rh]);
     qtyControl.lh = reset ? lh : sum([qtyControl.lh, lh]);
@@ -116,10 +117,12 @@ export async function updateQtyControlAction(
 
     if (qtyControl.percentage > 100 || qtyControl.percentage < 0)
         throw new Error("Error performing action");
-    await prisma.qtyControl.updateMany({
+    await prisma.qtyControl.update({
         where: {
-            itemControlUid: uid,
-            type,
+            itemControlUid_type: {
+                itemControlUid: uid,
+                type,
+            },
         },
         data: {
             rh: qtyControl.rh,
