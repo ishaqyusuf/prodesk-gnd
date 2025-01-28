@@ -17,9 +17,24 @@ import dayjs from "dayjs";
 import { resetSalesStatAction } from "../_common/data-actions/sales-stat-control.action";
 
 export async function loadSalesWithoutStats() {
+    // const resp = await prisma.qtyControl.deleteMany({
+    //     where: {
+    //         itemControl: {
+    //             // salesId,
+    //         },
+    //     },
+    // });
+    // const _resp = await prisma.salesItemControl.deleteMany({
+    //     where: {
+    //         // salesId
+    //     },
+    // });
     const sales = await prisma.salesOrders.findMany({
         where: {
             type: "order",
+            // id: {
+            //     lte: 3400,
+            // },
             // assignments: {
             //     some: {},
             // },
@@ -79,11 +94,7 @@ export async function loadSalesWithoutStats() {
         "HAS QTY CONTROLs",
         transformed.filter((a) => a.qtyCounts)
     );
-    return (
-        transformed
-            // .filter((a) => !a.qtyCounts)?
-            .map((a) => a.id)
-    );
+    return transformed.filter((a) => !a.qtyCounts).map((a) => a.id);
 }
 export async function updateSalesStats(ids) {
     return await Promise.all(
