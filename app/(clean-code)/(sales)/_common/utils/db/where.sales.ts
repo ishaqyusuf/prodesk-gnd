@@ -4,7 +4,7 @@ import {
 } from "@/app/(clean-code)/_common/utils/db-utils";
 import {
     FilterKeys,
-    FilterParams,
+    SearchParamsType,
 } from "@/components/(clean-code)/data-table/search-params";
 import { Prisma } from "@prisma/client";
 import { composeQuery } from "../db-utils";
@@ -14,7 +14,7 @@ import { dateEquals, fixDbTime } from "@/app/(v1)/_actions/action-utils";
 import { formatDate } from "@/lib/use-day";
 import dayjs from "dayjs";
 
-export function whereSales(query: FilterParams) {
+export function whereSales(query: SearchParamsType) {
     const whereAnd: Prisma.SalesOrdersWhereInput[] = [];
     if (query["with.trashed"]) whereAnd.push(withDeleted);
     if (query["trashed.only"])

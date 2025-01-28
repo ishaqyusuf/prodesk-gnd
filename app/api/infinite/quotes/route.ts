@@ -5,7 +5,6 @@ import {
 import { SalesType } from "@/app/(clean-code)/(sales)/types";
 
 import {
-    FilterParams,
     searchParamsCache,
     SearchParamsType,
 } from "@/components/(clean-code)/data-table/search-params";

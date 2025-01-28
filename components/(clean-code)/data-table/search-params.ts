@@ -127,6 +127,4 @@ export type SearchParamsType = Partial<
     z.infer<typeof searchSchema> & {
         [id in SpecialFilters]: any;
     }
->; //FilterParams; // inferParserType<typeof searchParamsParser>;
-
-export type FilterParams = SearchParamsType;
+>; //SearchParamsType; // inferParserType<typeof searchParamsParser>;

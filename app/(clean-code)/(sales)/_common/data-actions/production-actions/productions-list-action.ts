@@ -166,7 +166,7 @@ function transformProductionList(item: GetProductionList[number]) {
         )
     );
     const completed = totalAssigned == totalCompleted;
-    if (completed) alert.date = null;
+    // if (completed) alert.date = null;
 
     return {
         completed,

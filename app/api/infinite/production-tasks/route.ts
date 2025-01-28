@@ -6,7 +6,7 @@ import {
 import { authId } from "@/app/(v1)/_actions/utils";
 
 import {
-    FilterParams,
+    SearchParamsType,
     searchParamsCache,
 } from "@/components/(clean-code)/data-table/search-params";
 
@@ -20,7 +20,7 @@ export async function GET(req: NextRequest) {
         ...Object.fromEntries(_search),
         "sales.type": "order",
         "production.assignedToId": await authId(),
-    } as FilterParams;
+    } as SearchParamsType;
     const search = searchParamsCache.parse(_ as any);
 
     return Response.json(await getProductionTasksListPageAction(search as any));

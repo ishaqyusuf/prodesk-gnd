@@ -20,11 +20,11 @@ import {
 } from "@/app/(clean-code)/_common/utils/db-utils";
 import { DispatchListInclude } from "../utils/db/dispatch";
 import { SalesDispatchStatus } from "../../types";
-import { FilterParams } from "@/components/(clean-code)/data-table/search-params";
+import { SearchParamsType } from "@/components/(clean-code)/data-table/search-params";
 
 export type SalesDispatchFormData = AsyncFnType<typeof getSalesDispatchFormDta>;
 export interface GetSalesDispatchListQuery extends PageBaseQuery {}
-export async function getSalesDispatchDta(query: FilterParams) {
+export async function getSalesDispatchDta(query: SearchParamsType) {
     const resp = await getSalesDispatchListDta(query);
     return {
         ...resp,

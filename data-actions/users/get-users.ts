@@ -1,13 +1,13 @@
 "use server";
 
 import { whereUsers } from "@/app/(clean-code)/(sales)/_common/utils/db/where.users";
-import { FilterParams } from "@/components/(clean-code)/data-table/search-params";
+import { SearchParamsType } from "@/components/(clean-code)/data-table/search-params";
 import { prisma } from "@/db";
 import { AsyncFnType } from "@/types";
 import { Permission } from "@/types/auth";
 
 export type GetUsersList = AsyncFnType<typeof getUsersListAction>;
-export async function getUsersListAction(props: FilterParams) {
+export async function getUsersListAction(props: SearchParamsType) {
     const where = whereUsers(props);
     const users = await prisma.users.findMany({
         where,

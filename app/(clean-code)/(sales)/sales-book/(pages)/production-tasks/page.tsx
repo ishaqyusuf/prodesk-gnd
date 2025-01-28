@@ -1,5 +1,5 @@
 import {
-    FilterParams,
+    SearchParamsType,
     searchParamsCache,
 } from "@/components/(clean-code)/data-table/search-params";
 

@@ -1,6 +1,6 @@
 import { getSalesDispatchDta } from "@/app/(clean-code)/(sales)/_common/data-access/sales-dispatch-dta";
 import {
-    FilterParams,
+    SearchParamsType,
     searchParamsCache,
 } from "@/components/(clean-code)/data-table/search-params";
 import { NextRequest } from "next/server";

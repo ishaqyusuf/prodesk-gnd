@@ -9,6 +9,7 @@ import {
     DropdownMenuSubTrigger,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
 // import { Menu } from "@/components/(clean-code)/menu";
 import { Sheet, SheetContent, SheetHeader } from "@/components/ui/sheet";
 import { useState } from "react";
@@ -25,6 +26,7 @@ export default function Page({}) {
                         <DropdownMenu open={open} onOpenChange={menuOpenChange}>
                             <DropdownMenuTrigger>Menu</DropdownMenuTrigger>
                             <DropdownMenuContent>
+                                <Input />
                                 <DropdownMenuItem>Item 1</DropdownMenuItem>
                                 <DropdownMenuItem>Item 2</DropdownMenuItem>
                                 <DropdownMenuSub>

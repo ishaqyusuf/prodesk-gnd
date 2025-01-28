@@ -11,17 +11,17 @@ import { ThemeProvider } from "@/providers/theme-provider";
 const AppProvider = ({ children }) => {
     return (
         <SessionProvider>
-            <Provider store={store}>
-                <ThemeProvider attribute="class" defaultTheme="light">
-                    <CommandProvider>
-                        <ModalProvider>
+            <ModalProvider>
+                <Provider store={store}>
+                    <ThemeProvider attribute="class" defaultTheme="light">
+                        <CommandProvider>
                             <NavContext.Provider value={useNavCtx()}>
                                 {children}
                             </NavContext.Provider>
-                        </ModalProvider>
-                    </CommandProvider>
-                </ThemeProvider>
-            </Provider>
+                        </CommandProvider>
+                    </ThemeProvider>
+                </Provider>
+            </ModalProvider>
         </SessionProvider>
     );
     return (

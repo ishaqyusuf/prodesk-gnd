@@ -1,9 +1,9 @@
-import { FilterParams } from "@/components/(clean-code)/data-table/search-params";
+import { SearchParamsType } from "@/components/(clean-code)/data-table/search-params";
 import { Prisma } from "@prisma/client";
 import { composeQuery } from "../db-utils";
 import { addSpacesToCamelCase } from "@/lib/utils";
 
-export function whereUsers(query: FilterParams) {
+export function whereUsers(query: SearchParamsType) {
     const wheres: Prisma.UsersWhereInput[] = [];
 
     const permissions = query["user.permissions"]?.split(",");

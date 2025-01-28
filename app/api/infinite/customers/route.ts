@@ -3,7 +3,7 @@ import { getSalesOrdersDta } from "@/app/(clean-code)/(sales)/_common/data-acces
 import { SalesType } from "@/app/(clean-code)/(sales)/types";
 
 import {
-    FilterParams,
+    SearchParamsType,
     searchParamsCache,
 } from "@/components/(clean-code)/data-table/search-params";
 
@@ -14,7 +14,7 @@ export async function GET(req: NextRequest) {
     req.nextUrl.searchParams.forEach((value, key) => _search.set(key, value));
     const _ = {
         ...Object.fromEntries(_search),
-    } as FilterParams;
+    } as SearchParamsType;
     const search = searchParamsCache.parse(_ as any);
 
     return Response.json(await getCustomersDta(search as any));

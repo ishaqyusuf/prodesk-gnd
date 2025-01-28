@@ -238,7 +238,7 @@ export default function SelectDoorHeightsModal({
                             <Icons.edit className="size-4" />
                         </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent>
+                    <DropdownMenuContent className="z-10">
                         <CardHeader>
                             <CardTitle>Edit Price</CardTitle>
                         </CardHeader>
