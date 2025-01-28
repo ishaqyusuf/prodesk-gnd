@@ -56,9 +56,12 @@ function Assignments({ item }: ItemProps) {
     );
 }
 function Status({ item }: ItemProps) {
+    const status = `${item.stats?.prodCompleted?.score}/${item.stats?.prodCompleted?.total}`;
     return (
         <TCell>
-            <TCell.Secondary className="font-mono flex gap-4"></TCell.Secondary>
+            <TCell.Secondary className="font-mono flex gap-4">
+                {status}
+            </TCell.Secondary>
         </TCell>
     );
 }

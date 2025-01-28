@@ -59,7 +59,7 @@ export async function updateSalesStatControlAction(salesId) {
         .flat();
 
     const totalProduceable = sum(
-        qtyControls.filter((t) => t.shippable && t.type == "prodAssigned"),
+        qtyControls.filter((t) => t.produceable && t.type == "prodAssigned"),
         "itemTotal"
     );
     const totalShippable = sum(

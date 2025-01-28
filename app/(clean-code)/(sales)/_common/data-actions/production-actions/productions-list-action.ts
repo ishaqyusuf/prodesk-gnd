@@ -12,6 +12,11 @@ import { Prisma } from "@prisma/client";
 import { dueDateAlert } from "../../utils/production-utils";
 import { authId } from "@/app/(v1)/_actions/utils";
 import { sum } from "@/lib/utils";
+import { qtyControlsByType } from "../../utils/item-control-utils";
+import {
+    composeSalesStatKeyValue,
+    composeSalesStatus,
+} from "@/data/compose-sales";
 
 export type GetProductionListPage = AsyncFnType<
     typeof getProductionListPageAction
@@ -27,7 +32,6 @@ export async function getProductionTasksListPageAction(
 }
 export async function getProductionListPageAction(query: SearchParamsType) {
     const prodList = await getProductionListAction(query);
-    console.log(query.start);
     const excludes: (keyof SearchParamsType)[] = [
         "sort",
         "size",
@@ -39,8 +43,6 @@ export async function getProductionListPageAction(query: SearchParamsType) {
         ([a, b]) => b && !excludes.includes(a as any)
     );
     const queryCount = q?.length;
-    // console.log({ queryCount, query, q });
-
     const dueToday = !query.start
         ? await getProductionListAction({
               "sales.type": query["sales.type"],
@@ -98,6 +100,17 @@ export async function getProductionListAction(query: SearchParamsType) {
             salesRep: {
                 select: { name: true },
             },
+            stat: true,
+            itemControls: {
+                select: {
+                    qtyControls: true,
+                    assignments: {
+                        select: {
+                            id: true,
+                        },
+                    },
+                },
+            },
             assignments: {
                 where: {
                     deletedAt: null,
@@ -144,6 +157,8 @@ function transformProductionList(item: GetProductionList[number]) {
     const totalAssigned = sum(
         item.assignments.map((p) => p.qtyAssigned || sum([p.lhQty, p.rhQty]))
     );
+    const stats = composeSalesStatKeyValue(item.stat);
+
     const totalCompleted = sum(
         item.assignments.map((a) =>
             sum(a.submissions.map((s) => s.qty || sum([s.lhQty, s.rhQty])))
@@ -151,6 +166,7 @@ function transformProductionList(item: GetProductionList[number]) {
     );
     const completed = totalAssigned == totalCompleted;
     if (completed) alert.date = null;
+
     return {
         completed,
         totalAssigned,
@@ -163,5 +179,6 @@ function transformProductionList(item: GetProductionList[number]) {
         ).join(" & "),
         uuid: item.orderId,
         id: item.id,
+        stats,
     };
 }

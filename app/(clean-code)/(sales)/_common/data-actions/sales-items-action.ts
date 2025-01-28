@@ -289,7 +289,7 @@ export async function getSalesItemsOverviewAction({
             });
         } else if (doors?.length) {
             doors.map((door) => {
-                console.log(door);
+                // console.log(door);
                 const assignments = order.assignments.filter(
                     (a) => a.salesDoorId == door.id && a.itemId == item.id
                 );
@@ -358,8 +358,7 @@ export async function getSalesItemsOverviewAction({
             }
             return true;
         });
-    console.log(items);
-
+    // console.log(items);
     return {
         items,
     };
