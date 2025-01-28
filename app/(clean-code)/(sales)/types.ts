@@ -360,6 +360,7 @@ export interface PricingMetaData {
 export type PaymentTerms = "None" | "Net10" | "Net20" | "Net30";
 
 export interface SalesFormFields {
+    saveAction?: "new" | "close" | "default";
     metaData?: {
         salesRepId;
         type: SalesType;

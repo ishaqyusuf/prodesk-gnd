@@ -73,16 +73,28 @@ export class SaveSalesClass extends SaveSalesHelper {
         const salesResp = data.result?.[data.orderTxIndex] as SalesOrders;
 
         const isUpdate = data.sales.data?.id == null;
+        const type = this.form.metaData.type;
         const redirectTo =
             (!isUpdate || this.query?.restoreMode) && salesResp
                 ? composeSalesUrl({
                       slug: salesResp.slug,
-                      type: this.form.metaData.type,
+                      type,
                       isDyke: true,
                   })
                 : null;
-        if (redirectTo && (__redirect || this.query?.restoreMode))
-            redirect(redirectTo);
+        switch (this.form?.saveAction) {
+            case "close":
+                redirect(`/sales-book/${type}s`);
+                break;
+            case "default":
+                if (redirectTo && (__redirect || this.query?.restoreMode))
+                    redirect(redirectTo);
+                break;
+            case "new":
+                redirect(`/sales-book/create-${type}`);
+                break;
+        }
+
         return {
             slug: salesResp?.slug,
             redirectTo,

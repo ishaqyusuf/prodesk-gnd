@@ -13,11 +13,12 @@ import { zhInitializeState } from "../_utils/helpers/zus/zus-form-helper";
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
 import dayjs from "dayjs";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Menu } from "@/components/(clean-code)/menu";
 import { PrintAction } from "../../../_common/_components/overview-sheet/footer/print.action";
 import { useMemo } from "react";
 import { openSalesOverview } from "../../../_common/_components/sales-overview-sheet";
+import { MenuIcon, SaveIcon } from "lucide-react";
 
 export function FormHeader({ sticky }: { sticky: Sticky }) {
     const zus = useFormDataStore();
@@ -55,7 +56,8 @@ export function FormHeader({ sticky }: { sticky: Sticky }) {
             : null;
     }, [zus.metaData]);
     const searchParams = useSearchParams();
-    async function save() {
+    const router = useRouter();
+    async function save(action: "new" | "close" | "default" = "default") {
         const { kvFormItem, kvStepForm, metaData, sequence } = zus;
         const restoreMode = searchParams.get("restoreMode") != null;
 
@@ -65,6 +67,7 @@ export function FormHeader({ sticky }: { sticky: Sticky }) {
                 kvStepForm,
                 metaData,
                 sequence,
+                saveAction: action,
             },
             zus.oldFormState,
             {
@@ -168,10 +171,29 @@ export function FormHeader({ sticky }: { sticky: Sticky }) {
                 >
                     <span className="">Overview</span>
                 </Button>
-                <Button icon="save" size="xs" action={save} variant="default">
-                    {/* <Icons.save className="size-4 mr-4" /> */}
-                    <span className="">Save</span>
-                </Button>
+                <div className="flex">
+                    <Button
+                        icon="save"
+                        size="xs"
+                        action={save}
+                        variant="default"
+                    >
+                        {/* <Icons.save className="size-4 mr-4" /> */}
+                        <span className="">Save</span>
+                    </Button>
+                    <Menu Icon={MenuIcon}>
+                        <Menu.Item onClick={() => save("close")}>
+                            Save & Close
+                        </Menu.Item>
+                        <Menu.Item onClick={() => save("new")}>
+                            Save & New
+                        </Menu.Item>
+                        <Menu.Item>Copy</Menu.Item>
+                        <Menu.Item disabled>Move To Sales</Menu.Item>
+                        <Menu.Item disabled>Move To Quotes</Menu.Item>
+                        {/* <Menu.Item>& </Menu.Item> */}
+                    </Menu>
+                </div>
                 {printData && (
                     <Menu>
                         <PrintAction data={printData} />
