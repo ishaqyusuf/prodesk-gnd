@@ -49,6 +49,8 @@ import { Button } from "@/components/ui/button";
 import { DoorSizeSelectContext, useCtx, useInitContext } from "./ctx";
 import { Door } from "../door-swap-modal";
 import FormSelect from "@/components/common/controls/form-select";
+import { Menu } from "@/components/(clean-code)/menu";
+import { Input } from "@/components/ui/input";
 
 interface Props {
     cls: ComponentHelperClass;
@@ -72,7 +74,7 @@ export default function DoorSizeSelectModal({ cls, door }: Props) {
                 />
                 <Form {...ctx.form}>
                     <ScrollArea
-                        tabIndex={-1}
+                        // tabIndex={-1}
                         className="max-h-[50vh] px-4 -mx-4"
                     >
                         <Table>

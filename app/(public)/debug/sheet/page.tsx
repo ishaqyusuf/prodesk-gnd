@@ -1,5 +1,7 @@
 "use client";
 
+import { _modal } from "@/components/common/modal/provider";
+import { Button } from "@/components/ui/button";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -13,12 +15,20 @@ import { Input } from "@/components/ui/input";
 // import { Menu } from "@/components/(clean-code)/menu";
 import { Sheet, SheetContent, SheetHeader } from "@/components/ui/sheet";
 import { useState } from "react";
+import { CustomSheetDebugModal } from "./custom-sheet";
 
 export default function Page({}) {
     const [open, menuOpenChange] = useState(false);
     return (
         <>
-            <Sheet open>
+            <Button
+                onClick={() => {
+                    _modal.openModal(<CustomSheetDebugModal />);
+                }}
+            >
+                Open Custom
+            </Button>
+            <Sheet>
                 <SheetContent side="bottomRight">
                     <SheetHeader>Test</SheetHeader>
                     <div className="">
