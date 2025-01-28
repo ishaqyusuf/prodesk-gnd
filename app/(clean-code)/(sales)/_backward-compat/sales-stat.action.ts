@@ -17,18 +17,18 @@ import dayjs from "dayjs";
 import { resetSalesStatAction } from "../_common/data-actions/sales-stat-control.action";
 
 export async function loadSalesWithoutStats() {
-    // const resp = await prisma.qtyControl.deleteMany({
-    //     where: {
-    //         itemControl: {
-    //             // salesId,
-    //         },
-    //     },
-    // });
-    // const _resp = await prisma.salesItemControl.deleteMany({
-    //     where: {
-    //         // salesId
-    //     },
-    // });
+    const resp = await prisma.qtyControl.deleteMany({
+        where: {
+            itemControl: {
+                // salesId,
+            },
+        },
+    });
+    const _resp = await prisma.salesItemControl.deleteMany({
+        where: {
+            // salesId
+        },
+    });
     const sales = await prisma.salesOrders.findMany({
         where: {
             type: "order",

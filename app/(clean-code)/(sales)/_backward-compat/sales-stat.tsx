@@ -10,7 +10,7 @@ export default function SalesStat({}) {
         chunker({
             worker: updateSalesStats,
             list: resp,
-            chunkSize: 20,
+            chunkSize: 50,
         });
         // const resp = await salesStatisticsAction();
         // console.log(resp);
