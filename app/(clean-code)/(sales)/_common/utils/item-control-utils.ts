@@ -98,6 +98,7 @@ export function composeQtyControl(props: ComposeQtyControlProps) {
     const controls: QtyControlByType = {} as any;
     const totalProduceable = props.produceable ? totalQty : 0;
     const totalShippable = props.shippable ? totalQty : 0;
+
     controls.qty = {
         qty: props.qty,
         lh: props.lh,
@@ -119,6 +120,7 @@ export function composeQtyControl(props: ComposeQtyControlProps) {
         type: "prodAssigned",
         itemControlUid: props.controlUid,
         autoComplete: previousControls?.prodAssigned?.autoComplete,
+        itemTotal: totalProduceable,
     };
     const submissions = assignments.map((a) => a.submissions).flat();
     controls.prodCompleted = {
