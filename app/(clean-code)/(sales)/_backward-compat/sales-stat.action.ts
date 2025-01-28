@@ -63,7 +63,7 @@ export async function loadSalesWithoutStats() {
             createdAt: "desc",
         },
     });
-    console.log(sales);
+    // console.log(sales);
     // console.log(sales.filter(a => a.itemControls?.));
     const transformed = sales.map((s) => {
         return {

@@ -6,7 +6,7 @@ model NotePad {
     createdById Int?
     comments    NoteComments[]
     deletedAt   DateTime?      @db.Timestamp(0)
-    createdAt   DateTime?      @default(now()) @db.Timestamp
+    createdAt   DateTime?      @default(now()) @db.Timestamp(0)
     commentNote NoteComments[] @relation(name: "commentNote")
     tags        NoteTags[]
 }
@@ -30,7 +30,7 @@ model NoteComments {
     note          NotePad? @relation(name: "commentNote", fields: [commentNotePadId], references: [id])
 
     deletedAt DateTime? @db.Timestamp(0)
-    createdAt DateTime? @default(now()) @db.Timestamp
+    createdAt DateTime? @default(now()) @db.Timestamp(0)
 
     @@index([notePadId])
     @@index([commentNotePadId])
