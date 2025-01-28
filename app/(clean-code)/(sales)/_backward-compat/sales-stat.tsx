@@ -6,6 +6,7 @@ export default function SalesStat({}) {
     async function _salesStatistics() {
         const resp = await loadSalesWithoutStats();
         console.log(resp);
+        return;
 
         chunker({
             worker: updateSalesStats,

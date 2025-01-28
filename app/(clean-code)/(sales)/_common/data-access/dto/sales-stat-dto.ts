@@ -79,8 +79,7 @@ export function statToKeyValueDto(dataStats: SalesStat[], reset = false) {
     return k;
 }
 export function overallStatus(dataStats: SalesStat[]) {
-    console.log(dataStats);
-
+    // console.log(dataStats);
     const sk = statToKeyValueDto(dataStats);
     const dispatch = sumArrayKeys(
         [sk.dispatchAssigned, sk.dispatchInProgress, sk.dispatchCompleted],

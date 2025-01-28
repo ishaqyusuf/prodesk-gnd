@@ -17,6 +17,7 @@ import {
     composeSalesStatKeyValue,
     composeSalesStatus,
 } from "@/data/compose-sales";
+import { overallStatus } from "../../data-access/dto/sales-stat-dto";
 
 export type GetProductionListPage = AsyncFnType<
     typeof getProductionListPageAction
@@ -180,5 +181,6 @@ function transformProductionList(item: GetProductionList[number]) {
         uuid: item.orderId,
         id: item.id,
         stats,
+        status: overallStatus(item.stat),
     };
 }

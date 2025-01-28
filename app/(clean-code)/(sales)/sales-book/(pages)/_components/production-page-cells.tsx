@@ -2,6 +2,7 @@ import { TCell } from "@/components/(clean-code)/data-table/table-cells";
 import ConfirmBtn from "@/components/_v1/confirm-btn";
 import { GetProductionListPage } from "../../../_common/data-actions/production-actions/productions-list-action";
 import { OrderCells } from "./orders-page-cells";
+import { Progress } from "@/components/(clean-code)/progress";
 
 export interface ItemProps {
     item: GetProductionListPage["data"][number];
@@ -56,12 +57,15 @@ function Assignments({ item }: ItemProps) {
     );
 }
 function Status({ item }: ItemProps) {
-    const status = `${item.stats?.prodCompleted?.score}/${item.stats?.prodCompleted?.total}`;
+    // const status = `${item.stats?.prodCompleted?.score}/${item.stats?.prodCompleted?.total}`;
+    const production = item.status?.production;
     return (
         <TCell>
-            <TCell.Secondary className="font-mono flex gap-4">
-                {status}
-            </TCell.Secondary>
+            <Progress>
+                <Progress.Status color={production?.color || production?.color}>
+                    {production?.scoreStatus || production?.status}
+                </Progress.Status>
+            </Progress>
         </TCell>
     );
 }
