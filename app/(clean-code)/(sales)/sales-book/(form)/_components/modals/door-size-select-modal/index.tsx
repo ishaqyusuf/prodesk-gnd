@@ -215,6 +215,7 @@ function Row({ variant }) {
 }
 function PriceCell({ salesPrice, basePrice, variant }) {
     const ctx = useCtx();
+    // return <Menu Trigger={}></Menu>
     return (
         <Popover>
             <PopoverTrigger>
