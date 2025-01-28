@@ -32,28 +32,6 @@ export async function loadSalesWithoutStats() {
     const sales = await prisma.salesOrders.findMany({
         where: {
             type: "order",
-            // id: {
-            //     lte: 3400,
-            // },
-            // assignments: {
-            //     some: {},
-            // },
-            // OR: [
-            //     {
-            //         itemControls: {
-            //             none: {},
-            //         },
-            //     },
-            //     {
-            //         itemControls: {
-            //             every: {
-            //                 qtyControls: {
-            //                     none: {},
-            //                 },
-            //             },
-            //         },
-            //     },
-            // ],
         },
         select: {
             _count: {
@@ -78,8 +56,6 @@ export async function loadSalesWithoutStats() {
             createdAt: "desc",
         },
     });
-    // console.log(sales);
-    // console.log(sales.filter(a => a.itemControls?.));
     const transformed = sales.map((s) => {
         return {
             ...s,
