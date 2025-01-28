@@ -94,7 +94,11 @@ export async function loadSalesWithoutStats() {
         "HAS QTY CONTROLs",
         transformed.filter((a) => a.qtyCounts)
     );
-    return transformed.filter((a) => !a.qtyCounts).map((a) => a.id);
+    return (
+        transformed
+            // .filter((a) => !a.qtyCounts)
+            .map((a) => a.id)
+    );
 }
 export async function updateSalesStats(ids) {
     return await Promise.all(
