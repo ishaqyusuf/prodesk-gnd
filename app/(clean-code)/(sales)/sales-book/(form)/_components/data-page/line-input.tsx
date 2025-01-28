@@ -20,6 +20,7 @@ import { useMemo } from "react";
 interface LineInputProps {
     name: FieldPath<SalesFormZusData>;
     label?: string;
+    onChange?;
 }
 function getValue<K extends FieldPath<SalesFormZusData>>(
     path: K,
@@ -27,7 +28,12 @@ function getValue<K extends FieldPath<SalesFormZusData>>(
 ): FieldPathValue<SalesFormZusData, K> {
     return dotObject.pick(path, state);
 }
-export function Input({ name, label, ...props }: LineInputProps & InputProps) {
+export function Input({
+    name,
+    label,
+    onChange,
+    ...props
+}: LineInputProps & InputProps) {
     const state = useFormDataStore();
 
     const value = useMemo(() => {
@@ -49,12 +55,12 @@ export function Input({ name, label, ...props }: LineInputProps & InputProps) {
                 className={cn("h-8", props.className)}
                 value={value as any}
                 onChange={(e) => {
-                    state.dotUpdate(
-                        name,
+                    const val =
                         props.type == "number"
                             ? +e.target.value
-                            : e.target.value
-                    );
+                            : e.target.value;
+                    state.dotUpdate(name, val);
+                    onChange?.(val);
                 }}
             />
         </div>

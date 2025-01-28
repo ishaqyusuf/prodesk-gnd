@@ -66,15 +66,18 @@ export function FormDataPage({}) {
                     label="Sales Discount ($)"
                     type="number"
                     name="metaData.pricing.discount"
+                    onChange={(e) => {
+                        setting.calculateTotalPrice();
+                    }}
                 />
                 <Input
                     label="Labor Cost ($)"
                     type="number"
                     name="metaData.pricing.labour"
+                    onChange={(e) => {
+                        setting.calculateTotalPrice();
+                    }}
                 />
-                {/* <div className="col-span-2 border-b"></div>
-                <AddressForm addressType="billing" />
-                <AddressForm addressType="shipping" /> */}
             </div>
         </div>
     );

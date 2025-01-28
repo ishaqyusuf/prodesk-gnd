@@ -181,6 +181,8 @@ export class CostingClass {
     }
     public softCalculateTotalPrice(overrides: PricingMetaData = {}) {
         const data = this.setting.zus;
+        console.log({ overrides });
+
         const estimate = {
             ...data.metaData.pricing,
             ...overrides,
@@ -193,6 +195,7 @@ export class CostingClass {
         const subGrandTot =
             sum([estimate.subTotal, estimate.taxValue, estimate.labour]) -
             Number(estimate.discount || 0);
+        console.log([subGrandTot, estimate.discount]);
         if (data.metaData.paymentMethod == "Credit Card") {
             estimate.ccc = percentageValue(subGrandTot, 3);
         } else estimate.ccc = 0;
@@ -221,7 +224,6 @@ export class CostingClass {
                 if (taxxable) estimate.taxxable += price;
             });
         });
-
         this.softCalculateTotalPrice(estimate);
     }
     public currentTaxProfile() {
