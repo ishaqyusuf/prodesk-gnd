@@ -75,6 +75,8 @@ interface ComposeQtyControlProps {
     lh?;
     rh?;
     qty?;
+    produceable;
+    shippable;
 }
 export function qtyControlsByType(qtyControls: QtyControl[]) {
     const resp: QtyControlByType = {} as any;
@@ -84,6 +86,7 @@ export function qtyControlsByType(qtyControls: QtyControl[]) {
     return resp;
 }
 export function composeQtyControl(props: ComposeQtyControlProps) {
+    const { produceable, shippable } = props;
     const totalQty = props.qty ? props.qty : sum([props.lh, props.rh]);
     if (!totalQty) return [];
     const previousControls = qtyControlsByType(
@@ -93,6 +96,8 @@ export function composeQtyControl(props: ComposeQtyControlProps) {
     );
 
     const controls: QtyControlByType = {} as any;
+    const totalProduceable = props.produceable ? totalQty : 0;
+    const totalShippable = props.shippable ? totalQty : 0;
     controls.qty = {
         qty: props.qty,
         lh: props.lh,
@@ -100,6 +105,8 @@ export function composeQtyControl(props: ComposeQtyControlProps) {
         type: "qty",
         itemControlUid: props.controlUid,
         autoComplete: previousControls?.qty?.autoComplete,
+        total: totalQty,
+        itemTotal: totalQty,
     };
     let assignments = props.order.assignments.filter((a) =>
         props.doorId ? a.salesDoorId == props.doorId : a.itemId == props.itemId
@@ -121,6 +128,7 @@ export function composeQtyControl(props: ComposeQtyControlProps) {
         type: "prodCompleted",
         itemControlUid: props.controlUid,
         autoComplete: previousControls?.prodCompleted?.autoComplete,
+        itemTotal: totalProduceable,
     };
     const deliveries = props.order.deliveries;
     const dispatches = submissions.map((s) => s.itemDeliveries).flat();
@@ -153,6 +161,7 @@ export function composeQtyControl(props: ComposeQtyControlProps) {
             type: controlType,
             itemControlUid: props.controlUid,
             autoComplete: previousControls?.[controlType]?.autoComplete,
+            itemTotal: totalShippable,
         };
     }
     registerDispatch("cancelled", "dispatchCancelled");
@@ -161,14 +170,28 @@ export function composeQtyControl(props: ComposeQtyControlProps) {
     registerDispatch("queue", "dispatchAssigned");
     return Object.values(controls).map((control) => {
         const _totalQty = control.autoComplete
-            ? totalQty
+            ? control.itemTotal
             : sum([control.qty, control.lh, control.rh]);
-        // if (control.autoComplete) control.total = control.qty;
-        // else
 
         control.total = _totalQty;
-        control.itemTotal = totalQty;
-        control.percentage = percent(_totalQty, totalQty);
+        switch (control.type) {
+            case "prodAssigned":
+            case "prodCompleted":
+                if (props.produceable)
+                    control.percentage = percent(_totalQty, control.itemTotal);
+                else control.percentage = 0;
+                break;
+            case "qty":
+            case "dispatchCancelled":
+                break;
+            default:
+                if (props.shippable)
+                    control.percentage = percent(_totalQty, control.itemTotal);
+                else control.percentage = 0;
+                break;
+        }
+        // control.itemTotal = totalQty;
+        // control.percentage = percent(_totalQty, control.itemTotal);
         return control;
     });
 }
@@ -192,7 +215,6 @@ export function composeControls(order: GetSalesItemControllables) {
                         uid: controlUid,
                         itemId: item.id,
                         orderId: order.id,
-
                         qtyControls: composeQtyControl({
                             order,
                             controlUid,
@@ -201,6 +223,8 @@ export function composeControls(order: GetSalesItemControllables) {
                             rh: door.rhQty,
                             qty: !door.lhQty && !door.rhQty ? door.totalQty : 0,
                             doorId: door.id,
+                            shippable: item.itemStatConfig?.shipping,
+                            produceable: item.itemStatConfig?.production,
                         }),
                         data: {
                             subtitle: `${door.dimension}`,
@@ -231,6 +255,8 @@ export function composeControls(order: GetSalesItemControllables) {
                         controlUid,
                         itemId: item.id,
                         qty: item.qty,
+                        shippable: item.itemStatConfig?.shipping,
+                        produceable: item.itemStatConfig?.production,
                     }),
                 });
             }
@@ -251,6 +277,8 @@ export function composeControls(order: GetSalesItemControllables) {
                     controlUid,
                     itemId: item.id,
                     qty: item.qty,
+                    shippable: true,
+                    produceable: true,
                 }),
             });
         }
