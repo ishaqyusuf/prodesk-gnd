@@ -17,6 +17,10 @@ import {
     PRODUCTION_STATUS,
 } from "@/app/(clean-code)/(sales)/_common/utils/contants";
 import { PERMISSIONS } from "@/data/contants/permissions";
+import {
+    noteParamsParser,
+    noteSchema,
+} from "@/data-actions/note-action/constants";
 // import { REGIONS } from "@/constants/region";
 // import { METHODS } from "@/constants/method";
 
@@ -92,28 +96,31 @@ export const searchParamsParser: {
         parseAsStringLiteral(PERMISSIONS),
         ARRAY_DELIMITER
     ),
+    ...noteParamsParser,
 };
-export const searchSchema = z.object({
-    id: z.number().optional(),
-    status: z.string().optional(),
-    address: z.string().optional(),
-    "customer.name": z.string().optional(),
-    "order.no": z.string().optional(),
-    po: z.string().optional(),
-    phone: z.string().optional(),
-    "dispatch.status": z.enum(DISPATCH_FILTER_OPTIONS).optional(),
-    "production.status": z.enum(PRODUCTION_STATUS).optional(),
-    "production.assignment": z.string().optional(),
-    "production.assignedToId": z.number().optional(),
-    production: z.string().optional(),
-    invoice: z.string().optional(),
-    "sales.rep": z.string().optional(),
-    search: z.string().optional(),
-    "sales.type": z.enum(["order", "quote"]).optional(),
-    "dealer.id": z.number().optional(),
-    "sales.id": z.number().optional(),
-    "user.permissions": z.enum(PERMISSIONS).optional(),
-});
+export const searchSchema = z
+    .object({
+        id: z.number().optional(),
+        status: z.string().optional(),
+        address: z.string().optional(),
+        "customer.name": z.string().optional(),
+        "order.no": z.string().optional(),
+        po: z.string().optional(),
+        phone: z.string().optional(),
+        "dispatch.status": z.enum(DISPATCH_FILTER_OPTIONS).optional(),
+        "production.status": z.enum(PRODUCTION_STATUS).optional(),
+        "production.assignment": z.string().optional(),
+        "production.assignedToId": z.number().optional(),
+        production: z.string().optional(),
+        invoice: z.string().optional(),
+        "sales.rep": z.string().optional(),
+        search: z.string().optional(),
+        "sales.type": z.enum(["order", "quote"]).optional(),
+        "dealer.id": z.number().optional(),
+        "sales.id": z.number().optional(),
+        "user.permissions": z.enum(PERMISSIONS).optional(),
+    })
+    .merge(noteSchema);
 export const searchParamsCache = createSearchParamsCache(searchParamsParser);
 export const searchParamsSerializer = createSerializer(searchParamsParser);
 export type SearchParamsType = Partial<
