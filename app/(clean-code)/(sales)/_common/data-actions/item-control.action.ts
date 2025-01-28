@@ -285,15 +285,14 @@ export async function getSalesItemControllablesInfoAction(salesId) {
                 groupConfig?.[item.multiDykeUid];
             if (config) groupConfig[item.multiDykeUid] = config;
             console.log(config);
-
+            const isService = mainStep?.value?.toLowerCase() == "services";
             return {
                 ...item,
                 itemStatConfig: order.isDyke
                     ? {
-                          production:
-                              mainStep?.value?.toLowerCase() == "services"
-                                  ? item.dykeProduction
-                                  : config?.production,
+                          production: isService
+                              ? item.dykeProduction
+                              : config?.production,
                           shipping: config?.shipping,
                       }
                     : {

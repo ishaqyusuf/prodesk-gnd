@@ -18,12 +18,12 @@ export function SalesItemsTab({}) {
             </AdminOnly>
             {itemOverview?.items?.map((item) => (
                 <div className="flex flex-col gap-2" key={item.itemControlUid}>
-                    {/* {item.primary && item.sectionTitle && (
+                    {item.primary && item.sectionTitle && (
                         <div className="uppercase py-2 bg-muted text-center font-mono font-semibold">
                             {item.sectionTitle}
                         </div>
-                    )} */}
-                    {!item.hidden && (
+                    )}
+                    {!item.hidden && item.status?.qty?.total && (
                         <div
                             className={cn(
                                 item.sectionTitle && "",

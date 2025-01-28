@@ -29,6 +29,7 @@ import { ItemControlMenu } from "../../components/item-control-menu";
 export function ItemOverview({}) {
     const store = salesOverviewStore();
     const itemView = getOpenItem();
+    if (!itemView.status.qty) return;
     const pendingAssignment = itemView.produceable
         ? itemView.status.qty.total - itemView.status.prodAssigned.total
         : 0;
