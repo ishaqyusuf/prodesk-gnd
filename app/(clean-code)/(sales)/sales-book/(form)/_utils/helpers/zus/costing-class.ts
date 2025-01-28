@@ -187,14 +187,21 @@ export class CostingClass {
             ...data.metaData.pricing,
             ...overrides,
         };
+        const discount = Number(estimate.discount) || 0;
+        const taxxableDiscount = Math.min(discount, estimate.taxxable);
+        const nonTaxxableDiscount =
+            taxxableDiscount == estimate.taxxable &&
+            discount != taxxableDiscount
+                ? sum([discount, -1 * taxxableDiscount])
+                : 0;
+        let subTotalAfterDiscount = sum([estimate.subTotal, discount * -1]);
 
+        let taxxable = sum([estimate.taxxable, -1 * taxxableDiscount]);
         const taxProfile = this.currentTaxProfile();
         estimate.taxValue = taxProfile
-            ? percentageValue(estimate.taxxable, taxProfile.percentage)
+            ? percentageValue(taxxable, taxProfile.percentage)
             : 0;
-        const subGrandTot =
-            sum([estimate.subTotal, estimate.taxValue]) -
-            Number(estimate.discount || 0);
+        const subGrandTot = sum([subTotalAfterDiscount, estimate.taxValue]);
         if (data.metaData.paymentMethod == "Credit Card") {
             estimate.ccc = percentageValue(subGrandTot, 3);
         } else estimate.ccc = 0;
