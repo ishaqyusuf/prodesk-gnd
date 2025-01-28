@@ -193,13 +193,14 @@ export class CostingClass {
             ? percentageValue(estimate.taxxable, taxProfile.percentage)
             : 0;
         const subGrandTot =
-            sum([estimate.subTotal, estimate.taxValue, estimate.labour]) -
+            sum([estimate.subTotal, estimate.taxValue]) -
             Number(estimate.discount || 0);
-        console.log([subGrandTot, estimate.discount]);
         if (data.metaData.paymentMethod == "Credit Card") {
             estimate.ccc = percentageValue(subGrandTot, 3);
         } else estimate.ccc = 0;
-        estimate.grandTotal = formatMoney(subGrandTot + (estimate.ccc || 0));
+        estimate.grandTotal = formatMoney(
+            sum([estimate.labour, subGrandTot, estimate.ccc || 0])
+        );
         if (this.setting?.staticZus)
             this.setting.staticZus.metaData.pricing = estimate;
         else this.setting.zus.dotUpdate("metaData.pricing", estimate);
