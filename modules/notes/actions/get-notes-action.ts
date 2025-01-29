@@ -2,7 +2,7 @@
 
 import { SearchParamsType } from "@/components/(clean-code)/data-table/search-params";
 import { prisma } from "@/db";
-import { NoteTagNames, tagNames } from "./constants";
+import { tagNames } from "../constants";
 import { AsyncFnType } from "@/types";
 
 export type GetNotes = AsyncFnType<typeof getNotesAction>;

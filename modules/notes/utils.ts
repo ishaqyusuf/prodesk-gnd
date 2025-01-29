@@ -1,5 +1,5 @@
 import { NoteTagNames } from "./constants";
-import { GetNotes } from "./get-notes-action";
+import { GetNotes } from "./actions/get-notes-action";
 
 export type TagFilters = ReturnType<typeof tagFilter>;
 export function filterNotesByTags(notes: GetNotes, tagFilters: TagFilters[]) {

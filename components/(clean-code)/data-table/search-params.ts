@@ -7,7 +7,6 @@ import {
     parseAsInteger,
     parseAsString,
     parseAsStringLiteral,
-    type inferParserType,
 } from "nuqs/server";
 // Note: import from 'nuqs/server' to avoid the "use client" directive
 import { ARRAY_DELIMITER, SORT_DELIMITER } from "@/lib/delimiters";
@@ -17,10 +16,7 @@ import {
     PRODUCTION_STATUS,
 } from "@/app/(clean-code)/(sales)/_common/utils/contants";
 import { PERMISSIONS } from "@/data/contants/permissions";
-import {
-    noteParamsParser,
-    noteSchema,
-} from "@/modules/notes/actions/constants";
+import { noteParamsParser, noteSchema } from "@/modules/notes/constants";
 // import { REGIONS } from "@/constants/region";
 // import { METHODS } from "@/constants/method";
 

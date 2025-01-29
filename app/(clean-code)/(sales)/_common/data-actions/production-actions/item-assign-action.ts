@@ -56,13 +56,13 @@ export async function createItemAssignmentAction({
                 },
             },
         });
-        await _notify(
-            assignedToId,
-            "assign production",
-            `New Production Assigned`,
-            null,
-            ``
-        );
+        // await _notify(
+        //     assignedToId,
+        //     "assign production",
+        //     `New Production Assigned`,
+        //     null,
+        //     ``
+        // );
         if (produceable) {
             await updateQtyControlAction(uid, "prodAssigned", {
                 totalQty,
