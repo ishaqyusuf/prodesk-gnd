@@ -8,8 +8,8 @@ export function filterNotesByTags(notes: GetNotes, tagFilters: TagFilters[]) {
             const matchedTag = note.tags.find((t) => t.tagName == tf.tagName);
             return matchedTag?.tagValue == tf?.value;
         });
-        return true;
     });
+    return filteredNotes;
 }
 export function tagFilter(tagName: NoteTagNames, value) {
     return { tagName, value };

@@ -11,8 +11,8 @@ import { ThemeProvider } from "@/providers/theme-provider";
 const AppProvider = ({ children }) => {
     return (
         <SessionProvider>
-            <ModalProvider>
-                <Provider store={store}>
+            <Provider store={store}>
+                <ModalProvider>
                     <ThemeProvider attribute="class" defaultTheme="light">
                         <CommandProvider>
                             <NavContext.Provider value={useNavCtx()}>
@@ -20,22 +20,7 @@ const AppProvider = ({ children }) => {
                             </NavContext.Provider>
                         </CommandProvider>
                     </ThemeProvider>
-                </Provider>
-            </ModalProvider>
-        </SessionProvider>
-    );
-    return (
-        <SessionProvider>
-            <Provider store={store}>
-                <ThemeProvider attribute="class" defaultTheme="light">
-                    <CommandProvider>
-                        <ModalProvider>
-                            <NavContext.Provider value={useNavCtx()}>
-                                {children}
-                            </NavContext.Provider>
-                        </ModalProvider>
-                    </CommandProvider>
-                </ThemeProvider>
+                </ModalProvider>
             </Provider>
         </SessionProvider>
     );

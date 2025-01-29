@@ -10,9 +10,7 @@ import {
 import { getContractorsAction } from "@/app/(v2)/(loggedIn)/contractors/_actions/get-job-employees";
 import { getJobCostList } from "@/app/(v2)/(loggedIn)/contractors/_actions/job-cost-list";
 import { getStaticProductionUsersAction } from "@/app/(v2)/(loggedIn)/sales/_actions/static/get-static-production-users-action";
-import { deepCopy } from "@/lib/deep-copy";
 import { store, useAppSelector } from "@/store";
-import { ISlicer, dispatchSlice } from "@/store/slicers";
 import { updateStaticData } from "@/store/static-data-slice";
 import { IJobType } from "@/types/hrm";
 import { InstallCostLine } from "@/types/settings";

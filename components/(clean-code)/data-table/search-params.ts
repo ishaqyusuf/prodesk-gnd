@@ -20,7 +20,7 @@ import { PERMISSIONS } from "@/data/contants/permissions";
 import {
     noteParamsParser,
     noteSchema,
-} from "@/data-actions/note-action/constants";
+} from "@/modules/notes/actions/constants";
 // import { REGIONS } from "@/constants/region";
 // import { METHODS } from "@/constants/method";
 

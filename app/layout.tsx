@@ -1,7 +1,4 @@
 import "@/styles/globals.css";
-import { Metadata } from "next";
-
-import { Inter } from "next/font/google";
 // import { siteConfig } from "@/config/site";
 // import { fontSans } from "@/lib/fonts";
 import { Toaster } from "@/components/ui/toaster";
@@ -20,7 +17,6 @@ import { __isProd } from "@/lib/is-prod-server";
 import { ReactQueryProvider } from "@/providers/react-query";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { QueryTabProvider } from "./(clean-code)/_common/query-tab/provider";
-import { ThemeProvider } from "next-themes";
 import { constructMetadata } from "@/lib/(clean-code)/construct-metadata";
 
 export async function generateMetadata({}) {

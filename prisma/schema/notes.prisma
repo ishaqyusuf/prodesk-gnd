@@ -1,22 +1,57 @@
 model NotePad {
-    id          Int            @unique @default(autoincrement())
-    note        String?
-    type        String //sales
-    status      String //public,admin,dispatch,production
-    createdById Int?
-    comments    NoteComments[]
-    deletedAt   DateTime?      @db.Timestamp(0)
-    createdAt   DateTime?      @default(now()) @db.Timestamp(0)
-    commentNote NoteComments[] @relation(name: "commentNote")
-    tags        NoteTags[]
+    id              Int              @unique @default(autoincrement())
+    note            String?
+    subject         String?
+    headline        String?
+    type            String //sales,production,dispatch
+    status          String           @default("private") //public,private 
+    createdById     Int?
+    comments        NoteComments[]
+    deletedAt       DateTime?        @db.Timestamp(0)
+    createdAt       DateTime?        @default(now()) @db.Timestamp(0)
+    commentNote     NoteComments[]   @relation(name: "commentNote")
+    tags            NoteTags[]
+    senderContactId Int
+    recipients      NoteRecipients[]
+    senderContact   NotePadContacts? @relation(fields: [senderContactId], references: [id])
+
+    @@index([senderContactId])
+}
+
+model NoteRecipients {
+    id               Int             @unique @default(autoincrement())
+    notePage         NotePad         @relation(fields: [notePadId], references: [id])
+    deletedAt        DateTime?       @db.Timestamp(0)
+    createdAt        DateTime?       @default(now()) @db.Timestamp(0)
+    notePadId        Int
+    notePadContactId Int
+    contact          NotePadContacts @relation(fields: [notePadContactId], references: [id])
+
+    @@index([notePadId])
+    @@index([notePadContactId])
+}
+
+model NotePadContacts {
+    id            Int              @unique @default(autoincrement())
+    name          String
+    email         String?
+    phoneNo       String?
+    notesReceived NoteRecipients[]
+    notesSent     NotePad[]
+    deletedAt     DateTime?        @db.Timestamp(0)
+    createdAt     DateTime?        @default(now()) @db.Timestamp(0)
+
+    @@unique([name, email, phoneNo])
 }
 
 model NoteTags {
-    id        Int      @unique @default(autoincrement())
-    tagName   String //itemUID, deliveryId
+    id        Int       @unique @default(autoincrement())
+    tagName   String //itemUID, deliveryId,section=dispatch|production|sales
     tagValue  String
-    NotePad   NotePad? @relation(fields: [notePadId], references: [id])
+    notePad   NotePad?  @relation(fields: [notePadId], references: [id])
     notePadId Int?
+    deletedAt DateTime? @db.Timestamp(0)
+    createdAt DateTime? @default(now()) @db.Timestamp(0)
 
     @@index([notePadId])
 }

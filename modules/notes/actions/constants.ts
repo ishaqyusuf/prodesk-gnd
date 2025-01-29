@@ -21,6 +21,10 @@ export type NoteTagNames = (typeof tagNames)[number];
 export const noteSchema = z.object({
     "note.status": z.enum(noteStatus).optional(),
     "note.salesId": z.string().optional(),
+    "note.itemControlUID": z.string().optional(),
+    "note.deliveryId": z.string().optional(),
+    "note.salesItemId": z.string().optional(),
+    "note.salesAssignment": z.string().optional(),
 });
 export type FilterKeys = keyof typeof noteSchema._type;
 export const noteParamsParser: {
@@ -28,4 +32,8 @@ export const noteParamsParser: {
 } = {
     "note.status": parseAsString,
     "note.salesId": parseAsString,
+    "note.itemControlUID": parseAsString,
+    "note.deliveryId": parseAsString,
+    "note.salesItemId": parseAsString,
+    "note.salesAssignment": parseAsString,
 };
