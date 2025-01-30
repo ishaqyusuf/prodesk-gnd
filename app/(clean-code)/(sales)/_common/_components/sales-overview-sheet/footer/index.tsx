@@ -76,18 +76,18 @@ export function Footer({}) {
                 <PrintMenuAction pdf />
                 <CopyMenuAction />
                 <MoveMenuAction />
-                <DevOnly>
-                    <Menu.Item
-                        Icon={RefreshCcw}
-                        onClick={async () => {
-                            await resetSalesStatAction(store.overview?.id);
-                            toast.success("stat reset complete");
-                            refreshTabData(store.currentTab);
-                        }}
-                    >
-                        Reset Item Stats
-                    </Menu.Item>
-                </DevOnly>
+                {/* <DevOnly> */}
+                <Menu.Item
+                    Icon={RefreshCcw}
+                    onClick={async () => {
+                        await resetSalesStatAction(store.overview?.id);
+                        toast.success("stat reset complete");
+                        refreshTabData(store.currentTab);
+                    }}
+                >
+                    Reset Item Stats
+                </Menu.Item>
+                {/* </DevOnly> */}
             </Menu>
         </div>
     );

@@ -82,17 +82,18 @@ export class SaveSalesClass extends SaveSalesHelper {
                       isDyke: true,
                   })
                 : null;
-        console.log(this.form?.saveAction, redirectTo);
 
-        switch (this.form?.saveAction) {
-            case "close":
-                redirect(`/sales-book/${type}s`);
-            case "default":
-                if (redirectTo && (__redirect || this.query?.restoreMode))
-                    redirect(redirectTo);
-            case "new":
-                redirect(`/sales-book/create-${type}`);
-        }
+        // setTimeout(() => {
+        //     switch (this.form?.saveAction) {
+        //         case "close":
+        //             redirect(`/sales-book/${type}s`);
+        //         case "default":
+        //             if (redirectTo && (__redirect || this.query?.restoreMode))
+        //                 redirect(redirectTo);
+        //         case "new":
+        //             redirect(`/sales-book/create-${type}`);
+        //     }
+        // }, 1000);
 
         return {
             slug: salesResp?.slug,

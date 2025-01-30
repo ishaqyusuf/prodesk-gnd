@@ -75,6 +75,16 @@ export function FormHeader({ sticky }: { sticky: Sticky }) {
                 allowRedirect: true,
             }
         );
+        switch (action) {
+            case "close":
+                router.push(`/sales-book/${metaData.type}s`);
+                break;
+            case "default":
+                if (resp.redirectTo) router.push(resp.redirectTo);
+                break;
+            case "new":
+                router.push(`/sales-book/create-${metaData.type}`);
+        }
         // console.log({ resp });
         // return;
         if (!metaData.debugMode) {
@@ -181,7 +191,7 @@ export function FormHeader({ sticky }: { sticky: Sticky }) {
                         {/* <Icons.save className="size-4 mr-4" /> */}
                         <span className="">Save</span>
                     </Button>
-                    {/* <Menu Icon={MenuIcon}>
+                    <Menu Icon={MenuIcon}>
                         <Menu.Item onClick={() => save("close")}>
                             Save & Close
                         </Menu.Item>
@@ -191,8 +201,7 @@ export function FormHeader({ sticky }: { sticky: Sticky }) {
                         <Menu.Item>Copy</Menu.Item>
                         <Menu.Item disabled>Move To Sales</Menu.Item>
                         <Menu.Item disabled>Move To Quotes</Menu.Item>
-               
-                    </Menu> */}
+                    </Menu>
                 </div>
                 {printData && (
                     <Menu>
