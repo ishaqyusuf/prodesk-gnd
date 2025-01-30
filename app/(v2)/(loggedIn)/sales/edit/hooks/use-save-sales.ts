@@ -14,6 +14,7 @@ import useDeepCompareEffect from "use-deep-compare-effect";
 import { isProdClient } from "@/lib/is-prod";
 import usePersistDirtyForm from "@/_v2/hooks/use-persist-dirty-form";
 import salesFormUtils from "../sales-form-utils";
+import { resetSalesStatAction } from "@/app/(clean-code)/(sales)/_common/data-actions/sales-stat-control.action";
 
 export default function useSaveSalesHook() {
     const form = useFormContext<ISalesForm>();
@@ -53,6 +54,7 @@ export default function useSaveSalesHook() {
                 _data.order,
                 _data.items
             );
+            await resetSalesStatAction(order.id);
             switch (and) {
                 case "close":
                     router.push(`/sales/${order.type}s`);

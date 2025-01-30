@@ -80,7 +80,11 @@ export function FormHeader({ sticky }: { sticky: Sticky }) {
                 router.push(`/sales-book/${metaData.type}s`);
                 break;
             case "default":
-                if (resp.redirectTo) router.push(resp.redirectTo);
+                if (resp.redirectTo) {
+                    console.log(resp.redirectTo);
+
+                    router.push(resp.redirectTo);
+                }
                 break;
             case "new":
                 router.push(`/sales-book/create-${metaData.type}`);
@@ -182,15 +186,6 @@ export function FormHeader({ sticky }: { sticky: Sticky }) {
                     <span className="">Overview</span>
                 </Button>
                 <div className="flex">
-                    <Button
-                        icon="save"
-                        size="xs"
-                        action={save}
-                        variant="default"
-                    >
-                        {/* <Icons.save className="size-4 mr-4" /> */}
-                        <span className="">Save</span>
-                    </Button>
                     <Menu Icon={MenuIcon}>
                         <Menu.Item onClick={() => save("close")}>
                             Save & Close
@@ -202,6 +197,15 @@ export function FormHeader({ sticky }: { sticky: Sticky }) {
                         <Menu.Item disabled>Move To Sales</Menu.Item>
                         <Menu.Item disabled>Move To Quotes</Menu.Item>
                     </Menu>
+                    <Button
+                        icon="save"
+                        size="xs"
+                        action={save}
+                        variant="default"
+                    >
+                        {/* <Icons.save className="size-4 mr-4" /> */}
+                        <span className="">Save</span>
+                    </Button>
                 </div>
                 {printData && (
                     <Menu>

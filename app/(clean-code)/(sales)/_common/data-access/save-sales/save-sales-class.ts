@@ -8,6 +8,7 @@ import { generateRandomString } from "@/lib/utils";
 import { redirect } from "next/navigation";
 import { AddressClass } from "./address-class";
 import { composeSalesUrl } from "../../utils/sales-utils";
+import { resetSalesStatAction } from "../../data-actions/sales-stat-control.action";
 
 export interface SaverData {
     tx?;
@@ -94,7 +95,6 @@ export class SaveSalesClass extends SaveSalesHelper {
         //             redirect(`/sales-book/create-${type}`);
         //     }
         // }, 1000);
-
         return {
             slug: salesResp?.slug,
             redirectTo,
@@ -149,7 +149,7 @@ export class SaveSalesClass extends SaveSalesHelper {
         this.getUnusedIds();
         const data = Object.values(this.groupByPriorityAndId());
         this.data.tx = data;
-
+        let salesId = this.form.metaData?.id;
         const txs = [];
         this.data.deleteStacks
             ?.filter((s) => s?.ids?.length)
@@ -201,7 +201,6 @@ export class SaveSalesClass extends SaveSalesHelper {
                     this.data.orderTxIndex++;
                     this.data.orderTxIndexFound = orderTx;
                 }
-                // prisma.salesOrders
                 txs.push(
                     orderTx
                         ? table.create({
@@ -218,8 +217,20 @@ export class SaveSalesClass extends SaveSalesHelper {
             // TODO: REMOVE
             // if (data.filter((d) => d.priority == 2).length > 1) return;
             if (this.form.metaData.debugMode) return;
-            const transactions = await prisma.$transaction(txs);
+            const transactions = await prisma.$transaction((async (tx) => {
+                return await Promise.all(
+                    txs?.map(async (fn) => {
+                        const resp = await fn; //();
+                        if (resp?.slug && resp?.orderId) {
+                            salesId = resp.id;
+                            console.log(resp);
+                        }
+                        return resp;
+                    })
+                );
+            }) as any);
             this.data.result = transactions;
+            if (salesId) await resetSalesStatAction(salesId);
         } catch (error) {
             if (error instanceof Error) this.data.error = error.message;
             else this.data.error = "ERROR";
