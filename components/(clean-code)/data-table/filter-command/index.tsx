@@ -223,11 +223,31 @@ export function DataTableFilterCommand<TData, TSchema extends z.AnyZodObject>({
                     ref={inputRef}
                     value={inputValue}
                     onValueChange={setInputValue}
+                    onPaste={(e) => {
+                        // console.log();
+                        const pv = e.clipboardData.getData("text");
+
+                        const value = inputValue;
+                        if (!value && pv) {
+                            setInputValue(`search:${pv}`);
+                            setCurrentWord(`search:${pv}`);
+                            e.preventDefault(); // Block the input
+                        }
+                    }}
                     onKeyDown={(e) => {
+                        // if (e.metaKey && e.key.toLowerCase() === "v") return; // Allow paste (Meta+V)
+                        // if (e.ctrlKey && e.key.toLowerCase() === "v") return;
                         const allowedKeys = /^[a-zA-Z0-9]*$/; // Alphanumeric characters
                         const value = inputValue;
                         // Check if the key is not alphanumeric or a control key
-                        if (allowedKeys.test(e.key) && !value) {
+
+                        if (
+                            allowedKeys.test(e.key) &&
+                            !value &&
+                            !e.metaKey &&
+                            !e.ctrlKey &&
+                            !e.altKey
+                        ) {
                             setInputValue(`search:${e.key}`);
                             setCurrentWord(`search:${e.key}`);
                             e.preventDefault(); // Block the input
