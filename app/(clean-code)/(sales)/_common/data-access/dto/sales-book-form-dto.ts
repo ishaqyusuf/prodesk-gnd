@@ -49,7 +49,11 @@ export function typedSalesBookFormItems(data: SalesFormData) {
         // const isType = isComponentType(item.housePackageTool?.doorType as any);
         item.housePackageTool?.doors?.map((d) => {
             // if (d.rhQty && !isType.multiHandles) d.rhQty = 0;
-            let dim = d.dimension?.replaceAll('"', "in");
+            let dim = `${d.stepProduct?.uid}-${d.dimension?.replaceAll(
+                '"',
+                "in"
+            )}`;
+
             // d.stepProduct?.uid;
             if (!d.priceId)
                 d.priceData = {
@@ -250,7 +254,7 @@ export function transformMultiDykeItem(
         if (itemData.multiDykeUid == item.multiDykeUid) return true;
         return false;
     });
-    console.log(_comps.length);
+    console.log("LENGHT:::::", _comps.length);
 
     let sectionPrice = 0;
     _comps.map((item) => {

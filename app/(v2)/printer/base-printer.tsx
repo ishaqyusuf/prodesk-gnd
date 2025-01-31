@@ -71,7 +71,13 @@ export default function BasePrinter({
     function getData(slug) {
         return form.getValues(slug);
     }
-    if (!document) return;
+    // let doc = document;
+    let [doc, setDocument] = useState(null);
+    useEffect(() => {
+        setDocument(document);
+    }, []);
+
+    if (!doc) return;
     return createPortal(
         <PrintCtx.Provider value={{ pageReady, getData }}>
             <div className="printly">
@@ -79,6 +85,6 @@ export default function BasePrinter({
                 <WaterMark />
             </div>
         </PrintCtx.Provider>,
-        document?.body
+        doc?.body
     );
 }

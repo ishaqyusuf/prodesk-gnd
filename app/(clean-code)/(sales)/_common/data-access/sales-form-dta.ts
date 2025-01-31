@@ -41,7 +41,6 @@ export async function getSalesBookFormDataDta(data: GetSalesBookFormDataProps) {
         throw new Error("Invalid operation");
     }
     if (data.restoreMode) where.deletedAt = whereTrashed.where.deletedAt;
-    console.log(data);
 
     const order = await prisma.salesOrders.findFirst({
         where,
@@ -170,7 +169,7 @@ export async function saveSalesComponentPricingDta(
     orderId
 ) {
     // console.log(prices);
-    return;
+    // return;
     const ids = [];
     const filterPrices = prices.filter((p) => p.qty);
     await Promise.all(
@@ -204,7 +203,4 @@ export async function saveSalesComponentPricingDta(
             deletedAt: new Date(),
         },
     });
-    console.log(res.count);
-
-    console.log("DONE");
 }

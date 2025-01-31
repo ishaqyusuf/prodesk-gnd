@@ -236,13 +236,11 @@ export function zhInitializeState(data: GetSalesBookForm, copy = false) {
                     : item.item?.housePackageTool?.id;
                 resp.kvFormItem[uid].groupItem.doorStepProductId =
                     stepProductId;
-                Object.entries(data._doorForm).map(([dimIn, doorForm]) => {
-                    // doorForm.stepProductId
-                    // doorForm.priceData
-                    const stepProdUid = doorForm?.stepProduct?.uid;
+                Object.entries(data._doorForm).map(([formId, doorForm]) => {
+                    // const stepProdUid = doorForm?.stepProduct?.uid;
                     console.log(stepProdUid);
 
-                    const formId = `${stepProdUid}-${inToFt(dimIn)}`;
+                    // const formId = `${stepProdUid}-${inToFt(dimIn)}`;
                     pushItemId(formId);
                     // console.log(doorForm);
                     addFormItem(formId, {

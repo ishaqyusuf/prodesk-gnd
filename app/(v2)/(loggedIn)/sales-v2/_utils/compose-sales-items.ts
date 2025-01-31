@@ -21,6 +21,7 @@ export function composeSalesItems(data: ViewSaleType) {
         if (item.housePackageTool) {
             const tool = item.housePackageTool;
             const dt = tool.doorType as string;
+
             if (!housePakageTools[dt])
                 housePakageTools[dt] = {
                     type: dt,

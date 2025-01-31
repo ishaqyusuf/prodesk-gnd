@@ -420,7 +420,7 @@ function getDoorsTable(
                         (!item.multiDyke && i.id == item.id) ||
                         (item.multiDyke && item.multiDykeUid == i.multiDykeUid)
                 );
-                // console.log(_multies.length);
+                console.log(">", _multies.length);
                 _multies.map((m, _) => {
                     const getVal = (
                         cell: Cell,
@@ -483,10 +483,12 @@ function getDoorsTable(
                     } else {
                         m.housePackageTool?.doors?.map((door, _doorI) => {
                             const doorTitle =
-                                door?.stepProduct?.name ||
-                                m.housePackageTool.stepProduct?.door?.title ||
-                                m.housePackageTool?.door?.title ||
-                                "";
+                                // m.housePackageTool?.door?.title ||
+                                // m.housePackageTool.stepProduct?.door?.title ||
+                                door?.stepProduct?.name || "";
+                            console.log(door?.stepProduct);
+
+                            // console.log(door?.stepProduct?.name);
                             const isPh = m.formSteps.find((s) =>
                                 s.value?.toLowerCase()?.startsWith("ph -")
                             );

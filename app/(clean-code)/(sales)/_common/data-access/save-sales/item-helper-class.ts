@@ -110,6 +110,7 @@ export class ItemHelperClass {
                             formData.stepProductId?.id ||
                                 formData.stepProductId.fallbackId
                         );
+                        // console.log(updateDoor);
 
                         if (formData.doorId) {
                             if (
@@ -123,6 +124,7 @@ export class ItemHelperClass {
                                 doorData.data = updateDoor;
                         } else {
                             const { stepProduct, ...rest } = updateDoor;
+
                             const createDoor = {
                                 ...rest,
                                 id: this.ctx.nextId("salesDoor"),
