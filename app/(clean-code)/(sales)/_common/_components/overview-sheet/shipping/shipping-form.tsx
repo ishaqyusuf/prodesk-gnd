@@ -1,8 +1,5 @@
 import { SecondaryTabSheet } from "@/components/(clean-code)/data-table/item-overview-sheet";
-import {
-    ItemProdViewContext,
-    useItemProdViewContext,
-} from "../production/use-hooks";
+import { useItemProdViewContext } from "../production/use-hooks";
 import { Badge } from "@/components/ui/badge";
 import { GetSalesOverview } from "../../../use-case/sales-item-use-case";
 import { useForm } from "react-hook-form";
@@ -20,8 +17,6 @@ import Button from "@/components/common/button";
 import { toast } from "sonner";
 import FormSelect from "@/components/common/controls/form-select";
 import { Label } from "@/components/ui/label";
-import { useInfiniteDataTable } from "@/components/(clean-code)/data-table/use-data-table";
-import { Icons } from "@/components/_v1/icons";
 import { CheckCircle2Icon } from "lucide-react";
 
 const useShippingFormCtx = () => {
@@ -75,8 +70,6 @@ export function ShippingForm({}) {
             toast.error("Select Delivery Mode");
             return;
         }
-        console.log(data);
-        // return;
         createSalesDispatchUseCase(data)
             .then((resp) => {
                 toast.success("Shipping created");

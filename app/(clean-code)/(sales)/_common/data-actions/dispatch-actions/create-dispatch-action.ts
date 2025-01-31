@@ -65,9 +65,6 @@ export async function createSalesDispatchAction(data: CreateSalesDispatchData) {
         const resp = await tx.orderItemDelivery.createMany({
             data: dispatchables as any,
         });
-        console.log(resp);
-
-        await resetSalesStatAction(salesId);
     }) as any);
 }
 async function getItemDispatchableSubmissions(

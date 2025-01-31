@@ -6,6 +6,7 @@ import {
     CreateSalesDispatchData,
 } from "../../../../data-actions/dispatch-actions/create-dispatch-action";
 import { loadPageData, refreshTabData } from "../../helper";
+import { resetSalesStatAction } from "../../../../data-actions/sales-stat-control.action";
 
 export async function createSalesShipment(ctx: UseSalesShipmentForm) {
     try {
@@ -47,9 +48,12 @@ export async function createSalesShipment(ctx: UseSalesShipmentForm) {
             salesId: store.overview?.id,
             status: data.status,
         });
-        toast.success("Dispatch Created!");
-        store.update("currentTab", "shipping");
-        refreshTabData("shipping");
+        setTimeout(async () => {
+            await resetSalesStatAction(store.overview?.id);
+            toast.success("Dispatch Created!");
+            store.update("currentTab", "shipping");
+            refreshTabData("shipping");
+        }, 200);
         // await new Promise((resolve) =>
         //     setTimeout(() => {
         //         resolve(null);

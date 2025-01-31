@@ -348,6 +348,7 @@ export async function getSalesItemsOverviewAction({
             control?.qtyControls?.map((c) => {
                 item.status[c.type] = c;
             });
+
             item.lineConfigs = [];
             const qty = item.status?.qty;
             item.lineConfigs.push(item.subtitle);
@@ -369,7 +370,6 @@ export async function getSalesItemsOverviewAction({
             }
             return true;
         });
-    // console.log(items);
     return {
         items,
     };

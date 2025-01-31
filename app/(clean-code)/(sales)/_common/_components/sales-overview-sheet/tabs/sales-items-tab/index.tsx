@@ -1,7 +1,7 @@
 import { AdminOnly } from "../../helper";
 
 import { salesOverviewStore } from "../../store";
-import { cn, percent } from "@/lib/utils";
+import { cn, percent, sum } from "@/lib/utils";
 import Money from "@/components/_v1/money";
 import { Badge } from "@/components/ui/badge";
 import { ItemOverview } from "./item-overview";
@@ -94,7 +94,20 @@ export function SalesItemsTab({}) {
                                             <div className="flex-1">
                                                 <Pill
                                                     label="FulFilled"
-                                                    value={`${item.status?.dispatchCompleted?.total}/${item.status?.qty?.total}`}
+                                                    value={`${sum([
+                                                        item.status
+                                                            ?.dispatchCompleted
+                                                            ?.total,
+                                                        item.status
+                                                            ?.dispatchAssigned
+                                                            ?.total,
+                                                        item.status
+                                                            ?.dispatchInProgress
+                                                            ?.total,
+                                                    ])}/${
+                                                        item.status?.qty
+                                                            ?.itemTotal
+                                                    }`}
                                                 />
                                             </div>
                                         )}
