@@ -213,7 +213,20 @@ const SalesIncludes = {
                     doors: {
                         where: { deletedAt: null },
                         include: {
-                            stepProduct: true,
+                            stepProduct: {
+                                include: {
+                                    door: {
+                                        select: {
+                                            title: true,
+                                        },
+                                    },
+                                    product: {
+                                        select: {
+                                            title: true,
+                                        },
+                                    },
+                                },
+                            },
                         },
                     },
                     molding: {

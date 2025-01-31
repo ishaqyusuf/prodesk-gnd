@@ -485,8 +485,9 @@ function getDoorsTable(
                             const doorTitle =
                                 // m.housePackageTool?.door?.title ||
                                 // m.housePackageTool.stepProduct?.door?.title ||
-                                door?.stepProduct?.name || "";
-                            console.log(door?.stepProduct);
+                                door?.stepProduct?.name ||
+                                door?.stepProduct?.door?.title ||
+                                door?.stepProduct?.product?.title;
 
                             // console.log(door?.stepProduct?.name);
                             const isPh = m.formSteps.find((s) =>
