@@ -108,11 +108,6 @@ export async function getSalesItemsOverviewAction({
                                 select: {
                                     id: true,
                                     name: true,
-                                    door: {
-                                        select: {
-                                            title: true,
-                                        },
-                                    },
                                 },
                             },
                             door: {
@@ -131,6 +126,22 @@ export async function getSalesItemsOverviewAction({
                                     swing: true,
                                     lineTotal: true,
                                     unitPrice: true,
+                                    stepProduct: {
+                                        select: {
+                                            name: true,
+                                            door: {
+                                                select: {
+                                                    title: true,
+                                                },
+                                            },
+                                            product: {
+                                                select: {
+                                                    id: true,
+                                                    title: true,
+                                                },
+                                            },
+                                        },
+                                    },
                                 },
                             },
                         },
@@ -294,9 +305,9 @@ export async function getSalesItemsOverviewAction({
                     (a) => a.salesDoorId == door.id && a.itemId == item.id
                 );
                 const title = `${
-                    hpt.door?.title ||
-                    hpt.stepProduct?.name ||
-                    hpt?.stepProduct?.door?.title
+                    door?.stepProduct?.door?.title ||
+                    door?.stepProduct?.product?.title ||
+                    door.stepProduct?.name
                 }`;
 
                 itemControlUid = doorItemControlUid(door.id, door.dimension);
