@@ -164,13 +164,13 @@ export function ComboboxDropdown<T extends ComboboxItem>({
                     className="w-full justify-between relative"
                 >
                     <span className="truncate text-ellipsis pr-3">
-                        {selectedItem
+                        {/* {selectedItem
                             ? (
                                   <span className="flex items-center overflow-hidden whitespace-nowrap text-ellipsis block">
                                       {renderSelectedItem?.(selectedItem)}
                                   </span>
                               ) ?? selectedItem.label
-                            : placeholder ?? "Select item..."}
+                            : placeholder ?? "Select item..."} */}
                     </span>
                     <ChevronsUpDown className="size-4 opacity-50 absolute right-2" />
                 </Button>
