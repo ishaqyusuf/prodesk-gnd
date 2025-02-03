@@ -15,6 +15,8 @@ import { deleteDispatchAction } from "../../../../data-actions/dispatch-actions/
 import { refreshTabData } from "../../helper";
 import { toast } from "sonner";
 import { openSalesPrint } from "@/app/(v2)/printer/utils";
+import { resetSalesStatAction } from "../../../../data-actions/sales-stat-control.action";
+import { timeout } from "@/lib/timeout";
 
 export function SalesShippingTab({}) {
     const store = salesOverviewStore();
@@ -111,6 +113,11 @@ export function SalesShippingTab({}) {
                                                     {
                                                         loading: "Deleting....",
                                                         async success(data) {
+                                                            await timeout(1000);
+                                                            await resetSalesStatAction(
+                                                                store?.overview
+                                                                    ?.id
+                                                            );
                                                             refreshTabData(
                                                                 "shipping"
                                                             );

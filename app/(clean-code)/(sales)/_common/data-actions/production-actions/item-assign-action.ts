@@ -83,6 +83,26 @@ export async function deleteItemAssignmentAction({ id }) {
             },
             data: {
                 deletedAt: new Date(),
+                submissions: {
+                    updateMany: {
+                        where: {},
+                        data: {
+                            deletedAt: new Date(),
+                        },
+                    },
+                },
+            },
+        });
+        await prisma.orderItemDelivery?.updateMany({
+            where: {
+                submission: {
+                    assignment: {
+                        id,
+                    },
+                },
+            },
+            data: {
+                deletedAt: new Date(),
             },
         });
         await resetSalesStatAction(a.orderId);

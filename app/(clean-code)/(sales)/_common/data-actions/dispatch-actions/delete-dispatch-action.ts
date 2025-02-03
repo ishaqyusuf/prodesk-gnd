@@ -9,10 +9,18 @@ export async function deleteDispatchAction(id) {
             where: { id },
             data: {
                 deletedAt: new Date(),
+                items: {
+                    updateMany: {
+                        where: {},
+                        data: {
+                            deletedAt: new Date(),
+                        },
+                    },
+                },
             },
         });
         const salesId = resp.salesOrderId;
-        await resetSalesStatAction(salesId);
+        // await resetSalesStatAction(salesId);
     }) as any);
 }
 export async function restoreDispatchAction(id) {
@@ -24,6 +32,6 @@ export async function restoreDispatchAction(id) {
             },
         });
         const salesId = resp.salesOrderId;
-        await resetSalesStatAction(salesId);
+        // await resetSalesStatAction(salesId);
     }) as any);
 }

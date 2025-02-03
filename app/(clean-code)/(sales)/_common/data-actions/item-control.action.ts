@@ -310,12 +310,18 @@ export async function getSalesItemControllablesInfoAction(salesId) {
                 submissions: a.submissions.map((s) => {
                     return {
                         ...s,
-                        itemDeliveries: s.itemDeliveries.map((d) => {
-                            return {
-                                ...d,
-                                status: d.status as SalesDispatchStatus,
-                            };
-                        }),
+                        itemDeliveries: s.itemDeliveries
+                            .filter((s) =>
+                                order.deliveries.some(
+                                    (a) => a.id == s.orderDeliveryId
+                                )
+                            )
+                            .map((d) => {
+                                return {
+                                    ...d,
+                                    status: d.status as SalesDispatchStatus,
+                                };
+                            }),
                     };
                 }),
             };
