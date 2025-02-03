@@ -268,7 +268,7 @@ export function TransactionsSearchFilter({
                         </button>
                     </DropdownMenuTrigger>
                 </form>
-
+                {/* 
                 <FilterList
                     filters={filters}
                     loading={streaming}
@@ -281,7 +281,7 @@ export function TransactionsSearchFilter({
                     tags={tags}
                     recurringFilters={recurringFilters}
                     amountRange={filters.amount_range}
-                />
+                /> */}
             </div>
 
             <DropdownMenuContent
@@ -369,7 +369,7 @@ export function TransactionsSearchFilter({
                                 alignOffset={-4}
                                 className="p-0"
                             >
-                                {statusFilters.map(({ id, name }) => (
+                                {/* {statusFilters.map(({ id, name }) => (
                                     <DropdownMenuCheckboxItem
                                         key={id}
                                         checked={filters?.statuses?.includes(
@@ -399,7 +399,7 @@ export function TransactionsSearchFilter({
                                     >
                                         {name}
                                     </DropdownMenuCheckboxItem>
-                                ))}
+                                ))} */}
                             </DropdownMenuSubContent>
                         </DropdownMenuPortal>
                     </DropdownMenuSub>
@@ -417,7 +417,7 @@ export function TransactionsSearchFilter({
                                 alignOffset={-4}
                                 className="p-0"
                             >
-                                {attachmentsFilters.map(({ id, name }) => (
+                                {/* {attachmentsFilters.map(({ id, name }) => (
                                     <DropdownMenuCheckboxItem
                                         key={id}
                                         checked={filters?.attachments?.includes(
@@ -431,7 +431,7 @@ export function TransactionsSearchFilter({
                                     >
                                         {name}
                                     </DropdownMenuCheckboxItem>
-                                ))}
+                                ))} */}
                             </DropdownMenuSubContent>
                         </DropdownMenuPortal>
                     </DropdownMenuSub>
@@ -600,7 +600,7 @@ export function TransactionsSearchFilter({
                                 alignOffset={-4}
                                 className="p-0"
                             >
-                                {recurringFilters.map(({ id, name }) => (
+                                {/* {recurringFilters.map(({ id, name }) => (
                                     <DropdownMenuCheckboxItem
                                         key={id}
                                         checked={filters?.statuses?.includes(
@@ -630,7 +630,7 @@ export function TransactionsSearchFilter({
                                     >
                                         {name}
                                     </DropdownMenuCheckboxItem>
-                                ))}
+                                ))} */}
                             </DropdownMenuSubContent>
                         </DropdownMenuPortal>
                     </DropdownMenuSub>
