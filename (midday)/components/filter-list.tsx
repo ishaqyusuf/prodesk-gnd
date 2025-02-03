@@ -58,7 +58,7 @@ export function FilterList({
                 if (key === "start" && value && filters.end) {
                     return formatDateRange(
                         new Date(value),
-                        new Date(filters.end),
+                        new Date(filters.end as any),
                         {
                             includeTime: false,
                         }
@@ -170,11 +170,11 @@ export function FilterList({
 
     const handleOnRemove = (key: string) => {
         if (key === "start" || key === "end") {
-            onRemove({ start: null, end: null });
+            onRemove({ start: null, end: null } as any);
             return;
         }
 
-        onRemove({ [key]: null });
+        onRemove({ [key]: null } as any);
     };
 
     return (
