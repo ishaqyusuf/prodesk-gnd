@@ -18,6 +18,8 @@ import { ReactQueryProvider } from "@/providers/react-query";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { QueryTabProvider } from "./(clean-code)/_common/query-tab/provider";
 import { constructMetadata } from "@/lib/(clean-code)/construct-metadata";
+import UserAccountUpdateModal from "@/components/modals/user-account-update-required-modal";
+import UserAccountUpdateRequiredModal from "@/components/modals/user-account-update-required-modal";
 
 export async function generateMetadata({}) {
     return constructMetadata({
@@ -44,6 +46,7 @@ export default async function RootLayout({
                                 <QueryTabProvider>
                                     {children}
 
+                                    <UserAccountUpdateRequiredModal />
                                     <PageAnalytics />
                                 </QueryTabProvider>
                             </Suspense>

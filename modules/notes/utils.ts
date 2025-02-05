@@ -6,13 +6,13 @@ export function filterNotesByTags(notes: GetNotes, tagFilters: TagFilters[]) {
     const filteredNotes = notes.filter((note) => {
         return tagFilters.every((tf) => {
             const matchedTag = note.tags.find((t) => t.tagName == tf.tagName);
-            return matchedTag?.tagValue == tf?.value;
+            return matchedTag?.tagValue == tf?.tagValue;
         });
     });
     return filteredNotes;
 }
-export function noteTagFilter(tagName: NoteTagNames, value) {
-    return { tagName, value };
+export function noteTagFilter(tagName: NoteTagNames, tagValue) {
+    return { tagName, tagValue };
 }
 export function composeNoteTags(tagFilters: TagFilters[]) {
     return {};
@@ -20,7 +20,7 @@ export function composeNoteTags(tagFilters: TagFilters[]) {
 export function composeNoteTagToken(tags: TagFilters[]) {
     return tags
         .sort((a, b) => a.tagName.localeCompare(b.tagName))
-        .map((tag) => `${tag.tagName}_is_${tag.value}`)
+        .map((tag) => `${tag.tagName}_is_${tag.tagValue}`)
         .join("_and_");
 }
 export function noteTokenToObject(tok): TagFilters[] {
