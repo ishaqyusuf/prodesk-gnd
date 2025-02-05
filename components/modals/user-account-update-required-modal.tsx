@@ -20,7 +20,6 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { signIn, useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
 
 const schema = z.object({
     email: z.string().email({
@@ -64,7 +63,6 @@ export default function UserAccountUpdateRequiredModal({}) {
                 .catch((e) => {});
         }, 2000);
     }, []);
-    const router = useRouter();
     async function updateAccount() {
         form.trigger().then(async (e) => {
             // console.log(e);
@@ -79,7 +77,7 @@ export default function UserAccountUpdateRequiredModal({}) {
                         password: ",./",
                         redirect: false,
                     });
-                    router?.refresh();
+                    window.location.reload();
                 } catch (error) {
                     toast.error(
                         "Unable to complete, check data and try again."
