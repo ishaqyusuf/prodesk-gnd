@@ -26,6 +26,7 @@ export async function salesDashboardAction(): Promise<ISalesDashboard> {
     ORDER BY
       year, month;`;
     let bar = composeBar(salesByMonthAndYear);
+    console.log(salesByMonthAndYear);
 
     const sales = await prisma.salesOrders.findMany({
         where: { deletedAt: null, type: "order" },

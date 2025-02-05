@@ -6,16 +6,42 @@ import { Menu } from "../../menu";
 import { cn } from "@/lib/utils";
 import ConfirmBtn from "@/components/_v1/confirm-btn";
 import { toast } from "sonner";
-
+import { useRef, useState } from "react";
+import { motion } from "framer-motion";
 export function BatchAction({ children = null }) {
     const ctx = useInfiniteDataTable();
     const selectCount = ctx.selectedRows?.length;
     const total = ctx.totalRowsFetched;
+    const ref = useRef(undefined);
+    const [show, setShow] = useState(false);
     if (!ctx.checkMode) return null;
-
     return (
-        <div className="fixed left-1/2 transform -translate-x-1/2  m-4 bottom-10 z-10">
-            <div className="border flex sgap-4 items-center rounded-xl bg-white overflow-hidden border-muted-foreground/50 divide-x divide-muted-foreground/50 shadow-xl  relative ">
+        <div
+            ref={ref}
+            className={cn(
+                show
+                    ? "fixed left-1/2 transform -translate-x-1/2 m-4 bottom-10 z-10"
+                    : "hidden"
+            )}
+        >
+            <motion.div
+                onAnimationStart={(e) => {
+                    setShow(true);
+                }}
+                onAnimationEnd={(e) => {
+                    console.log("LEAVING>>");
+                }}
+                onViewportEnter={(e) => {
+                    setShow(true);
+                }}
+                initial={{ opacity: 0, scale: 0 }}
+                animate={{
+                    opacity: ctx.checkMode ? 1 : 0,
+                    scale: ctx.checkMode ? 1 : 0,
+                }}
+                className="border flex sgap-4 items-center rounded-xl bg-white overflow-hidden border-muted-foreground/50 divide-x divide-muted-foreground/50 shadow-xl  relative "
+            >
+                {/* <div className="border flex sgap-4 items-center rounded-xl bg-white overflow-hidden border-muted-foreground/50 divide-x divide-muted-foreground/50 shadow-xl  relative "> */}
                 <Label className="font-mono px-2">
                     <span className="font-bold">{selectCount}</span>
                     {" of "}
@@ -32,10 +58,12 @@ export function BatchAction({ children = null }) {
                 >
                     <Icons.X className="size-4" />
                 </Button>
-            </div>
+                {/* </div> */}
+            </motion.div>
         </div>
     );
 }
+
 interface BatchBtnProps {
     icon?: IconKeys;
     children?;

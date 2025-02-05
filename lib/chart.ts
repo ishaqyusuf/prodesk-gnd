@@ -20,9 +20,10 @@ export function composeBar(_charts: { year; month; value }[]) {
         let _d = dayjs().subtract(i, "months");
         const month = _d?.format("M");
         const year = _d?.format("YYYY");
-        // console.log([year, month]);
+
         const lastYear = String(Number(year) - 1);
         const monthChats = charts.filter((c) => c.month == month);
+
         const _c = {
             month: _d.format("MMM"),
             current: +toFixed(
@@ -32,7 +33,6 @@ export function composeBar(_charts: { year; month; value }[]) {
                 monthChats.find((v) => v.year == lastYear)?.value || 0
             ),
         };
-        // console.log({ _c, lastYear, year, month, monthChats });
 
         _chart.unshift(_c);
     }

@@ -20,5 +20,12 @@
     },
     "peacock.color": "#8858af",
     "workbench.panel.defaultLocation": "right",
-    "typescript.tsdk": "node_modules/typescript/lib"
+    "typescript.tsdk": "node_modules/typescript/lib",
+    "files.exclude": {
+        // "(midday)": true
+        ".next": true,
+        // ".vscode"
+        "node_modules": true
+        // "**/._*": true
+    }
 }
