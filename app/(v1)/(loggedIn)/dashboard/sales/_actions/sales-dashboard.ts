@@ -10,24 +10,47 @@ import { Prisma } from "@prisma/client";
 
 interface Props {}
 export async function salesDashboardAction(): Promise<ISalesDashboard> {
+    // const salesByMonthAndYear: any[] = await prisma.$queryRaw`
+    // SELECT
+    //   EXTRACT(YEAR FROM createdAt) as year,
+    //   EXTRACT(MONTH FROM createdAt) as month,
+    //  SUM(amount) as value
+    // -- ROUND(SUM(amount)::numeric, 2) as value
+    // FROM
+    //   SalesPayments
+    // WHERE
+    //     deletedAt IS NULL
+    // GROUP BY
+    //   year,
+    //   month
+    // ORDER BY
+    //   year, month;`;
     const salesByMonthAndYear: any[] = await prisma.$queryRaw`
     SELECT
-      EXTRACT(YEAR FROM createdAt) as year,
-      EXTRACT(MONTH FROM createdAt) as month,
-     SUM(amount) as value
-    -- ROUND(SUM(amount)::numeric, 2) as value
+      EXTRACT(YEAR FROM sp.createdAt) as year,
+      EXTRACT(MONTH FROM sp.createdAt) as month,
+      SUM(sp.amount) as value
     FROM
-      SalesPayments 
+      SalesPayments sp
+    JOIN 
+      SalesOrders o ON sp.orderId = o.id
     WHERE 
-        deletedAt IS NULL
+      sp.deletedAt IS NULL
+      AND o.deletedAt IS NULL
     GROUP BY
       year,
       month
     ORDER BY
-      year, month;`;
+      year, month;
+`;
+
     let bar = composeBar(salesByMonthAndYear);
     console.log(salesByMonthAndYear);
-
+    await prisma.salesPayments.aggregate({
+        _sum: {
+            amount: true,
+        },
+    });
     const sales = await prisma.salesOrders.findMany({
         where: { deletedAt: null, type: "order" },
         select: {

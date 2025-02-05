@@ -48,4 +48,5 @@ export async function createNoteAction(data: CreateNoteData) {
             },
         },
     });
+    return note;
 }

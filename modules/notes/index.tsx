@@ -10,6 +10,7 @@ import { useEnterSubmit } from "@/hooks/use-enter-submit";
 import { toast } from "sonner";
 import { createNoteAction } from "./actions/create-note-action";
 import { SearchParamsType } from "@/components/(clean-code)/data-table/search-params";
+import { formatDate } from "@/lib/use-day";
 
 interface NoteProps {
     tagFilters: TagFilters[];
@@ -23,6 +24,8 @@ export default function Note(props: NoteProps) {
         props.tagFilters.map((f) => {
             tagQuery[`note.${f.tagName}`] = f.tagValue;
         });
+        console.log(tagQuery);
+
         getNotesAction(tagQuery).then((result) => {
             console.log(result);
             setNotes(result);
@@ -38,6 +41,9 @@ export default function Note(props: NoteProps) {
             tags: props.tagFilters,
         });
         console.log(result);
+        setNotes((current) => {
+            return [result, ...current] as any;
+        });
     }
     return (
         <div className="">
@@ -47,7 +53,20 @@ export default function Note(props: NoteProps) {
                     <NoteForm onCreate={onCreate} />
                 </div>
             ) : (
-                <></>
+                <>
+                    <div className="py-2 flex justify-end items-center gap-4">
+                        {/* <div>No Note</div> */}
+                        <NoteForm onCreate={onCreate} />
+                    </div>
+                    {notes?.map((note) => (
+                        <div key={note.id} className="border-b">
+                            <span className="text-muted-foreground mr-4">
+                                {formatDate(note.createdAt)}
+                            </span>
+                            <span>{note.note}</span>
+                        </div>
+                    ))}
+                </>
             )}
         </div>
     );

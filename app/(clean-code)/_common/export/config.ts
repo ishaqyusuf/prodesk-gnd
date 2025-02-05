@@ -20,7 +20,7 @@ type OrderSelect = Prisma.SalesOrdersSelect;
 export const exportCells = {
     order: {
         "Amount Due": salesSelect("amountDue"),
-        // "Amount Paid": salesSelect(''),
+        "Amount Paid": salesSelect("payments"),
         "Order Date": salesSelect("createdAt"),
         "Order Id": salesSelect("orderId"),
         "Customer Name": salesCustomerSelect("name"),
@@ -37,6 +37,7 @@ export const exportCells = {
 export const cellTransform: CellTransform = {
     order: {
         "Invoice Due Date": (value, data) => formatDate(value),
+        "Amount Paid": (value, data) => {},
     },
 };
 function salesSelect(node: keyof OrderSelect): OrderSelect {

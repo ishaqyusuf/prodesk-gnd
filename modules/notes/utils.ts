@@ -12,7 +12,7 @@ export function filterNotesByTags(notes: GetNotes, tagFilters: TagFilters[]) {
     return filteredNotes;
 }
 export function noteTagFilter(tagName: NoteTagNames, tagValue) {
-    return { tagName, tagValue };
+    return { tagName, tagValue: String(tagValue) };
 }
 export function composeNoteTags(tagFilters: TagFilters[]) {
     return {};

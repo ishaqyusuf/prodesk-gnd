@@ -9,6 +9,8 @@ import Money from "@/components/_v1/money";
 import { Label } from "@/components/ui/label";
 import { composeSalesUrl } from "../../../../utils/sales-utils";
 import { openCustomerOverviewSheet } from "../../../customer-overview-sheet";
+import Note from "@/modules/notes";
+import { noteTagFilter } from "@/modules/notes/utils";
 
 export function SalesInfoTab({}) {
     const store = salesOverviewStore();
@@ -94,6 +96,15 @@ export function SalesInfoTab({}) {
                     </div>
                 ))}
             </div>
+            <Note
+                tagFilters={[
+                    // noteTagFilter("itemControlUID", itemView?.itemControlUid),
+                    // noteTagFilter("salesItemId", itemView?.itemId),
+                    noteTagFilter("salesId", store?.salesId),
+                ]}
+                subject={`Sales Note`}
+                headline={`${overview?.orderId}`}
+            />
         </div>
     );
 }

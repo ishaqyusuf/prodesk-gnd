@@ -13,6 +13,12 @@ export function isDay(date: dayjs.Dayjs) {
         lte: fixDbTime(date, 23, 59, 59).toISOString(),
     };
 }
+export function isYear(date: dayjs.Dayjs) {
+    return {
+        gte: date.startOf("year").startOf("day").toISOString(),
+        lte: date.endOf("year").endOf("day").toISOString(),
+    };
+}
 export function isMonth(date: dayjs.Dayjs) {
     return {
         gte: date.startOf("month").startOf("day").toISOString(),
