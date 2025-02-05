@@ -7,7 +7,7 @@ import { DataTableFilterCommand } from "@/components/(clean-code)/data-table/fil
 
 import { DataTableInfinityToolbar } from "@/components/(clean-code)/data-table/infinity/data-table-toolbar";
 import { _modal } from "@/components/common/modal/provider";
-import { OrderOverviewSheet } from "../../../_common/_components/overview-sheet/order-overview-sheet";
+import { OrderOverviewSheet } from "../../../_common/_components/overview-sheet.bin/order-overview-sheet";
 import { QuotesCell } from "./quotes-page-cells";
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/_v1/icons";

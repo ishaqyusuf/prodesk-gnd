@@ -1,7 +1,7 @@
 import { NoteTagNames } from "./constants";
 import { GetNotes } from "./actions/get-notes-action";
 
-export type TagFilters = ReturnType<typeof tagFilter>;
+export type TagFilters = ReturnType<typeof noteTagFilter>;
 export function filterNotesByTags(notes: GetNotes, tagFilters: TagFilters[]) {
     const filteredNotes = notes.filter((note) => {
         return tagFilters.every((tf) => {
@@ -11,7 +11,7 @@ export function filterNotesByTags(notes: GetNotes, tagFilters: TagFilters[]) {
     });
     return filteredNotes;
 }
-export function tagFilter(tagName: NoteTagNames, value) {
+export function noteTagFilter(tagName: NoteTagNames, value) {
     return { tagName, value };
 }
 export function composeNoteTags(tagFilters: TagFilters[]) {

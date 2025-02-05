@@ -25,6 +25,8 @@ import { ItemAssignments } from "./assignments";
 import { createItemAssignmentAction } from "../../../../data-actions/production-actions/item-assign-action";
 import { cn } from "@/lib/utils";
 import { ItemControlMenu } from "../../components/item-control-menu";
+import Note from "@/modules/notes";
+import { noteTagFilter } from "@/modules/notes/utils";
 
 export function ItemOverview({}) {
     const store = salesOverviewStore();
@@ -103,6 +105,18 @@ export function ItemOverview({}) {
                 )}
                 {!showForm && (
                     <>
+                        <Note
+                            tagFilters={[
+                                noteTagFilter(
+                                    "itemControlUID",
+                                    itemView?.itemControlUid
+                                ),
+                                noteTagFilter("salesItemId", itemView?.itemId),
+                                noteTagFilter("salesId", store?.salesId),
+                            ]}
+                            subject={itemView?.title}
+                            headline={itemView?.inlineSubtitle}
+                        />
                         <ItemAssignments />
                     </>
                 )}

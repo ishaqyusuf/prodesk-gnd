@@ -15,7 +15,7 @@ import { buttonVariants } from "@/components/ui/button";
 import dayjs from "dayjs";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Menu } from "@/components/(clean-code)/menu";
-import { PrintAction } from "../../../_common/_components/overview-sheet/footer/print.action";
+import { PrintAction } from "../../../_common/_components/overview-sheet.bin/footer/print.action";
 import { useMemo } from "react";
 import { openSalesOverview } from "../../../_common/_components/sales-overview-sheet";
 import { MenuIcon, SaveIcon } from "lucide-react";

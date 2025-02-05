@@ -7,7 +7,7 @@ import { DataTableFilterCommand } from "@/components/(clean-code)/data-table/fil
 import { DataTableInfinityToolbar } from "@/components/(clean-code)/data-table/infinity/data-table-toolbar";
 
 import { DispatchCells } from "./dispatch-page-cells";
-import { DispatchOverviewSheet } from "../../../_common/_components/overview-sheet/order-overview-sheet";
+import { DispatchOverviewSheet } from "../../../_common/_components/overview-sheet.bin/order-overview-sheet";
 import { __filters } from "../../../_common/utils/contants";
 import { QueryTabAction } from "@/app/(clean-code)/_common/query-tab/query-tab-edit";
 import QueryTab from "@/app/(clean-code)/_common/query-tab";

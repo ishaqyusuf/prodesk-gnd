@@ -5,7 +5,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import {
     loadSalesOverviewer,
     zSalesOverview,
-} from "../overview-sheet/utils/store";
+} from "../overview-sheet.bin/utils/store";
 import { ItemProductionCard } from "./item-production-card";
 
 type OpenProps = {

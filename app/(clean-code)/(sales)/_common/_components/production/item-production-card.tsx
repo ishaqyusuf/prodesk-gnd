@@ -1,8 +1,8 @@
 import { Label } from "@/components/ui/label";
-import { ItemProps } from "../overview-sheet/common/sales-item-card";
-import Badge from "../overview-sheet/components/badge";
-import { zSalesOverview } from "../overview-sheet/utils/store";
-import { Admin } from "../overview-sheet/common/admin";
+import { ItemProps } from "../overview-sheet.bin/common/sales-item-card";
+import Badge from "../overview-sheet.bin/components/badge";
+import { zSalesOverview } from "../overview-sheet.bin/utils/store";
+import { Admin } from "../overview-sheet.bin/common/admin";
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { Menu } from "@/components/(clean-code)/menu";

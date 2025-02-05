@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Admin } from "../overview-sheet/common/admin";
+import { Admin } from "../overview-sheet.bin/common/admin";
 import { useSalesItem } from "./item-production-card";
 import { Icons } from "@/components/_v1/icons";
 
