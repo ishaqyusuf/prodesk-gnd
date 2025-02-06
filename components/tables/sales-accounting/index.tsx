@@ -20,6 +20,7 @@ import QueryTab from "@/app/(clean-code)/_common/query-tab";
 import { QueryTabAction } from "@/app/(clean-code)/_common/query-tab/query-tab-edit";
 import { DataTableFilterCommand } from "@/components/(clean-code)/data-table/filter-command";
 import { DataTableInfinityToolbar } from "@/components/(clean-code)/data-table/infinity/data-table-toolbar";
+import { openSalesCustomerTx } from "@/components/sheets/sales-customer-tx-sheet";
 
 export default function SalesAccountingTable({
     filterFields,
@@ -60,6 +61,7 @@ export default function SalesAccountingTable({
                 ActionCell={ActionCell}
                 queryKey={queryKey}
                 itemViewFn={(item) => {
+                    openSalesCustomerTx(item.id);
                     // openSalesProductionTasksModal({
                     //     salesId: item.id,
                     // });
