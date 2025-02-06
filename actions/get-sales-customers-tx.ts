@@ -7,12 +7,12 @@ import {
 import { SearchParamsType } from "@/components/(clean-code)/data-table/search-params";
 import { prisma } from "@/db";
 import { AsyncFnType } from "@/types";
-import { whereSalesPayments } from "@/utils/db/where.customer-transactions";
+import { whereCustomerTx } from "@/utils/db/where.customer-transactions";
 
 export type GetSalesCustomerTx = AsyncFnType<typeof getSalesCustomerTxAction>;
 
 export async function getSalesCustomerTxAction(query: SearchParamsType) {
-    const where = whereSalesPayments(query);
+    const where = whereCustomerTx(query);
     const data = await prisma.customerTransaction.findMany({
         where,
         ...pageQueryFilter(query),
@@ -65,6 +65,9 @@ export async function getSalesCustomerTxAction(query: SearchParamsType) {
     );
     return {
         ...pageInfo,
-        data,
+        data: data.map((item) => {
+            item.amount = Math.abs(item.amount);
+            return item;
+        }),
     };
 }

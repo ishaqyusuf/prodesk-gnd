@@ -3,7 +3,7 @@
 import { SearchParamsType } from "@/components/(clean-code)/data-table/search-params";
 import { prisma } from "@/db";
 import { AsyncFnType } from "@/types";
-import { whereSales } from "../../../../../../utils/db/where.sales";
+
 import {
     inifinitePageInfo,
     pageQueryFilter,
@@ -18,6 +18,7 @@ import {
     composeSalesStatus,
 } from "@/data/compose-sales";
 import { overallStatus } from "../../data-access/dto/sales-stat-dto";
+import { whereSales } from "@/utils/db/where.sales";
 
 export type GetProductionListPage = AsyncFnType<
     typeof getProductionListPageAction
