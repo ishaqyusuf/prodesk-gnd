@@ -51,6 +51,7 @@ model NoteTags {
     deletedAt DateTime? @db.Timestamp(0)
     createdAt DateTime? @default(now()) @db.Timestamp(0)
 
+    @@unique([tagName, tagValue, notePadId])
     @@index([notePadId])
 }
 

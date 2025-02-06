@@ -31,11 +31,11 @@ export async function createNoteAction(data: CreateNoteData) {
     ).id;
     const note = await prisma.notePad.create({
         data: {
-            type: data.type,
+            // type: data.type,
             headline: data.headline,
             note: data.note,
             subject: data.subject,
-            status: "public",
+            // status: "public",
             senderContact: {
                 connect: {
                     id: senderContactId,
