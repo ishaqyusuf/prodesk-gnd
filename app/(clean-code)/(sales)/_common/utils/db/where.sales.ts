@@ -7,12 +7,12 @@ import {
     SearchParamsType,
 } from "@/components/(clean-code)/data-table/search-params";
 import { Prisma } from "@prisma/client";
-import { composeQuery } from "../../app/(clean-code)/(sales)/_common/utils/db-utils";
-import { QtyControlType } from "../../app/(clean-code)/(sales)/types";
-import { ftToIn } from "../../app/(clean-code)/(sales)/_common/utils/sales-utils";
 import { dateEquals, fixDbTime } from "@/app/(v1)/_actions/action-utils";
 import { formatDate } from "@/lib/use-day";
 import dayjs from "dayjs";
+import { QtyControlType } from "../../../types";
+import { composeQuery } from "../db-utils";
+import { ftToIn } from "../sales-utils";
 
 export function whereSales(query: SearchParamsType) {
     const whereAnd: Prisma.SalesOrdersWhereInput[] = [];
