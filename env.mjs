@@ -6,6 +6,8 @@ import { z } from "zod";
  */
 const server = z.object({
     SQUARE_SANDBOX_ACCESS_TOKEN: z.string().optional(),
+    TRIGGER_SECRET_KEY: z.string(),
+    TRIGGER_PROJECT_ID: z.string(),
     SQUARE_SANDBOX_LOCATION_ID: z.string().optional(),
     SQUARE_SANDBOX_APP_ID: z.string().optional(),
     SQUARE_LOCATION_ID: z.string(),
@@ -63,6 +65,8 @@ const client = z.object({
  */
 const processEnv = {
     // server
+    TRIGGER_SECRET_KEY: process.env.TRIGGER_SECRET_KEY,
+    TRIGGER_PROJECT_ID: process.env.TRIGGER_PROJECT_ID,
     SQUARE_SANDBOX_LOCATION_ID: process.env.SQUARE_SANDBOX_LOCATION_ID,
     SQUARE_SANDBOX_ACCESS_TOKEN: process.env.SQUARE_SANDBOX_ACCESS_TOKEN,
     SQUARE_SANDBOX_APP_ID: process.env.SQUARE_SANDBOX_APP_ID,
