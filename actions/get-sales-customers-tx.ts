@@ -9,9 +9,9 @@ import { prisma } from "@/db";
 import { AsyncFnType } from "@/types";
 import { whereSalesPayments } from "@/utils/db/where.customer-transactions";
 
-export type GetSalesPayments = AsyncFnType<typeof getSalesPaymentsAction>;
+export type GetSalesCustomerTx = AsyncFnType<typeof getSalesCustomerTxAction>;
 
-export async function getSalesPaymentsAction(query: SearchParamsType) {
+export async function getSalesCustomerTxAction(query: SearchParamsType) {
     const where = whereSalesPayments(query);
     const data = await prisma.customerTransaction.findMany({
         where,
