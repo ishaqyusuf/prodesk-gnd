@@ -1,5 +1,6 @@
 "use server";
 
+import { SalesType } from "@/app/(clean-code)/(sales)/types";
 import {
     getPageInfo,
     pageQueryFilter,
@@ -34,6 +35,11 @@ export async function getSalesCustomerTxAction(query: SearchParamsType) {
                 },
             },
             salesPayments: {
+                where: {
+                    order: {
+                        type: "order" as SalesType,
+                    },
+                },
                 select: {
                     order: {
                         select: {
