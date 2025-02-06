@@ -3,8 +3,6 @@ model NotePad {
     note            String?
     subject         String?
     headline        String?
-    type            String //sales,production,dispatch
-    status          String           @default("private") //public,private 
     createdById     Int?
     comments        NoteComments[]
     deletedAt       DateTime?        @db.Timestamp(0)
