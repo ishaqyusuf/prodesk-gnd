@@ -28,6 +28,11 @@ export async function getSalesCustomerTxAction(query: SearchParamsType) {
                     id: true,
                 },
             },
+            wallet: {
+                select: {
+                    accountNo: true,
+                },
+            },
             salesPayments: {
                 select: {
                     order: {
