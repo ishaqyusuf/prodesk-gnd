@@ -74,7 +74,10 @@ export async function getSalesCustomerTxAction(query: SearchParamsType) {
             // item.amount = Math.abs(item.amount);
             // let amountDisplay = item.amount <= 0
             // ? `(${Math.abs(item.amount)})`
-            return item;
+            return {
+                uuid: item.id,
+                ...item,
+            };
         }),
     };
 }
