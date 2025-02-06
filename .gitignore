@@ -43,3 +43,5 @@ todo.md
 
 # typescript
 *.tsbuildinfo
+
+.trigger
