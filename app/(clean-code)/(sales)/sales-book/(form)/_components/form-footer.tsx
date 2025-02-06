@@ -67,6 +67,10 @@ export function FormFooter() {
                                 value={zus.metaData?.pricing?.subTotal}
                             />
                             <FixedDisplay
+                                label={"Discount"}
+                                value={zus.metaData?.pricing?.discount}
+                            />
+                            <FixedDisplay
                                 label={`${zus.metaData?.tax?.title} (${zus.metaData?.tax?.percentage}%)`}
                                 value={zus.metaData?.pricing?.taxValue}
                             />

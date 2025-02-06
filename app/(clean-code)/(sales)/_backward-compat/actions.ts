@@ -6,6 +6,18 @@ import dayjs from "dayjs";
 import { sum } from "@/lib/utils";
 
 export async function getJanuarySalesAction() {
+    const r = await prisma.salesPayments.findMany({
+        where: {
+            order: {
+                type: {
+                    not: "order",
+                },
+            },
+        },
+    });
+    return {
+        r,
+    };
     // const payments = await prisma.salesPayments.findMany({
     //     where: {
     //         deletedAt: null,
