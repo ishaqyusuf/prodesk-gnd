@@ -8,6 +8,7 @@ interface CreateNoteData {
     headline;
     subject;
     note;
+    status;
     tags: TagFilters[];
 }
 export async function createNoteAction(data: CreateNoteData) {
@@ -43,9 +44,14 @@ export async function createNoteAction(data: CreateNoteData) {
             },
             tags: {
                 createMany: {
-                    data: data.tags,
+                    data: data.tags.map((tag) => {
+                        return tag;
+                    }),
                 },
             },
+        },
+        include: {
+            tags: true,
         },
     });
     return note;

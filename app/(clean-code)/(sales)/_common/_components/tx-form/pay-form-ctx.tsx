@@ -60,7 +60,7 @@ export const usePayForm = () => {
         const deviceName = tx.terminals?.find(
             (t) => t.value == data.deviceId
         )?.label;
-        const amount = +tx.totalPay;
+        const amount = +data.amount;
 
         const resp = await createTerminalPaymentAction({
             amount,
@@ -153,7 +153,7 @@ export const usePayForm = () => {
         );
         const r = await createTransactionUseCase({
             accountNo: tx.phoneNo,
-            amount: +tx.totalPay,
+            amount: +data.amount,
             paymentMode: data.paymentMethod,
             salesIds: selections?.map((a) => a.id),
             description: "",

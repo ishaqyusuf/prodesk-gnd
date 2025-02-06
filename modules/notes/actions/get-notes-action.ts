@@ -35,5 +35,13 @@ export async function getNotesAction(query: SearchParamsType) {
             },
         },
     });
-    return notes;
+    return notes.map((note) => {
+        let statusTag = note.tags.find((tag) => tag.tagName == "status");
+        let typeTag = note.tags.find((tag) => tag.tagName == "type");
+        return {
+            type: typeTag,
+            status: statusTag,
+            ...note,
+        };
+    });
 }

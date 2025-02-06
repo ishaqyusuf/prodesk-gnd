@@ -102,6 +102,8 @@ export function SalesInfoTab({}) {
                     // noteTagFilter("salesItemId", itemView?.itemId),
                     noteTagFilter("salesId", store?.salesId),
                 ]}
+                typeFilters={["general", "dispatch", "payment", "production"]}
+                statusFilters={["public", "private"]}
                 subject={`Sales Note`}
                 headline={`${overview?.orderId}`}
             />

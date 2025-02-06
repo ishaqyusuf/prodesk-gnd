@@ -113,9 +113,11 @@ export function ItemOverview({}) {
                                 ),
                                 noteTagFilter("salesItemId", itemView?.itemId),
                                 noteTagFilter("salesId", store?.salesId),
+                                // noteTagFilter("status", ""),
                             ]}
                             subject={itemView?.title}
                             headline={itemView?.inlineSubtitle}
+                            typeFilters={["production"]}
                         />
                         <ItemAssignments />
                     </>

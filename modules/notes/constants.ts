@@ -1,7 +1,12 @@
 import { parseAsString } from "nuqs";
 import { z } from "zod";
 
-export const noteTypes = ["sales", "production", "dispatch"] as const;
+export const noteTypes = [
+    "general",
+    "payment",
+    "production",
+    "dispatch",
+] as const;
 export const noteStatus = ["public", "private"] as const;
 
 export const tagNames = [
@@ -10,8 +15,12 @@ export const tagNames = [
     "salesId",
     "salesItemId",
     "salesAssignment",
+    "status",
+    "type",
 ] as const;
 export type NoteTagNames = (typeof tagNames)[number];
+export type NoteTagTypes = (typeof noteTypes)[number];
+export type NoteTagStatus = (typeof noteStatus)[number];
 export const noteSchema = z.object({
     "note.status": z.enum(noteStatus).optional(),
     "note.type": z.enum(noteTypes).optional(),

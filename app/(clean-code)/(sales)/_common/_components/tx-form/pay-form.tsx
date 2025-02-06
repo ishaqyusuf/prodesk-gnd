@@ -19,6 +19,7 @@ import { UsePayForm, usePayForm } from "./pay-form-ctx";
 export default function PayForm({}) {
     const ctx = usePayForm();
     const { form, terminal, tx, pm, pay, terminalPay, totalPay } = ctx;
+    const amount = form.watch("amount");
     if (!tx.phoneNo) return null;
     return (
         <Form {...form}>
@@ -46,9 +47,9 @@ export default function PayForm({}) {
                                         name="amount"
                                         type="number"
                                         size="sm"
-                                        label={"Amount"}
+                                        label={"Amounts"}
                                         prefix="$"
-                                        disabled
+                                        // disabled
                                         // disabled={tx.inProgress}
                                     />
                                     {pm == "check" ? (
@@ -131,7 +132,7 @@ export default function PayForm({}) {
                                 disabled={!tx.totalPay}
                             >
                                 Pay
-                                <Money className="ml-2" value={tx.totalPay} />
+                                <Money className="ml-2" value={amount} />
                             </Button>
                         </div>
                     </>
