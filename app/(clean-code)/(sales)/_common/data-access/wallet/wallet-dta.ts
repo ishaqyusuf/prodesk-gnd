@@ -32,7 +32,11 @@ export async function fundCustomerWalletDta({
                     id: accountId,
                 },
             },
-            authorId: await userId(),
+            author: {
+                connect: {
+                    id: await userId(),
+                },
+            },
             paymentMethod,
             description,
             status: "success" as SalesPaymentStatus,

@@ -1,4 +1,3 @@
-import { getSalesCustomerTxAction } from "@/actions/get-sales-customers-tx";
 import { getSalesOrdersDta } from "@/app/(clean-code)/(sales)/_common/data-access/sales-dta";
 
 import {
@@ -13,8 +12,9 @@ export async function GET(req: NextRequest) {
     req.nextUrl.searchParams.forEach((value, key) => _search.set(key, value));
     const _ = {
         ...Object.fromEntries(_search),
+        "sales.type": "order",
     } as SearchParamsType;
     const search = searchParamsCache.parse(_ as any);
 
-    return Response.json(await getSalesCustomerTxAction(search as any));
+    return Response.json(await getSalesOrdersDta(search as any));
 }

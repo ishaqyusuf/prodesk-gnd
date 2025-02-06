@@ -136,7 +136,7 @@ function Dispatch({ item }: ItemProps) {
 }
 function Invoice({ item }: ItemProps) {
     const invoice = item.invoice;
-    const { theme } = useTheme();
+
     return (
         <TCell align="right">
             <TCell.Money value={invoice.total} className={cn("font-mono")} />

@@ -6,7 +6,16 @@ import {
     InfiniteDataTablePageProps,
 } from "@/components/(clean-code)/data-table";
 import { useTableCompose } from "@/components/(clean-code)/data-table/use-table-compose";
-import { ActionCell, DateCol } from "./columns";
+import {
+    ActionCell,
+    AmountPaidCell,
+    DateCell,
+    DescriptionCell,
+    OrderIdCell,
+    PaymentAuthorCell,
+    SalesRepCell,
+    StatusCell,
+} from "./columns";
 import QueryTab from "@/app/(clean-code)/_common/query-tab";
 import { QueryTabAction } from "@/app/(clean-code)/_common/query-tab/query-tab-edit";
 import { DataTableFilterCommand } from "@/components/(clean-code)/data-table/filter-command";
@@ -19,8 +28,13 @@ export default function SalesAccountingTable({
     const table = useTableCompose({
         cells(ctx) {
             return [
-                ctx.Column("Due Date", "date", DateCol),
-                // ctx.Column("Due", "alert", Cells.Alert),
+                ctx.Column("Date", "date", DateCell),
+                ctx.Column("Total", "total", AmountPaidCell),
+                ctx.Column("Description", "description", DescriptionCell),
+                ctx.Column("Order #", "order_ids", OrderIdCell),
+                ctx.Column("Sales Rep", "sale_rep", SalesRepCell),
+                ctx.Column("Received By", "recieved_by", PaymentAuthorCell),
+                ctx.Column("Status", "status", StatusCell),
                 // ctx.Column("Order #", "order.no", Cells.Order),
                 // ctx.Column("Sales Rep", "sales.rep", Cells.SalesRep),
                 // // ctx.Column("Assigned To", "assignments", Cells.Assignments),

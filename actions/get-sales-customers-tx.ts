@@ -21,24 +21,41 @@ export async function getSalesCustomerTxAction(query: SearchParamsType) {
             amount: true,
             createdAt: true,
             description: true,
+            status: true,
             author: {
                 select: {
                     name: true,
                     id: true,
                 },
             },
-            order: {
+            salesPayments: {
                 select: {
-                    orderId: true,
-                    amountDue: true,
-                    grandTotal: true,
-                    salesRep: {
+                    order: {
                         select: {
-                            name: true,
+                            orderId: true,
+                            id: true,
+                            salesRep: {
+                                select: {
+                                    name: true,
+                                    id: true,
+                                },
+                            },
                         },
                     },
                 },
             },
+            // order: {
+            //     select: {
+            //         orderId: true,
+            //         amountDue: true,
+            //         grandTotal: true,
+            //         salesRep: {
+            //             select: {
+            //                 name: true,
+            //             },
+            //         },
+            //     },
+            // },
         },
     });
     const pageInfo = await getPageInfo(
