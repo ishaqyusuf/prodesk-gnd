@@ -8,6 +8,8 @@ import Modal from "../common/modal";
 import { _modal } from "../common/modal/provider";
 import { Table, TableBody, TableCell, TableRow } from "../ui/table";
 import Money from "../_v1/money";
+import { TCell } from "../(clean-code)/data-table/table-cells";
+import Link from "next/link";
 
 export async function openSalesCustomerTx(tid) {
     const res = await getSalesCustomerTxOverviewAction(tid);
@@ -17,14 +19,28 @@ export async function openSalesCustomerTx(tid) {
 function SalesCustomerTxSheet({ data }: { data: GetSalesCustomerTxOverview }) {
     return (
         <Modal.Content>
-            <Modal.Header title={`${data.wallet?.accountNo} | #${data.id}`} />
-            <Modal.ScrollArea>
+            <Modal.Header
+                title={`${data.wallet?.accountNo} | #${data.id}`}
+                subtitle={data.squarePayment?.id ? "POS" : ""}
+            />
+            <Modal.ScrollArea className="h-[80vh]">
                 <Table>
                     <TableBody>
                         {data.salesPayments?.map((p) => (
                             <TableRow key={p.id}>
-                                <TableCell>{p.orderId}</TableCell>
-                                <TableCell>{p.order.orderId}</TableCell>
+                                <TCell>
+                                    <TCell.Date>{p.createdAt}</TCell.Date>
+                                </TCell>
+                                <TableCell>
+                                    <Link
+                                        target="_blank"
+                                        href={`/sales-v2/overview/${p.order.type}/${p.order?.orderId}`}
+                                    >
+                                        <p>{p.order.orderId}</p>
+                                        <p>{p.order.type}</p>
+                                    </Link>
+                                </TableCell>
+                                {/* <TableCell>{}</TableCell> */}
                                 <TableCell>
                                     <Money value={p.amount} />
                                 </TableCell>

@@ -103,12 +103,22 @@ export async function getSalesCustomerTxOverviewAction(id) {
         include: {
             author: true,
             wallet: true,
+            squarePayment: {
+                select: {
+                    id: true,
+                },
+            },
             salesPayments: {
                 where: {
                     deletedAt: null,
                 },
                 include: {
                     order: true,
+                    checkout: {
+                        select: {
+                            id: true,
+                        },
+                    },
                 },
             },
         },
