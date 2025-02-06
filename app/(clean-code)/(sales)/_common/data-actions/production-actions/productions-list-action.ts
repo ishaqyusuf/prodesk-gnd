@@ -3,7 +3,7 @@
 import { SearchParamsType } from "@/components/(clean-code)/data-table/search-params";
 import { prisma } from "@/db";
 import { AsyncFnType } from "@/types";
-import { whereSales } from "../../utils/db/where.sales";
+import { whereSales } from "../../../../../../utils/db/where.sales";
 import {
     inifinitePageInfo,
     pageQueryFilter,

@@ -1,6 +1,6 @@
 import { SearchParamsType } from "@/components/(clean-code)/data-table/search-params";
 import { Prisma } from "@prisma/client";
-import { composeQuery } from "../db-utils";
+import { composeQuery } from "../../app/(clean-code)/(sales)/_common/utils/db-utils";
 
 export function whereDispatch(query: SearchParamsType) {
     const wheres: Prisma.OrderDeliveryWhereInput[] = [];

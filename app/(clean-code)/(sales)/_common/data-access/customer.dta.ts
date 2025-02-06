@@ -2,7 +2,7 @@ import { AsyncFnType } from "@/app/(clean-code)/type";
 import { SearchParamsType } from "@/components/(clean-code)/data-table/search-params";
 import { prisma } from "@/db";
 import { Prisma } from "@prisma/client";
-import { whereCustomers } from "../utils/db/where.customer";
+import { whereCustomers } from "../../../../../utils/db/where.customer";
 import {
     getPageInfo,
     pageQueryFilter,

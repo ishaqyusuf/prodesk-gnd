@@ -11,6 +11,7 @@ export const queryKeys = [
     "sales-productions",
     "sales-dispatch",
     "production-tasks",
+    "sales-accounting",
 ] as const;
 export type QueryKeys = (typeof queryKeys)[number];
 export type Filters = Partial<{

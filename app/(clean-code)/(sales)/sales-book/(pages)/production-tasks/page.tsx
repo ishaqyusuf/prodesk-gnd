@@ -24,11 +24,7 @@ export async function generateMetadata({}) {
     });
 }
 export default async function SalesBookPage({ searchParams }) {
-    // const del = await prisma.salesStat.deleteMany({});
-    // console.log(del);
-
     const search = searchParamsCache.parse(searchParams);
-
     const queryClient = getQueryClient();
     const props = composeFilter(
         "production-tasks"

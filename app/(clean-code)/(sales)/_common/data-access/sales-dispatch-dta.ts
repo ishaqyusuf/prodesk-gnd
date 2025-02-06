@@ -18,7 +18,7 @@ import {
     getPageInfo,
     pageQueryFilter,
 } from "@/app/(clean-code)/_common/utils/db-utils";
-import { DispatchListInclude } from "../utils/db/dispatch";
+import { DispatchListInclude } from "../../../../../utils/db/dispatch";
 import { SalesDispatchStatus } from "../../types";
 import { SearchParamsType } from "@/components/(clean-code)/data-table/search-params";
 

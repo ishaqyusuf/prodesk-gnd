@@ -49,10 +49,10 @@ export function useInfiniteDataTableContext({
         isLoading,
         fetchNextPage,
         refetch,
-        isRefetching,
-        isPending,
-        isFetched,
-        dataUpdatedAt,
+        // isRefetching,
+        // isPending,
+        // isFetched,
+        // dataUpdatedAt,
     } = useInfiniteQuery(dataOptions(search, queryKey));
 
     const { sort, start, size, uuid, ...filter } = search;

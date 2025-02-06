@@ -1,6 +1,6 @@
 import { Prisma } from "@prisma/client";
-import { CustomersQueryParams } from "../../data-access/customer.dta";
-import { composeQuery } from "../db-utils";
+import { CustomersQueryParams } from "../../app/(clean-code)/(sales)/_common/data-access/customer.dta";
+import { composeQuery } from "../../app/(clean-code)/(sales)/_common/utils/db-utils";
 
 export function whereCustomers(query: CustomersQueryParams) {
     const whereAnd: Prisma.CustomersWhereInput[] = [];

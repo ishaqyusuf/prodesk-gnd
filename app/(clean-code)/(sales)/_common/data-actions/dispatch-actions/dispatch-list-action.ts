@@ -1,7 +1,7 @@
 "use server";
 
 import { SearchParamsType } from "@/components/(clean-code)/data-table/search-params";
-import { whereDispatch } from "../../utils/db/where.dispatch";
+import { whereDispatch } from "../../../../../../utils/db/where.dispatch";
 import { prisma } from "@/db";
 import {
     getPageInfo,

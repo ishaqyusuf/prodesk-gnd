@@ -15,7 +15,9 @@ model CustomerTransaction {
     refundTx      RefundTransactions[]
     squarePayment SquarePayments?      @relation(fields: [squarePID], references: [id])
     squarePID     String?
+    author        Users?               @relation(fields: [authorId], references: [id])
 
+    @@index([authorId])
     @@index([walletId])
     @@index([squarePID])
 }

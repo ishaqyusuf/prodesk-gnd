@@ -65,6 +65,7 @@ export function getMenuList(pathname: string, session): any[] {
         .menu("Dashboard", "/sales-book/dashboard", "dashboard", canSales)
         .commit();
     addGroup("Sales")
+        .menu("Accounting", "/sales-book/accounting", "billing", canSales)
         .menu("Orders", "/sales-book/orders", "orders", canSales)
         .menu("Quotes", "/sales-book/quotes", "estimates", canSales)
         .menu("Customers", "/sales-book/customers", "user", canSales)

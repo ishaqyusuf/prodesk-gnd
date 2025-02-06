@@ -1,6 +1,6 @@
 "use server";
 
-import { whereUsers } from "@/app/(clean-code)/(sales)/_common/utils/db/where.users";
+import { whereUsers } from "@/utils/db/where.users";
 import { SearchParamsType } from "@/components/(clean-code)/data-table/search-params";
 import { prisma } from "@/db";
 import { AsyncFnType } from "@/types";
