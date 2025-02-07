@@ -10,23 +10,31 @@ import { Table, TableBody, TableCell, TableRow } from "../ui/table";
 import Money from "../_v1/money";
 import { TCell } from "../(clean-code)/data-table/table-cells";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 export async function openSalesCustomerTx(tid) {
-    const res = await getSalesCustomerTxOverviewAction(tid);
-    _modal.openSheet(<SalesCustomerTxSheet data={res} />);
+    // const res = await getSalesCustomerTxOverviewAction(tid);
+    _modal.openSheet(<SalesCustomerTxSheet id={tid} />);
 }
 
-function SalesCustomerTxSheet({ data }: { data: GetSalesCustomerTxOverview }) {
+function SalesCustomerTxSheet({ id }) {
+    const [data, setData] = useState<GetSalesCustomerTxOverview>();
+    useEffect(() => {
+        getSalesCustomerTxOverviewAction(id).then((result) => {
+            setData(result);
+        });
+    }, [id]);
+
     return (
         <Modal.Content>
             <Modal.Header
-                title={`${data.wallet?.accountNo} | #${data.id}`}
-                subtitle={data.squarePayment?.id ? "POS" : ""}
+                title={`${data?.wallet?.accountNo} | #${data?.id}`}
+                subtitle={data?.squarePayment?.id ? "POS" : ""}
             />
             <Modal.ScrollArea className="h-[80vh]">
                 <Table>
                     <TableBody>
-                        {data.salesPayments?.map((p) => (
+                        {data?.salesPayments?.map((p) => (
                             <TableRow key={p.id}>
                                 <TCell>
                                     <TCell.Date>{p.createdAt}</TCell.Date>

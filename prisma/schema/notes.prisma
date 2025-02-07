@@ -12,6 +12,7 @@ model NotePad {
     senderContactId Int
     recipients      NoteRecipients[]
     senderContact   NotePadContacts? @relation(fields: [senderContactId], references: [id])
+    events          NotePadEvent[]
 
     @@index([senderContactId])
 }
@@ -68,4 +69,20 @@ model NoteComments {
 
     @@index([notePadId])
     @@index([commentNotePadId])
+}
+
+model NotePadEvent {
+    id Int @unique @default(autoincrement())
+
+    reminderType String?
+    status       String? //queued,cancelled,notified,completed
+    reminderDate DateTime? @db.Timestamp(0)
+    remindedAt   DateTime? @db.Timestamp(0)
+    eventDate    DateTime? @db.Timestamp(0)
+    deletedAt    DateTime? @db.Timestamp(0)
+    createdAt    DateTime? @default(now()) @db.Timestamp(0)
+    notePad      NotePad   @relation(fields: [notePadId], references: [id])
+    notePadId    Int
+
+    @@index([notePadId])
 }

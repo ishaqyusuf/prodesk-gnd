@@ -171,8 +171,6 @@ function productionStats(order: LoadedSales[number]) {
         prods: [],
         assignments: [] as Partial<OrderItemProductionAssignments>[],
     };
-    const isDelivered =
-        order.deliveredAt || order.status?.toLowerCase() == "delivered";
     const prodId = order.producer?.id;
     order.items.map((item) => {
         function registerAssignment(
@@ -294,7 +292,6 @@ export async function salesStatUpgrade() {
             .diff(sale.raw.createdAt, "days");
         const producer = sale.raw?.producer;
         const producerId = producer?.id;
-        const deliveredAt = sale.raw.deliveredAt;
         const statData = {
             produceable: 0,
             deliverable: 0,
