@@ -33,8 +33,6 @@ export const ctx = {
     refetch: null,
 };
 export function revalidateTable() {
-    console.log(ctx);
-
     ctx?.refetch();
 }
 export function useInfiniteDataTableContext({
