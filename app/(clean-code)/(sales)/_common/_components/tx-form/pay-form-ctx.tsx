@@ -15,6 +15,8 @@ import {
 import { toast } from "sonner";
 import { _modal } from "@/components/common/modal/provider";
 import { isProdClient } from "@/lib/is-prod";
+import { useInfiniteDataTable } from "@/components/(clean-code)/data-table/use-data-table";
+import { revalidateTable } from "@/components/(clean-code)/data-table/use-infinity-data-table";
 
 export type UsePayForm = ReturnType<typeof usePayForm>;
 export const usePayForm = () => {
@@ -146,6 +148,7 @@ export const usePayForm = () => {
             );
         });
     }
+    const tableCtx = useInfiniteDataTable();
     async function pay() {
         const data = form.getValues();
         const selections = profile?.salesInfo?.orders?.filter(
@@ -159,6 +162,7 @@ export const usePayForm = () => {
             description: "",
             squarePaymentId: data.terminal?.squarePaymentId,
         });
+        revalidateTable();
         _modal.close();
         toast.success("Payment Applied");
     }

@@ -10,11 +10,17 @@ export function NoteLine({ note }: { note: GetNotes[number] }) {
             <span className="text-muted-foreground mr-4">
                 {formatDate(note.createdAt)}
             </span>
-            <div className="inline-flex flex-1 gap-2 items-center">
-                {/* <NoteTag note={note} tag={note.status} /> */}
-                <NoteTag note={note} tag={note.type} />
-                <div className="flex-1">{note.note}</div>
-                {!event || <div>{formatDate(event.eventDate)}</div>}
+            <div className="">
+                <div className="">
+                    <span>{note.headline}</span>
+                    <span>{note.subject}</span>
+                </div>
+                <div className="inline-flex flex-1 gap-2 items-center">
+                    {/* <NoteTag note={note} tag={note.status} /> */}
+                    <NoteTag note={note} tag={note.type} />
+                    <div className="flex-1">{note.note}</div>
+                    {!event || <div>{formatDate(event.eventDate)}</div>}
+                </div>
             </div>
         </div>
     );

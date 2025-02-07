@@ -29,6 +29,14 @@ import { generateRandomString } from "@/lib/utils";
 import { toast } from "sonner";
 import { __findFilterField } from "./filter-command/filters";
 
+export const ctx = {
+    refetch: null,
+};
+export function revalidateTable() {
+    console.log(ctx);
+
+    ctx?.refetch();
+}
 export function useInfiniteDataTableContext({
     columns,
     // data,
@@ -243,6 +251,7 @@ export function useInfiniteDataTableContext({
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [rowSelection, selectedRow, checkMode]);
+    ctx.refetch = refetch;
     return {
         checkable,
         refetch,

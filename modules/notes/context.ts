@@ -25,7 +25,6 @@ export const useNoteContext = (props: NoteProps) => {
         });
         console.log(tagQuery);
         getNotesAction(tagQuery).then((result) => {
-            console.log(result);
             setNotes(
                 result.filter((note) => {
                     let validations = [];

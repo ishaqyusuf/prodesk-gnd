@@ -15,6 +15,7 @@ import {
 } from "@/modules/square";
 import { SalesTransaction } from "../../types";
 import { createTransactionDta } from "../data-access/wallet/transaction-dta";
+import { revalidatePath } from "next/cache";
 
 export type GetSalesPayment = AsyncFnType<typeof getSalesPaymentUseCase>;
 export async function getSalesPaymentUseCase(id) {
@@ -49,5 +50,7 @@ export async function cancelSalesPaymentCheckoutUseCase(id) {
 }
 export async function createTransactionUseCase(data: SalesTransaction) {
     if (!data.accountNo) throw new Error("Payment Requires customer phone.");
-    return await createTransactionDta(data);
+    const c = await createTransactionDta(data);
+    await revalidatePath(`/sales-books/orders`);
+    return c;
 }
