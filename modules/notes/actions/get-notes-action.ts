@@ -33,6 +33,10 @@ export async function getNotesAction(query: SearchParamsType) {
                     note: true,
                 },
             },
+            events: true,
+        },
+        orderBy: {
+            createdAt: "desc",
         },
     });
     return notes.map((note) => {

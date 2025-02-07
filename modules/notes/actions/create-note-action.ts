@@ -10,6 +10,7 @@ interface CreateNoteData {
     note;
     status;
     tags: TagFilters[];
+    eventDate;
 }
 export async function createNoteAction(data: CreateNoteData) {
     const auth = await user();
@@ -42,6 +43,13 @@ export async function createNoteAction(data: CreateNoteData) {
                     id: senderContactId,
                 },
             },
+            events: data.eventDate
+                ? {
+                      create: {
+                          eventDate: data.eventDate,
+                      },
+                  }
+                : undefined,
             tags: {
                 createMany: {
                     data: data.tags.map((tag) => {
@@ -52,6 +60,7 @@ export async function createNoteAction(data: CreateNoteData) {
         },
         include: {
             tags: true,
+            events: true,
         },
     });
     return note;

@@ -10,6 +10,7 @@ import { SalesItemsTab } from "./tabs/sales-items-tab";
 import { SalesShippingForm } from "./tabs/sales-shipping-form";
 import { SalesShippingTab } from "./tabs/sales-shipping-tab";
 import { SalesShippingOverview } from "./tabs/sales-shipping-overview";
+import { ProductionNoteTab } from "./tabs/prod-note-tab";
 
 interface OpenSalesOverviewProps {
     salesId;
@@ -60,8 +61,9 @@ export function openDispatchModal(props: OpenSalesOverviewProps) {
 export function openSalesProductionTasksModal(props: OpenSalesOverviewProps) {
     salesOverviewStore.getState().reset({
         salesId: props.salesId,
-        tabs: salesTabs.admin,
+        tabs: salesTabs.productionTasks,
         currentTab: "items",
+        showTabs: true,
     });
     _modal.openSheet(<SalesOverviewModal />);
 }
@@ -142,6 +144,9 @@ function PrimaryTab({}) {
                 </TabContent>
                 <TabContent tabName="shipping_overview">
                     <SalesShippingOverview />
+                </TabContent>
+                <TabContent tabName="production_note">
+                    <ProductionNoteTab />
                 </TabContent>
             </Modal.ScrollArea>
             {store.showFooter && (

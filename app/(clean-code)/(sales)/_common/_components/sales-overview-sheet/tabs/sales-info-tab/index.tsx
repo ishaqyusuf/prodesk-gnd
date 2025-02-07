@@ -97,6 +97,7 @@ export function SalesInfoTab({}) {
                 ))}
             </div>
             <Note
+                admin
                 tagFilters={[
                     // noteTagFilter("itemControlUID", itemView?.itemControlUid),
                     // noteTagFilter("salesItemId", itemView?.itemId),

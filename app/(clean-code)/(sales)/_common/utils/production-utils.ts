@@ -14,7 +14,7 @@ export function dueDateAlert(dates): { text; color; date } {
         const diff = dueDate.diff(today, "day");
 
         if (diff === 0) {
-            result.today = { text: "due today", color: "yellow" };
+            result.today = { text: "due today", color: "yellow", date };
         } else if (diff < 0) {
             const absDiff = Math.abs(diff);
             if (absDiff === 1) {
@@ -55,9 +55,7 @@ export function dueDateAlert(dates): { text; color; date } {
             }
         }
     }
-    console.log({ result, dates });
 
-    // Sort pastDues in descending order (most recent past first)
     result.pastDues.sort((a, b) => dayjs(b.date).diff(dayjs(a.date)));
 
     // Sort futureDues in ascending order (soonest first)

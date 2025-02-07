@@ -34,7 +34,6 @@ export default function ProductionTasksPageClient({
                 ctx.Column("Sales Rep", "sales.rep", Cells.SalesRep),
                 // ctx.Column("Assigned To", "assignments", Cells.Assignments),
                 ctx.Column("Status", "status", Cells.Status),
-
                 ...__filters()["sales-productions"].filterColumns,
             ];
         },

@@ -13,6 +13,7 @@ export type SalesTabs =
     | "production"
     | "items"
     | "payments"
+    | "production_note"
     | "shipping"
     | "shipping_overview"
     | "shipping_form"
@@ -59,6 +60,7 @@ export const salesTabs = {
         createTab("shipping_form", null, false),
         createTab("notification"),
     ],
+    productionTasks: [createTab("items"), createTab("production_note")],
     quotes: [
         createTab("sales_info"),
         createTab("items"),
