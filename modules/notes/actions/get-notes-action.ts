@@ -34,6 +34,7 @@ export async function getNotesAction(query: SearchParamsType) {
                 },
             },
             events: true,
+            senderContact: true,
         },
         orderBy: {
             createdAt: "desc",

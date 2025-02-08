@@ -1,18 +1,19 @@
 model NotePad {
-    id              Int              @unique @default(autoincrement())
+    id              Int                  @unique @default(autoincrement())
     note            String?
     subject         String?
     headline        String?
     createdById     Int?
     comments        NoteComments[]
-    deletedAt       DateTime?        @db.Timestamp(0)
-    createdAt       DateTime?        @default(now()) @db.Timestamp(0)
-    commentNote     NoteComments[]   @relation(name: "commentNote")
+    deletedAt       DateTime?            @db.Timestamp(0)
+    createdAt       DateTime?            @default(now()) @db.Timestamp(0)
+    commentNote     NoteComments[]       @relation(name: "commentNote")
     tags            NoteTags[]
     senderContactId Int
     recipients      NoteRecipients[]
-    senderContact   NotePadContacts? @relation(fields: [senderContactId], references: [id])
+    senderContact   NotePadContacts?     @relation(fields: [senderContactId], references: [id])
     events          NotePadEvent[]
+    readReceipts    NotePadReadReceipt[]
 
     @@index([senderContactId])
 }
@@ -31,14 +32,15 @@ model NoteRecipients {
 }
 
 model NotePadContacts {
-    id            Int              @unique @default(autoincrement())
+    id            Int                  @unique @default(autoincrement())
     name          String
     email         String?
     phoneNo       String?
     notesReceived NoteRecipients[]
     notesSent     NotePad[]
-    deletedAt     DateTime?        @db.Timestamp(0)
-    createdAt     DateTime?        @default(now()) @db.Timestamp(0)
+    deletedAt     DateTime?            @db.Timestamp(0)
+    createdAt     DateTime?            @default(now()) @db.Timestamp(0)
+    readReceipts  NotePadReadReceipt[]
 
     @@unique([name, email, phoneNo])
 }
@@ -84,5 +86,19 @@ model NotePadEvent {
     notePad      NotePad   @relation(fields: [notePadId], references: [id])
     notePadId    Int
 
+    @@index([notePadId])
+}
+
+model NotePadReadReceipt {
+    id Int @unique @default(autoincrement())
+
+    deletedAt        DateTime?        @db.Timestamp(0)
+    createdAt        DateTime?        @default(now()) @db.Timestamp(0)
+    notePadContactId Int
+    notePadId        Int
+    contact          NotePadContacts? @relation(fields: [notePadContactId], references: [id])
+    note             NotePad?         @relation(fields: [notePadId], references: [id])
+
+    @@index([notePadContactId])
     @@index([notePadId])
 }

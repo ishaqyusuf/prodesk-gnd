@@ -11,6 +11,7 @@ import { SalesShippingForm } from "./tabs/sales-shipping-form";
 import { SalesShippingTab } from "./tabs/sales-shipping-tab";
 import { SalesShippingOverview } from "./tabs/sales-shipping-overview";
 import { ProductionNoteTab } from "./tabs/prod-note-tab";
+import { SalesNoteTab } from "./tabs/sales-note-tab";
 
 interface OpenSalesOverviewProps {
     salesId;
@@ -147,6 +148,9 @@ function PrimaryTab({}) {
                 </TabContent>
                 <TabContent tabName="production_note">
                     <ProductionNoteTab />
+                </TabContent>
+                <TabContent tabName="notification">
+                    <SalesNoteTab />
                 </TabContent>
             </Modal.ScrollArea>
             {store.showFooter && (
