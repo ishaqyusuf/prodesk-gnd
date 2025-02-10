@@ -4,10 +4,19 @@ import { Progress } from "@/components/(clean-code)/progress";
 import { formatDate } from "@/lib/use-day";
 import ConfirmBtn from "@/components/_v1/confirm-btn";
 import { BellIcon } from "lucide-react";
+import { deleteNoteAction } from "./actions/delete-note-action";
+import { useNote } from "./context";
+import { toast } from "sonner";
 
 export function NoteLine({ note }: { note: GetNotes[number] }) {
     const event = note?.events?.[0];
+    const ctx = useNote();
     const pills = [note.subject, note.headline]?.filter(Boolean);
+    async function deleteNote() {
+        await deleteNoteAction(note.id);
+        ctx.deleteNote(note.id);
+        toast.success("Note Deleted!");
+    }
     return (
         <div className="cursor-default flex flex-col items-start gap-2 rounded-lg border p-3 text-left text-sm transition-all hover:bg-accent my-1.5">
             <div className="flex w-full flex-col gap-1">
@@ -47,7 +56,7 @@ export function NoteLine({ note }: { note: GetNotes[number] }) {
                     </div>
                 )}
                 <div className="flex-1"></div>
-                <ConfirmBtn trash />
+                <ConfirmBtn trash onClick={deleteNote} />
             </div>
         </div>
     );

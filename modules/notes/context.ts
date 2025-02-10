@@ -53,6 +53,11 @@ export const useNoteContext = (props: NoteProps) => {
         notes,
         props,
         setNotes,
+        deleteNote(id) {
+            setNotes((prev) => {
+                return [...prev].filter((a) => a.id != id);
+            });
+        },
     };
 };
 export const useNote = () => useContext(noteContext);
