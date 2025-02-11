@@ -69,15 +69,11 @@ export default function OrdersPageClient({
         <div className="bg-white">
             <DataTable.Infinity
                 checkable
-                itemViewFn={
-                    isProdClient
-                        ? (data) => {
-                              openSalesOverview({
-                                  salesId: data.id,
-                              });
-                          }
-                        : undefined
-                }
+                itemViewFn={(data) => {
+                    openSalesOverview({
+                        salesId: data.id,
+                    });
+                }}
                 ActionCell={Cells.Action}
                 queryKey={queryKey}
                 {...table.props}

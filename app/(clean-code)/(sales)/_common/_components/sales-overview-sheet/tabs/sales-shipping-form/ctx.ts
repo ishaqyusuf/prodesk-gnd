@@ -42,6 +42,7 @@ export function useSalesShipmentForm() {
     const itemView = store.itemOverview;
     const form = useForm({
         defaultValues: {
+            selectAllToken: "",
             dispatchMode: "" as DeliveryOption,
             assignedToId: "",
             selection: {} as SelectionType,

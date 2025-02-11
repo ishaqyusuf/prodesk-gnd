@@ -6,7 +6,7 @@ import { dispatchModes } from "../../../../utils/contants";
 import Button from "@/components/common/button";
 import Portal from "@/components/_v1/portal";
 import { Menu } from "@/components/(clean-code)/menu";
-import { cn, sum } from "@/lib/utils";
+import { cn, generateRandomString, sum } from "@/lib/utils";
 import FormInput from "@/components/common/controls/form-input";
 import {
     CheckCircle,
@@ -31,7 +31,8 @@ export function SalesShippingForm({}) {
     const ctx = useSalesShipmentForm();
     const { form, itemView, store, totalSelected, selectionError } = ctx;
     if (!itemView || !ctx.loaded) return null;
-
+    const toggleTok = form.watch("selectAllToken");
+    // const allChecked =
     return (
         <Form {...form}>
             <div className="">
@@ -60,7 +61,13 @@ export function SalesShippingForm({}) {
                             />
                         </div>
                         <Button
-                            disabled={!totalSelected || selectionError}
+                            // disabled={!totalSelected || selectionError}
+                            onClick={() => {
+                                form.setValue(
+                                    "selectAllToken",
+                                    generateRandomString()
+                                );
+                            }}
                             variant="secondary"
                             className=""
                         >
@@ -323,8 +330,11 @@ function QtyInput({ uid, input }) {
     let available = input.available;
     // available = 100;
     // console.log(available);
-
     const form = useFormContext();
+    const w = form.watch("selectAllToken");
+    useEffect(() => {
+        if (w) form.setValue(`selection.${uid}.${input.formKey}`, available);
+    }, [w]);
     if (!available) return null;
 
     const inputOptions = Array(available + 1)

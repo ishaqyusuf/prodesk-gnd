@@ -1,6 +1,7 @@
 import { prisma } from "@/db";
 import { SalesIncludeAll } from "../../utils/db-utils";
 import { generateSalesId } from "./sales-id-dta";
+import { authId } from "@/app/(v1)/_actions/utils";
 
 export async function copySalesDta(orderId, as) {
     const sale = await prisma.salesOrders.findFirst({
@@ -36,7 +37,7 @@ export async function copySalesDta(orderId, as) {
                     shippingAddress: connectOr(sale.shippingAddressId),
                     billingAddress: connectOr(sale.billingAddressId),
                     customer: connectOr(sale.customerId),
-                    salesRep: connectOr(sale.salesRepId),
+                    salesRep: connectOr(await authId()),
                     amountDue: sale.grandTotal,
                     deliveryOption: sale.deliveryOption,
                     grandTotal: sale.grandTotal,
@@ -185,5 +186,6 @@ export async function copySalesDta(orderId, as) {
                 error: error.message,
             };
         });
+
     return response;
 }

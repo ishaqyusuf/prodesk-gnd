@@ -18,7 +18,7 @@ import { Menu } from "@/components/(clean-code)/menu";
 import { PrintAction } from "../../../_common/_components/overview-sheet.bin/footer/print.action";
 import { useMemo } from "react";
 import { openSalesOverview } from "../../../_common/_components/sales-overview-sheet";
-import { MenuIcon, SaveIcon } from "lucide-react";
+import { MenuIcon } from "lucide-react";
 
 export function FormHeader({ sticky }: { sticky: Sticky }) {
     const zus = useFormDataStore();
@@ -151,7 +151,7 @@ export function FormHeader({ sticky }: { sticky: Sticky }) {
             </div>
             <div className="flex-1" />
             <div className="flex gap-4 px-4 py-2 items-center">
-                {/* {isOld > 0 && (
+                {isOld > 0 && (
                     <Link
                         className={cn(
                             buttonVariants({
@@ -162,7 +162,7 @@ export function FormHeader({ sticky }: { sticky: Sticky }) {
                     >
                         Open In Old Version
                     </Link>
-                )} */}
+                )}
                 <Button
                     size="xs"
                     icon="settings"
