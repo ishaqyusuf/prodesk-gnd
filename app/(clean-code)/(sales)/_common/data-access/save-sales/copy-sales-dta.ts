@@ -124,6 +124,7 @@ export async function copySalesDta(orderId, as) {
                                     ? undefined
                                     : {
                                           create: {
+                                              meta: hpt.meta,
                                               salesOrderId: newSales.id,
                                               doorType: hpt.doorType,
                                               stepProductId: hpt.stepProductId,
