@@ -38,6 +38,8 @@ export function SalesPreviewModal({}) {
                 mode: ctx.q.salesPreviewType,
                 preview: true,
             }).then((result) => {
+                console.log(result);
+
                 setData(result as any);
             });
         }
@@ -46,6 +48,7 @@ export function SalesPreviewModal({}) {
         <Dialog open={ctx.isOpened}>
             <DialogContent className="">
                 <ScrollArea className="h-[90vh] overflow-auto">
+                    <span>ab</span>
                     {data && (
                         <OrderBasePrinter mode={ctx.q.salesPreviewType as any}>
                             <SalesPrintDisplay

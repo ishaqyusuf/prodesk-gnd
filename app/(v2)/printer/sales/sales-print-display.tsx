@@ -10,6 +10,7 @@ import SalesPrintLineItems from "./components/sales-print-line-items";
 import SalesPrintShelfItems from "./components/sales-print-shelf-items";
 import SalesPrintDoorItems from "./components/sales-print-door-items";
 import SalesPrintFooter from "./components/sales-print-footer";
+import { SalesBlockCtx } from "./sales-print-block";
 
 export type SalesPrintData = NonNullable<
     Awaited<ReturnType<typeof getSalesPrintData>>
@@ -18,11 +19,6 @@ export type SalesPrintData = NonNullable<
 interface SalesBlockCtxProps extends BasePrintProps {
     sale: SalesPrintData;
 }
-export const SalesBlockCtx = React.createContext<SalesBlockCtxProps>(
-    null as any
-);
-export const useSalesBlockCtx = () =>
-    React.useContext<SalesBlockCtxProps>(SalesBlockCtx);
 
 export default function SalesPrintDisplay({ data, slug }) {
     // const data = React.use(action);
