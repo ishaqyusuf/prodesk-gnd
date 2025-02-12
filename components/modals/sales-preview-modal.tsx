@@ -38,17 +38,21 @@ export function SalesPreviewModal({}) {
                 mode: ctx.q.salesPreviewType,
                 preview: true,
             }).then((result) => {
-                console.log(result);
+                console.log({ result });
 
                 setData(result as any);
             });
         }
     }, [ctx.q.salesPreviewSlug]);
     return (
-        <Dialog open={ctx.isOpened}>
-            <DialogContent className="">
+        <Dialog
+            onOpenChange={(e) => {
+                ctx.close();
+            }}
+            open={ctx.isOpened}
+        >
+            <DialogContent className="w-full sm:w-[500px]">
                 <ScrollArea className="h-[90vh] overflow-auto">
-                    <span>ab</span>
                     {data && (
                         <OrderBasePrinter mode={ctx.q.salesPreviewType as any}>
                             <SalesPrintDisplay
