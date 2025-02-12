@@ -8,7 +8,17 @@ import { prisma } from "@/db";
 export async function checkUpdateRequiredStatus() {
     const auth = await user();
     if (!auth) throw new Error();
-    return auth;
+    const phoneNo = (
+        await prisma.users.findFirst({
+            where: {
+                id: auth.id,
+            },
+        })
+    )?.phoneNo;
+    return {
+        ...auth,
+        phoneNo,
+    };
 }
 
 export async function updateAccountInfoAction(data) {

@@ -127,8 +127,9 @@ export async function copySalesDta(orderId, as) {
                                               doorId: hpt.doorId,
                                               moldingId: hpt.moldingId,
                                               dykeDoorId: hpt.dykeDoorId,
-
                                               meta: hpt.meta,
+                                              totalPrice: hpt.totalPrice,
+
                                               salesOrderId: newSales.id,
                                               doorType: hpt.doorType,
                                               stepProductId: hpt.stepProductId,
