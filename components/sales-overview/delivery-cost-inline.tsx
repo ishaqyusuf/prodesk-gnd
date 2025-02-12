@@ -5,16 +5,22 @@ import { salesOverviewStore } from "@/app/(clean-code)/(sales)/_common/_componen
 import { InlineTextEditor } from "../inline-text-editor";
 import Money from "../_v1/money";
 import { InfoLine } from "@/app/(clean-code)/(sales)/_common/_components/sales-overview-sheet/tabs/sales-info-tab";
+import { updateSalesDeliveryCostAction } from "@/actions/update-sales-delivery-cost-action";
+import { refreshTabData } from "@/app/(clean-code)/(sales)/_common/_components/sales-overview-sheet/helper";
 
 export function DeliveryCostInline() {
     const store = salesOverviewStore();
     const overview = store.overview;
-
+    async function updateCost(value) {
+        await updateSalesDeliveryCostAction(overview.id, Number(value));
+        refreshTabData(store.currentTab);
+    }
     return (
         <InfoLine
             label="Delivery Cost"
             value={
                 <InlineTextEditor
+                    onUpdate={updateCost}
                     className="w-24"
                     value={overview?.invoice?.delivery}
                 >

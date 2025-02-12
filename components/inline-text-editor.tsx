@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Button } from "./ui/button";
 import { Icons } from "./_v1/icons";
 import { toast } from "sonner";
+import { revalidateTable } from "./(clean-code)/data-table/use-infinity-data-table";
 
 export function InlineTextEditor({
     children,
@@ -20,6 +21,8 @@ export function InlineTextEditor({
             await onUpdate?.(_value, oldValue);
             setEditMode(false);
             setOldValue(_value);
+            toast.success("Saved");
+            revalidateTable();
         } catch (error) {
             if (error instanceof Error) toast.error(error.message);
         }
