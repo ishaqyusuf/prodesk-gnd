@@ -78,6 +78,14 @@ export function FormDataPage({}) {
                         setting.calculateTotalPrice();
                     }}
                 />
+                <Input
+                    label="Delivery Cost ($)"
+                    type="number"
+                    name="metaData.pricing.delivery"
+                    onChange={(e) => {
+                        setting.calculateTotalPrice();
+                    }}
+                />
             </div>
         </div>
     );

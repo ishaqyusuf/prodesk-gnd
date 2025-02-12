@@ -120,6 +120,7 @@ export type SalesMeta = {
     ccc_percentage;
     labor_cost;
     discount;
+    deliveryCost;
     sales_profile;
     sales_percentage;
     po;
@@ -350,6 +351,7 @@ export interface PricingMetaData {
     paid?: number;
     pending?: number;
     discount?: number | string;
+    delivery?: number | string;
     labour?: number | string;
     taxCode?: string;
     taxxable?: number;

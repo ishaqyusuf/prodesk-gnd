@@ -181,7 +181,6 @@ export class CostingClass {
     }
     public softCalculateTotalPrice(overrides: PricingMetaData = {}) {
         const data = this.setting.zus;
-        console.log({ overrides });
 
         const estimate = {
             ...data.metaData.pricing,
@@ -206,7 +205,12 @@ export class CostingClass {
             estimate.ccc = percentageValue(subGrandTot, 3);
         } else estimate.ccc = 0;
         estimate.grandTotal = formatMoney(
-            sum([estimate.labour, subGrandTot, estimate.ccc || 0])
+            sum([
+                estimate.labour,
+                estimate.delivery,
+                subGrandTot,
+                estimate.ccc || 0,
+            ])
         );
         if (this.setting?.staticZus)
             this.setting.staticZus.metaData.pricing = estimate;

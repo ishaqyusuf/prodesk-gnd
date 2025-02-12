@@ -60,6 +60,7 @@ export function zhInitializeState(data: GetSalesBookForm, copy = false) {
             paymentMethod: data.order?.meta?.payment_option,
             pricing: {
                 discount: data.order?.meta?.discount,
+                delivery: data.order?.meta?.deliveryCost,
                 labour: data.order?.meta?.labor_cost,
                 taxValue: data.order?.tax,
                 taxCode: selectedTax?.taxCode,
