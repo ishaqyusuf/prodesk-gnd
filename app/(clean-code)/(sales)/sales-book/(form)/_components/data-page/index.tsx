@@ -86,6 +86,14 @@ export function FormDataPage({}) {
                         setting.calculateTotalPrice();
                     }}
                 />
+                <Select
+                    label="Net Term"
+                    name="metaData.paymentTerm"
+                    options={salesData.paymentTerms}
+                    valueKey={"value"}
+                    titleKey={"text"}
+                    onSelect={(e) => {}}
+                />
             </div>
         </div>
     );
