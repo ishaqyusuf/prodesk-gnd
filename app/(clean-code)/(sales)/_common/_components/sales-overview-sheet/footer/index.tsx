@@ -17,9 +17,14 @@ import DevOnly from "@/_v2/components/common/dev-only";
 import { resetSalesStatAction } from "../../../data-actions/sales-stat-control.action";
 import { refreshTabData } from "../helper";
 import { RefreshCcw } from "lucide-react";
+import { useSalesPreviewModal } from "@/components/modals/sales-preview-modal";
 
 export function Footer({}) {
     const store = salesOverviewStore();
+    const sPreview = useSalesPreviewModal();
+    function preview() {
+        sPreview.preview(store.salesId, store.overview.type as any);
+    }
     return (
         <div className="flex gap-4 py-2 border-t w-full">
             <div className="flex-1"></div>
@@ -44,6 +49,14 @@ export function Footer({}) {
                 trash
                 variant="destructive"
             />
+            <Button
+                className="bg-purple-600 hover:bg-purple-700"
+                variant="destructive"
+                size="xs"
+                onClick={preview}
+            >
+                Preview
+            </Button>
             {store.adminMode && (
                 <>
                     <Button
