@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { ScrollArea } from "../ui/scroll-area";
 import SalesPrintDisplay from "@/app/(v2)/printer/sales/sales-print-display";
 import { getSalesPrintData } from "@/app/(v2)/printer/sales/get-sales-print-data";
+import { OrderBasePrinter } from "@/app/(v2)/printer/sales/order-base-printer";
 
 export function useSalesPreviewModal() {
     const [q, setQ] = useQueryStates({
@@ -46,10 +47,12 @@ export function SalesPreviewModal({}) {
             <DialogContent className="">
                 <ScrollArea className="h-[90vh] overflow-auto">
                     {data && (
-                        <SalesPrintDisplay
-                            data={data}
-                            slug={ctx.q.salesPreviewSlug}
-                        />
+                        <OrderBasePrinter mode={ctx.q.salesPreviewType as any}>
+                            <SalesPrintDisplay
+                                data={data}
+                                slug={ctx.q.salesPreviewSlug}
+                            />
+                        </OrderBasePrinter>
                     )}
                 </ScrollArea>
             </DialogContent>
