@@ -22,7 +22,6 @@ export function InlineTextEditor({
             setEditMode(false);
             setOldValue(_value);
             toast.success("Saved");
-            revalidateTable();
         } catch (error) {
             if (error instanceof Error) toast.error(error.message);
         }
@@ -69,7 +68,7 @@ export function InlineTextEditor({
                             <Icons.X className="size-3" />
                         </Button>
                         <Button
-                            onClick={() => {}}
+                            onClick={update}
                             variant="destructive"
                             className="size-5 bg-green-500 hover:bg-green-600 p-0"
                         >

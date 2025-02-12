@@ -7,6 +7,7 @@ import Money from "../_v1/money";
 import { InfoLine } from "@/app/(clean-code)/(sales)/_common/_components/sales-overview-sheet/tabs/sales-info-tab";
 import { updateSalesDeliveryCostAction } from "@/actions/update-sales-delivery-cost-action";
 import { refreshTabData } from "@/app/(clean-code)/(sales)/_common/_components/sales-overview-sheet/helper";
+import { revalidateTable } from "../(clean-code)/data-table/use-infinity-data-table";
 
 export function DeliveryCostInline() {
     const store = salesOverviewStore();
@@ -14,6 +15,7 @@ export function DeliveryCostInline() {
     async function updateCost(value) {
         await updateSalesDeliveryCostAction(overview.id, Number(value));
         refreshTabData(store.currentTab);
+        revalidateTable();
     }
     return (
         <InfoLine
