@@ -51,7 +51,7 @@ export function SalesPreviewModal({}) {
             }}
             open={ctx.isOpened}
         >
-            <DialogContent className="w-full sm:w-[500px]">
+            <DialogContent className="w-[800px]s max-w-4xl">
                 <ScrollArea className="h-[90vh] overflow-auto">
                     {data && (
                         <OrderBasePrinter mode={ctx.q.salesPreviewType as any}>
