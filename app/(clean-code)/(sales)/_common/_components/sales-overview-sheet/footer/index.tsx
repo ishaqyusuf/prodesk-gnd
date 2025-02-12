@@ -23,7 +23,7 @@ export function Footer({}) {
     const store = salesOverviewStore();
     const sPreview = useSalesPreviewModal();
     function preview() {
-        sPreview.preview(store.salesId, store.overview.type as any);
+        sPreview.preview(store.overview?.orderId, store.overview.type as any);
     }
     return (
         <div className="flex gap-4 py-2 border-t w-full">

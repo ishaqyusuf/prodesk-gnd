@@ -45,10 +45,12 @@ export function SalesPreviewModal({}) {
         <Dialog open={ctx.isOpened}>
             <DialogContent className="">
                 <ScrollArea className="h-[90vh] overflow-auto">
-                    <SalesPrintDisplay
-                        data={data}
-                        slug={ctx.q.salesPreviewSlug}
-                    />
+                    {data && (
+                        <SalesPrintDisplay
+                            data={data}
+                            slug={ctx.q.salesPreviewSlug}
+                        />
+                    )}
                 </ScrollArea>
             </DialogContent>
         </Dialog>
