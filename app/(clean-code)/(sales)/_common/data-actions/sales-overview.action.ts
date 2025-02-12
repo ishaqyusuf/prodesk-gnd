@@ -73,6 +73,8 @@ export async function loadSalesOverviewAction(id) {
             total: order.grandTotal,
             pending: order.amountDue,
             paid: formatMoney(order.grandTotal - order.amountDue),
+            labour: meta?.labor_cost,
+            delivery: meta?.deliveryCost,
         },
         title: [order.orderId, displayName].filter(Boolean).join(" | "),
         subtitle: "",
