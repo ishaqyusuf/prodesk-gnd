@@ -17,6 +17,7 @@ export function LaborCostInline() {
         refreshTabData(store.currentTab);
         revalidateTable();
     }
+
     return (
         <InfoLine
             label="Labour Cost"

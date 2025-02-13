@@ -11,11 +11,11 @@ import { composeSalesUrl } from "../../../../utils/sales-utils";
 import { openCustomerOverviewSheet } from "../../../customer-overview-sheet";
 import Note from "@/modules/notes";
 import { noteTagFilter } from "@/modules/notes/utils";
-import { InlineTextEditor } from "@/components/inline-text-editor"; 
 import { LaborCostInline } from "@/components/sales-overview/labor-cost-inline";
-import { PoInline } from "@/components/sales-overview/po-inline"; 
+import { PoInline } from "@/components/sales-overview/po-inline";
 import { SalesDateInline } from "@/components/sales-overview/sales-date-inline";
 import { SalesDeliveryCostInline } from "@/components/sales-overview/sales-delivery-cost-inline";
+import { SalesInvoiceDueStatus } from "@/components/sales-invoice-due-status";
 
 export function SalesInfoTab({}) {
     const store = salesOverviewStore();
@@ -72,7 +72,14 @@ export function SalesInfoTab({}) {
             ></InfoLine>
             <InfoLine
                 label="Pending"
-                value={<Money value={overview?.invoice?.pending} />}
+                value={
+                    <span>
+                        <SalesInvoiceDueStatus
+                            amountDue={overview?.invoice?.pending}
+                            dueDate={overview?.paymentDueDate}
+                        />
+                    </span>
+                }
             ></InfoLine>
 
             <div className="grid my-4 sm:grid-cols-2 gap-4">
@@ -130,10 +137,10 @@ export function InfoLine({
     children?;
 }) {
     return (
-        <div className="flex gap-4 p-1 b border-b items-center">
-            <span className="">{label}</span>
+        <div className="flex gap-4 p-1 py-2 b border-b items-center">
+            <span className="text-sm uppercase font-medium">{label}:</span>
             <div className="flex-1"></div>
-            <span>{value}</span>
+            <span className="text-sm uppercase font-mono">{value}</span>
             {children}
         </div>
     );

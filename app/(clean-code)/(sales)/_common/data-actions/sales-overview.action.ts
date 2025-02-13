@@ -2,7 +2,7 @@
 
 import { prisma } from "@/db";
 import { AsyncFnType } from "@/types";
-import { SalesMeta } from "../../types";
+import { SalesMeta, SalesType } from "../../types";
 import { IconKeys } from "@/components/_v1/icons";
 import { formatMoney } from "@/lib/use-number";
 
@@ -20,6 +20,7 @@ export async function loadSalesOverviewAction(id) {
             amountDue: true,
             grandTotal: true,
             isDyke: true,
+            paymentDueDate: true,
             customer: {
                 select: {
                     id: true,
@@ -62,8 +63,9 @@ export async function loadSalesOverviewAction(id) {
         return { value, icon };
     }
     const phoneNo = order.customer?.phoneNo || order.billingAddress?.phoneNo;
+    let type: SalesType = order.type as any;
     return {
-        type: order.type,
+        type,
         id: order.id,
         dyke: order.isDyke,
         due: order.amountDue,
@@ -71,6 +73,8 @@ export async function loadSalesOverviewAction(id) {
         orderId: order.orderId,
         salesRep: order.salesRep,
         createdAt: order.createdAt,
+        paymentDueDate: type == "order" ? order.paymentDueDate : null,
+
         invoice: {
             total: order.grandTotal,
             pending: order.amountDue,
