@@ -11,11 +11,11 @@ import { composeSalesUrl } from "../../../../utils/sales-utils";
 import { openCustomerOverviewSheet } from "../../../customer-overview-sheet";
 import Note from "@/modules/notes";
 import { noteTagFilter } from "@/modules/notes/utils";
-import { InlineTextEditor } from "@/components/inline-text-editor";
-import { DeliveryCostInline } from "@/components/sales-overview/delivery-cost-inline";
+import { InlineTextEditor } from "@/components/inline-text-editor"; 
 import { LaborCostInline } from "@/components/sales-overview/labor-cost-inline";
-import { PoInline } from "@/components/sales-overview/po-inline";
+import { PoInline } from "@/components/sales-overview/po-inline"; 
 import { SalesDateInline } from "@/components/sales-overview/sales-date-inline";
+import { SalesDeliveryCostInline } from "@/components/sales-overview/sales-delivery-cost-inline";
 
 export function SalesInfoTab({}) {
     const store = salesOverviewStore();
@@ -61,7 +61,7 @@ export function SalesInfoTab({}) {
 
             <PoInline />
             <LaborCostInline />
-            <DeliveryCostInline />
+            <SalesDeliveryCostInline />
             <InfoLine
                 label="Total Invoice"
                 value={<Money value={overview?.invoice?.total} />}

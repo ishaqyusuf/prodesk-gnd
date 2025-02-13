@@ -2,6 +2,7 @@ import { DykeSteps, SalesStat } from "@prisma/client";
 import { DykeDoorType, SalesStatStatus, QtyControlType } from "../../types";
 import { Colors } from "@/lib/status-badge";
 import { sum } from "@/lib/utils";
+import dayjs from "dayjs";
 
 export function inToFt(_in) {
     if (_in.includes("-")) return _in;
@@ -104,3 +105,9 @@ export const qtyControlDifference = <T>(from: T, sub): T => {
     // result.total =
     return result as any;
 };
+
+export function calculatePaymentDueDate(paymentTerm, createdAt) {
+    if (!paymentTerm || paymentTerm == "None") return null;
+    const val = +paymentTerm?.toLowerCase()?.replace("net", "")?.trim();
+    return dayjs(createdAt).add(val, "days").toISOString();
+}

@@ -6,17 +6,11 @@ import { formatMoney } from "@/lib/use-number";
 import { isEqual, isNaN } from "lodash";
 import { __isProd } from "@/lib/is-prod-server";
 import { generateSalesId } from "./sales-id-dta";
+import { calculatePaymentDueDate } from "../../utils/sales-utils";
 
 export class SaveSalesHelper {
     constructor(public ctx?: SaveSalesClass) {}
 
-    public paymentDueDate(md: SalesFormFields["metaData"]) {
-        if (!md.paymentTerm || md.paymentTerm == "None") return null;
-        const val = +md.paymentTerm?.toLowerCase()?.replace("net", "")?.trim();
-        // console.log(val, md.paymentTerm);
-
-        return dayjs(md.createdAt).add(val, "days").toISOString();
-    }
     public createRel(newId, oldId) {
         const resp: any = {};
         if (oldId) {
@@ -78,7 +72,10 @@ export class SaveSalesHelper {
         } satisfies Prisma.SalesOrdersUpdateInput;
 
         if (md.type == "order") {
-            updateData.paymentDueDate = this.paymentDueDate(md);
+            updateData.paymentDueDate = calculatePaymentDueDate(
+                md.paymentTerm,
+                md.createdAt
+            );
         }
         if (md.id) {
             return {
