@@ -6,7 +6,6 @@ export default async function Layout({ children }) {
         <>
             <PagesTab />
             {children}
-            <SalesPreviewModal />
         </>
     );
 }

@@ -73,14 +73,15 @@ export async function viewSale(type, slug, deletedAt?) {
         const routes = settings?.data?.route;
         const rootConfig = settings?.data?.route?.[rootStep?.prodUid]?.config;
 
-        const sectionOverride = item.formSteps
+        const ovs = item.formSteps
             ?.map(
                 (fs) =>
                     (fs.component?.meta as any as StepComponentMeta)
                         ?.sectionOverride
             )
-            ?.filter(Boolean)
-            .find((s) => s.overrideMode);
+            ?.filter(Boolean);
+        const sectionOverride = ovs.find((s) => s.overrideMode);
+        // console.log({ sectionOverride, ovs });
         return {
             ...item,
             configs: sectionOverride
