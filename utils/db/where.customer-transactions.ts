@@ -12,5 +12,13 @@ export function whereCustomerTx(query: SearchParamsType) {
         //     },
         // },
     ];
+    if (query["sales.id"])
+        whereAnd.push({
+            salesPayments: {
+                some: {
+                    orderId: query["sales.id"],
+                },
+            },
+        });
     return composeQuery(whereAnd);
 }

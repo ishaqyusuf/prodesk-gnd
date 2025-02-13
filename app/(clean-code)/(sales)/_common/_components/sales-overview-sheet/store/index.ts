@@ -17,6 +17,7 @@ export type SalesTabs =
     | "shipping"
     | "shipping_overview"
     | "shipping_form"
+    | "transactions"
     | "notification";
 const data = {
     salesId: null,
@@ -55,6 +56,7 @@ export const salesTabs = {
         createTab("sales_info"),
         createTab("items"),
         // createTab("payments"),
+        createTab("transactions"),
         createTab("shipping"),
         createTab("shipping_overview", null, false),
         createTab("shipping_form", null, false),

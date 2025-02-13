@@ -15,16 +15,8 @@ import {
 } from "@/components/ui/select";
 import { DatePicker } from "@/components/_v1/date-range-picker";
 import { formatDate } from "@/lib/use-day";
-import { useCallback, useEffect, useTransition } from "react";
-import { toast } from "sonner";
-import dayjs from "dayjs";
-import { updatePaymentTerm } from "@/app/(v1)/(loggedIn)/sales/_actions/sales-payment";
-import {
-    Tooltip,
-    TooltipContent,
-    TooltipProvider,
-    TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { useEffect, useTransition } from "react";
+
 import { Switch } from "@/components/ui/switch";
 import { FormField } from "@/components/ui/form";
 import { useAppSelector } from "@/store";
