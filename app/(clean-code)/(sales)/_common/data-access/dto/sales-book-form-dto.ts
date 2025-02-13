@@ -254,7 +254,6 @@ export function transformMultiDykeItem(
         if (itemData.multiDykeUid == item.multiDykeUid) return true;
         return false;
     });
-    console.log("LENGHT:::::", _comps.length);
 
     let sectionPrice = 0;
     _comps.map((item) => {

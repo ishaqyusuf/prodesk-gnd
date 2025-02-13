@@ -19,6 +19,9 @@ import { PrintAction } from "../../../_common/_components/overview-sheet.bin/foo
 import { useMemo } from "react";
 import { openSalesOverview } from "../../../_common/_components/sales-overview-sheet";
 import { MenuIcon } from "lucide-react";
+import { Label } from "@/components/ui/label";
+
+import { DatePicker } from "@/components/_v1/date-range-picker";
 
 export function FormHeader({ sticky }: { sticky: Sticky }) {
     const zus = useFormDataStore();
@@ -163,6 +166,7 @@ export function FormHeader({ sticky }: { sticky: Sticky }) {
                         Open In Old Version
                     </Link>
                 )}
+                <CreatedDate />
                 <Button
                     size="xs"
                     icon="settings"
@@ -214,6 +218,24 @@ export function FormHeader({ sticky }: { sticky: Sticky }) {
                     </Menu>
                 )}
             </div>
+        </div>
+    );
+}
+function CreatedDate() {
+    const zus = useFormDataStore();
+
+    return (
+        <div className="inline-flex items-center space-x-2">
+            <Label>Date:</Label>
+            <DatePicker
+                // disabled={(date) => date > new Date()}
+                setValue={(e) => {
+                    // form.setValue("order.createdAt", e)
+                    zus.dotUpdate("metaData.createdAt", e);
+                }}
+                className="w-auto h-8"
+                value={zus.metaData?.createdAt}
+            />
         </div>
     );
 }

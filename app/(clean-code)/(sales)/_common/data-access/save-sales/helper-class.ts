@@ -63,7 +63,7 @@ export class SaveSalesHelper {
             customer: this.createRel(sd.customerId, md.cad),
             billingAddress: this.createRel(sd.billingAddressId, md.bad),
             shippingAddress: this.createRel(sd.shippingAddressId, md.sad),
-
+            createdAt: md.createdAt,
             // shippingAddress: {
             //     connect: sd.shippingAddressId
             //         ? { id: sd.shippingAddressId }
