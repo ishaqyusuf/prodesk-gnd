@@ -34,6 +34,7 @@ export async function _syncBuilderTasks(
                         },
                     },
                     taskUid: p.uid,
+                    deletedAt: {},
                     // taskName: {
                     //     not: p.name
                     // }
@@ -47,6 +48,7 @@ export async function _syncBuilderTasks(
                     installable: p.installable,
                     deco: p.deco,
                     punchout: p.punchout,
+                    deletedAt: null,
                 },
             });
         })

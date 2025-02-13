@@ -96,7 +96,7 @@ export default function BuilderModal({
                         data.id
                     );
                     const homeIds = await _getBuilderHomeIds(data.id);
-                    console.log(homeIds.length);
+
                     const a = await chunkArray(
                         homeIds.map(({ id }) => id),
                         500
