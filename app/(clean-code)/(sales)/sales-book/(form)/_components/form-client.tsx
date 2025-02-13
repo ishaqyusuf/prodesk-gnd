@@ -31,7 +31,6 @@ export function FormClient({ data }: FormClientProps) {
     const sticky = useSticky((bv, pv, { top, bottom }) => {
         return top < 100;
     });
-
     if (!zus.formStatus) return <></>;
     return (
         <div className="mb-28">

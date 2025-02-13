@@ -15,6 +15,7 @@ import { InlineTextEditor } from "@/components/inline-text-editor";
 import { DeliveryCostInline } from "@/components/sales-overview/delivery-cost-inline";
 import { LaborCostInline } from "@/components/sales-overview/labor-cost-inline";
 import { PoInline } from "@/components/sales-overview/po-inline";
+import { SalesDateInline } from "@/components/sales-overview/sales-date-inline";
 
 export function SalesInfoTab({}) {
     const store = salesOverviewStore();
@@ -52,6 +53,7 @@ export function SalesInfoTab({}) {
                     </Button>
                 }
             ></InfoLine>
+            <SalesDateInline />
             <InfoLine
                 label="Sales Rep"
                 value={overview.salesRep?.name}

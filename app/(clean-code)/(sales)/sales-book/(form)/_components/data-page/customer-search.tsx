@@ -80,9 +80,10 @@ export function CustomerSearch({ addressType }) {
         });
     }
     useEffect(() => {
-        searchAddressUseCase(debouncedQuery).then((res) => {
-            setResult(res || []);
-        });
+        if (debouncedQuery)
+            searchAddressUseCase(debouncedQuery).then((res) => {
+                setResult(res || []);
+            });
     }, [debouncedQuery]);
     return (
         <div>

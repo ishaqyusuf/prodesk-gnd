@@ -13,6 +13,7 @@ export async function loadSalesOverviewAction(id) {
     const order = await prisma.salesOrders.findFirstOrThrow({
         where: { id },
         select: {
+            createdAt: true,
             type: true,
             orderId: true,
             id: true,
@@ -69,6 +70,7 @@ export async function loadSalesOverviewAction(id) {
         po: meta?.po,
         orderId: order.orderId,
         salesRep: order.salesRep,
+        createdAt: order.createdAt,
         invoice: {
             total: order.grandTotal,
             pending: order.amountDue,
