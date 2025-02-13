@@ -138,7 +138,9 @@ export function InfoLine({
 }) {
     return (
         <div className="flex gap-4 p-1 py-2 b border-b items-center">
-            <span className="text-sm uppercase font-medium">{label}:</span>
+            <span className="text-sm uppercase font-semibold text-muted-foreground">
+                {label}:
+            </span>
             <div className="flex-1"></div>
             <span className="text-sm uppercase font-mono">{value}</span>
             {children}
