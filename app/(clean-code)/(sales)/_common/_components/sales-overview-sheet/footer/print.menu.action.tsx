@@ -85,6 +85,17 @@ export function PrintMenuAction({ pdf }: Props) {
                     <Menu.Item
                         icon="orders"
                         onClick={() => {
+                            print({
+                                mode: "order-packing",
+                                dispatchId: "all",
+                            });
+                        }}
+                    >
+                        Order & Packing
+                    </Menu.Item>
+                    <Menu.Item
+                        icon="orders"
+                        onClick={() => {
                             print();
                         }}
                     >

@@ -22,7 +22,7 @@ export async function _syncBuilderTasks(
     unitIds
 ) {
     const taskNames: any = [];
-    console.log(unitIds);
+
     // const unitIds = units.findMany(({ id }) => id);
     await Promise.all(
         data.meta.tasks.map(async (p) => {
