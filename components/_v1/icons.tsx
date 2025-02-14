@@ -79,6 +79,8 @@ import {
     Box,
     Download,
     MoreHorizontal,
+    Search,
+    Filter,
 } from "lucide-react";
 import Image from "next/image";
 import logo from "@/public/logo_mini.png";
@@ -92,8 +94,10 @@ export type Icon = LucideIcon;
 
 export const Icons = {
     box: Box,
+    Filter: Filter,
     Menu: MoreHorizontal,
     pdf: File,
+    Search: Search,
     Export: Download,
     placeholder: ImageIcon,
     reciept: Receipt,

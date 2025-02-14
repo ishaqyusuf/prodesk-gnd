@@ -39,7 +39,7 @@ export function BatchAction({ children = null }) {
                     opacity: ctx.checkMode ? 1 : 0,
                     scale: ctx.checkMode ? 1 : 0,
                 }}
-                className="border flex sgap-4 items-center rounded-xl bg-white overflow-hidden border-muted-foreground/50 divide-x divide-muted-foreground/50 shadow-xl  relative "
+                className="border flex sgap-4 items-center rounded-xl bg-white overflow-hidden border-muted-foreground/50 divide-x divide-muted-foreground/50 shadow-xl relative"
             >
                 {/* <div className="border flex sgap-4 items-center rounded-xl bg-white overflow-hidden border-muted-foreground/50 divide-x divide-muted-foreground/50 shadow-xl  relative "> */}
                 <Label className="font-mono px-2">

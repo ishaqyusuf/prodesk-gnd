@@ -107,9 +107,13 @@ export async function copySalesDta(orderId, as) {
                                                       qty,
                                                       stepId,
                                                       value,
+                                                      componentId,
+                                                      priceId,
                                                   }) => ({
                                                       basePrice,
+                                                      componentId,
                                                       meta,
+                                                      priceId,
                                                       price,
                                                       prodUid,
                                                       qty,

@@ -7,21 +7,26 @@ import { _modal } from "@/components/common/modal/provider";
 import { toast } from "sonner";
 import { salesOverviewStore } from "../store";
 import { copySalesUseCase } from "../../../use-case/sales-book-form-use-case";
+import { useRouter } from "next/navigation";
 
 export function CopyMenuAction({}) {
     const ctx = salesOverviewStore();
     const type = ctx.overview.type;
     const isDyke = ctx.overview.dyke;
+    const route = useRouter();
     async function copyAs(as: SalesType) {
         const orderId = ctx.overview.orderId;
         const result = await copySalesUseCase(orderId, as);
 
         if (result.link) {
-            // await __revalidatePath(`/sales-book/${as}s`);
-            toast.success(`Copied as ${as}`);
-        } else {
-            //
-            console.log(result);
+            toast.success(`Copied as ${as}`, {
+                // action: {
+                //     label: "open",
+                //     onClick(event) {
+                //         route.push(result.link);
+                //     },
+                // },
+            });
         }
     }
     return (
