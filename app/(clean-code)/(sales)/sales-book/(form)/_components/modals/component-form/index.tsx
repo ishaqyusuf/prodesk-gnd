@@ -15,6 +15,7 @@ import { Label } from "@/components/ui/label";
 import Button from "@/components/common/button";
 import { Image } from "lucide-react";
 import { openImgModal } from "../img-gallery-modal";
+import { FileUploader } from "@/components/common/file-uploader";
 
 interface Props {
     stepCls: StepHelperClass;
@@ -69,9 +70,13 @@ export function useInitContext(props: Props) {
             },
         });
     };
+    const onImgUpload = (assetId) => {
+        form.setValue("img", assetId);
+    };
     return {
         form,
         browseImg,
+        onImgUpload,
         save,
         img,
         title,
@@ -79,6 +84,7 @@ export function useInitContext(props: Props) {
 }
 export default function StepComponentFormModal(props: Props) {
     const ctx = useInitContext(props);
+
     return (
         <Context.Provider value={ctx}>
             <Modal.Content>
@@ -104,9 +110,33 @@ export default function StepComponentFormModal(props: Props) {
                         </Button>
                     </div>
                     <div className="flex justify-center">
-                        <div className="w-2/3">
-                            <ComponentImg src={ctx.img} aspectRatio={2 / 2} />
-                        </div>
+                        <FileUploader
+                            width={50}
+                            height={50}
+                            src={ctx.img}
+                            onUpload={ctx.onImgUpload}
+                            label="Product Image"
+                            folder="dyke"
+                        >
+                            <div className="w-2/3">
+                                <ComponentImg
+                                    src={ctx.img}
+                                    aspectRatio={2 / 2}
+                                />
+                                {/* <ProductImage
+                                    item={{
+                                        product: {
+                                            img,
+                                            meta: {
+                                                svg,
+                                                url,
+                                            },
+                                        },
+                                    }}
+                                /> */}
+                            </div>
+                        </FileUploader>
+                        {/* <ComponentImg src={ctx.img} aspectRatio={2 / 2} /> */}
                     </div>
                 </Form>
                 <Modal.Footer submitText="Save" onSubmit={ctx.save} />

@@ -25,15 +25,15 @@
         // "(midday)": true
         ".next": true,
         // ".vscode"
-        "node_modules": true,
+        "node_modules": true
 
-        "**/*.bin": true,
-        "**/sales-v2": true,
-        "**/(v1)": true,
-        "**/(v2)": true,
-        "**/(store*)": true,
-        "**/(dealer*)": true,
-        "**/_v*": true,
-        "**/(square*)": true
+        // "**/*.bin": true,
+        // "**/sales-v2": true,
+        // "**/(v1)": true,
+        // "**/(v2)": true,
+        // "**/(store*)": true,
+        // "**/(dealer*)": true,
+        // "**/_v*": true,
+        // "**/(square*)": true
     }
 }
