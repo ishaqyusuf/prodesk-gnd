@@ -45,7 +45,10 @@ export default function DeliveryCell({ item }: any) {
             }
         >
             {salesData.delivery.map((o) => (
-                <MenuItem onClick={() => updateDeliveryMode(o.value)} key={o}>
+                <MenuItem
+                    onClick={() => updateDeliveryMode(o.value)}
+                    key={o.text}
+                >
                     {o.text}
                 </MenuItem>
             ))}
