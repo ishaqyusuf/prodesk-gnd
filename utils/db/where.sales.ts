@@ -10,9 +10,15 @@ import { Prisma } from "@prisma/client";
 import { composeQuery } from "../../app/(clean-code)/(sales)/_common/utils/db-utils";
 import { QtyControlType } from "../../app/(clean-code)/(sales)/types";
 import { ftToIn } from "../../app/(clean-code)/(sales)/_common/utils/sales-utils";
-import { dateEquals, fixDbTime } from "@/app/(v1)/_actions/action-utils";
+import {
+    dateEquals,
+    dateQuery,
+    fixDbTime,
+} from "@/app/(v1)/_actions/action-utils";
 import { formatDate } from "@/lib/use-day";
 import dayjs from "dayjs";
+import { prisma } from "@/db";
+import salesData from "@/app/(clean-code)/(sales)/_common/utils/sales-data";
 
 export function whereSales(query: SearchParamsType) {
     const whereAnd: Prisma.SalesOrdersWhereInput[] = [];
@@ -35,8 +41,9 @@ export function whereSales(query: SearchParamsType) {
             },
         });
     const statType = (type: QtyControlType) => type;
-
-    if (query["dispatch.status"]) {
+    const status = query["dispatch.status"];
+    const invoice = query["invoice"];
+    if (status) {
         switch (query["dispatch.status"]) {
             case "backorder":
                 whereAnd.push({
@@ -57,6 +64,84 @@ export function whereSales(query: SearchParamsType) {
                             ],
                         },
                     },
+                });
+                break;
+        }
+    }
+    if (query["invoice"]) {
+        switch (query["invoice"]) {
+            case "paid":
+                whereAnd.push({
+                    AND: [
+                        {
+                            amountDue: 0,
+                        },
+                        {
+                            grandTotal: { gt: 0 },
+                        },
+                    ],
+                });
+                break;
+            case "late":
+                whereAnd.push({
+                    AND: [
+                        {
+                            amountDue: { gt: 1 },
+                        },
+                        {
+                            OR: [
+                                {
+                                    AND: [
+                                        {
+                                            paymentTerm: {
+                                                in: salesData.paymentTerms.map(
+                                                    (a) => a.value
+                                                ),
+                                            },
+                                        },
+                                        {
+                                            paymentDueDate: {
+                                                lte: new Date(),
+                                            },
+                                        },
+                                    ],
+                                },
+                                {
+                                    AND: [
+                                        {
+                                            paymentTerm: null,
+                                        },
+                                        {
+                                            createdAt: {
+                                                lte: dayjs()
+                                                    .subtract(3, "month")
+                                                    .toISOString(),
+                                            },
+                                        },
+                                    ],
+                                },
+                            ],
+                        },
+                    ],
+                });
+                break;
+            case "part-paid":
+                whereAnd.push({
+                    AND: [
+                        {
+                            amountDue: {
+                                gt: 1,
+                            },
+                        },
+                        {
+                            NOT: {
+                                amountDue: {
+                                    equals: prisma.salesOrders.fields
+                                        .grandTotal,
+                                },
+                            },
+                        },
+                    ],
                 });
                 break;
         }
@@ -156,6 +241,8 @@ export function whereSales(query: SearchParamsType) {
                         },
                     },
                 });
+                break;
+            case "invoice":
                 break;
         }
     });
