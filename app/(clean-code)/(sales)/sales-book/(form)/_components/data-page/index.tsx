@@ -4,9 +4,6 @@ import { Input, LineSwitch, Select } from "./line-input";
 import { useMemo } from "react";
 import { SettingsClass } from "../../_utils/helpers/zus/settings-class";
 import salesData from "@/app/(clean-code)/(sales)/_common/utils/sales-data";
-import { FieldPath } from "react-hook-form";
-import { SalesFormZusData } from "@/app/(clean-code)/(sales)/types";
-import { CustomerSearch } from "./customer-search";
 
 export function FormDataPage({}) {
     const zus = useFormDataStore();

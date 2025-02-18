@@ -167,7 +167,7 @@ function Dispatch({ item }: SalesCellProps) {
                 {salesData.delivery.map((o) => (
                     <MenuItem
                         onClick={() => updateDeliveryMode(o.value)}
-                        key={o}
+                        key={o.value}
                     >
                         {o.text}
                     </MenuItem>
