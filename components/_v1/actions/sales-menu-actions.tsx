@@ -136,7 +136,7 @@ export function OrderRowAction(props: IOrderRowProps) {
                                             onClick={() =>
                                                 updateDeliveryMode(o.value)
                                             }
-                                            key={o}
+                                            key={o.value}
                                         >
                                             {o.text}
                                         </MenuItem>
