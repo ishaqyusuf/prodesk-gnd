@@ -34,7 +34,7 @@ export function composeStepRouting(fdata: LoadSalesFormData) {
     fdata.rootStep.stepProducts.map((s) => {
         rootComponentsByKey[s.uid] = {
             uid: s.uid,
-            title: s.product.title,
+            title: s.product?.title,
             stepUid: fdata.rootStep.uid,
         };
     });
