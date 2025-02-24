@@ -18,7 +18,7 @@ export function NoteLine({ note }: { note: GetNotes[number] }) {
         toast.success("Note Deleted!");
     }
     return (
-        <div className="cursor-default flex flex-col items-start gap-2 rounded-lg border p-3 text-left text-sm transition-all hover:bg-accent my-1.5">
+        <div className="cursor-default flex flex-col items-start gap-s2 rounded-lg border p-3 text-left text-sm transition-all hover:bg-accent my-1.5">
             <div className="flex w-full flex-col gap-1">
                 <div className="flex items-center">
                     <div className="flex items-center gap-2">
@@ -27,7 +27,7 @@ export function NoteLine({ note }: { note: GetNotes[number] }) {
                         </div>
                         <span className="flex h-2 w-2 rounded-full bg-blue-600"></span>
                     </div>
-                    <div className="ml-auto text-xs text-muted-foreground">
+                    <div className="ml-auto text-xs font-bold text-muted-foreground">
                         {formatDate(note.createdAt)}
                     </div>
                 </div>
@@ -36,7 +36,7 @@ export function NoteLine({ note }: { note: GetNotes[number] }) {
                 </div> */}
             </div>
             <div className="flex">
-                <span className="line-clamp-2 text-xss text-muted-foreground">
+                <span className="line-clamp-2 text-base  text-muted-foreground font-semibold">
                     {note.note}
                 </span>
             </div>

@@ -1,6 +1,7 @@
 model NotePad {
     id              Int                  @unique @default(autoincrement())
     note            String?
+    color           String?
     subject         String?
     headline        String?
     createdById     Int?
