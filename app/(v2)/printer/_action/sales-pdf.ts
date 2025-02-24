@@ -4,13 +4,14 @@ import { SalesPrintProps } from "../sales/page";
 import QueryString from "qs";
 import { uploadPDFToCloudinary } from "@/modules/cloudinary";
 import { generateRandomString } from "@/lib/utils";
+import dayjs from "dayjs";
 
 export async function salesPdf(query: SalesPrintProps["searchParams"]) {
     const pdf = await geenrate(query);
     // const pdfDataUri = `data:application/pdf;base64,${pdf.toString("base64")}`;
     const cloudinary = await uploadPDFToCloudinary(
         pdf,
-        `${query.slugs}.pdf`,
+        `${query.slugs}-${dayjs().valueOf()}.pdf`,
         "sales-orders"
     );
     return {

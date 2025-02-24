@@ -20,21 +20,5 @@
     },
     "peacock.color": "#8858af",
     "workbench.panel.defaultLocation": "right",
-    "typescript.tsdk": "node_modules/typescript/lib",
-    "files.exclude": {
-        "**/*.bin": true,
-        "(midday)": true,
-        // "**/(public)": true,
-        "**/(download)": true,
-        // "**/(clean-code)": true,
-        "**/sales-v2": true,
-        "**/(v1)": true,
-        "**/(v2)": true,
-        "**/(store*)": true,
-        "**/(dealer*)": true,
-        "**/_v*": true,
-        "**/(square*)": true,
-        "trigger": true,
-        "node_modules": true
-    }
+    "typescript.tsdk": "node_modules/typescript/lib"
 }
