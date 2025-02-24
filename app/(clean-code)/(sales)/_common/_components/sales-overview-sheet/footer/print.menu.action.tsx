@@ -26,7 +26,12 @@ export function PrintMenuAction({ pdf }: Props) {
                 async () => {
                     const pdf = await salesPdf(query);
                     const link = document.createElement("a");
-                    link.href = pdf.url;
+                    // link.href = pdf.url;
+                    const downloadUrl =
+                        pdf.url.replace("/upload/", "/upload/fl_attachment:") +
+                        `/${query.slugs}.pdf`;
+
+                    link.href = downloadUrl;
                     link.download = `${query.slugs}.pdf`;
                     link.click();
                 },
