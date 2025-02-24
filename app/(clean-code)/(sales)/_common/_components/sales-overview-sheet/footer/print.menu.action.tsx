@@ -28,7 +28,7 @@ export function PrintMenuAction({ pdf }: Props) {
                     const link = document.createElement("a");
                     // link.href = pdf.url;
                     const downloadUrl =
-                        pdf.url.replace("/upload/", `/upload/${query.slugs}:`) +
+                        pdf.url.replace("/upload/", "/upload/fl_attachment:") +
                         `/${query.slugs}.pdf`;
 
                     link.href = downloadUrl;
