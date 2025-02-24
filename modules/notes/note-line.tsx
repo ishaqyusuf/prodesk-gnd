@@ -7,15 +7,48 @@ import { BellIcon } from "lucide-react";
 import { deleteNoteAction } from "./actions/delete-note-action";
 import { useNote } from "./context";
 import { toast } from "sonner";
+import { updateNoteAction } from "./actions/update-note-action";
+import { useState } from "react";
+import { cn } from "@/lib/utils";
+import { cva } from "class-variance-authority";
 
+const noteColorListVariant = cva("size-4 rounded", {
+    variants: {
+        color: {
+            red: "bg-red-500",
+            blue: "bg-blue-500",
+            green: "bg-green-500",
+        },
+    },
+    defaultVariants: {},
+});
+const noteColorVariant = cva(
+    "line-clamp-2 text-base  text-muted-foreground font-semibold",
+    {
+        variants: {
+            color: {
+                red: "text-red-600",
+                blue: "text-blue-500",
+                green: "text-green-500",
+            },
+        },
+        defaultVariants: {},
+    }
+);
 export function NoteLine({ note }: { note: GetNotes[number] }) {
     const event = note?.events?.[0];
     const ctx = useNote();
+    const [_note, _setNote] = useState(note);
     const pills = [note.subject, note.headline]?.filter(Boolean);
     async function deleteNote() {
         await deleteNoteAction(note.id);
         ctx.deleteNote(note.id);
         toast.success("Note Deleted!");
+    }
+    const colors = ["red", "blue", "green"];
+    async function changeColor(color: string) {
+        await updateNoteAction(note.id, { color });
+        _setNote((on) => ({ ...on, color }));
     }
     return (
         <div className="cursor-default flex flex-col items-start gap-s2 rounded-lg border p-3 text-left text-sm transition-all hover:bg-accent my-1.5">
@@ -36,7 +69,11 @@ export function NoteLine({ note }: { note: GetNotes[number] }) {
                 </div> */}
             </div>
             <div className="flex">
-                <span className="line-clamp-2 text-base  text-muted-foreground font-semibold">
+                <span
+                    className={cn(
+                        noteColorVariant({ color: _note.color as any })
+                    )}
+                >
                     {note.note}
                 </span>
             </div>
@@ -61,9 +98,25 @@ export function NoteLine({ note }: { note: GetNotes[number] }) {
                     <Menu.Item
                         SubMenu={
                             <>
-                                <Menu.Item>Red</Menu.Item>
-                                <Menu.Item>Blue</Menu.Item>
-                                <Menu.Item>Green</Menu.Item>
+                                {colors.map((color) => (
+                                    <Menu.Item
+                                        key={color}
+                                        shortCut={
+                                            <div
+                                                className={cn(
+                                                    noteColorListVariant({
+                                                        color: color as any,
+                                                    })
+                                                )}
+                                            ></div>
+                                        }
+                                        onClick={() => changeColor(color)}
+                                    >
+                                        <span className="capitalize">
+                                            {color}
+                                        </span>
+                                    </Menu.Item>
+                                ))}
                             </>
                         }
                     >
