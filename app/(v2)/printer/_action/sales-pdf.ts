@@ -20,21 +20,22 @@ export async function salesPdf(query: SalesPrintProps["searchParams"]) {
     };
 }
 async function geenrate(query: SalesPrintProps["searchParams"]) {
-    let browser, page, url;
+    // let   page, url;
     const puppeteer = require("puppeteer-core");
-    browser = await puppeteer.connect({
+    let browser = await puppeteer.connect({
         browserWSEndpoint: `wss://chrome.browserless.io?token=${env.BLESS_TOKEN}`,
     });
-    page = await browser.newPage();
+    let page = await browser.newPage();
+    await page.setCacheEnabled(false);
     // console.log(query);
-    url = `${env.NEXT_PUBLIC_APP_URL}/printer/sales?${QueryString.stringify(
+    let url = `${env.NEXT_PUBLIC_APP_URL}/printer/sales?${QueryString.stringify(
         query
     )}`;
+
     await page.goto(url, {
         waitUntil: "networkidle0",
     });
     // await timeout(2000);
-
     await page.emulateMediaType("print");
     const pdf = await page.pdf({
         format: "Letter",
