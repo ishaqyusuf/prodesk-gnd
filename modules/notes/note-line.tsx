@@ -57,6 +57,19 @@ export function NoteLine({ note }: { note: GetNotes[number] }) {
                 )}
                 <div className="flex-1"></div>
                 <ConfirmBtn trash onClick={deleteNote} />
+                <Menu>
+                    <Menu.Item
+                        SubMenu={
+                            <>
+                                <Menu.Item>Red</Menu.Item>
+                                <Menu.Item>Blue</Menu.Item>
+                                <Menu.Item>Green</Menu.Item>
+                            </>
+                        }
+                    >
+                        Note Color
+                    </Menu.Item>
+                </Menu>
             </div>
         </div>
     );
