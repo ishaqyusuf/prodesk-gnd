@@ -3,6 +3,7 @@ import { env } from "@/env.mjs";
 import { SalesPrintProps } from "../sales/page";
 import QueryString from "qs";
 import { uploadPDFToCloudinary } from "@/modules/cloudinary";
+import { generateRandomString } from "@/lib/utils";
 
 export async function salesPdf(query: SalesPrintProps["searchParams"]) {
     const pdf = await geenrate(query);
@@ -29,10 +30,14 @@ async function geenrate(query: SalesPrintProps["searchParams"]) {
     await page.setCacheEnabled(false);
     // console.log(query);
     let url = `${env.NEXT_PUBLIC_APP_URL}/printer/sales?${QueryString.stringify(
-        query
+        {
+            ...query,
+            rnd: generateRandomString(),
+        }
     )}`;
 
     await page.goto(url, {
+        // waitUntil: "domcontentloaded",
         waitUntil: "networkidle0",
     });
     // await timeout(2000);
