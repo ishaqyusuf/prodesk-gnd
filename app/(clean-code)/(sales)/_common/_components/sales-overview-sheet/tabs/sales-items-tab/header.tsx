@@ -33,6 +33,7 @@ export function ProductionHeader({ children = null }) {
                     <div className="flex-1"></div>
                     <Menu label="Options">
                         <Menu.Item
+                            disabled
                             SubMenu={
                                 <>
                                     <Menu.Item>All Production</Menu.Item>
