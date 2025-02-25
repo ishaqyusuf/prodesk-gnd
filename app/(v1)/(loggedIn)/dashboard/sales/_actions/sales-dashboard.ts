@@ -104,6 +104,7 @@ export async function salesDashboardAction(): Promise<ISalesDashboard> {
         // where: {}
     });
     response.recentSales = recentSales as any;
+    return response;
     const prismaKeys = {
         tableCounts: {},
         imports: [],

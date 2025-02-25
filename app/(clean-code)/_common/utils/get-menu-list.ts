@@ -62,7 +62,7 @@ export function getMenuList(pathname: string, session): any[] {
 
     const canSales = or(isAdmin, and("viewSales"));
     addGroup("")
-        .menu("Dashboard", "/sales-book/dashboard", "dashboard", canSales)
+        .menu("Dashboard", "/sales-book", "dashboard", canSales)
         .commit();
     addGroup("Sales")
         .menu("Accounting", "/sales-book/accounting", "billing", canSales)

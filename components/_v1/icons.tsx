@@ -81,6 +81,8 @@ import {
     MoreHorizontal,
     Search,
     Filter,
+    TrendingUp,
+    TrendingDown,
 } from "lucide-react";
 import Image from "next/image";
 import logo from "@/public/logo_mini.png";
@@ -104,6 +106,8 @@ export const Icons = {
     X: Cross2Icon,
     calendar: Calendar,
     dollarSign: DollarSign,
+    TrendingUp: TrendingUp,
+    TrendingDown: TrendingDown,
     Logo: () => <Image alt="" src={logo2} width={48} height={48} />,
     LogoLg: () => <Image alt="" src={logo2} width={120} />,
     logoLg: ({ width = 120 }) => (
