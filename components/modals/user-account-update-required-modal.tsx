@@ -48,19 +48,19 @@ export default function UserAccountUpdateRequiredModal({}) {
     const updateRequired = form.watch("updateRequired");
     useEffect(() => {
         setTimeout(() => {
-            checkUpdateRequiredStatus()
-                .then(({ name, email = "", id, phoneNo = "" }) => {
-                    if (!name || !email || !phoneNo) {
-                        form.reset({
-                            id,
-                            name,
-                            email,
-                            phoneNo,
-                            updateRequired: true,
-                        });
-                    }
-                })
-                .catch((e) => {});
+            // checkUpdateRequiredStatus()
+            //     .then(({ name, email = "", id, phoneNo = "" }) => {
+            //         if (!name || !email || !phoneNo) {
+            //             form.reset({
+            //                 id,
+            //                 name,
+            //                 email,
+            //                 phoneNo,
+            //                 updateRequired: true,
+            //             });
+            //         }
+            //     })
+            //     .catch((e) => {});
         }, 2000);
     }, []);
     async function updateAccount() {

@@ -186,7 +186,21 @@ export async function loginAction({ email, password }) {
                 can[camel(p.name) as any] =
                     permissionIds.includes(p.id) || _role?.name == "Admin";
             });
+        await prisma.session.deleteMany({
+            where: {
+                userId: user.id,
+            },
+        });
+        const newSession = await prisma.session.create({
+            data: {
+                sessionToken: crypto.randomUUID(),
+                userId: user.id,
+                expires: new Date(Date.now() + 60 * 60 * 1000), // 1 hour session
+            },
+        });
+
         return {
+            sessionId: newSession.id,
             user,
             can,
             role,

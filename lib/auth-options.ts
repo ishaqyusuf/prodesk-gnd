@@ -11,6 +11,7 @@ declare module "next-auth" {
         user: Users;
         can: ICan;
         role: Roles;
+        sessionId?: string;
     }
 
     interface Session extends DefaultSession {
@@ -31,7 +32,9 @@ declare module "next-auth/jwt" {
 export const authOptions: NextAuthOptions = {
     session: {
         strategy: "jwt",
+        // strategy: "database",
     },
+
     pages: {
         signIn: "/login",
         error: "/login?error=login+failed",
@@ -44,19 +47,44 @@ export const authOptions: NextAuthOptions = {
     secret: process.env.SECRET,
     callbacks: {
         jwt: async ({ token, user: cred }) => {
-            // console.log("CRED");
-            // console.log(token?.jti);
-            // console.log(cred)
             if (cred) {
-                const { role, can, user } = cred;
+                const { role, can, user, sessionId } = cred;
                 token.user = user;
                 token.can = can;
                 token.role = role;
+                token.sessionId = sessionId;
+            }
+            // console.log("JWT-TOKEN", token);
+
+            if (!token.sessionId) return null;
+            if (token.sessionId) {
+                const session = await prisma.session.findUnique({
+                    where: { id: token.sessionId as any },
+                });
+                // console.log("SESSION", session);
+                if (!session) {
+                    // Session not found, sign out
+                    // console.log("SESSION NOT FOUND");
+                    return {} as any;
+                }
+
+                // if (new Date(session.expires) < new Date()) {
+                //     // Session expired, create a new one
+                //     const newSession = await prisma.session.create({
+                //         data: {
+                //             userId: token.user.id,
+                //             sessionToken: crypto.randomUUID(),
+                //             expires: new Date(Date.now() + 60 * 60 * 1000), // Extend for another hour
+                //         },
+                //     });
+                //     token.sessionId = newSession.id;
+                // }
             }
             return token;
         },
         session({ session, user, token }) {
             // console.log("Session");
+            // console.log("Session", session);
             if (session.user) {
                 session.user = token.user;
                 session.role = token.role;

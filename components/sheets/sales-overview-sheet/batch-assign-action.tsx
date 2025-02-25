@@ -62,10 +62,11 @@ export function BatchAssignAction() {
                         {" selected"}
                     </Label>
                     <AssignTo />
+                    <AssignBtn />
                     <Button
                         size="xs"
                         variant="ghost"
-                        className="rounded-none"
+                        className="rounded-none hover:bg-red-500 hover:text-white"
                         onClick={(e) => {
                             // ctx.form.setValue("selectMode", false);
                             ctx.form.reset({
@@ -83,6 +84,17 @@ export function BatchAssignAction() {
         </TabFloatingAction>
     );
 }
+function AssignBtn() {
+    return (
+        <Button
+            size="xs"
+            className="rounded-none hover:bg-green-500 hover:text-white"
+            variant="ghost"
+        >
+            Save
+        </Button>
+    );
+}
 function AssignTo() {
     const workers = useEffectLoader(getSalesProdWorkersAsSelectOption);
     const form = useFormContext();
@@ -93,7 +105,11 @@ function AssignTo() {
     return (
         <Menu
             Trigger={
-                <span className="whitespace-nowrap cursor-pointer">
+                <Button
+                    size="xs"
+                    className="whitespace-nowrap p-0 rounded-none text-start"
+                    variant="ghost"
+                >
                     <Label className="font-mono px-2  w-24 line-clamp-1">
                         {AssignTo ? (
                             <span className="">{assignedTo?.label}</span>
@@ -103,7 +119,7 @@ function AssignTo() {
                         {/* {" of "} */}
                         {/* <span className="font-bold">{total}</span> */}
                     </Label>
-                </span>
+                </Button>
             }
         >
             {workers?.data?.map((worker) => (
