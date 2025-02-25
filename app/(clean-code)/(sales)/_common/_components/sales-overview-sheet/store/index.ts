@@ -11,6 +11,7 @@ import { SelectionType } from "../tabs/sales-shipping-form/ctx";
 export type SalesTabs =
     | "sales_info"
     | "production"
+    | "productions"
     | "items"
     | "payments"
     | "production_note"
@@ -55,6 +56,7 @@ export const salesTabs = {
     admin: [
         createTab("sales_info"),
         createTab("items"),
+        createTab("productions"),
         // createTab("payments"),
         createTab("transactions"),
         createTab("shipping"),

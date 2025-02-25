@@ -138,6 +138,9 @@ function PrimaryTab({}) {
                 <TabContent tabName="items">
                     <SalesItemsTab />
                 </TabContent>
+                <TabContent tabName="productions">
+                    <SalesItemsTab productionMode />
+                </TabContent>
                 <TabContent tabName="shipping">
                     <SalesShippingTab />
                 </TabContent>

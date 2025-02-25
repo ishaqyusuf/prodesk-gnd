@@ -35,6 +35,7 @@ export const loaders: Partial<{ [k in keyof Data]: any }> = {
 export const tabLoaders: Partial<{ [k in SalesTabs]: (keyof Data)[] }> = {
     sales_info: ["overview"],
     items: ["overview", "itemOverview"],
+    productions: ["overview", "itemOverview"],
     shipping: ["overview", "shipping"],
     shipping_form: ["overview", "dispatchUsers", "shipping", "itemOverview"],
 };

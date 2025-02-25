@@ -6,17 +6,28 @@ import Money from "@/components/_v1/money";
 import { Badge } from "@/components/ui/badge";
 import { ItemOverview } from "./item-overview";
 import { ProductionHeader } from "./header";
+import { Label } from "@/components/ui/label";
 
-export function SalesItemsTab({}) {
+export function SalesItemsTab({ productionMode = false }) {
     const store = salesOverviewStore();
     const itemOverview = store.itemOverview;
     if (!itemOverview) return;
+    const items = itemOverview?.items?.filter((item) =>
+        productionMode ? item.produceable : true
+    );
+    const noItem = items?.length == 0;
+    if (noItem)
+        return (
+            <div className="flex flex-col items-center justify-center h-[50vh]">
+                <Label>No item</Label>
+            </div>
+        );
     return (
         <div>
             <AdminOnly>
                 <ProductionHeader />
             </AdminOnly>
-            {itemOverview?.items?.map((item) => (
+            {items.map((item) => (
                 <div className="flex flex-col gap-2" key={item.itemControlUid}>
                     {item.primary && item.sectionTitle && (
                         <div className="uppercase py-2 bg-muted text-center font-mono font-semibold">
