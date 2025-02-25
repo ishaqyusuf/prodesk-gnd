@@ -72,11 +72,11 @@ function BaseMenu(
     }));
     return (
         <DropdownMenu
-            open={onOpenChanged ? open : _open}
-            onOpenChange={(e) => {
-                _onOpenChanged(e);
-                onOpenChanged?.(e);
-            }}
+        // open={onOpenChanged ? open : _open}
+        // onOpenChange={(e) => {
+        //     _onOpenChanged(e);
+        //     onOpenChanged?.(e);
+        // }}
         >
             <DropdownMenuTrigger asChild>
                 {Trigger ? (
