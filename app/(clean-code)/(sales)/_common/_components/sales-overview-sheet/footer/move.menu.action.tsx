@@ -3,6 +3,7 @@ import { Move } from "lucide-react";
 import { moveOrderUseCase } from "../../../use-case/sales-book-form-use-case";
 import { toast } from "sonner";
 import { salesOverviewStore } from "../store";
+import { revalidateTable } from "@/components/(clean-code)/data-table/use-infinity-data-table";
 
 export function MoveMenuAction({}) {
     const ctx = salesOverviewStore();
@@ -20,6 +21,7 @@ export function MoveMenuAction({}) {
         }
 
         toast.success(`Moved to ${to}`, {});
+        revalidateTable();
         // ctx.refreshList();
         // ctx.closeModal();
         toast.success("Success");

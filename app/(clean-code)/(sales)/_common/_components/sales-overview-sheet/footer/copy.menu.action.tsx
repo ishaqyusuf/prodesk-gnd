@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { salesOverviewStore } from "../store";
 import { copySalesUseCase } from "../../../use-case/sales-book-form-use-case";
 import { useRouter } from "next/navigation";
+import { revalidateTable } from "@/components/(clean-code)/data-table/use-infinity-data-table";
 
 export function CopyMenuAction({}) {
     const ctx = salesOverviewStore();
@@ -27,6 +28,7 @@ export function CopyMenuAction({}) {
                 //     },
                 // },
             });
+            revalidateTable();
         }
     }
     return (

@@ -4,6 +4,8 @@ import { SalesPrintProps } from "@/app/(v2)/printer/sales/page";
 import { toast } from "sonner";
 import { salesPdf } from "@/app/(v2)/printer/_action/sales-pdf";
 import { salesOverviewStore } from "../store";
+import QueryString from "qs";
+import { env } from "@/env.mjs";
 
 interface Props {
     pdf?: boolean;
@@ -24,12 +26,21 @@ export function PrintMenuAction({ pdf }: Props) {
         else {
             toast.promise(
                 async () => {
-                    const pdf = await salesPdf(query);
+                    // const pdf = await salesPdf(query);
+                    const pdf = await fetch(
+                        `${
+                            env.NEXT_PUBLIC_NODE_ENV == "production"
+                                ? ""
+                                : "https://gnd-prodesk.vercel.app"
+                        }/api/pdf/sales?${QueryString.stringify(query)}`
+                    ).then((res) => res.json());
+                    console.log(pdf);
                     const link = document.createElement("a");
                     // link.href = pdf.url;
-                    const downloadUrl =
-                        pdf.url.replace("/upload/", "/upload/fl_attachment:") +
-                        `/${query.slugs}.pdf`;
+                    const downloadUrl = pdf.url.replace(
+                        "/fl_attachment/",
+                        `/fl_attachment:${query.slugs}/`
+                    ); //+ `/${query.slugs}.pdf`;
 
                     link.href = downloadUrl;
                     link.download = `${query.slugs}.pdf`;
