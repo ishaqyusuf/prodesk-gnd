@@ -38,6 +38,7 @@ export function useItemsTabContext() {
         noItem,
         ...watch,
         form,
+        selectionArray,
         selectCount: selectionArray.fields.length,
         isSelected(uid) {
             return selectionArray.fields.some((field) => field.itemUid == uid);
