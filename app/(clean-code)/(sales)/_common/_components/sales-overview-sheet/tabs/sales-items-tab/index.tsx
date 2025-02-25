@@ -7,132 +7,156 @@ import { Badge } from "@/components/ui/badge";
 import { ItemOverview } from "./item-overview";
 import { ProductionHeader } from "./header";
 import { Label } from "@/components/ui/label";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useState } from "react";
 
 export function SalesItemsTab({ productionMode = false }) {
     const store = salesOverviewStore();
     const itemOverview = store.itemOverview;
+    const [tab, setTab] = useState("production");
     if (!itemOverview) return;
+    productionMode = tab == "production";
     const items = itemOverview?.items?.filter((item) =>
         productionMode ? item.produceable : true
     );
     const noItem = items?.length == 0;
-    if (noItem)
-        return (
-            <div className="flex flex-col items-center justify-center h-[50vh]">
-                <Label>No item</Label>
-            </div>
-        );
+
     return (
         <div>
             <AdminOnly>
-                <ProductionHeader />
+                <ProductionHeader>
+                    <Tabs value={tab} onValueChange={setTab}>
+                        <TabsList>
+                            <TabsTrigger value="production">
+                                Production Items
+                            </TabsTrigger>
+                            <TabsTrigger value="all-items">
+                                All Items
+                            </TabsTrigger>
+                        </TabsList>
+                    </Tabs>
+                </ProductionHeader>
             </AdminOnly>
-            {items.map((item) => (
-                <div className="flex flex-col gap-2" key={item.itemControlUid}>
-                    {item.primary && item.sectionTitle && (
-                        <div className="uppercase py-2 bg-muted text-center font-mono font-semibold">
-                            {item.sectionTitle}
-                        </div>
-                    )}
-                    {!item.hidden && item.status?.qty?.total && (
-                        <div
-                            className={cn(
-                                item.sectionTitle && "",
-                                "border border-transparent border-b-muted-foreground/20 rounded-b-none rounded-lg",
-                                item.itemControlUid != store.itemViewId
-                                    ? "cursor-pointer hover:bg-muted/80 hover:shadow-lg hover:border-muted-foreground/30"
-                                    : "border border-muted-foreground/60  shadow-sm bg-muted/30"
-                            )}
-                        >
-                            <div
-                                className={cn("p-2 pt-4 text-sm", "space-y-2")}
-                                onClick={() => {
-                                    store.update(
-                                        "itemViewId",
-                                        item.itemControlUid
-                                    );
-                                    store.update("itemView", item);
-                                }}
-                            >
-                                <div className="">
-                                    <div className="flex gap-6 justify-between">
-                                        <div className="flex-1 font-semibold font-mono uppercase">
-                                            {item.title}
-                                        </div>
-                                        <div className="font-mono text-sm font-medium">
-                                            <AdminOnly>
-                                                <Money value={item.totalCost} />
-                                            </AdminOnly>
-                                        </div>
-                                    </div>
-                                    <div className="uppercase font-mono text-muted-foreground font-semibold">
-                                        <span>{item.inlineSubtitle}</span>
-                                    </div>
-                                </div>
-                                {item.lineConfigs?.length && (
-                                    <div className="flex gap-4 justify-end">
-                                        {item.lineConfigs?.map((c) => (
-                                            <Badge
-                                                key={c}
-                                                className="font-mono font-semibold"
-                                                variant="outline"
-                                            >
-                                                {c}
-                                            </Badge>
-                                        ))}
-                                    </div>
-                                )}
-
-                                <div className="flex pt-2 gap-6">
-                                    <div className="flex-1 flex justify-end">
-                                        {item.produceable && (
-                                            <>
-                                                <div className="flex-1">
-                                                    <Pill
-                                                        label="Assigned"
-                                                        value={`${item.status?.prodAssigned?.total}/${item.status?.qty?.total}`}
-                                                    />
-                                                </div>
-                                                <div className="flex-1">
-                                                    <Pill
-                                                        label="Completed"
-                                                        value={`${item.status?.prodCompleted?.total}/${item.status?.qty?.total}`}
-                                                    />
-                                                </div>
-                                            </>
-                                        )}
-                                        {item.shippable && (
-                                            <div className="flex-1">
-                                                <Pill
-                                                    label="FulFilled"
-                                                    value={`${sum([
-                                                        item.status
-                                                            ?.dispatchCompleted
-                                                            ?.total,
-                                                        item.status
-                                                            ?.dispatchAssigned
-                                                            ?.total,
-                                                        item.status
-                                                            ?.dispatchInProgress
-                                                            ?.total,
-                                                    ])}/${
-                                                        item.status?.qty
-                                                            ?.itemTotal
-                                                    }`}
-                                                />
-                                            </div>
-                                        )}
-                                    </div>
-                                    <div className=""></div>
-                                </div>
-                            </div>
-                            {item.itemControlUid == store.itemViewId && (
-                                <ItemOverview />
-                            )}
-                        </div>
-                    )}
+            {noItem ? (
+                <div className="flex flex-col items-center justify-center h-[50vh]">
+                    <Label>No item</Label>
                 </div>
-            ))}
+            ) : (
+                items.map((item) => (
+                    <div
+                        className="flex flex-col gap-2"
+                        key={item.itemControlUid}
+                    >
+                        {item.primary && item.sectionTitle && (
+                            <div className="uppercase py-2 bg-muted text-center font-mono font-semibold">
+                                {item.sectionTitle}
+                            </div>
+                        )}
+                        {!item.hidden && item.status?.qty?.total && (
+                            <div
+                                className={cn(
+                                    item.sectionTitle && "",
+                                    "border border-transparent border-b-muted-foreground/20 rounded-b-none rounded-lg",
+                                    item.itemControlUid != store.itemViewId
+                                        ? "cursor-pointer hover:bg-muted/80 hover:shadow-lg hover:border-muted-foreground/30"
+                                        : "border border-muted-foreground/60  shadow-sm bg-muted/30"
+                                )}
+                            >
+                                <div
+                                    className={cn(
+                                        "p-2 pt-4 text-sm",
+                                        "space-y-2"
+                                    )}
+                                    onClick={() => {
+                                        store.update(
+                                            "itemViewId",
+                                            item.itemControlUid
+                                        );
+                                        store.update("itemView", item);
+                                    }}
+                                >
+                                    <div className="">
+                                        <div className="flex gap-6 justify-between">
+                                            <div className="flex-1 font-semibold font-mono uppercase">
+                                                {item.title}
+                                            </div>
+                                            <div className="font-mono text-sm font-medium">
+                                                <AdminOnly>
+                                                    <Money
+                                                        value={item.totalCost}
+                                                    />
+                                                </AdminOnly>
+                                            </div>
+                                        </div>
+                                        <div className="uppercase font-mono text-muted-foreground font-semibold">
+                                            <span>{item.inlineSubtitle}</span>
+                                        </div>
+                                    </div>
+                                    {item.lineConfigs?.length && (
+                                        <div className="flex gap-4 justify-end">
+                                            {item.lineConfigs?.map((c) => (
+                                                <Badge
+                                                    key={c}
+                                                    className="font-mono font-semibold"
+                                                    variant="outline"
+                                                >
+                                                    {c}
+                                                </Badge>
+                                            ))}
+                                        </div>
+                                    )}
+
+                                    <div className="flex pt-2 gap-6">
+                                        <div className="flex-1 flex justify-end">
+                                            {item.produceable && (
+                                                <>
+                                                    <div className="flex-1">
+                                                        <Pill
+                                                            label="Assigned"
+                                                            value={`${item.status?.prodAssigned?.total}/${item.status?.qty?.total}`}
+                                                        />
+                                                    </div>
+                                                    <div className="flex-1">
+                                                        <Pill
+                                                            label="Completed"
+                                                            value={`${item.status?.prodCompleted?.total}/${item.status?.qty?.total}`}
+                                                        />
+                                                    </div>
+                                                </>
+                                            )}
+                                            {item.shippable && (
+                                                <div className="flex-1">
+                                                    <Pill
+                                                        label="FulFilled"
+                                                        value={`${sum([
+                                                            item.status
+                                                                ?.dispatchCompleted
+                                                                ?.total,
+                                                            item.status
+                                                                ?.dispatchAssigned
+                                                                ?.total,
+                                                            item.status
+                                                                ?.dispatchInProgress
+                                                                ?.total,
+                                                        ])}/${
+                                                            item.status?.qty
+                                                                ?.itemTotal
+                                                        }`}
+                                                    />
+                                                </div>
+                                            )}
+                                        </div>
+                                        <div className=""></div>
+                                    </div>
+                                </div>
+                                {item.itemControlUid == store.itemViewId && (
+                                    <ItemOverview />
+                                )}
+                            </div>
+                        )}
+                    </div>
+                ))
+            )}
         </div>
     );
 }
