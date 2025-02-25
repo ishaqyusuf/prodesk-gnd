@@ -23,18 +23,7 @@ export function SalesItemsTab({ productionMode = false }) {
     return (
         <ItemsTabProvider value={ctx}>
             <AdminOnly>
-                <ProductionHeader>
-                    <Tabs value={tab} onValueChange={setTab}>
-                        <TabsList>
-                            <TabsTrigger value="production">
-                                Production Items
-                            </TabsTrigger>
-                            <TabsTrigger value="all-items">
-                                All Items
-                            </TabsTrigger>
-                        </TabsList>
-                    </Tabs>
-                </ProductionHeader>
+                <ProductionHeader />
             </AdminOnly>
             {noItem ? (
                 <div className="flex flex-col items-center justify-center h-[50vh]">
@@ -58,7 +47,8 @@ export function SalesItemsTab({ productionMode = false }) {
                                     "border border-transparent border-b-muted-foreground/20 rounded-b-none rounded-lg",
                                     item.itemControlUid != store.itemViewId
                                         ? "cursor-pointer hover:bg-muted/80 hover:shadow-lg hover:border-muted-foreground/30"
-                                        : "border border-muted-foreground/60  shadow-sm bg-muted/30"
+                                        : "border border-muted-foreground/60 shadow-sm bg-muted/30",
+                                    ctx.selectMode && "cursor-pointer"
                                 )}
                             >
                                 <div
@@ -67,6 +57,12 @@ export function SalesItemsTab({ productionMode = false }) {
                                         "space-y-2"
                                     )}
                                     onClick={() => {
+                                        if (ctx.selectMode) {
+                                            ctx.toggeItemSelection(
+                                                item.itemControlUid
+                                            );
+                                            return;
+                                        }
                                         store.update(
                                             "itemViewId",
                                             item.itemControlUid
@@ -78,6 +74,13 @@ export function SalesItemsTab({ productionMode = false }) {
                                         <div className="flex gap-6 justify-between">
                                             <div className="flex-1 font-semibold font-mono uppercase">
                                                 {item.title}
+                                                <span>
+                                                    {ctx.isSelected(
+                                                        item.itemControlUid
+                                                    ) && (
+                                                        <Badge>Selected</Badge>
+                                                    )}
+                                                </span>
                                             </div>
                                             <div className="font-mono text-sm font-medium">
                                                 <AdminOnly>
@@ -148,9 +151,8 @@ export function SalesItemsTab({ productionMode = false }) {
                                         <div className=""></div>
                                     </div>
                                 </div>
-                                {item.itemControlUid == store.itemViewId && (
-                                    <ItemOverview />
-                                )}
+                                {item.itemControlUid == store.itemViewId &&
+                                    !ctx.selectMode && <ItemOverview />}
                             </div>
                         )}
                     </div>
