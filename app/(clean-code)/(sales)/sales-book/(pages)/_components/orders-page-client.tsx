@@ -31,6 +31,7 @@ import { useMemo } from "react";
 import { deleteSalesByOrderIds } from "../../../_common/data-actions/sales-actions";
 import DevOnly from "@/_v2/components/common/dev-only";
 import { useOpenCustomerQuery } from "@/components/sheets/customer-overview-sheet";
+import { useSalesOverviewQuery } from "@/hooks/use-sales-overview-query";
 
 export default function OrdersPageClient({
     filterFields,
@@ -65,11 +66,13 @@ export default function OrdersPageClient({
         },
     });
     const customerSheet = useOpenCustomerQuery();
+    const overviewQuery = useSalesOverviewQuery();
     return (
         <div className="bg-white">
             <DataTable.Infinity
                 checkable
                 itemViewFn={(data) => {
+                    // overviewQuery.open(data.id, "sales");
                     openSalesOverview({
                         salesId: data.id,
                     });

@@ -8,21 +8,20 @@ import { ItemOverview } from "./item-overview";
 import { ProductionHeader } from "./header";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useState } from "react";
+import {
+    ItemsTabProvider,
+    useItemsTabContext,
+} from "@/components/sheets/sales-overview-sheet/items-tab-context";
 
 export function SalesItemsTab({ productionMode = false }) {
     const store = salesOverviewStore();
+    const ctx = useItemsTabContext();
     const itemOverview = store.itemOverview;
-    const [tab, setTab] = useState("production");
     if (!itemOverview) return;
-    productionMode = tab == "production";
-    const items = itemOverview?.items?.filter((item) =>
-        productionMode ? item.produceable : true
-    );
-    const noItem = items?.length == 0;
+    const { noItem, items, tab, setTab } = ctx;
 
     return (
-        <div>
+        <ItemsTabProvider value={ctx}>
             <AdminOnly>
                 <ProductionHeader>
                     <Tabs value={tab} onValueChange={setTab}>
@@ -157,7 +156,7 @@ export function SalesItemsTab({ productionMode = false }) {
                     </div>
                 ))
             )}
-        </div>
+        </ItemsTabProvider>
     );
 }
 function Pill({ label, value }) {

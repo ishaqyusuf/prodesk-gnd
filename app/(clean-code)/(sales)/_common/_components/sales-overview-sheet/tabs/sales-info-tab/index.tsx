@@ -11,10 +11,10 @@ import { composeSalesUrl } from "../../../../utils/sales-utils";
 import { openCustomerOverviewSheet } from "../../../customer-overview-sheet";
 import Note from "@/modules/notes";
 import { noteTagFilter } from "@/modules/notes/utils";
-import { LaborCostInline } from "@/components/sales-overview/labor-cost-inline";
-import { PoInline } from "@/components/sales-overview/po-inline";
-import { SalesDateInline } from "@/components/sales-overview/sales-date-inline";
-import { SalesDeliveryCostInline } from "@/components/sales-overview/sales-delivery-cost-inline";
+import { LaborCostInline } from "@/components/sheets/sales-overview-sheet/labor-cost-inline";
+import { PoInline } from "@/components/sheets/sales-overview-sheet/po-inline";
+import { SalesDateInline } from "@/components/sheets/sales-overview-sheet/sales-date-inline";
+import { SalesDeliveryCostInline } from "@/components/sheets/sales-overview-sheet/sales-delivery-cost-inline";
 import { SalesInvoiceDueStatus } from "@/components/sales-invoice-due-status";
 
 export function SalesInfoTab({}) {

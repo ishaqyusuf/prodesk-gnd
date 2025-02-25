@@ -4,6 +4,7 @@ import SidebarLayout from "../../../components/(clean-code)/side-bar-layout";
 import BackwardCompat from "./_backward-compat";
 import { CustomerOverviewSheet } from "@/components/sheets/customer-overview-sheet";
 import { SalesPreviewModal } from "@/components/modals/sales-preview-modal";
+// import SalesOverviewSheet from "@/components/sheets/sales-overview-sheet";
 
 export default function Layout({ children }) {
     return (
@@ -14,6 +15,7 @@ export default function Layout({ children }) {
             </ContentLayout>
             <CustomerOverviewSheet />
             <SalesPreviewModal />
+            {/* <SalesOverviewSheet /> */}
         </SidebarLayout>
     );
 }

@@ -5,12 +5,12 @@ import { salesOverviewStore } from "@/app/(clean-code)/(sales)/_common/_componen
 import { InfoLine } from "@/app/(clean-code)/(sales)/_common/_components/sales-overview-sheet/tabs/sales-info-tab";
 
 import { useState } from "react";
-import { DatePicker } from "../_v1/date-range-picker";
+import { DatePicker } from "../../_v1/date-range-picker";
 import { useAction } from "next-safe-action/hooks";
 import { updateSalesDateAction } from "@/actions/update-sales-date-action";
 import { toast } from "sonner";
 import { refreshTabData } from "@/app/(clean-code)/(sales)/_common/_components/sales-overview-sheet/helper";
-import { revalidateTable } from "../(clean-code)/data-table/use-infinity-data-table";
+import { revalidateTable } from "../../(clean-code)/data-table/use-infinity-data-table";
 
 export function SalesDateInline() {
     const store = salesOverviewStore();

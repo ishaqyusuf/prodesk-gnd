@@ -1,8 +1,10 @@
 import { Menu } from "@/components/(clean-code)/menu";
 import Portal from "@/components/_v1/portal";
-import Button from "@/components/common/button";
+import { salesOverviewStore } from "../../store";
 
 export function ProductionHeader({ children = null }) {
+    const store = salesOverviewStore();
+
     return (
         <Portal nodeId={"tabHeader"}>
             <div className="flex py-2 border-b">
