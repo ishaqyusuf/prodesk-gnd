@@ -2,12 +2,13 @@
 
 # WED, FEB 26 
 - delete payment
+- new sales dashboard
 <!-- - change alert position -->
-- invoice page footer: show in footer.
-- sales print: remove footer on every page
+- invoice page footer: show amount paid in footer.
+<!-- - sales print: remove footer on every page -->
 - emails: create and send, send reminder etc.
 - remember customer tier when changed
 - sales filters:
   - production assignment
-  - dispatch status
+  - dispatch status ``
   <!-- - invoice filter -->

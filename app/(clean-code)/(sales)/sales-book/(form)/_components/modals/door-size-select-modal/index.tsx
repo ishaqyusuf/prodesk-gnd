@@ -159,7 +159,7 @@ function Row({ variant }) {
     return (
         <TableRow className={cn()}>
             <TableCell className="">
-                <Label className="whitespace-nowrap">{variant.size}</Label>
+                <Label className="whitespace-nowrap">{variant.sizeIn}</Label>
             </TableCell>
             <TableCell>
                 <AdminControl fallback={<Money value={salesPrice} />}>

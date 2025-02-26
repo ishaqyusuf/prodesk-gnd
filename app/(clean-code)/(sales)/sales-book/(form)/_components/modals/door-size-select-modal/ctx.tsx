@@ -1,4 +1,4 @@
-import { cn, generateRandomString, sum, toNumber } from "@/lib/utils";
+import { cn, generateRandomString, inToFt, sum, toNumber } from "@/lib/utils";
 
 import { createContext, useContext, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -7,6 +7,7 @@ import { _modal } from "@/components/common/modal/provider";
 import { ComponentHelperClass } from "../../../_utils/helpers/zus/step-component-class";
 import { formatMoney } from "@/lib/use-number";
 import { Door } from "../door-swap-modal";
+import { ftToIn } from "@/app/(clean-code)/(sales)/_common/utils/sales-utils";
 
 export const useCtx = () => useContext(DoorSizeSelectContext);
 export const DoorSizeSelectContext =
@@ -41,7 +42,7 @@ export function useInitContext(cls: ComponentHelperClass, door?: Door) {
             )?.path;
             const sizeData =
                 groupItem?.form?.[swapPath] || groupItem?.form?.[path];
-            console.log({ swapPath, sizeData });
+            // console.log({ swapPath, sizeData });
             const basePrice =
                 priceModel?.formData?.priceVariants?.[sl.size]?.price;
             let salesPrice = cls.calculateSales(basePrice);
@@ -58,6 +59,10 @@ export function useInitContext(cls: ComponentHelperClass, door?: Door) {
             return {
                 path,
                 ...sl,
+                sizeIn: sl.size
+                    ?.split("x")
+                    ?.map((s) => ftToIn(s?.trim())?.replace("in", '"'))
+                    .join(" x "),
             };
         });
         return { selections, sList, priceModel, routeConfig };
