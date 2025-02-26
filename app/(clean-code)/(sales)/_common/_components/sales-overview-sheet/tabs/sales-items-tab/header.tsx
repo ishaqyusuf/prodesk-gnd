@@ -2,7 +2,6 @@ import { Menu } from "@/components/(clean-code)/menu";
 import Portal from "@/components/_v1/portal";
 import { salesOverviewStore } from "../../store";
 import { useSalesOverviewItemsTab } from "@/components/sheets/sales-overview-sheet/items-tab-context";
-import { AdminOnly } from "../../helper";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
     BatchAssignAction,
