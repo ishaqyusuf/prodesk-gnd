@@ -277,6 +277,21 @@ export function whereSales(query: SearchParamsType) {
             // case ''
             break;
     }
+    switch (query["production.assignment"]) {
+        case "all assigned":
+            break;
+        case "not assigned":
+            whereAnd.push({
+                assignments: {
+                    none: {
+                        deletedAt: null,
+                    },
+                },
+            });
+            break;
+        case "part assigned":
+            break;
+    }
     return composeQuery(whereAnd);
 }
 function whereSearch(query): Prisma.SalesOrdersWhereInput | null {

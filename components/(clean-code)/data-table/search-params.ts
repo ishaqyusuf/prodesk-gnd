@@ -14,6 +14,7 @@ import { z } from "zod";
 import {
     DISPATCH_FILTER_OPTIONS,
     INVOICE_FILTER_OPTIONS,
+    PRODUCTION_ASSIGNMENT_FILTER_OPTIONS,
     PRODUCTION_STATUS,
 } from "@/app/(clean-code)/(sales)/_common/utils/contants";
 import { PERMISSIONS } from "@/data/contants/permissions";
@@ -106,7 +107,9 @@ export const searchSchema = z
         phone: z.string().optional(),
         "dispatch.status": z.enum(DISPATCH_FILTER_OPTIONS).optional(),
         "production.status": z.enum(PRODUCTION_STATUS).optional(),
-        "production.assignment": z.string().optional(),
+        "production.assignment": z
+            .enum(PRODUCTION_ASSIGNMENT_FILTER_OPTIONS)
+            .optional(),
         "production.assignedToId": z.number().optional(),
         production: z.string().optional(),
         invoice: z.enum(INVOICE_FILTER_OPTIONS).optional(),
