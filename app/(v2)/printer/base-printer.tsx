@@ -7,7 +7,7 @@ import { useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { useForm } from "react-hook-form";
-
+import "./style.css";
 type PagesProps = {
     [slug in string]: {
         ready: boolean;

@@ -65,9 +65,9 @@ export default function SalesPrintBlock({ action, slug, className }: Props) {
                                     )
                                 )}
                                 <SalesPrintLineItems />
+                                <SalesPrintFooter />
                             </tbody>
                         )}
-                        <SalesPrintFooter />
                     </table>
                     {data.isPacking && (
                         <div className="flex px-4 justify-between">

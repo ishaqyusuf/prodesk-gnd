@@ -2,7 +2,7 @@
 
 # WED, FEB 26 
 - delete payment
-- change alert position
+<!-- - change alert position -->
 - invoice page footer: show in footer.
 - sales print: remove footer on every page
 - emails: create and send, send reminder etc.
