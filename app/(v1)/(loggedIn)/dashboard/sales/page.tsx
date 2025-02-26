@@ -8,6 +8,7 @@ import { DataPageShell } from "@/components/_v1/shells/data-page-shell";
 import { StartCard, StatCardContainer } from "@/components/_v1/stat-card";
 import { Metadata } from "next";
 import BarChart from "./_components/bar-chart";
+import NewFeatureBtn from "@/components/common/new-feature-btn";
 
 export const metadata: Metadata = {
     title: "Sales Dashboard",
@@ -26,6 +27,9 @@ export default async function SalesDashboardPage({}: Props) {
     } = salesDashboard;
     return (
         <AuthGuard can={["editDashboard"]}>
+            <Portal nodeId={"actionNav"}>
+                <NewFeatureBtn href="/sales/orders">New Site</NewFeatureBtn>
+            </Portal>
             <DataPageShell className="space-y-4" data={salesDashboard}>
                 <Breadcrumbs>
                     <BreadLink isFirst title="Dashboard" />

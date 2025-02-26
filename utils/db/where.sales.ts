@@ -70,6 +70,11 @@ export function whereSales(query: SearchParamsType) {
     }
     if (query["invoice"]) {
         switch (query["invoice"]) {
+            case "pending":
+                whereAnd.push({
+                    amountDue: { gt: 0 },
+                });
+                break;
             case "paid":
                 whereAnd.push({
                     AND: [
