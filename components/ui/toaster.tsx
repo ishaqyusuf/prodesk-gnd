@@ -7,7 +7,7 @@ export function Toaster() {
         <Portal.Root className="fixed z-[60]">
             <SonnerToaster
                 richColors
-                position="bottom-left"
+                position="top-right"
                 //   toastOptions={{
                 //     style: {
                 //       background: "hsl(var(--background))",
