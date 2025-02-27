@@ -21,7 +21,7 @@ export default function Page({}) {
             // const pdf = await salesPdf(query);
             const query = {
                 slugs: params.slug,
-                mode: searchParams.get("type"),
+                mode: searchParams.get("mode"),
                 preview: false,
                 ...(params || {}),
             } as SalesPrintProps["searchParams"];
