@@ -345,9 +345,10 @@ export class ItemHelperClass {
                 priceTags: {
                     moulding: {
                         addon: this.ctx.safeInt(gf.pricing?.addon),
-                        overridePrice: this.ctx.safeInt(
-                            gf.pricing?.customPrice
-                        ),
+                        // overridePrice: gf.pricing?.customPrice
+                        //     ? this.ctx.safeInt(gf.pricing?.customPrice)
+                        //     : gf.pricing?.customPrice,
+                        overridePrice: gf.pricing?.customPrice as any,
                         salesPrice: this.ctx.safeInt(
                             gf?.pricing?.itemPrice?.salesPrice
                         ),

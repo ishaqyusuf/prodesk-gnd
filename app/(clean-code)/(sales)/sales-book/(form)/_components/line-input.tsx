@@ -34,7 +34,6 @@ export function LineInput({
                             ? null
                             : +e.target.value
                         : e.target.value;
-                console.log({ val });
 
                 cls.dotUpdateGroupItemFormPath(lineUid, name, val);
 
