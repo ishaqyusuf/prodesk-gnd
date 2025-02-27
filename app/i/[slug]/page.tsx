@@ -44,7 +44,9 @@ export default function Page({}) {
             link.href = downloadUrl;
             link.download = `${query.slugs}.pdf`;
             link.click();
-            window.close();
+            setTimeout(() => {
+                window.close();
+            }, 1000);
         }
 
         download();
