@@ -9,10 +9,11 @@ import { env } from "@/env.mjs";
 
 interface Props {
     pdf?: boolean;
+    data?;
 }
-export function PrintMenuAction({ pdf }: Props) {
+export function PrintMenuAction({ pdf, data }: Props) {
     let ctx = salesOverviewStore();
-
+    if (data) ctx = data as any;
     // const dispatchList = ctx.item.dispatchList || [];
     const type = ctx.overview?.type;
     function print(params?: SalesPrintProps["searchParams"]) {

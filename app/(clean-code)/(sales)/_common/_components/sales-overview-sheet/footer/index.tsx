@@ -18,6 +18,7 @@ import { resetSalesStatAction } from "../../../data-actions/sales-stat-control.a
 import { refreshTabData } from "../helper";
 import { RefreshCcw } from "lucide-react";
 import { useSalesPreviewModal } from "@/components/modals/sales-preview-modal";
+import { SalesEmailMenuItem } from "@/components/sales-email-menu-item";
 
 export function Footer({}) {
     const store = salesOverviewStore();
@@ -85,6 +86,7 @@ export function Footer({}) {
                 </>
             )}
             <Menu variant="outline">
+                <SalesEmailMenuItem salesId={store.overview?.id} />
                 <PrintMenuAction />
                 <PrintMenuAction pdf />
                 <CopyMenuAction />

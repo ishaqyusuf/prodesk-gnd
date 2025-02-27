@@ -15,13 +15,15 @@ import { buttonVariants } from "@/components/ui/button";
 import dayjs from "dayjs";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Menu } from "@/components/(clean-code)/menu";
-import { PrintAction } from "../../../_common/_components/overview-sheet.bin/footer/print.action";
+
 import { useMemo } from "react";
 import { openSalesOverview } from "../../../_common/_components/sales-overview-sheet";
 import { MenuIcon } from "lucide-react";
 import { Label } from "@/components/ui/label";
 
 import { DatePicker } from "@/components/_v1/date-range-picker";
+import { SalesEmailMenuItem } from "@/components/sales-email-menu-item";
+import { PrintMenuAction } from "../../../_common/_components/sales-overview-sheet/footer/print.menu.action";
 
 export function FormHeader({ sticky }: { sticky: Sticky }) {
     const zus = useFormDataStore();
@@ -213,8 +215,9 @@ export function FormHeader({ sticky }: { sticky: Sticky }) {
                 </div>
                 {printData && (
                     <Menu>
-                        <PrintAction data={printData} />
-                        <PrintAction pdf data={printData} />
+                        <PrintMenuAction data={printData} />
+                        <PrintMenuAction pdf data={printData} />
+                        <SalesEmailMenuItem salesId={zus?.metaData?.id} />
                     </Menu>
                 )}
             </div>

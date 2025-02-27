@@ -18,6 +18,9 @@ interface Props {
     link: string;
     customerName;
 }
+export const composeSalesEmail = (props: Props) => (
+    <SalesInvoiceEmail {...props} />
+);
 export const SalesInvoiceEmail = ({ salesRep, link, customerName }) => {
     const text = `You've Received an Invoice from ${salesRep}`;
     return (
