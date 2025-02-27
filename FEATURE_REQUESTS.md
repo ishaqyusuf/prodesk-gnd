@@ -1,11 +1,19 @@
 
 # WED, FEB 27
 - add midday animation to invoice builder
-- zero custom price
-- create feature request feature
+- create feature-request feature
+- change door size in print to inch.
+- email system:
+    - create and send email
+    - invoice updated email
+    - reminder email
+- invoice copy & move history
+- payment portal: created, saved but not applied.
+<!-- - zero custom price -->
 # WED, FEB 26 
 - delete payment
 - new sales dashboard
+  - 
 <!-- - change alert position -->
 - invoice page footer: show amount paid in footer.
 <!-- - sales print: remove footer on every page -->

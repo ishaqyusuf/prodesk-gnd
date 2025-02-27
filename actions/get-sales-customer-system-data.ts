@@ -16,6 +16,7 @@ export const _getSalesCustomerSystemData = async (phoneNo, profileId) => {
             customerTypeId: true,
             name: true,
             businessName: true,
+            id: true,
             profile: {
                 select: {
                     id: true,
@@ -25,12 +26,13 @@ export const _getSalesCustomerSystemData = async (phoneNo, profileId) => {
         },
     });
     const profileConflicts =
-        customers.length > 0 &&
-        customers.some(
-            (a) =>
-                a.customerTypeId &&
-                customers.some((c) => c.customerTypeId != a.customerTypeId)
-        );
+        (customers.length > 0 &&
+            customers.some(
+                (a) =>
+                    a.customerTypeId &&
+                    customers.some((c) => c.customerTypeId != a.customerTypeId)
+            )) ||
+        !customers.every((a) => a.customerTypeId == profileId);
     // if (!profileConflicts) return null;
     const profiles = await prisma.customerTypes.findMany({
         select: {
