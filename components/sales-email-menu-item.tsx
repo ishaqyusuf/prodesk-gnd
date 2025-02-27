@@ -21,6 +21,7 @@ export function SalesEmailMenuItem({ salesId }) {
                         <Menu.Item onClick={sendInvoiceEmail}>
                             Invoice Email
                         </Menu.Item>
+                        <Menu.Item disabled>Reminder Email</Menu.Item>
                     </>
                 }
             >
