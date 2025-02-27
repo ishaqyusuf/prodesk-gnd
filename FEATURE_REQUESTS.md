@@ -1,5 +1,8 @@
 
-
+# WED, FEB 27
+- add midday animation to invoice builder
+- zero custom price
+- create feature request feature
 # WED, FEB 26 
 - delete payment
 - new sales dashboard

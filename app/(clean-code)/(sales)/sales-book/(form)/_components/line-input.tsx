@@ -29,7 +29,13 @@ export function LineInput({
             defaultValue={value as any}
             onChange={(e) => {
                 const val =
-                    props.type == "number" ? +e.target.value : e.target.value;
+                    props.type == "number"
+                        ? e.target.value === ""
+                            ? null
+                            : +e.target.value
+                        : e.target.value;
+                console.log({ val });
+
                 cls.dotUpdateGroupItemFormPath(lineUid, name, val);
 
                 valueChanged?.(val);

@@ -4,11 +4,25 @@ import { Input, LineSwitch } from "../line-input";
 import { FieldPath } from "react-hook-form";
 import { SalesFormZusData } from "@/app/(clean-code)/(sales)/types";
 import { CustomerSearch } from "../customer-search";
+import { cn } from "@/lib/utils";
 
 export function AddressTab({}) {
+    const zus = useFormDataStore();
+
+    const sameAddress = zus.metaData?.sameAddress;
     return (
-        <div className="lg:max-w-5xl xl:max-w-4xl">
-            <div className="grid p-4 grid-cols-2 gap-4 sm:gap-10 lg:gap-16">
+        <div
+            className={cn(
+                "lg:max-w-5xl xl:max-w-4xl",
+                sameAddress && "lg:max-w-2xl xl:max-w-xl"
+            )}
+        >
+            <div
+                className={cn(
+                    " p-4  gap-4 sm:gap-10 lg:gap-16",
+                    !sameAddress ? "grid grid-cols-2" : ""
+                )}
+            >
                 <AddressForm addressType="billing" />
                 <AddressForm addressType="shipping" />
             </div>
@@ -47,6 +61,7 @@ function AddressForm({ addressType }) {
     const isBusiness = zus.metaData?.customer?.isBusiness;
     const namePrefix = isShipping && sameAddress ? "billing" : addressType;
     const disabled = isShipping && sameAddress;
+    if (isShipping && sameAddress) return null;
     return (
         <div className="mt-2">
             <div className="border-b h-10 flex gap-2 items-center">
@@ -55,10 +70,7 @@ function AddressForm({ addressType }) {
                 <CustomerSearch addressType={addressType} />
                 <div className="flex items-center gap-2">
                     {isShipping ? (
-                        <>
-                            <Label>Same as Billing</Label>
-                            <LineSwitch name="metaData.sameAddress" />
-                        </>
+                        <></>
                     ) : (
                         <>
                             <Label>Business</Label>
@@ -67,6 +79,15 @@ function AddressForm({ addressType }) {
                     )}
                 </div>
             </div>
+            {isShipping || (
+                <div className="flex mt-4 items-center">
+                    <Label>Shipping Address: (Same as Billing)</Label>
+                    <div className="flex-1"></div>
+                    <div className="flex items-center space-x-4">
+                        <LineSwitch name="metaData.sameAddress" />
+                    </div>
+                </div>
+            )}
             <div className="mt-4 grid grid-cols-2 gap-4">
                 {!isShipping && isBusiness ? (
                     <div className="col-span-2">

@@ -17,6 +17,7 @@ import { FormDataPage } from "./data-page";
 import { cn } from "@/lib/utils";
 import { FormFooter } from "./form-footer";
 import { AddressTab } from "./data-page/address-tab";
+import CustomerProfileUpdateModal from "@/components/modals/customer-profile-update-modal";
 
 interface FormClientProps {
     data: GetSalesBookForm;
@@ -25,7 +26,6 @@ interface FormClientProps {
 export function FormClient({ data }: FormClientProps) {
     const zus = useFormDataStore();
     useEffect(() => {
-        console.log("RAW DATA", data);
         zus.init(zhInitializeState(data));
     }, []);
     const sticky = useSticky((bv, pv, { top, bottom }) => {
@@ -86,6 +86,10 @@ export function FormClient({ data }: FormClientProps) {
                 </div>
             </div>
             <FormFooter />
+            <CustomerProfileUpdateModal
+                phoneNo={zus.metaData.billing?.primaryPhone}
+                profileId={zus.metaData.salesProfileId}
+            />
         </div>
     );
 }

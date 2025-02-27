@@ -147,3 +147,12 @@ table.styled thead {
 table.styled td.action {
     @apply flex gap-2 justify-end items-center;
 }
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+    }
+  body {
+    @apply bg-background text-foreground;
+    }
+}

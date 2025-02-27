@@ -20,6 +20,7 @@ export async function searchAddressDta(q = null) {
             customer: {
                 select: {
                     businessName: true,
+                    customerTypeId: true,
                 },
             },
             name: true,
@@ -34,7 +35,7 @@ export async function searchAddressDta(q = null) {
                 where: {
                     taxes: {
                         some: {
-                            deletedAt: notDeleted.where.deletedAt,
+                            deletedAt: null,
                         },
                     },
                 },
