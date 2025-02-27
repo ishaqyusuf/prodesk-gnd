@@ -19,7 +19,7 @@ export function Footer() {
             <br />
 
             <Text className="text-[21px] font-regular">
-                Run your business smarter.
+                {/* Run your business smarter. */}
             </Text>
 
             <br />
