@@ -1,6 +1,7 @@
 
 # WED, FEB 27
 - add midday animation to invoice builder
+- batch production: throw error when already assigned item is selected
 - create feature-request feature
 - change door size in print to inch.
 - email system:
@@ -9,6 +10,7 @@
     - reminder email
 - invoice copy & move history
 - payment portal: created, saved but not applied.
+- add delivery charge to invoice.
 <!-- - zero custom price -->
 # WED, FEB 26 
 - delete payment

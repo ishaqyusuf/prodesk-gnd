@@ -33,7 +33,7 @@
     "@next/mdx": "^14.1.0",
     "@number-flow/react": "^0.4.2",
     "@prisma/adapter-pg": "^5.12.1",
-    "@prisma/client": "^6.4.0",
+    "@prisma/client": "^6.4.1",
     "@radix-ui/react-accordion": "^1.1.2",
     "@radix-ui/react-alert-dialog": "^1.0.5",
     "@radix-ui/react-aspect-ratio": "^1.0.3",
@@ -100,6 +100,7 @@
     "little-date": "^1.0.0",
     "lodash": "^4.17.21",
     "lucide-react": "^0.475.0",
+    "nanoid": "^5.1.2",
     "next": "14.2.10",
     "next-auth": "^4.24.4",
     "next-cloudinary": "^5.6.0",
@@ -154,7 +155,7 @@
     "@types/dot-object": "^2.1.6",
     "@types/prettier": "^2.7.3",
     "@types/qs": "^6.9.7",
-    "prisma": "^6.0.1",
+    "prisma": "^6.4.1",
     "tailwindcss": "^3.4.15"
   }
 }

@@ -1,6 +1,7 @@
 import { salesOverviewStore } from "@/app/(clean-code)/(sales)/_common/_components/sales-overview-sheet/store";
 import React, { useEffect, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 export function useItemsTabContext() {
     const store = salesOverviewStore();
@@ -44,6 +45,13 @@ export function useItemsTabContext() {
             return selectionArray.fields.some((field) => field.itemUid == uid);
         },
         toggeItemSelection(uid) {
+            const item = itemOverview.items.find(
+                (item) => item.itemControlUid == uid
+            );
+            if (item.status.qty.total <= item.status.prodAssigned.total) {
+                toast.error("Already assigned item cannot be selected");
+                return;
+            }
             const index = selectionArray.fields.findIndex(
                 (field) => field.itemUid == uid
             );
