@@ -37,6 +37,8 @@ export const __sendInvoiceEmailTrigger = async (id) => {
             },
         },
     });
+    console.log(sales.customer);
+
     let customerEmail: any =
         sales.customer?.email || sales.billingAddress?.email;
     if (!customerEmail) throw new Error("Customer has no valid email");

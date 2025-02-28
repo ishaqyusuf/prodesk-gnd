@@ -12,12 +12,27 @@ export async function updateCustomerEmailAction(phoneNo, email) {
         },
     });
     if (existings.length) throw new Error("Customer with email already exist!");
-    await prisma.customers.updateMany({
+    console.log({
+        phoneNo,
+        email,
+    });
+    const r = await prisma.customers.updateMany({
         where: {
             phoneNo,
         },
         data: {
             email,
         },
+    });
+    await prisma.addressBooks.updateMany({
+        where: {
+            phoneNo,
+        },
+        data: {
+            email,
+        },
+    });
+    console.log({
+        r: r.count,
     });
 }

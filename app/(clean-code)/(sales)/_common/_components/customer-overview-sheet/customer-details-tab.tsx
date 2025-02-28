@@ -43,6 +43,9 @@ export default function CustomerDetailsTab() {
         await updateCustomerEmailAction(ctx.profile?.phoneNo, email)
             .then((e) => {
                 toast.success("updated");
+                getCustomerGeneralInfoAction(ctx.profile?.phoneNo).then((e) => {
+                    setData(e);
+                });
             })
             .catch((e) => {
                 toast.error(e.message);
