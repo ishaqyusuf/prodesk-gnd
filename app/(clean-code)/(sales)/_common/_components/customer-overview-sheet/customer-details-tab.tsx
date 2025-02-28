@@ -22,6 +22,7 @@ import Button from "@/components/common/button";
 import InputControl from "@/_v2/components/common/input-control";
 import { updateCustomerEmailAction } from "@/actions/update-customer-email-action";
 import { toast } from "sonner";
+import FormInput from "@/components/common/controls/form-input";
 
 export default function CustomerDetailsTab() {
     const ctx = customerStore();
@@ -52,7 +53,7 @@ export default function CustomerDetailsTab() {
         <TabsContent value="general">
             <Form {...form}>
                 <div className="grid gap-2">
-                    <InputControl
+                    <FormInput
                         label="Email"
                         control={form.control}
                         name="email"
