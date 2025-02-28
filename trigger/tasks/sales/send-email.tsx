@@ -37,7 +37,9 @@ export const sendInvoiceEmail = schemaTask({
         //     user,
         // };
         const response = await resend.emails.send({
-            from: `GND Millwork <gndbot@gndprodesk.com>`,
+            from: `GND Millwork <${
+                salesRepEmail?.split("@")[0]
+            }@gndprodesk.com>`,
             to: customerEmail,
             reply_to: salesRepEmail,
             headers: {
