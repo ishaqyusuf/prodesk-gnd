@@ -37,11 +37,11 @@ export const __sendInvoiceEmailTrigger = async (id) => {
             },
         },
     });
-    const customerEmail =
-        env.NODE_ENV == "development"
-            ? ["ishaqyusuf024@gmail.com", "pcruz321@gmail.com"]
-            : sales.customer?.email || sales.billingAddress?.email;
+    let customerEmail: any =
+        sales.customer?.email || sales.billingAddress?.email;
     if (!customerEmail) throw new Error("Customer has no valid email");
+    env.NODE_ENV == "development" &&
+        (customerEmail = ["ishaqyusuf024@gmail.com", "pcruz321@gmail.com"]);
     const salesRepEmail = sales.salesRep.email || undefined;
     const customerName =
         sales.customer?.businessName ||
