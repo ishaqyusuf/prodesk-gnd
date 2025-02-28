@@ -5,7 +5,7 @@ import { GetCustomerOverviewUseCase } from "../../use-case/customer-use-case";
 
 const defaultValues = {
     loading: true,
-    tab: "sales",
+    tab: "general",
 };
 const data: GetCustomerOverviewUseCase & typeof defaultValues = {
     ...defaultValues,

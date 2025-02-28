@@ -9,6 +9,7 @@ import SalesTab from "./sales-tab";
 import QuotesTab from "./quotes-tab";
 import PaymentsTab from "./payments-tab";
 import { _modal } from "@/components/common/modal/provider";
+import CustomerDetailsTab from "./customer-details-tab";
 
 export const openCustomerOverviewSheet = (phoneNo) =>
     _modal.openSheet(<CustomerOverviewSheet phoneNo={phoneNo} />);
@@ -33,6 +34,9 @@ export default function CustomerOverviewSheet({ phoneNo }) {
                     />
                     <Tabs value={store.tab} onValueChange={store.tabChanged}>
                         <TabsList className="w-full">
+                            <TabsTrigger className="space-x-2" value="general">
+                                <span>General</span>
+                            </TabsTrigger>
                             <TabsTrigger className="space-x-2" value="sales">
                                 <span>Sales</span>
                                 <Badge
@@ -63,6 +67,7 @@ export default function CustomerOverviewSheet({ phoneNo }) {
                             </TabsTrigger>
                         </TabsList>
                         <ScrollArea className="h-[80vh]">
+                            <CustomerDetailsTab />
                             <SalesTab />
                             <QuotesTab />
                             <PaymentsTab />
