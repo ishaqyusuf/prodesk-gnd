@@ -10,7 +10,7 @@ import {
     composeSalesItems,
 } from "../../(loggedIn)/sales-v2/_utils/compose-sales-items";
 import { SalesPrintProps } from "./page";
-import { formatCurrency, inToFt, sum } from "@/lib/utils";
+import { formatCurrency, ftToIn, inToFt, sum } from "@/lib/utils";
 import { PrintTextProps } from "../components/print-text";
 import salesFormUtils from "../../(loggedIn)/sales/edit/sales-form-utils";
 import { isComponentType } from "../../(loggedIn)/sales-v2/overview/is-component-type";
@@ -441,9 +441,16 @@ function getDoorsTable(
                             //     (s) => s.step.title == "Door"
                             // )?.value;
                             case "dimension":
-                                return inToFt(
-                                    door?.dimension?.replaceAll("in", '"')
-                                );
+                                // return `ss`;
+                                // return door?.dimension;
+
+                                return door?.dimension
+                                    ?.split("x")
+                                    ?.map((a) =>
+                                        ftToIn(a?.trim())?.replaceAll("in", '"')
+                                    )
+                                    .join(" x ");
+
                             case "moulding":
                                 return (
                                     m.housePackageTool?.molding?.title ||

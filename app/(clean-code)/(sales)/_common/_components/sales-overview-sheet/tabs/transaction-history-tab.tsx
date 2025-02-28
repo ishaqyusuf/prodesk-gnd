@@ -14,12 +14,14 @@ import {
 } from "@/components/ui/table";
 import { TCell } from "@/components/(clean-code)/data-table/table-cells";
 import { getSalesPaymentsAction } from "@/actions/get-sales-payment";
+import NoResults from "./empty-tx-history";
 
 export function TransactionHistoryTab() {
     const store = salesOverviewStore();
     const ctx = useEffectLoader(async () =>
         getSalesPaymentsAction(store.salesId)
     );
+    if (!ctx?.data?.length) return <NoResults />;
     return (
         <div>
             <Table>

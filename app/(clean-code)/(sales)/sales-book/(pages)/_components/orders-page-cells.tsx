@@ -176,7 +176,8 @@ function InvoicePending({ item }: ItemProps) {
                 className={cn(
                     "text-muted-foreground font-mono font-medium",
 
-                    invoice.pending && " text-red-700/70"
+                    invoice.pending > 0 && "text-red-700/70",
+                    invoice.pending < 0 && "text-red-700/70"
                 )}
             />
         </TCell>
