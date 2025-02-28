@@ -2,7 +2,6 @@
 
 import useEffectLoader from "@/lib/use-effect-loader";
 import { salesOverviewStore } from "../store";
-import { getSalesCustomerTxAction } from "@/actions/get-sales-customers-tx";
 import Money from "@/components/_v1/money";
 import {
     Table,
