@@ -13,13 +13,12 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import { TCell } from "@/components/(clean-code)/data-table/table-cells";
+import { getSalesPaymentsAction } from "@/actions/get-sales-payment";
 
 export function TransactionHistoryTab() {
     const store = salesOverviewStore();
     const ctx = useEffectLoader(async () =>
-        getSalesCustomerTxAction({
-            "sales.id": store.salesId,
-        })
+        getSalesPaymentsAction(store.salesId)
     );
     return (
         <div>
@@ -27,21 +26,32 @@ export function TransactionHistoryTab() {
                 <TableHeader>
                     <TableRow>
                         <TableHead>Date</TableHead>
+                        <TableHead>Payment Method</TableHead>
                         <TableHead>Received By</TableHead>
                         <TableHead>Amount</TableHead>
+                        <TableHead>Status</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {ctx.data?.data?.map((tx) => (
-                        <TableRow key={tx.id}>
+                    {ctx.data?.map((tx) => (
+                        <TableRow key={tx.paymentId}>
                             <TableCell>
-                                <TCell.Date>{tx.createdAt}</TCell.Date>
+                                <TCell.Primary>{tx.paymentId}</TCell.Primary>
+                                <TCell.Date>{tx.date}</TCell.Date>
                             </TableCell>
                             <TableCell>
-                                <>{tx.author?.name}</>
+                                <TCell.Secondary>
+                                    {tx.paymentMethod}
+                                </TCell.Secondary>
+                            </TableCell>
+                            <TableCell>
+                                <>{tx.receivedBy}</>
                             </TableCell>
                             <TableCell>
                                 <Money value={Math.abs(tx.amount)} />
+                            </TableCell>
+                            <TableCell>
+                                <TCell.Status status={tx.status} />
                             </TableCell>
                         </TableRow>
                     ))}

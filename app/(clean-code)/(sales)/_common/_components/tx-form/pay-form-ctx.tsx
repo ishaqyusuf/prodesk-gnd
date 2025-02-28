@@ -148,7 +148,6 @@ export const usePayForm = () => {
             );
         });
     }
-    const tableCtx = useInfiniteDataTable();
     async function pay() {
         const data = form.getValues();
         const selections = profile?.salesInfo?.orders?.filter(

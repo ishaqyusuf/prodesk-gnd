@@ -24,6 +24,8 @@ export async function getSalesCustomerTxAction(query: SearchParamsType) {
             createdAt: true,
             description: true,
             status: true,
+            paymentMethod: true,
+
             author: {
                 select: {
                     name: true,
@@ -44,6 +46,7 @@ export async function getSalesCustomerTxAction(query: SearchParamsType) {
                 },
                 select: {
                     amount: true,
+
                     order: {
                         select: {
                             orderId: true,

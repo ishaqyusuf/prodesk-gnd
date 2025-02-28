@@ -26,6 +26,7 @@ export default function PaymentHistory() {
                         <span>Payment History</span>
                         <div>
                             <Button
+                                disabled
                                 onClick={() => {
                                     modal.openSheet(
                                         <PaymentModal
