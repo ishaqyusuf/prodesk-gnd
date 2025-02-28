@@ -70,6 +70,7 @@ export type ISalesOrderMeta = {
     qb;
     profileEstimate: Boolean;
     ccc;
+    deliveryCost;
     priority: IPriority;
     ccc_percentage;
     labor_cost;

@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import BasePrinter from "../base-printer";
 import { getSalesPrintData } from "./get-sales-print-data";
-import { BasePrintProps, OrderBasePrinter } from "./order-base-printer";
+import { OrderBasePrinter } from "./order-base-printer";
 import SalesPrintBlock from "./sales-print-block";
 import { IOrderPrintMode } from "@/types/sales";
 

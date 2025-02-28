@@ -57,6 +57,7 @@ export function composePrint(
         lineItems: lineItems(data, {
             ...printData,
         }),
+        headerTitle: query.mode == "order" ? "Invoice" : query.mode,
         footer: printFooter(data, printData.isProd || printData.isPacking),
         address: address({ ...printData.order }),
         heading: heading({ ...printData }),
@@ -738,6 +739,15 @@ function printFooter(data: PrintData, notPrintable) {
                       }
                   )
                 : null,
+            data.order.meta.deliveryCost > 0
+                ? styled(
+                      "Delivery",
+                      `${formatCurrency.format(data.order.meta.deliveryCost)}`,
+                      {
+                          //   font: "bold",
+                      }
+                  )
+                : null,
             totalPaid > 0
                 ? styled(
                       "Total Paid",
@@ -768,7 +778,7 @@ function heading({ mode, isOrder, order, isEstimate, isPacking }) {
         title: mode,
         lines: [
             styled(
-                isOrder ? "Order #" : "Quote #",
+                isOrder ? "Invoice #" : "Quote #",
                 order.orderId?.toUpperCase(),
                 {
                     font: "bold",
@@ -776,7 +786,7 @@ function heading({ mode, isOrder, order, isEstimate, isPacking }) {
                 }
             ),
             styled(
-                isOrder ? "Order Date" : "Quote Date",
+                isOrder ? "Invoice Date" : "Quote Date",
                 formatDate(order.createdAt)
             ),
             styled("Rep", order.salesRep?.name),
