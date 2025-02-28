@@ -1,15 +1,21 @@
 import { salesPdf } from "@/app/(v2)/printer/_action/sales-pdf";
 import { SalesPrintProps } from "@/app/(v2)/printer/sales/page";
+import { prisma } from "@/db";
+import { apiParamsTokV } from "@/utils/api-params-to-kv";
 import { NextRequest } from "next/server";
 
 export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
-    const query = {
-        slugs: searchParams.get("slug"),
-        mode: searchParams.get("type"),
-        preview: false,
-    } as SalesPrintProps["searchParams"];
-
+    const query = apiParamsTokV(
+        req.nextUrl.searchParams
+    ) as any as SalesPrintProps["searchParams"];
+    const id = req.nextUrl.searchParams.get("id");
+    const order = await prisma.salesOrders.findFirstOrThrow({
+        where: {
+            id: Number(id),
+            slug: query.slugs,
+        },
+    });
     const pdf = await salesPdf(query);
 
     const res = await fetch(pdf.url); // fetch actual pdf content
@@ -22,4 +28,3 @@ export async function GET(req: NextRequest) {
         },
     });
 }
-

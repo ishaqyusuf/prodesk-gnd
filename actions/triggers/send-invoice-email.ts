@@ -14,6 +14,7 @@ export const __sendInvoiceEmailTrigger = async (id) => {
         },
         select: {
             slug: true,
+            id: true,
             type: true,
             salesRep: {
                 select: {
@@ -58,13 +59,14 @@ export const __sendInvoiceEmailTrigger = async (id) => {
         html: await render(
             composeSalesEmail({
                 customerName,
-                link: `https://gnd-prodesk.vercel.app/i/${
-                    sales.slug
-                }?${QueryString.stringify({
-                    // slugs: sales.slug,
-                    mode: sales.type,
-                    preview: false,
-                })}`,
+                link: `https://gnd-prodesk.vercel.app/api/pdf/download?${QueryString.stringify(
+                    {
+                        id: sales.id,
+                        slugs: sales.slug,
+                        mode: sales.type,
+                        preview: false,
+                    }
+                )}`,
                 salesRep,
             })
         ),
