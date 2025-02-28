@@ -443,13 +443,13 @@ function getDoorsTable(
                             case "dimension":
                                 // return `ss`;
                                 // return door?.dimension;
-
-                                return door?.dimension
+                                const dimIn = door?.dimension
                                     ?.split("x")
                                     ?.map((a) =>
                                         ftToIn(a?.trim())?.replaceAll("in", '"')
                                     )
                                     .join(" x ");
+                                return `${dimIn} \n(${door.dimension})`;
 
                             case "moulding":
                                 return (
