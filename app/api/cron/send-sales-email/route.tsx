@@ -4,6 +4,7 @@ import { resend } from "@/lib/resend";
 import { composeSalesEmail } from "@/modules/email/emails/invoice";
 import QueryString from "qs";
 import { render } from "@react-email/render";
+import { env } from "@/env.mjs";
 
 export async function POST(request: Request) {
     const body = await request.json();
