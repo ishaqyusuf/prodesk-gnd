@@ -1,6 +1,7 @@
 
 # WED, FEB 28
 - Payment Transactions Page: delete, recheck sync
+- customer wallet profile.
 # WED, FEB 27
 - add midday animation to invoice builder
 - batch production: throw error when already assigned item is selected
