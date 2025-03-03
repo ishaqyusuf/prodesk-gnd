@@ -12,17 +12,22 @@ import {
 } from "@react-email/components";
 import { Logo } from "../components/logo";
 import { Footer } from "../components/footer";
+import { SalesType } from "@/app/(clean-code)/(sales)/types";
 
 interface Props {
     salesRep: string;
     link: string;
     customerName;
+    type: SalesType;
 }
 export const composeSalesEmail = (props: Props) => (
     <SalesInvoiceEmail {...props} />
 );
-export const SalesInvoiceEmail = ({ salesRep, link, customerName }) => {
-    const text = `You've Received an Invoice from ${salesRep}`;
+export const SalesInvoiceEmail = ({ salesRep, type, link, customerName }) => {
+    const isQuote = type == "quote";
+    const text = `You've Received ${
+        isQuote ? "a quote" : "an Invoice"
+    } from ${salesRep}`;
     return (
         <Html>
             <Tailwind>
@@ -56,15 +61,20 @@ export const SalesInvoiceEmail = ({ salesRep, link, customerName }) => {
                     >
                         <Logo />
                         <Heading className="text-[#121212] text-[21px] font-normal text-center p-0 my-[30px] mx-0">
-                            You’ve Received an Invoice <br /> from {salesRep}
+                            You’ve Received{" "}
+                            {isQuote ? " a Quote" : " an Invoice"} <br /> from{" "}
+                            {salesRep}
                         </Heading>
                         <br />
 
                         <span className="font-medium">Hi {customerName},</span>
                         <Text className="text-[#121212]">
-                            Please review your invoice and make sure to pay it
-                            on time. If you have any questions, feel free to
-                            reply to this email.
+                            {isQuote
+                                ? "Please review your quote"
+                                : `Please review your invoice and make sure to pay it
+                            on time`}
+                            . If you have any questions, feel free to reply to
+                            this email.
                         </Text>
 
                         <Section className="text-center mt-[50px] mb-[50px]">
@@ -72,7 +82,7 @@ export const SalesInvoiceEmail = ({ salesRep, link, customerName }) => {
                                 className="bg-transparent text-primary text-[14px] text-[#121212] font-medium no-underline text-center px-6 py-3 border border-solid border-[#121212]"
                                 href={link}
                             >
-                                View invoice
+                                View {isQuote ? " quote" : " invoice"}
                             </Button>
                         </Section>
 

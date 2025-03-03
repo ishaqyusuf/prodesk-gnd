@@ -56,6 +56,7 @@ export const __sendInvoiceEmailTrigger = async (id) => {
         sales.customer?.name ||
         sales.billingAddress?.name;
     const salesRep = sales.salesRep?.name;
+    const isQuote = sales.type == "quote";
     const response = await resend.emails.send({
         from: `GND Millwork <${salesRepEmail?.split("@")[0]}@gndprodesk.com>`,
         to: customerEmail,
@@ -63,9 +64,10 @@ export const __sendInvoiceEmailTrigger = async (id) => {
         headers: {
             "X-Entity-Ref-ID": nanoid(),
         },
-        subject: `${salesRep} sent you and invoice`,
+        subject: `${salesRep} sent you ${isQuote ? "a quote" : "an invoice"}`,
         html: await render(
             composeSalesEmail({
+                type: sales.type as any,
                 customerName,
                 link: `https://gnd-prodesk.vercel.app/api/pdf/download?${QueryString.stringify(
                     {
