@@ -43,8 +43,8 @@ export function BatchAssignActionMenu() {
                                     .filter(
                                         (a) =>
                                             a.produceable &&
-                                            a.status.qty.total >
-                                                a.status.prodAssigned.total
+                                            a.status.qty?.total >
+                                                a.status.prodAssigned?.total
                                     )
                                     .map((a) => ({
                                         itemUid: a.itemControlUid,
