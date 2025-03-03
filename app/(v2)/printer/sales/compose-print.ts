@@ -449,7 +449,7 @@ function getDoorsTable(
                                         ftToIn(a?.trim())?.replaceAll("in", '"')
                                     )
                                     .join(" x ");
-                                return [`${dimIn}`, `(${door.dimension})`];
+                                return [`(${door.dimension})`, `${dimIn}`];
 
                             case "moulding":
                                 return (
