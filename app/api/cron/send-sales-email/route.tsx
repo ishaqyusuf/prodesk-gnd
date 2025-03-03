@@ -59,6 +59,7 @@ export async function POST(request: Request) {
         subject: `${salesRep} sent you and invoice`,
         html: await render(
             composeSalesEmail({
+                type: sales.type as any,
                 customerName,
                 link: `https://gnd-prodesk.vercel.app/api/pdf/download?${QueryString.stringify(
                     {
