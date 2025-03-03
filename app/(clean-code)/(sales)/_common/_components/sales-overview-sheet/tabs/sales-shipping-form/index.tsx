@@ -333,7 +333,10 @@ function QtyInput({ uid, input }) {
     const form = useFormContext();
     const w = form.watch("selectAllToken");
     useEffect(() => {
-        if (w) form.setValue(`selection.${uid}.${input.formKey}`, available);
+        if (w) {
+            form.setValue(`selection.${uid}.${input.formKey}`, available);
+            console.log({ available, input });
+        }
     }, [w]);
     if (!available) return null;
 
@@ -346,23 +349,23 @@ function QtyInput({ uid, input }) {
             <span className="uppercase font-mono text-xs font-semibold">
                 {input.label}:
             </span>
-            {inputOptions.length > 15 ? (
-                <FormInput
-                    className="w-20"
-                    type="number"
-                    size="sm"
-                    control={form.control}
-                    name={`selection.${uid}.${input.formKey}`}
-                />
-            ) : (
-                <FormSelect
-                    size="sm"
-                    className="w-20"
-                    control={form.control}
-                    name={`selection.${uid}.${input.formKey}`}
-                    options={inputOptions}
-                />
-            )}
+            {/* {inputOptions.length > 15 ? ( */}
+            <FormInput
+                className="w-20"
+                type="number"
+                size="sm"
+                control={form.control}
+                name={`selection.${uid}.${input.formKey}`}
+            />
+            {/* // ) : (
+            //     <FormSelect
+            //         size="sm"
+            //         className="w-20"
+            //         control={form.control}
+            //         name={`selection.${uid}.${input.formKey}`}
+            //         options={inputOptions}
+            //     />
+            // )} */}
             <span className="text-xs font-mono font-bold">/{available}</span>
         </div>
     );

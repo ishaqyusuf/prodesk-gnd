@@ -55,7 +55,7 @@ function createTab(name: SalesTabs, label?, show = true) {
 export const salesTabs = {
     admin: [
         createTab("sales_info"),
-        createTab("items"),
+        createTab("items", "production"),
         // createTab("productions"),
         // createTab("payments"),
         createTab("transactions"),

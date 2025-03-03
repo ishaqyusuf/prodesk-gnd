@@ -217,7 +217,10 @@ export function FormHeader({ sticky }: { sticky: Sticky }) {
                     <Menu>
                         <PrintMenuAction data={printData} />
                         <PrintMenuAction pdf data={printData} />
-                        <SalesEmailMenuItem salesId={zus?.metaData?.id} />
+                        <SalesEmailMenuItem
+                            salesId={zus?.metaData?.id}
+                            salesType={zus.metaData.type}
+                        />
                     </Menu>
                 )}
             </div>

@@ -1,8 +1,16 @@
 import { __sendInvoiceEmailTrigger } from "@/actions/triggers/send-invoice-email";
 import { Menu } from "./(clean-code)/menu";
 import { toast } from "sonner";
+import { SalesType } from "@/app/(clean-code)/(sales)/types";
 
-export function SalesEmailMenuItem({ salesId }) {
+export function SalesEmailMenuItem({
+    salesId,
+    salesType,
+}: {
+    salesId;
+    salesType: SalesType;
+}) {
+    const isQuote = salesType == "quote";
     async function sendInvoiceEmail() {
         toast.promise(async () => await __sendInvoiceEmailTrigger(salesId), {
             loading: "Sending email...",
@@ -19,7 +27,7 @@ export function SalesEmailMenuItem({ salesId }) {
                 SubMenu={
                     <>
                         <Menu.Item onClick={sendInvoiceEmail}>
-                            Invoice Email
+                            {isQuote ? "Quote " : "Invoice "} Email
                         </Menu.Item>
                         <Menu.Item disabled>Reminder Email</Menu.Item>
                     </>

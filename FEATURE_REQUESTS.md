@@ -7,6 +7,7 @@
 - shelf items.
 - transaction payment method.
 - shipping not selecting all available.
+- split batch assignment & shipping to task chunks.
 # WED, FEB 28
 - Payment Transactions Page: delete, recheck sync
 - customer wallet profile.
@@ -18,6 +19,7 @@
     - create and send email
     - invoice updated email
     - reminder email
+    - quote email.
 - invoice copy & move history
 - payment portal: created, saved but not applied.
 <!-- - change door size in print to inch. -->

@@ -28,7 +28,9 @@ export interface CreateSalesDispatchData {
 }
 export async function createSalesDispatchAction(data: CreateSalesDispatchData) {
     return await prisma.$transaction((async (tx: typeof prisma) => {
+        // const tx = prisma;
         const { deliveryMode, salesId, driverId, status } = data;
+        console.log(">>>>");
         const dispatch = await tx.orderDelivery.create({
             data: {
                 deliveryMode,
@@ -39,6 +41,8 @@ export async function createSalesDispatchAction(data: CreateSalesDispatchData) {
                 order: { connect: { id: salesId } },
             },
         });
+        console.log("CREATED!");
+        // return dispatch;
         const dispatchables = (
             await Promise.all(
                 data.items.map(async (item) => {
@@ -57,6 +61,7 @@ export async function createSalesDispatchAction(data: CreateSalesDispatchData) {
                 })
             )
         )?.flat();
+        console.log("LCOAACLLCA");
         if (!dispatchables?.length)
             throw new Error(
                 "Unable to create dispatch due to missing submissions"

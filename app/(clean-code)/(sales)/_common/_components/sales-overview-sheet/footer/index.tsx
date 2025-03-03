@@ -86,7 +86,10 @@ export function Footer({}) {
                 </>
             )}
             <Menu variant="outline">
-                <SalesEmailMenuItem salesId={store.overview?.id} />
+                <SalesEmailMenuItem
+                    salesId={store.overview?.id}
+                    salesType={store.overview?.type}
+                />
                 <PrintMenuAction />
                 <PrintMenuAction pdf />
                 <CopyMenuAction />
