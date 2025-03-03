@@ -19,6 +19,7 @@ import {
     deleteItemAssignmentAction,
     deleteSubmissionAction,
     submitItemAssignmentAction,
+    updateAssignmentAssignedToAction,
     updateAssignmentDueDateAction,
 } from "../../../../data-actions/production-actions/item-assign-action";
 import { salesOverviewStore } from "../../store";
@@ -31,6 +32,9 @@ import {
 } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 import { useState } from "react";
+import { getSalesProdWorkersAsSelectOption } from "../../../../use-case/sales-prod-workers-use-case";
+import useEffectLoader from "@/lib/use-effect-loader";
+import { Menu } from "@/components/(clean-code)/menu";
 
 export function ItemAssignments({}) {
     const itemView = getOpenItem();
@@ -65,6 +69,7 @@ function AssignmentLine({ assignment, index }) {
             showForm: false,
         },
     });
+    const workers = useEffectLoader(getSalesProdWorkersAsSelectOption);
     const show = form.watch("showForm");
     const store = salesOverviewStore();
     async function submit() {
@@ -86,13 +91,33 @@ function AssignmentLine({ assignment, index }) {
         await updateAssignmentDueDateAction(ass.id, date);
         toast.success("Updated!.");
     }
+    async function assignmentChanged(id) {
+        await updateAssignmentAssignedToAction(ass.id, id);
+        toast.success("Updated!.");
+    }
     return (
         <div key={ass.id} className="py-2 text-sm space-y-4 border-b">
             <div className="flex items-center gap-4">
                 <span>{index + 1}.</span>
-                <span className="uppercase">
-                    {ass?.assignedTo || "Not Assigned"}
-                </span>
+                <Menu
+                    label={ass?.assignedTo || "Not Assigned"}
+                    Icon={null}
+                    variant={ass?.assignedTo ? "link" : "destructive"}
+                >
+                    {/* {
+                        <Button
+                            size="xs"
+                            variant={ass?.assignedTo ? "link" : "destructive"}
+                        >
+                            <span className="uppercase">
+                                {ass?.assignedTo || "Not Assigned"}
+                            </span>
+                        </Button>
+                    } */}
+                    {workers?.data?.map((w) => (
+                        <Menu.Item key={w.value}>{w.label}</Menu.Item>
+                    ))}
+                </Menu>
 
                 <DueDate
                     disabled={!store.adminMode}

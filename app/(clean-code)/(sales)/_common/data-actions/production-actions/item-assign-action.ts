@@ -163,6 +163,19 @@ export async function updateAssignmentDueDateAction(assignmentId, dueDate) {
         },
     });
 }
+export async function updateAssignmentAssignedToAction(
+    assignmentId,
+    assignedToId
+) {
+    await prisma.orderItemProductionAssignments.update({
+        where: {
+            id: assignmentId,
+        },
+        data: {
+            assignedToId,
+        },
+    });
+}
 export async function deleteSubmissionAction({ id }) {
     return await prisma.$transaction((async (tx: typeof prisma) => {
         const resp = await tx.orderProductionSubmissions.update({
