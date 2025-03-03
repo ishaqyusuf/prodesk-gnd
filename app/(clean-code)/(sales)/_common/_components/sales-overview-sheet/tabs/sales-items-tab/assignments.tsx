@@ -1,5 +1,11 @@
 import { Badge } from "@/components/ui/badge";
-import { AdminOnly, getOpenItem, GuestOnly, loadPageData } from "../../helper";
+import {
+    AdminOnly,
+    getOpenItem,
+    GuestOnly,
+    loadPageData,
+    refreshTabData,
+} from "../../helper";
 import { useForm, useFormContext } from "react-hook-form";
 import ConfirmBtn from "@/components/_v1/confirm-btn";
 import { Form, FormField } from "@/components/ui/form";
@@ -94,6 +100,7 @@ function AssignmentLine({ assignment, index }) {
     async function assignmentChanged(id) {
         await updateAssignmentAssignedToAction(ass.id, id);
         toast.success("Updated!.");
+        refreshTabData("items");
     }
     return (
         <div key={ass.id} className="py-2 text-sm space-y-4 border-b">
@@ -114,6 +121,9 @@ function AssignmentLine({ assignment, index }) {
                             </span>
                         </Button>
                     } */}
+                    <Menu.Item onClick={() => assignmentChanged(null)}>
+                        Unassign
+                    </Menu.Item>
                     {workers?.data?.map((w) => (
                         <Menu.Item
                             onClick={() => assignmentChanged(w.value)}
