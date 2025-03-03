@@ -1,4 +1,6 @@
 
+# WED, FEB 29
+- midday print feature.
 # WED, FEB 28
 - Payment Transactions Page: delete, recheck sync
 - customer wallet profile.

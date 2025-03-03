@@ -40,9 +40,9 @@ export async function POST(request: Request) {
     });
     let customerEmail: any =
         sales.customer?.email || sales.billingAddress?.email;
-    if (!customerEmail) throw new Error("Customer has no valid email");
     env.NODE_ENV == "development" &&
         (customerEmail = ["ishaqyusuf024@gmail.com", "pcruz321@gmail.com"]);
+    if (!customerEmail) throw new Error("Customer has no valid email");
     const salesRepEmail = sales.salesRep.email || undefined;
     const customerName =
         sales.customer?.businessName ||
@@ -73,4 +73,6 @@ export async function POST(request: Request) {
         ),
     });
     if (response.error) throw new Error(`Unable to send email`);
+
+    return new Response();
 }

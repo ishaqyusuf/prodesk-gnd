@@ -9,6 +9,7 @@ import QueryString from "qs";
 import { tasks } from "@trigger.dev/sdk/v3";
 
 export const __sendInvoiceEmailTrigger = async (id) => {
+    console.log("SENDING EMAIL");
     await tasks.trigger("send-invoice-email", {
         salesId: id,
     });

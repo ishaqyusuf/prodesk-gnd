@@ -92,7 +92,26 @@ export default function SalesPrintDoorItems({ index }) {
                                                             </div>
                                                         ) : (
                                                             <Text {...ld.style}>
-                                                                {ld.value}
+                                                                {Array.isArray(
+                                                                    ld.value
+                                                                )
+                                                                    ? ld.value.map(
+                                                                          (
+                                                                              val,
+                                                                              vi
+                                                                          ) => (
+                                                                              <div
+                                                                                  key={
+                                                                                      vi
+                                                                                  }
+                                                                              >
+                                                                                  {
+                                                                                      val
+                                                                                  }
+                                                                              </div>
+                                                                          )
+                                                                      )
+                                                                    : ld.value}
                                                             </Text>
                                                         )}
                                                     </td>

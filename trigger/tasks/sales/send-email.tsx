@@ -1,4 +1,5 @@
-import { schemaTask } from "@trigger.dev/sdk/v3";
+import { logger, schemaTask } from "@trigger.dev/sdk/v3";
+import { env } from "process";
 import { z } from "zod";
 
 export const sendInvoiceEmail = schemaTask({
@@ -15,13 +16,22 @@ export const sendInvoiceEmail = schemaTask({
         concurrencyLimit: 10,
     },
     run: async ({ salesId }) => {
-        await fetch(
-            `https://gnd-prodesk.vercel.app/api/cron/send-sales-email`,
+        const resp = await fetch(
+            `${env.NEXT_PUBLIC_APP_URL}/api/cron/send-sales-email`,
+            // `https://gnd-prodesk.vercel.app/api/cron/send-sales-email`,
             {
+                method: "POST",
                 body: JSON.stringify({
                     salesId,
                 }),
             }
-        ).then((r) => r.body);
+        ).then((r) => r.json());
+        // .then((r) => r.body)
+        // .catch((e) => {
+        //     logger.error(e.message);
+        // });
+        //     if(!resp.ok)
+        //         throw new Error(resp.)
+        // console.log(">>>>>>>>");
     },
 });
