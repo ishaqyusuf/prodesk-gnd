@@ -130,6 +130,7 @@ interface HeaderProps {
     icon?: keyof typeof Icons;
     children?;
     secondary?: boolean;
+    className?: string;
 }
 function Header({
     title,
@@ -138,6 +139,7 @@ function Header({
     subtitle,
     onBack,
     children,
+    className,
 }: HeaderProps) {
     // const modal = useModal();
     const isModal = _modal?.data?.type == "modal";
@@ -146,7 +148,7 @@ function Header({
         : [SheetHeader, SheetTitle, SheetDescription];
     const Icon = Icons[icon] || undefined;
     return (
-        <Header className="">
+        <Header className={cn(className)}>
             <div className="flex flex-1">
                 <div className={cn(onBack && "flex flex-1 sm:space-x-4")}>
                     {onBack && !secondary && (

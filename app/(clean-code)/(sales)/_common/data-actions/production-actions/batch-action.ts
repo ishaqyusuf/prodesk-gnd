@@ -47,6 +47,7 @@ export async function assignAllPendingToProductionAction(
                             qty: pending.qty,
                             totalQty: qty.total,
                             produceable,
+                            assignedToId: props.assignedToId,
                         });
                         if (props.submit)
                             await submitItemAssignmentAction({

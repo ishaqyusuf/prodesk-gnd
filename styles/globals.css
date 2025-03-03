@@ -125,10 +125,10 @@ table.size-sm td {
 }
 
 .side-modal-rounded-h-content {
-    @apply h-[calc(95vh)] lg:h-[calc(95vh-3vh)];
+    @apply h-full sm:h-[calc(95vh)] lg:h-[calc(95vh-3vh)];
 }
 .side-modal-rounded {
-    @apply lg:h-[95vh] lg:mt-[2.5vh] lg:mx-4 lg:rounded-xl flex flex-col;
+    @apply max-sm:p-0 max-sm:h-screen max-sm:overflow-hidden lg:h-[95vh] lg:mt-[2.5vh] lg:mx-4 lg:rounded-xl flex flex-col;
 }
 
 table.styled thead {
@@ -149,10 +149,10 @@ table.styled td.action {
 }
 
 @layer base {
-  * {
-    @apply border-border outline-ring/50;
+    * {
+        @apply border-border outline-ring/50;
     }
-  body {
-    @apply bg-background text-foreground;
+    body {
+        @apply bg-background text-foreground;
     }
 }

@@ -1,6 +1,9 @@
 
 # WED, FEB 29
 - midday print feature.
+- sales page mobile responsive
+- sales overview footer in mobile view
+- customer wallet for refund. 
 # WED, FEB 28
 - Payment Transactions Page: delete, recheck sync
 - customer wallet profile.

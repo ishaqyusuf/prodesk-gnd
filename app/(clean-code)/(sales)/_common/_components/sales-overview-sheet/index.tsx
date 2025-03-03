@@ -104,6 +104,7 @@ function PrimaryTab({}) {
     return (
         <>
             <Modal.Header
+                className="max-sm:p-4"
                 title={
                     <span className="uppercase">
                         {store?.overview?.title || "Loading..."}
