@@ -115,7 +115,12 @@ function AssignmentLine({ assignment, index }) {
                         </Button>
                     } */}
                     {workers?.data?.map((w) => (
-                        <Menu.Item key={w.value}>{w.label}</Menu.Item>
+                        <Menu.Item
+                            onClick={() => assignmentChanged(w.value)}
+                            key={w.value}
+                        >
+                            {w.label}
+                        </Menu.Item>
                     ))}
                 </Menu>
 
