@@ -32,7 +32,10 @@ export function zhInitializeState(data: GetSalesBookForm, copy = false) {
     const isLegacy =
         dayjs("2025-02-12").diff(dayjs(data._rawData?.createdAt), "days") > 0;
     function customPrice(price) {
-        if (!price) return "";
+        if (!price && isLegacy) {
+            console.log("IS LEGACY");
+            return "";
+        }
         return price;
     }
     const resp: SalesFormZusData = {
