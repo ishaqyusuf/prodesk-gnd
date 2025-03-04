@@ -17,7 +17,7 @@ model Customers {
     salesOrders    SalesOrders[]
     profile        CustomerTypes?  @relation(fields: [customerTypeId], references: [id])
     addressBooks   AddressBooks[]  @relation(name: "addressBooks")
-    payments       SalesPayments[] @relation()
+    // payments       SalesPayments[] @relation()
     wallet         CustomerWallet?
     auth           DealerAuth?
 

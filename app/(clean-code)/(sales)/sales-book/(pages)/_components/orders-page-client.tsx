@@ -29,9 +29,6 @@ import { PrintAction } from "../../../_common/_components/overview-sheet.bin/foo
 import { useInfiniteDataTable } from "@/components/(clean-code)/data-table/use-data-table";
 import { useMemo } from "react";
 import { deleteSalesByOrderIds } from "../../../_common/data-actions/sales-actions";
-import DevOnly from "@/_v2/components/common/dev-only";
-import { useOpenCustomerQuery } from "@/components/sheets/customer-overview-sheet";
-import { useSalesOverviewQuery } from "@/hooks/use-sales-overview-query";
 
 export default function OrdersPageClient({
     filterFields,
@@ -65,8 +62,6 @@ export default function OrdersPageClient({
             },
         },
     });
-    const customerSheet = useOpenCustomerQuery();
-    const overviewQuery = useSalesOverviewQuery();
     return (
         <div className="bg-white">
             <DataTable.Infinity
@@ -89,16 +84,8 @@ export default function OrdersPageClient({
                         </div>
                         <div className="flex-1"></div>
                         <QueryTabAction />
-                        <DevOnly>
-                            <Button
-                                onClick={() => {
-                                    customerSheet.open("8186877306");
-                                }}
-                            >
-                                Open Customer
-                            </Button>
-                        </DevOnly>
-                        <Button
+
+                        {/* <Button
                             onClick={() => {
                                 openTxForm({});
                             }}
@@ -107,7 +94,7 @@ export default function OrdersPageClient({
                         >
                             <Icons.dollar className="size-4 mr-2" />
                             <span>Pay Portal</span>
-                        </Button>
+                        </Button> */}
                         <Button asChild size="sm">
                             <Link href="/sales-book/create-order">
                                 <Icons.add className="size-4 mr-2" />

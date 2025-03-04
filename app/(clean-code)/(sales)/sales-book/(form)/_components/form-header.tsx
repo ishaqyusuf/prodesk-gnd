@@ -100,7 +100,9 @@ export function FormHeader({ sticky }: { sticky: Sticky }) {
             await refetchData();
             if (resp.data?.error) toast.error(resp.data?.error);
             else {
-                toast.success("Saved");
+                toast.success("Saved", {
+                    closeButton: true,
+                });
             }
         } else {
             toast.info("Debug mode");

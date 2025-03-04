@@ -136,9 +136,17 @@ function AssignBtn() {
     const form = useFormContext();
     const ctx = useSalesOverviewItemsTab();
     const store = salesOverviewStore();
+
     async function onSubmit() {
         const { dueDate, assignedToId } = form.getValues();
-
+        toast.promise(
+            new Promise(async (resolve, reject) => {
+                const controlIds = ctx.selections?.map((a) => a.itemUid);
+            }),
+            {
+                loading: "Assigning...",
+            }
+        );
         await assignAllPendingToProductionAction(
             {
                 salesId: store.overview.id,

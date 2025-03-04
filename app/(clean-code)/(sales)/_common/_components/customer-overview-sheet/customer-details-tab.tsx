@@ -42,7 +42,9 @@ export default function CustomerDetailsTab() {
         const email = form.getValues("email");
         await updateCustomerEmailAction(ctx.profile?.phoneNo, email)
             .then((e) => {
-                toast.success("updated");
+                toast.success("updated", {
+                    closeButton: true,
+                });
                 getCustomerGeneralInfoAction(ctx.profile?.phoneNo).then((e) => {
                     setData(e);
                 });

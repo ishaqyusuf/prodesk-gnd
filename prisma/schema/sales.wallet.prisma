@@ -32,13 +32,14 @@ model CustomerWallet {
     createdAt    DateTime?             @default(now()) @db.Timestamp(0)
     updatedAt    DateTime?             @updatedAt
     deletedAt    DateTime?             @db.Timestamp(0)
-
-    refunds Refunds[]
+    refunds      Refunds[]
 }
 
 model SalesPayments {
     id            Int                  @unique @default(autoincrement())
-    customerId    Int
+    note          String?
+    authorId      Int?
+    // customerId    Int
     transactionId Int?
     orderId       Int
     amount        Float
@@ -50,12 +51,14 @@ model SalesPayments {
     updatedAt     DateTime?            @updatedAt
     order         SalesOrders          @relation(name: "salesPayment", fields: [orderId], references: [id], onDelete: Cascade)
     checkout      SalesCheckout?
-    customer      Customers            @relation(fields: [customerId], references: [id], onDelete: Cascade)
+    // customer      Customers            @relation(fields: [customerId], references: [id], onDelete: Cascade)
     transaction   CustomerTransaction? @relation(fields: [transactionId], references: [id], onDelete: Cascade)
     commissions   SalesCommision[]
+    author        Users?               @relation(fields: [authorId], references: [id])
 
+    @@index([authorId])
     @@index([orderId])
-    @@index([customerId])
+    // @@index([customerId])
     @@index([transactionId])
 }
 

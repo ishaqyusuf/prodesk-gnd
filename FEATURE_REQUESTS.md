@@ -1,6 +1,11 @@
-
-# WED, FEB 29
-- midday print feature.
+# TUE, MAR 04
+- payment method: payment link
+- add payment link generation to email.
+- transform modals to querystate
+  - customer modal with on back handle
+  - customer payment modal
+  - sales overview modal
+# MON, MAR 03
 - sales page mobile responsive
 - sales overview footer in mobile view
 - customer wallet for refund. 
@@ -8,6 +13,9 @@
 - transaction payment method.
 - shipping not selecting all available.
 - split batch assignment & shipping to task chunks.
+- service production toggle not working.
+# THUR, MAR 01
+- midday print feature.
 # WED, FEB 28
 - Payment Transactions Page: delete, recheck sync
 - customer wallet profile.

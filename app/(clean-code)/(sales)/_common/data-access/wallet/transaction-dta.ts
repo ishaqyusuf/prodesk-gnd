@@ -26,6 +26,8 @@ export async function createTransactionDta(data: SalesTransaction) {
                     description: data.description,
                     squarePaymentId: data.squarePaymentId,
                 });
+                console.log(tx.paymentMethod);
+
                 const transactionIds = await Promise.all(
                     saleslist.map(async (orderItem) => {
                         let payAmount =
@@ -128,9 +130,14 @@ export async function createSalesPaymentTransactionDta({
             order: {
                 connect: { id: orderId },
             },
-            customer: {
-                connect: { id: customerId },
+            transaction: {
+                connect: {
+                    id: transactionId,
+                },
             },
+            // customer: {
+            //     connect: { id: customerId },
+            // },
         },
     });
     return payment;

@@ -23,7 +23,6 @@ export async function getSalesPaymentsAction(id) {
             status: true,
             amount: true,
             createdAt: true,
-
             transaction: {
                 select: {
                     id: true,
@@ -41,6 +40,7 @@ export async function getSalesPaymentsAction(id) {
     });
     return payments.map((payment) => {
         let meta: ISalesPaymentMeta = payment.meta as any;
+
         return {
             paymentId: `P${payment.id}-T${payment.transaction.id}`,
             receivedBy: payment.transaction.author.name,

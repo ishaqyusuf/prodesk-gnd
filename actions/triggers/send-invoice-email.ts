@@ -6,14 +6,8 @@ import { render } from "@react-email/render";
 import { composeSalesEmail } from "@/modules/email/emails/invoice";
 import { env } from "@/env.mjs";
 import QueryString from "qs";
-import { tasks } from "@trigger.dev/sdk/v3";
 
 export const __sendInvoiceEmailTrigger = async (id) => {
-    console.log("SENDING EMAIL");
-    // await tasks.trigger("send-invoice-email", {
-    //     salesId: id,
-    // });
-    // return;
     const sales = await prisma.salesOrders.findFirstOrThrow({
         where: {
             id,
@@ -43,7 +37,6 @@ export const __sendInvoiceEmailTrigger = async (id) => {
             },
         },
     });
-    console.log(sales.customer);
 
     let customerEmail: any =
         sales.customer?.email || sales.billingAddress?.email;

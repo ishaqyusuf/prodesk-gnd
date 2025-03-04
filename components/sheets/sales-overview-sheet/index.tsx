@@ -1,6 +1,5 @@
 "use client";
 
-import SalesOverviewModal from "@/app/(clean-code)/(sales)/_common/_components/sales-overview-sheet";
 import { salesOverviewStore } from "@/app/(clean-code)/(sales)/_common/_components/sales-overview-sheet/store";
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import { useSalesOverviewQuery } from "@/hooks/use-sales-overview-query";

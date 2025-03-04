@@ -19,6 +19,7 @@ interface Props {
     link: string;
     customerName;
     type: SalesType;
+    paymentLink?;
 }
 export const composeSalesEmail = (props: Props) => (
     <SalesInvoiceEmail {...props} />
@@ -83,6 +84,14 @@ export const SalesInvoiceEmail = ({ salesRep, type, link, customerName }) => {
                                 href={link}
                             >
                                 View {isQuote ? " quote" : " invoice"}
+                            </Button>
+                        </Section>
+                        <Section className="text-center mt-[50px] mb-[50px]">
+                            <Button
+                                className="bg-transparent text-primary text-[14px] text-[#121212] font-medium no-underline text-center px-6 py-3 border border-solid border-[#121212]"
+                                href={link}
+                            >
+                                Make Payment
                             </Button>
                         </Section>
 

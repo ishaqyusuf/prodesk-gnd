@@ -52,6 +52,7 @@ model Users {
     exportConfigs               ExportConfig[]
     squarePayments              SquarePayments[]
     customerTransactions        CustomerTransaction[]
+    salesTransactions           SalesPayments[]
 
     @@index([createdAt, deletedAt, name])
     @@index([employeeProfileId])
