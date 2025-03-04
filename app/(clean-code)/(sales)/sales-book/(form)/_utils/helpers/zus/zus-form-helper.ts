@@ -10,6 +10,7 @@ import { formatMoney } from "@/lib/use-number";
 
 import { CostingClass } from "./costing-class";
 import { SettingsClass } from "./settings-class";
+import dayjs from "dayjs";
 export function zhInitializeState(data: GetSalesBookForm, copy = false) {
     const profile = data.order?.id
         ? data.salesProfile
@@ -28,7 +29,12 @@ export function zhInitializeState(data: GetSalesBookForm, copy = false) {
     }
     const selectedTax = data._taxForm?.selection?.[0];
     if (copy && selectedTax) selectedTax.salesTaxId = null;
-
+    const isLegacy =
+        dayjs("2025-02-12").diff(dayjs(data._rawData?.createdAt), "days") > 0;
+    function customPrice(price) {
+        if (!price) return "";
+        return price;
+    }
     const resp: SalesFormZusData = {
         // data,
         setting: data.salesSetting,
@@ -254,7 +260,9 @@ export function zhInitializeState(data: GetSalesBookForm, copy = false) {
                                 basePrice: basePrice(doorForm.jambSizePrice),
                             },
                             unitPrice: doorForm.unitPrice,
-                            customPrice: doorForm?.meta?.overridePrice,
+                            customPrice: customPrice(
+                                doorForm?.meta?.overridePrice
+                            ),
                             addon: doorForm.doorPrice,
                         },
                         meta: {
@@ -296,7 +304,9 @@ export function zhInitializeState(data: GetSalesBookForm, copy = false) {
                         total: data.qty,
                     },
                     pricing: {
-                        customPrice: data.priceTags?.moulding?.overridePrice,
+                        customPrice: customPrice(
+                            data.priceTags?.moulding?.overridePrice
+                        ),
                         itemPrice: {
                             basePrice: data.priceTags?.moulding?.basePrice,
                             salesPrice:
@@ -319,7 +329,7 @@ export function zhInitializeState(data: GetSalesBookForm, copy = false) {
                     pricing: {
                         itemPrice: {},
                         unitPrice: data.unitPrice,
-                        customPrice: data.unitPrice,
+                        customPrice: customPrice(data.unitPrice),
                         addon: 0,
                     },
                     selected: true,

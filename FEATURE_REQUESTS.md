@@ -6,6 +6,7 @@
   - customer payment modal
   - sales overview modal
 - components sorting
+- clean invoice safe (prevent duplicates)
 # MON, MAR 03
   - sales page mobile responsive  
   - sales overview footer in mobile view
