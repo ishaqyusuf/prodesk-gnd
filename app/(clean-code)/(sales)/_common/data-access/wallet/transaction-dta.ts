@@ -57,7 +57,8 @@ export async function createTransactionDta(data: SalesTransaction) {
                 );
                 await applyPaymentDta(
                     wallet.id,
-                    transactionIds.filter(Boolean)
+                    transactionIds.filter(Boolean),
+                    data.paymentMode
                 );
                 break;
         }

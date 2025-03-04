@@ -11,7 +11,7 @@ interface Props {
 }
 export default function useEffectLoader<T extends (...args: any) => any>(
     fn: T,
-    {}: Props = {}
+    props: Props = {}
 ) {
     type DataType = Awaited<NonNullable<ReturnType<T>>>;
     const [data, setData] = useState<DataType>();
@@ -28,6 +28,7 @@ export default function useEffectLoader<T extends (...args: any) => any>(
             setData(res);
             setReady(true);
             if (r) setRefreshToken(generateRandomString());
+            props.onSuccess?.(res);
         });
     }
     return {

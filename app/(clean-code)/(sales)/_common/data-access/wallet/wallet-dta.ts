@@ -72,7 +72,7 @@ export async function getWalletBalance(walletId) {
     });
     return sum(tx, "amount");
 }
-export async function applyPaymentDta(walletId, transactionIds) {
+export async function applyPaymentDta(walletId, transactionIds, paymentMethod) {
     const transactions = await prisma.salesPayments.findMany({
         where: {
             id: {
@@ -91,6 +91,7 @@ export async function applyPaymentDta(walletId, transactionIds) {
             amount: total,
             walletId,
             authorId: await authId(),
+            paymentMethod,
             status: "success" as SalesPaymentStatus,
         },
     });

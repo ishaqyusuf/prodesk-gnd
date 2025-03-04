@@ -18,8 +18,13 @@ import ConfirmBtn from "@/components/_v1/confirm-btn";
 
 export function TransactionHistoryTab() {
     const store = salesOverviewStore();
-    const ctx = useEffectLoader(async () =>
-        getSalesPaymentsAction(store.salesId)
+    const ctx = useEffectLoader(
+        async () => getSalesPaymentsAction(store.salesId),
+        {
+            onSuccess(data) {
+                console.log(data);
+            },
+        }
     );
     async function deleteTransaction(id) {
         //
