@@ -492,7 +492,8 @@ function getDoorsTable(
                         console.log(".....");
                         m.housePackageTool?.doors?.map((door, _doorI) => {
                             const doorTitle =
-                                `${door.id}` + door?.stepProduct?.name ||
+                                // `${door.id}` +
+                                door?.stepProduct?.name ||
                                 door?.stepProduct?.door?.title ||
                                 door?.stepProduct?.product?.title;
 
