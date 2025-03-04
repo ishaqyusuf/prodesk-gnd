@@ -21,6 +21,9 @@ export function TransactionHistoryTab() {
     const ctx = useEffectLoader(async () =>
         getSalesPaymentsAction(store.salesId)
     );
+    async function deleteTransaction(id) {
+        //
+    }
     if (!ctx?.data?.length) return <NoResults />;
     return (
         <div>
@@ -57,7 +60,9 @@ export function TransactionHistoryTab() {
                                 <TCell.Status status={tx.status} />
                             </TableCell>
                             <TableCell>
-                                <ConfirmBtn onClick={() => deleteTransaction}
+                                <ConfirmBtn
+                                    onClick={() => deleteTransaction(tx.id)}
+                                />
                             </TableCell>
                         </TableRow>
                     ))}

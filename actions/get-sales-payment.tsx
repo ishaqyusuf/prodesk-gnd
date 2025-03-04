@@ -42,6 +42,7 @@ export async function getSalesPaymentsAction(id) {
         let meta: ISalesPaymentMeta = payment.meta as any;
 
         return {
+            id: payment.id,
             paymentId: `P${payment.id}-T${payment.transaction.id}`,
             receivedBy: payment.transaction.author.name,
             amount: payment.amount,
