@@ -14,6 +14,7 @@ import {
 import { TCell } from "@/components/(clean-code)/data-table/table-cells";
 import { getSalesPaymentsAction } from "@/actions/get-sales-payment";
 import NoResults from "./empty-tx-history";
+import ConfirmBtn from "@/components/_v1/confirm-btn";
 
 export function TransactionHistoryTab() {
     const store = salesOverviewStore();
@@ -31,6 +32,7 @@ export function TransactionHistoryTab() {
                         <TableHead>Received By</TableHead>
                         <TableHead>Amount</TableHead>
                         <TableHead>Status</TableHead>
+                        <TableHead></TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -53,6 +55,9 @@ export function TransactionHistoryTab() {
                             </TableCell>
                             <TableCell>
                                 <TCell.Status status={tx.status} />
+                            </TableCell>
+                            <TableCell>
+                                <ConfirmBtn onClick={() => deleteTransaction}
                             </TableCell>
                         </TableRow>
                     ))}

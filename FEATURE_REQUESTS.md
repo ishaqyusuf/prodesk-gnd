@@ -6,14 +6,14 @@
   - customer payment modal
   - sales overview modal
 # MON, MAR 03
-- sales page mobile responsive
-- sales overview footer in mobile view
-- customer wallet for refund. 
-- shelf items.
-- transaction payment method.
-- shipping not selecting all available.
-- split batch assignment & shipping to task chunks.
-- service production toggle not working.
+  - sales page mobile responsive  
+  - sales overview footer in mobile view
+  - customer wallet for refund. 
+  - shelf items.
+  - transaction payment method.
+  - shipping not selecting all available.
+  - split batch assignment & shipping to task chunks.
+  - service production toggle not working.
 # THUR, MAR 01
 - midday print feature.
 # WED, FEB 28
