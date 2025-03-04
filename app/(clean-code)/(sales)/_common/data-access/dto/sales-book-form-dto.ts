@@ -20,6 +20,8 @@ type SalesFormData = AsyncFnType<typeof getSalesBookFormDataDta>;
 type SalesFormItems = AsyncFnType<typeof typedSalesBookFormItems>;
 export function transformSalesBookForm(data: SalesFormData) {
     const items = typedSalesBookFormItems(data);
+    const deleteDoors = items.map((item) => item.deleteDoors).flat();
+
     const itemArray = transformSalesBookFormItem(data, items);
     const footer = {
         footerPrices: JSON.stringify(footerPrices),
@@ -28,6 +30,7 @@ export function transformSalesBookForm(data: SalesFormData) {
     let paidAmount = sum(data.order?.payments || [], "amount");
     return {
         order: data.order,
+        deleteDoors,
         _rawData: { ...data.order, footer, formItem: itemArray },
         itemArray,
         paidAmount,
@@ -47,26 +50,33 @@ export function typedSalesBookFormItems(data: SalesFormData) {
             [dimension in string]: { id: number };
         } = {};
         // const isType = isComponentType(item.housePackageTool?.doorType as any);
-        item.housePackageTool?.doors?.map((d) => {
-            // if (d.rhQty && !isType.multiHandles) d.rhQty = 0;
-            let dim = `${d.stepProduct?.uid}-${d.dimension?.replaceAll(
-                '"',
-                "in"
-            )}`;
+        const deleteDoors = [];
+        item.housePackageTool?.doors
+            ?.filter((d) => !d.deletedAt)
+            .map((d) => {
+                // if (d.rhQty && !isType.multiHandles) d.rhQty = 0;
+                let dim = `${d.stepProduct?.uid}-${d.dimension?.replaceAll(
+                    '"',
+                    "in"
+                )}`;
 
-            // d.stepProduct?.uid;
-            if (!d.priceId)
-                d.priceData = {
-                    salesUnitCost: d.jambSizePrice,
-                } as any;
-
-            _doorForm[dim] = { ...d } as any;
-            _doorFormDefaultValue[dim] = {
-                id: d.id,
-            };
-        });
+                // d.stepProduct?.uid;
+                if (!d.priceId)
+                    d.priceData = {
+                        salesUnitCost: d.jambSizePrice,
+                    } as any;
+                if (_doorForm[dim]) {
+                    deleteDoors.push(d.id);
+                    return;
+                }
+                _doorForm[dim] = { ...d } as any;
+                _doorFormDefaultValue[dim] = {
+                    id: d.id,
+                };
+            });
         return {
             ...item,
+            deleteDoors,
             housePackageTool: item.housePackageTool
                 ? {
                       ...(item.housePackageTool || {}),
@@ -241,6 +251,7 @@ export function transformMultiDykeItem(
         uid: itemData.multiDykeUid as any,
         multiDyke: itemData.multiDyke as any,
     };
+    let safeTitles: any = [];
     multiComponent.primary = ((multiComponent.uid &&
         multiComponent.multiDyke) ||
         (!multiComponent.multiDyke && multiComponent.uid)) as any;
@@ -308,7 +319,7 @@ export function transformMultiDykeItem(
                     };
                 }
             }
-            const c = (multiComponent.components[safeTitle] = {
+            const cData = {
                 uid,
                 checked: true,
                 heights: _dykeSizes,
@@ -331,10 +342,15 @@ export function transformMultiDykeItem(
                 priceTags,
                 stepProductId: item.housePackageTool?.stepProductId,
                 stepProduct: item.housePackageTool?.stepProduct as any,
-            });
+            };
+            // if (multiComponent.components[safeTitle])
+            //     throw new Error("Component already exists");
+            multiComponent.components[safeTitle] = cData;
+            safeTitles.push(safeTitle);
+
             footerPrices[uid] = {
-                price: c.totalPrice || 0,
-                tax: c.tax,
+                price: cData.totalPrice || 0,
+                tax: cData.tax,
                 doorType: item.meta.doorType,
             };
             sectionPrice += price;
@@ -342,6 +358,7 @@ export function transformMultiDykeItem(
     });
     return {
         multiComponent,
+        safeTitles,
         sectionPrice,
     };
 }

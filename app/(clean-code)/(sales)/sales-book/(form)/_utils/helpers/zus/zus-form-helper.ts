@@ -224,7 +224,11 @@ export function zhInitializeState(data: GetSalesBookForm, copy = false) {
                 formData.meta.salesItemId == item.item.id;
 
             // resp.kvFormItem[uid].groupItem.itemIds.push(formId); //= formData;
-            resp.kvFormItem[uid].groupItem.form[formId] = formData;
+            const form = resp.kvFormItem[uid].groupItem.form;
+            if (form[formId]) {
+                console.log("ALREADY EXIST", formId, form[formId]);
+            }
+            form[formId] = formData;
         }
         Object.entries(item.multiComponent.components).map(([id, data]) => {
             let sp =

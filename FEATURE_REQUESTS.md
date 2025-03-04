@@ -7,6 +7,7 @@
   - sales overview modal
 - components sorting
 - clean invoice safe (prevent duplicates)
+- add notification when email is sent.
 # MON, MAR 03
   - sales page mobile responsive  
   - sales overview footer in mobile view

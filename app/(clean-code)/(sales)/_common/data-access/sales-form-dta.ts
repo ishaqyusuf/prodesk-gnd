@@ -121,6 +121,14 @@ export async function createSalesBookFormDataDta(
 }
 async function formatForm(data: GetSalesBookFormDataDta) {
     const result = transformSalesBookForm(data);
+    const { deleteDoors } = result;
+    if (deleteDoors?.length)
+        await prisma.dykeSalesDoors.updateMany({
+            where: { id: { in: deleteDoors }, salesOrderId: data.order?.id },
+            data: {
+                deletedAt: new Date(),
+            },
+        });
     const ctx = await salesFormData(true);
     const _taxForm = await salesTaxForm(
         data.order.taxes as any,
