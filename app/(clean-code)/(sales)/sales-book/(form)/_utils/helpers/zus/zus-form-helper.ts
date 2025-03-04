@@ -7,7 +7,7 @@ import { getFormState } from "../../../_common/_stores/form-data-store";
 import { StepHelperClass } from "./step-component-class";
 import { generateRandomString } from "@/lib/utils";
 import { formatMoney } from "@/lib/use-number";
-import { inToFt } from "@/app/(clean-code)/(sales)/_common/utils/sales-utils";
+
 import { CostingClass } from "./costing-class";
 import { SettingsClass } from "./settings-class";
 export function zhInitializeState(data: GetSalesBookForm, copy = false) {

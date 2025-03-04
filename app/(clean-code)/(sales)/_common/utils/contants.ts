@@ -23,6 +23,7 @@ export const INVOICE_FILTER_OPTIONS = [
     "pending",
     "late",
     "part-paid",
+    "overdraft",
 ] as const;
 export const PRODUCTION_FILTER_OPTIONS = [
     "pending",

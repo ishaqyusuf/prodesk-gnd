@@ -148,6 +148,12 @@ export function whereSales(query: SearchParamsType) {
                         },
                     ],
                 });
+            case "overdraft":
+                whereAnd.push({
+                    amountDue: {
+                        lt: 0,
+                    },
+                });
                 break;
         }
     }

@@ -3,6 +3,7 @@ import FPage from "@/components/(clean-code)/fikr-ui/f-page";
 import { FormClient } from "../../_components/form-client";
 import { prisma } from "@/db";
 import { constructMetadata } from "@/lib/(clean-code)/construct-metadata";
+import { fixUndefinedOrderIdAction } from "@/actions/--fix/fix-undefined-order-id";
 
 export async function generateMetadata({ params }) {
     return constructMetadata({
@@ -10,14 +11,8 @@ export async function generateMetadata({ params }) {
     });
 }
 export default async function EditQuotePage({ params, searchParams }) {
-    const s = await prisma.salesOrders.findFirst({
-        where: {
-            deletedAt: {},
-            orderId: {
-                contains: "quo-241226-008",
-            },
-        },
-    });
+    let slug = params.slug;
+    await fixUndefinedOrderIdAction(slug, "quote");
 
     // console.log(s);
     const data = await getSalesBookFormUseCase({

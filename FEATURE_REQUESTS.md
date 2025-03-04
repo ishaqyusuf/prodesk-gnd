@@ -5,6 +5,7 @@
   - customer modal with on back handle
   - customer payment modal
   - sales overview modal
+- components sorting
 # MON, MAR 03
   - sales page mobile responsive  
   - sales overview footer in mobile view

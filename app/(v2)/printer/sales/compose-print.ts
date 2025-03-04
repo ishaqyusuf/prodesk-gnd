@@ -421,6 +421,7 @@ function getDoorsTable(
                         (!item.multiDyke && i.id == item.id) ||
                         (item.multiDyke && item.multiDykeUid == i.multiDykeUid)
                 );
+
                 _multies.map((m, _) => {
                     const getVal = (
                         cell: Cell,
@@ -488,9 +489,10 @@ function getDoorsTable(
                             })
                         );
                     } else {
+                        console.log(".....");
                         m.housePackageTool?.doors?.map((door, _doorI) => {
                             const doorTitle =
-                                door?.stepProduct?.name ||
+                                `${door.id}` + door?.stepProduct?.name ||
                                 door?.stepProduct?.door?.title ||
                                 door?.stepProduct?.product?.title;
 
