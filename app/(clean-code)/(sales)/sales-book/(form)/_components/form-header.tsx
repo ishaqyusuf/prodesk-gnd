@@ -57,6 +57,10 @@ export function FormHeader({ sticky }: { sticky: Sticky }) {
                       slug: zus.metaData.salesId,
                       dispatchList: [],
                   },
+                  overview: {
+                      type: zus.metaData.type,
+                      orderId: zus.metaData.salesId,
+                  },
               }
             : null;
     }, [zus.metaData]);

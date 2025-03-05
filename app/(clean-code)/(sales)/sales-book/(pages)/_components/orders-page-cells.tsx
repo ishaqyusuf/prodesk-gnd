@@ -182,12 +182,11 @@ function InvoicePending({ item }: ItemProps) {
     return (
         <TCell>
             <TCell.Money
-                value={invoice.pending || 0}
+                value={Math.abs(invoice.pending || 0)}
                 className={cn(
                     "text-muted-foreground font-mono font-medium",
-
-                    invoice.pending > 0 && "text-red-700/70",
-                    invoice.pending < 0 && "text-red-700/70"
+                    invoice.pending > 0 && "text-red-700/80",
+                    invoice.pending < 0 && "bg-emerald-700 text-white"
                 )}
             />
         </TCell>
