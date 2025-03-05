@@ -35,7 +35,7 @@ export function NoteForm({}) {
 
         const result = await createNoteAction({
             // type: "sales",
-            type,
+            type: type as any,
             status,
             headline: props.headline,
             subject: props.subject,

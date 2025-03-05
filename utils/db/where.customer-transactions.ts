@@ -4,6 +4,16 @@ import { Prisma } from "@prisma/client";
 
 export function whereCustomerTx(query: SearchParamsType) {
     const whereAnd: Prisma.CustomerTransactionWhereInput[] = [
+        {
+            OR: [
+                { type: {} },
+                {
+                    amount: {
+                        lte: 0,
+                    },
+                },
+            ],
+        },
         // {
         //     salesPayments: {
         //         some: {
