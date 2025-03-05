@@ -25,7 +25,6 @@ export async function getSalesCustomerTxAction(query: SearchParamsType) {
             description: true,
             status: true,
             paymentMethod: true,
-
             author: {
                 select: {
                     name: true,

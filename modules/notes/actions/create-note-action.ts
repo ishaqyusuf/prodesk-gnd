@@ -2,15 +2,16 @@
 import { user } from "@/app/(v1)/_actions/utils";
 import { prisma } from "@/db";
 import { TagFilters } from "../utils";
+import { NoteTagTypes } from "../constants";
 
 interface CreateNoteData {
-    type;
-    headline;
-    subject;
+    type?: NoteTagTypes;
+    headline?;
+    subject?;
     note;
-    status;
+    status?;
     tags: TagFilters[];
-    eventDate;
+    eventDate?;
 }
 export async function createNoteAction(data: CreateNoteData) {
     const auth = await user();

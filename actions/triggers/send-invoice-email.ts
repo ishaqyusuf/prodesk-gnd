@@ -6,6 +6,7 @@ import { render } from "@react-email/render";
 import { composeSalesEmail } from "@/modules/email/emails/invoice";
 import { env } from "@/env.mjs";
 import QueryString from "qs";
+import { createNoteAction } from "@/modules/notes/actions/create-note-action";
 
 export const __sendInvoiceEmailTrigger = async (id) => {
     const sales = await prisma.salesOrders.findFirstOrThrow({
@@ -73,6 +74,19 @@ export const __sendInvoiceEmailTrigger = async (id) => {
                 salesRep,
             })
         ),
+    });
+    await createNoteAction({
+        note: isQuote ? "Quote email sent" : "Invoice email sent",
+        subject: "Email Notification",
+        headline: "",
+        status: "",
+        type: "email",
+        tags: [
+            {
+                tagName: "salesId",
+                tagValue: String(sales.id),
+            },
+        ],
     });
     if (response.error) throw new Error(`Unable to send email`);
 };

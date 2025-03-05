@@ -5,6 +5,7 @@ model CustomerTransaction {
     amount        Float
     walletId      Int?
     paymentMethod String?
+    type          String? //wallet, transaction
     description   String?              @db.LongText
     meta          Json?                @db.Json
     createdAt     DateTime?            @default(now()) @db.Timestamp(0)

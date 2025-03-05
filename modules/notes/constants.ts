@@ -2,6 +2,7 @@ import { parseAsString } from "nuqs";
 import { z } from "zod";
 
 export const noteTypes = [
+    "email",
     "general",
     "payment",
     "production",
