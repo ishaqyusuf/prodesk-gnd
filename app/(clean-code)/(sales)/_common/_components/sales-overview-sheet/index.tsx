@@ -125,7 +125,7 @@ function PrimaryTab({}) {
                 }}
                 className=""
             >
-                <div className="flex justify-end">
+                <div className="flex md:hidden justify-end">
                     <Select
                         value={store.currentTab}
                         onValueChange={(e) => {
