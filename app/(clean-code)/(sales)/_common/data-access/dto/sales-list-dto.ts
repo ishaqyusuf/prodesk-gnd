@@ -11,6 +11,7 @@ import {
 import { overallStatus, statToKeyValueDto } from "./sales-stat-dto";
 import { dispatchTitle } from "./sales-shipping-dto";
 import { toNumber } from "@/lib/utils";
+import { getNameInitials } from "@/utils/get-name-initials";
 
 export type Item = GetSalesListDta["data"][number];
 export function salesOrderDto(data: Item) {
@@ -73,6 +74,7 @@ function commonListData(data: Item) {
         customerId: data.customer?.id,
         isBusiness: data.customer?.businessName,
         salesRep: data.salesRep?.name,
+        salesRepInitial: getNameInitials(data.salesRep?.name),
         poNo: meta?.po,
         deliveryOption: data?.deliveryOption,
         customerPhone:

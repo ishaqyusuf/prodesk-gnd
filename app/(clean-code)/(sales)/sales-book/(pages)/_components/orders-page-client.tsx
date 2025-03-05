@@ -44,7 +44,7 @@ export default function OrdersPageClient({
                 ctx.Column("Customer", "customer", Cells.Customer),
                 ctx.Column("Phone", "phone", Cells.CustomerPhone),
                 ctx.Column("Address", "address", Cells.Address),
-                ctx.Column("Rep", "rep", Cells.SalesRep),
+                // ctx.Column("Rep", "rep", Cells.SalesRep),
                 ctx.Column("Invoice", "invoice", Cells.Invoice),
                 ctx.Column("Pending", "pending", Cells.InvoicePending),
                 ctx.Column("Dispatch", "dispatch", Cells.Dispatch),

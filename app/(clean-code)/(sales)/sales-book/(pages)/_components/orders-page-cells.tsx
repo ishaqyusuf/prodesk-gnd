@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { useTheme } from "next-themes";
 import TextWithTooltip from "@/components/(clean-code)/custom/text-with-tooltip";
 import ConfirmBtn from "@/components/_v1/confirm-btn";
+import { Badge } from "@/components/ui/badge";
 
 export interface ItemProps {
     item: GetSalesOrdersDta["data"][number];
@@ -27,7 +28,16 @@ function Order({ item }: ItemProps) {
     return (
         <TCell>
             <TCell.Secondary className="whitespace-nowrap  ">
-                {item.orderId}
+                {item.orderId}{" "}
+                {item.orderId
+                    ?.toLocaleUpperCase()
+                    ?.endsWith(item?.salesRepInitial) || (
+                    <span>
+                        <Badge className="font-mono" variant="secondary">
+                            {item.salesRepInitial}
+                        </Badge>
+                    </span>
+                )}
             </TCell.Secondary>
             {/* <TCell.Secondary>{item.salesDate}</TCell.Secondary> */}
         </TCell>
