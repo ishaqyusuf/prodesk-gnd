@@ -129,7 +129,7 @@ function PrimaryTab({}) {
                     <Select
                         value={store.currentTab}
                         onValueChange={(e) => {
-                            store.update("currentTab", e);
+                            store.update("currentTab", e as any);
                         }}
                     >
                         <SelectTrigger className="w-1/2 space-x-1 font-medium">
