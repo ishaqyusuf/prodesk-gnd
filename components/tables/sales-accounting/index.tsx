@@ -36,7 +36,7 @@ export default function SalesAccountingTable({
                 ctx.Column("Description", "description", DescriptionCell),
                 ctx.Column("Order #", "order_ids", OrderIdCell),
                 ctx.Column("Sales Rep", "sale_rep", SalesRepCell),
-                ctx.Column("Received By", "recieved_by", PaymentAuthorCell),
+                ctx.Column("Processed By", "recieved_by", PaymentAuthorCell),
                 ctx.Column("Status", "status", StatusCell),
                 // ctx.Column("Order #", "order.no", Cells.Order),
                 // ctx.Column("Sales Rep", "sales.rep", Cells.SalesRep),

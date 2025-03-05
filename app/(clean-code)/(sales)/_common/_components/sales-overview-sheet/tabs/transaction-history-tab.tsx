@@ -37,7 +37,7 @@ export function TransactionHistoryTab() {
                     <TableRow>
                         <TableHead>Date</TableHead>
                         <TableHead>Payment Method</TableHead>
-                        <TableHead>Received By</TableHead>
+                        <TableHead>Processed By</TableHead>
                         <TableHead>Amount</TableHead>
                         <TableHead>Status</TableHead>
                         <TableHead></TableHead>
