@@ -281,7 +281,7 @@ function SecondaryPane({ children }) {
 }
 function Pane({ children }) {
     return (
-        <div className="h-auto w-full sm:w-[600px] flex flex-col side-modal-rounded-h-content">
+        <div className="w-full lg:w-[600px] flex flex-col side-modal-rounded-h-content">
             {children}
         </div>
     );

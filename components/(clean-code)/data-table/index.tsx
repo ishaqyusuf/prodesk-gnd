@@ -151,15 +151,15 @@ function _Table({}) {
     const { table, columns, ...ctx } = useInfiniteDataTable();
 
     return (
-        <div className="z-0 max-sm:w-[100vw] max-sm:overflow-auto">
+        <div className="z-0 max-md:w-[100vw] max-md:overflow-auto">
             <Table
                 containerClassName={
-                    ctx.topBarHeight ? "w-full sm:overflow-clip" : ""
+                    ctx.topBarHeight ? "w-full md:overflow-clip" : ""
                 }
             >
                 <TableHeader
                     className={cn(
-                        ctx.topBarHeight ? "sm:sticky bg-muted z-10" : ""
+                        ctx.topBarHeight ? "md:sticky bg-muted z-10" : ""
                     )}
                     style={{ top: `${ctx.topBarHeight}px` }}
                 >

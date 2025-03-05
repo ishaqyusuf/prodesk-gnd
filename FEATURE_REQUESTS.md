@@ -1,3 +1,5 @@
+# WED, MAR 05
+- route cache
 # TUE, MAR 04
 - payment method: payment link
 - add payment link generation to email.

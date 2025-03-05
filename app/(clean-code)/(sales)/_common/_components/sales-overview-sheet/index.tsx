@@ -13,6 +13,12 @@ import { SalesShippingOverview } from "./tabs/sales-shipping-overview";
 import { ProductionNoteTab } from "./tabs/prod-note-tab";
 import { SalesNoteTab } from "./tabs/sales-note-tab";
 import { TransactionHistoryTab } from "./tabs/transaction-history-tab";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+} from "@/components/ui/select";
 
 interface OpenSalesOverviewProps {
     salesId;
@@ -119,7 +125,44 @@ function PrimaryTab({}) {
                 }}
                 className=""
             >
-                <TabsList className={cn("w-full", !store.showTabs && "hidden")}>
+                <div className="flex justify-end">
+                    <Select
+                        value={store.currentTab}
+                        onValueChange={(e) => {
+                            store.update("currentTab", e);
+                        }}
+                    >
+                        <SelectTrigger className="w-1/2 space-x-1 font-medium">
+                            <span className="uppercase">
+                                {
+                                    store.tabs?.find(
+                                        (s) => s.name == store.currentTab
+                                    )?.label
+                                }
+                            </span>
+                        </SelectTrigger>
+                        <SelectContent>
+                            {store.tabs?.map((tab) => (
+                                <SelectItem
+                                    className={cn(
+                                        "uppercase",
+                                        !tab.show && "hidden"
+                                    )}
+                                    key={tab.name}
+                                    value={tab.name}
+                                >
+                                    {tab.label}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+                </div>
+                <TabsList
+                    className={cn(
+                        "w-full hidden md:block",
+                        !store.showTabs && "hidden md:hidden"
+                    )}
+                >
                     {store.tabs?.map((tab) => (
                         <TabsTrigger
                             className={cn("uppercase", !tab.show && "hidden")}
