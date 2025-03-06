@@ -35,7 +35,6 @@ export function PrintMenuAction({ pdf, data }: Props) {
                                 : "https://gnd-prodesk.vercel.app"
                         }/api/pdf/sales?${QueryString.stringify(query)}`
                     ).then((res) => res.json());
-                    console.log(pdf);
                     const link = document.createElement("a");
                     // link.href = pdf.url;
                     const downloadUrl = pdf.url.replace(

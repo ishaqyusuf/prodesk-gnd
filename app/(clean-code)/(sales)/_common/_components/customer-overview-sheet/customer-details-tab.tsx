@@ -19,7 +19,6 @@ import { Form } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 
 import Button from "@/components/common/button";
-import InputControl from "@/_v2/components/common/input-control";
 import { updateCustomerEmailAction } from "@/actions/update-customer-email-action";
 import { toast } from "sonner";
 import FormInput from "@/components/common/controls/form-input";

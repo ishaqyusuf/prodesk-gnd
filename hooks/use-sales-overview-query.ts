@@ -3,7 +3,13 @@ import {
     salesTabs,
 } from "@/app/(clean-code)/(sales)/_common/_components/sales-overview-sheet/store";
 import { SalesType } from "@/app/(clean-code)/(sales)/types";
-import { parseAsInteger, parseAsStringEnum, useQueryStates } from "nuqs";
+import {
+    parseAsJson,
+    parseAsString,
+    parseAsStringEnum,
+    useQueryStates,
+} from "nuqs";
+import { useOnCloseQuery } from "./use-on-close-query";
 
 const openModes = [
     "quote",
@@ -14,16 +20,30 @@ const openModes = [
 ] as const;
 type Modes = (typeof openModes)[number];
 export function useSalesOverviewQuery() {
+    const onCloseQuery = useOnCloseQuery();
     const [params, setParams] = useQueryStates({
-        "sales-overview-id": parseAsInteger,
+        "sales-overview-id": parseAsString,
         "sales-type": parseAsStringEnum(["quote", "sales"] as SalesType[]),
         mode: parseAsStringEnum([...openModes]),
+        onCloseQuery: parseAsJson(),
     });
 
     return {
         ...params,
+        params,
+        close() {
+            setParams(null);
+            onCloseQuery.handle(params, setParams);
+        },
         setParams,
-
+        open2(orderNo: string, mode: Modes) {
+            let salesType: SalesType = mode == "quote" ? "quote" : "order";
+            setParams({
+                "sales-overview-id": orderNo,
+                "sales-type": salesType,
+                mode,
+            });
+        },
         open(salesOverviewId: number, mode: Modes) {
             let salesType: SalesType = mode == "quote" ? "quote" : "order";
             salesOverviewStore.getState().reset({
@@ -35,7 +55,7 @@ export function useSalesOverviewQuery() {
                 currentTab: currentTab(),
             });
             setParams({
-                "sales-overview-id": salesOverviewId,
+                // "sales-overview-id": salesOverviewId,
                 "sales-type": salesType,
                 mode,
             });

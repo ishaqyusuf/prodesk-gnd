@@ -1,6 +1,7 @@
 "use server";
 
 import { prisma } from "@/db";
+import { formatMoney } from "@/lib/use-number";
 import { AsyncFnType } from "@/types";
 import { ISalesPaymentMeta } from "@/types/sales";
 
@@ -19,6 +20,7 @@ export async function getSalesPaymentsAction(id) {
                     orderId: true,
                 },
             },
+            note: true,
             meta: true,
             status: true,
             amount: true,
@@ -41,13 +43,17 @@ export async function getSalesPaymentsAction(id) {
     });
     return payments.map((payment) => {
         let meta: ISalesPaymentMeta = payment.meta as any;
-
         return {
             payment,
             id: payment.id,
             paymentId: `P${payment.id}-T${payment.transaction.id}`,
             receivedBy: payment.transaction.author.name,
             amount: payment.amount,
+            note:
+                payment.note ||
+                `$${formatMoney(payment.amount)} paid for order ${
+                    payment.order?.orderId
+                }`,
             date: payment.createdAt,
             status: payment.status,
             paymentMethod:

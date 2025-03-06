@@ -5,8 +5,8 @@ import BackwardCompat from "./_backward-compat";
 import { CustomerOverviewSheet } from "@/components/sheets/customer-overview-sheet";
 import { SalesPreviewModal } from "@/components/modals/sales-preview-modal";
 import { SalesQuickAction } from "@/components/sales-quick-action";
-import { fixPaymentMethod } from "@/actions/--fix/fix-payment-method";
-// import SalesOverviewSheet from "@/components/sheets/sales-overview-sheet";
+
+import SalesOverviewSheet from "@/components/sheets/sales-overview-sheet";
 
 export default async function Layout({ children }) {
     // await fixPaymentMethod();
@@ -19,7 +19,7 @@ export default async function Layout({ children }) {
             </ContentLayout>
             <CustomerOverviewSheet />
             <SalesPreviewModal />
-            {/* <SalesOverviewSheet /> */}
+            <SalesOverviewSheet />
         </SidebarLayout>
     );
 }

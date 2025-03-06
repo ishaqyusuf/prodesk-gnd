@@ -16,10 +16,17 @@ import { PoInline } from "@/components/sheets/sales-overview-sheet/po-inline";
 import { SalesDateInline } from "@/components/sheets/sales-overview-sheet/sales-date-inline";
 import { SalesDeliveryCostInline } from "@/components/sheets/sales-overview-sheet/sales-delivery-cost-inline";
 import { SalesInvoiceDueStatus } from "@/components/sales-invoice-due-status";
+import { useCustomerOverviewQuery } from "@/hooks/use-customer-overview-query";
+import DevOnly from "@/_v2/components/common/dev-only";
+import { _modal } from "@/components/common/modal/provider";
+import { useSalesOverviewQuery } from "@/hooks/use-sales-overview-query";
 
 export function SalesInfoTab({}) {
     const store = salesOverviewStore();
     const overview = store.overview;
+    const salesQuery = useSalesOverviewQuery();
+    const customerOverviewQuery = useCustomerOverviewQuery();
+
     if (!overview) return;
     return (
         <div>
@@ -41,16 +48,32 @@ export function SalesInfoTab({}) {
             <InfoLine
                 label="Customer"
                 value={
-                    <Button
-                        size="xs"
-                        disabled={!overview?.phoneNo}
-                        onClick={() => {
-                            openCustomerOverviewSheet(overview.phoneNo);
-                        }}
-                        variant={overview?.phoneNo ? "destructive" : "outline"}
-                    >
-                        {overview?.displayName || overview?.phoneNo}
-                    </Button>
+                    <div>
+                        <Button
+                            size="xs"
+                            disabled={!overview?.phoneNo}
+                            onClick={() => {
+                                openCustomerOverviewSheet(overview.phoneNo);
+                            }}
+                            variant={
+                                overview?.phoneNo ? "destructive" : "outline"
+                            }
+                        >
+                            {overview?.displayName || overview?.phoneNo}
+                        </Button>
+                        <DevOnly>
+                            <Button
+                                onClick={() => {
+                                    _modal.close();
+                                    customerOverviewQuery.open(
+                                        overview.phoneNo
+                                    );
+                                }}
+                            >
+                                V2
+                            </Button>
+                        </DevOnly>
+                    </div>
                 }
             ></InfoLine>
             <SalesDateInline />
@@ -112,6 +135,16 @@ export function SalesInfoTab({}) {
                     </div>
                 ))}
             </div>
+            <DevOnly>
+                <Button
+                    onClick={() => {
+                        _modal.close();
+                        salesQuery.open2(overview.orderId, "sales");
+                    }}
+                >
+                    V2
+                </Button>
+            </DevOnly>
             <Note
                 admin
                 tagFilters={[
