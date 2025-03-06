@@ -156,3 +156,6 @@ table.styled td.action {
         @apply bg-background text-foreground;
     }
 }
+
+.custom-sheet {
+}
