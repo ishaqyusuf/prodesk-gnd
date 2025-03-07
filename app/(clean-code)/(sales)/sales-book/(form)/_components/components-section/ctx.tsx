@@ -164,6 +164,7 @@ export function useStepContext(stepUid) {
         q,
         setQ,
         items: filteredComponents || [],
+        setItems: setFilteredComponents,
         sticky,
         cls: stepHelper,
         props,

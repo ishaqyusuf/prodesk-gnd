@@ -358,10 +358,21 @@ model DykeStepProducts {
     salesDoors        DykeSalesDoors[]
     step              DykeSteps           @relation(fields: [dykeStepId], references: [id])
     stepForms         DykeStepForm[]
+    sorts             ProductSortIndex[]
 
     @@index([doorId])
     @@index([dykeStepId])
     @@index([dykeProductId])
+}
+
+model ProductSortIndex {
+    id                 Int               @unique @default(autoincrement())
+    sortIndex          Int
+    createdAt          DateTime?         @default(now()) @db.Timestamp(0)
+    updatedAt          DateTime?         @updatedAt
+    deletedAt          DateTime?         @db.Timestamp(0)
+    stepProduct        DykeStepProducts? @relation(fields: [dykeStepProductsId], references: [id])
+    dykeStepProductsId Int?
 }
 
 model DykePricingSystem {

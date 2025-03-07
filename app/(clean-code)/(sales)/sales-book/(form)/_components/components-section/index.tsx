@@ -40,6 +40,10 @@ import { openDoorSizeSelectModal } from "../modals/door-size-select-modal/open-m
 import { openSectionSettingOverride } from "../modals/component-section-setting-override";
 import { CustomComponent } from "./custom-component";
 import { CustomComponentAction } from "./custom-component.action";
+import { Sortable, SortableItem } from "@/components/ui/sortable";
+import { closestCorners } from "@dnd-kit/core";
+import { useHotkeys } from "react-hotkeys-hook";
+import { useSortControl } from "@/hooks/use-sort-control";
 
 interface Props {
     itemStepUid;
@@ -47,23 +51,44 @@ interface Props {
 export function ComponentsSection({ itemStepUid }: Props) {
     const ctx = useStepContext(itemStepUid);
     const { items, sticky, cls, props } = ctx;
-
+    const sortMode = useSortControl();
     return (
         <ScrollArea
             ref={sticky.containerRef}
             className="p-4 pb-20 h-full smax-h-[80vh] relative"
         >
-            {/* <div>ITEMS: {items?.length}</div> */}
-            <div className="grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4">
-                {items?.map((component) => (
-                    <Component
-                        ctx={ctx}
-                        key={component.uid}
-                        component={component}
-                    />
-                ))}
-                <CustomComponent ctx={ctx} />
-            </div>
+            <Sortable
+                orientation="mixed"
+                collisionDetection={closestCorners}
+                value={items}
+                onValueChange={ctx.setItems}
+                overlay={<div className="size-full rounded-md bg-primary/10" />}
+            >
+                <div className="grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4">
+                    {items?.map((component, index) => (
+                        <SortableItem
+                            key={component.id}
+                            value={component.id}
+                            asTrigger
+                            asChild={sortMode}
+                        >
+                            <div className="">
+                                {/* <span>
+                                    {sortMode ? "sort-mode" : "sort-mode-off"}
+                                </span> */}
+                                <Component
+                                    sortMode={sortMode}
+                                    ctx={ctx}
+                                    itemIndex={index}
+                                    key={component.uid}
+                                    component={component}
+                                />
+                            </div>
+                        </SortableItem>
+                    ))}
+                    <CustomComponent ctx={ctx} />
+                </div>
+            </Sortable>
             <FloatingAction ctx={ctx} />
         </ScrollArea>
     );
@@ -247,10 +272,14 @@ export function Component({
     component,
     ctx,
     swapDoor,
+    sortMode,
+    itemIndex,
 }: {
     component: ZusComponent;
     ctx: UseStepContext;
     swapDoor?;
+    sortMode;
+    itemIndex;
 }) {
     const { stepUid } = ctx;
     const zus = useFormDataStore();
@@ -258,6 +287,7 @@ export function Component({
 
     const selectState = ctx.selectionState;
     const [open, setOpen] = useState(false);
+
     const { cls } = useMemo(() => {
         const cls = new ComponentHelperClass(
             stepUid,
@@ -305,17 +335,23 @@ export function Component({
                 cls.getMultiSelectData()?.length} */}
             <button
                 className={cn(
-                    "border  h-full hover:bg-white  w-full rounded-lg overflow-hidden",
+                    "border h-full hover:bg-white  w-full rounded-lg overflow-hidden",
                     (multiSelect && cls.multiSelected()) ||
                         stepForm?.componentUid == component.uid
                         ? "border-muted-foreground bg-white"
-                        : "hover:border-muted-foreground/50"
+                        : "hover:border-muted-foreground/50",
+                    sortMode &&
+                        "border-dashed border-muted-foreground hover:border-muted-foreground"
                 )}
                 onClick={selectComponent}
             >
                 <div className="flex h-full flex-col">
                     <div className="flex-1">
-                        <ComponentImg aspectRatio={4 / 2} src={component.img} />
+                        <ComponentImg
+                            noHover={sortMode}
+                            aspectRatio={4 / 2}
+                            src={component.img}
+                        />
                     </div>
                     <div className="p-2 border-t font-mono inline-flex text-sm justify-between">
                         <Label className=" uppercase">{component.title}</Label>

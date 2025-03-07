@@ -20,7 +20,6 @@ export async function loadStepComponentsDta(props: LoadStepComponentsProps) {
     const filtered = resp.filter(
         (r, i) => resp.findIndex((s) => s.title == r.title) == i
     );
-    console.log(filtered.length);
     return filtered;
     // if (resp.filter((s) => s.sortIndex >= 0).length)
     //     return resp.sort((a, b) => a.sortIndex - b.sortIndex);
@@ -108,7 +107,7 @@ export async function getComponentsDta(props: LoadStepComponentsProps) {
 export function transformStepProduct(
     component: AsyncFnType<typeof getComponentsDta>[number]
 ) {
-    const { door, product, ...prod } = component;
+    const { door, product, sortIndex, ...prod } = component;
     let meta: StepComponentMeta = prod.meta as any;
     if (!prod.meta)
         meta = {
@@ -124,6 +123,7 @@ export function transformStepProduct(
     //     };
     return {
         uid: component.uid,
+        sortIndex,
         id: component.id,
         title: prod.name || door?.title || product?.title,
         img: prod.img || product?.img || door?.img,

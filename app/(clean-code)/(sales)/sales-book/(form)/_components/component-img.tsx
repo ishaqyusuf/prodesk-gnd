@@ -34,6 +34,7 @@ export function ComponentImg({
             <AspectRatio ratio={aspectRatio}>
                 {src ? (
                     <Image
+                        draggable={false}
                         src={`${env.NEXT_PUBLIC_CLOUDINARY_BASE_URL}/dyke/${src}`}
                         alt={alt}
                         className="object-contain"
