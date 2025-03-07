@@ -72,32 +72,7 @@ export function useStepContext(stepUid) {
         ];
     }, [stepComponents]);
     const [tab, setTab] = useState<"main" | "custom" | "hidden">("main");
-    // useEffect(() => {
-    //     setTabs([
-    //         {
-    //             title: "Default Components",
-    //             count: stepComponents?.filter(
-    //                 (s) => s._metaData.visible && !s._metaData.custom
-    //             ).length,
-    //             Icon: Layout,
-    //             tab: "main",
-    //         },
-    //         {
-    //             title: "Custom Components",
-    //             count: stepComponents?.filter((s) => s._metaData.custom).length,
-    //             Icon: Edit3,
-    //             tab: "custom",
-    //         },
-    //         {
-    //             title: "Hidden Components",
-    //             count: stepComponents?.filter(
-    //                 (s) => !s._metaData.visible && !s._metaData.custom
-    //             ).length,
-    //             Icon: EyeOff,
-    //             tab: "hidden",
-    //         },
-    //     ]);
-    // }, [stepComponents]);
+
     useEffect(() => {
         setTabComponents(
             stepComponents.filter((s) => {

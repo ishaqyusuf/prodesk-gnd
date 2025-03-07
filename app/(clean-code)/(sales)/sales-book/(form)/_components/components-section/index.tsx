@@ -6,8 +6,16 @@ import {
 import { zusDeleteComponents } from "../../_utils/helpers/zus/zus-step-helper";
 import { Menu } from "@/components/(clean-code)/menu";
 import { Icons } from "@/components/_v1/icons";
-import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { cn } from "@/lib/utils";
+import {
+    memo,
+    useCallback,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+    useTransition,
+} from "react";
+import { cn, generateRandomString } from "@/lib/utils";
 import {
     BoxSelect,
     CheckCircle,
@@ -52,6 +60,12 @@ export function ComponentsSection({ itemStepUid }: Props) {
     const ctx = useStepContext(itemStepUid);
     const { items, sticky, cls, props } = ctx;
     const sortMode = useSortControl();
+    const [savingSort, startSavingSort] = useTransition();
+    const onSorted = async (e: typeof items) => {
+        startSavingSort(async () => {
+            ctx.setItems(e);
+        });
+    };
     return (
         <ScrollArea
             ref={sticky.containerRef}
@@ -61,7 +75,7 @@ export function ComponentsSection({ itemStepUid }: Props) {
                 orientation="mixed"
                 collisionDetection={closestCorners}
                 value={items}
-                onValueChange={ctx.setItems}
+                onValueChange={onSorted}
                 overlay={<div className="size-full rounded-md bg-primary/10" />}
             >
                 <div className="grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4">
@@ -70,20 +84,16 @@ export function ComponentsSection({ itemStepUid }: Props) {
                             key={component.id}
                             value={component.id}
                             asTrigger
-                            asChild={sortMode}
+                            className={cn(savingSort && "grayscale")}
+                            asChild
                         >
-                            <div className="">
-                                {/* <span>
-                                    {sortMode ? "sort-mode" : "sort-mode-off"}
-                                </span> */}
-                                <Component
-                                    sortMode={sortMode}
-                                    ctx={ctx}
-                                    itemIndex={index}
-                                    key={component.uid}
-                                    component={component}
-                                />
-                            </div>
+                            <Component
+                                sortMode={sortMode}
+                                ctx={ctx}
+                                itemIndex={index}
+                                key={component.uid}
+                                component={component}
+                            />
                         </SortableItem>
                     ))}
                     <CustomComponent ctx={ctx} />
