@@ -4,6 +4,7 @@ import { Icons } from "@/components/_v1/icons";
 import { useSalesBlockCtx } from "../sales-print-block";
 import Text from "../../components/print-text";
 import React from "react";
+import { cn } from "@/lib/utils";
 
 export default function SalesPrintHeader() {
     const ctx = useSalesBlockCtx();
@@ -13,7 +14,7 @@ export default function SalesPrintHeader() {
         <thead id="topHeader">
             <tr className="">
                 <td colSpan={16}>
-                    <table className="w-full  table-fixed text-xs">
+                    <table className="w-full  font-mono table-fixed text-xs">
                         <tbody>
                             <tr className="">
                                 <td colSpan={9} valign="top">
@@ -63,9 +64,26 @@ export default function SalesPrintHeader() {
                             <tr className="">
                                 {sale?.address?.map((address, index) => (
                                     <React.Fragment key={address?.title}>
-                                        {index == 1 && <td colSpan={1}></td>}
-                                        <td colSpan={10} key={address?.title}>
-                                            <div className="my-4  mb-4 flex flex-col ">
+                                        {index == 1 && (
+                                            <td colSpan={6} className="">
+                                                {!sale.paymentDate || (
+                                                    <div className="sabsolute watermark-text   -rotate-45 -translate-y-20 translate-x-8 font-mono uppercase font-bold">
+                                                        <p className="text-5xl">
+                                                            Paid
+                                                        </p>
+                                                        <p className="text-2xl">
+                                                            {sale.paymentDate}
+                                                        </p>
+                                                    </div>
+                                                )}
+                                            </td>
+                                        )}
+                                        <td colSpan={9} key={address?.title}>
+                                            <div
+                                                className={cn(
+                                                    "my-4  mb-4 flex flex-col"
+                                                )}
+                                            >
                                                 <div>
                                                     <span className="p-1 px-2 border border-b-0 border-gray-400 bg-slate-200 text-gray-700 text-sm  font-bold">
                                                         {address?.title}

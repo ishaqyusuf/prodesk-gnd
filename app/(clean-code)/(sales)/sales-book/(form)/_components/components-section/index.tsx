@@ -87,6 +87,7 @@ export function ComponentsSection({ itemStepUid }: Props) {
                             className={cn(savingSort && "grayscale")}
                             asChild
                         >
+                            {/* <div className=""> */}
                             <Component
                                 sortMode={sortMode}
                                 ctx={ctx}
@@ -94,6 +95,7 @@ export function ComponentsSection({ itemStepUid }: Props) {
                                 key={component.uid}
                                 component={component}
                             />
+                            {/* </div> */}
                         </SortableItem>
                     ))}
                     <CustomComponent ctx={ctx} />
@@ -336,10 +338,7 @@ export function Component({
     const multiSelect = cls.isMultiSelect();
 
     return (
-        <div
-            className="relative p-2 min-h-[25vh] xl:min-h-[40vh] flex flex-col group "
-            key={component.uid}
-        >
+        <div className="relative p-2 min-h-[25vh] xl:min-h-[40vh] flex flex-col group">
             {/* {multiSelect &&
                 cls.multiSelected() &&
                 cls.getMultiSelectData()?.length} */}
@@ -353,7 +352,7 @@ export function Component({
                     sortMode &&
                         "border-dashed border-muted-foreground hover:border-muted-foreground"
                 )}
-                onClick={selectComponent}
+                onClick={!sortMode ? selectComponent : undefined}
             >
                 <div className="flex h-full flex-col">
                     <div className="flex-1">

@@ -1,5 +1,13 @@
 # FRI, MAR 07
 - global side-nav
+- dispatch page.
+- invoice paid water-mark
+- move to sales: open button to edit.
+- multiple invoices on a single email.
+- search filter not forgetting marked items when filter changes.
+- marked items x btn not working.
+- accounting delete payment: reflect on orders.
+- sales delete order reflect on accounting.
 # WED, MAR 05
 - route cache
 # TUE, MAR 04

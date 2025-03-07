@@ -116,12 +116,7 @@ export function transformStepProduct(
             deleted: {},
             show: {},
         };
-    // let prodMeta: DykeProductMeta = product?.meta || door?.meta || ({} as any);
-    // if (door)
-    //     prodMeta = {
-    //         // ...findDoorSvg(prod.door.title, prod.door.img),
-    //         ...prodMeta,
-    //     };
+
     return {
         uid: component.uid,
         sortIndex,
@@ -137,9 +132,19 @@ export function transformStepProduct(
         productCode: component.productCode,
         redirectUid: component.redirectUid,
         _metaData: {
+            sorts: component.sorts.map(
+                ({ sortIndex, stepComponentId, uid }) => ({
+                    sortIndex,
+                    stepComponentId,
+                    uid,
+                })
+            ),
             custom: component.custom,
             visible: false,
             priceId: null,
+            sortId: null,
+            sortIndex: null,
+            sortUid: null,
         },
     };
 }

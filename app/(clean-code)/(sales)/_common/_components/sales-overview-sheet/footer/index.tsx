@@ -19,6 +19,7 @@ import { refreshTabData } from "../helper";
 import { RefreshCcw } from "lucide-react";
 import { useSalesPreviewModal } from "@/components/modals/sales-preview-modal";
 import { SalesEmailMenuItem } from "@/components/sales-email-menu-item";
+import { revalidateTable } from "@/components/(clean-code)/data-table/use-infinity-data-table";
 
 export function Footer({}) {
     const store = salesOverviewStore();
@@ -35,7 +36,7 @@ export function Footer({}) {
                 onClick={async () => {
                     const id = store?.salesId;
                     await deleteSalesUseCase(id);
-                    // ctx.refreshList?.();
+                    revalidateTable();
                     toast("Deleted", {
                         action: {
                             label: "Undo",

@@ -75,6 +75,11 @@ export class StepHelperClass extends SettingsClass {
         const sequence = this.zus.sequence.stepComponent?.[this.itemUid];
         return sequence;
     }
+    public getCurrentStepSequence() {
+        const sequence = this.getItemStepSequence();
+        const index = this.getStepIndex();
+        return sequence.filter((a, i) => i <= index);
+    }
     public getItemStepForms() {
         const sequence = this.getItemStepSequence();
         return Object.entries(this.zus.kvStepForm)
@@ -139,8 +144,9 @@ export class StepHelperClass extends SettingsClass {
         return componentPricings?.[stepUids]?.price || null;
     }
     public isComponentVisible(c: ZusComponent) {
-        if (c.variations?.length)
-            return c.variations.some((v) => {
+        let vis = [];
+        if (c.variations?.length) {
+            c.variations.some((v) => {
                 const rules = v.rules;
                 const matches = rules.every(
                     ({ componentsUid, operator, stepUid: __stepUid }) => {
@@ -159,9 +165,14 @@ export class StepHelperClass extends SettingsClass {
                         );
                     }
                 );
+                if (matches)
+                    vis.push(rules.map((r) => r.componentsUid.join("-")));
                 return matches;
             });
-        return true;
+            if (!vis.length) return null;
+            return vis;
+        }
+        return ["default"];
     }
     public get getStepComponents() {
         return this.zus.kvStepComponentList?.[this.stepUid];
@@ -311,17 +322,30 @@ export class StepHelperClass extends SettingsClass {
     }
     public selectionUid;
     public filterStepComponents(components: ZusComponent[]) {
-        const filteredComponents = components
+        let filteredComponents = components
             // ?.filter(cls.isComponentVisible)
             ?.map((component, index) => {
                 if (!component._metaData) component._metaData = {} as any;
-                component._metaData.visible =
-                    this.isComponentVisible(component);
+                const vis = this.isComponentVisible(component);
+                component._metaData.visible = !!vis;
                 component.basePrice = this.getComponentPrice(component.uid);
                 component.salesPrice = this.calculateSales(component.basePrice);
-
+                const sort = component._metaData.sorts?.find((s) =>
+                    vis.includes(s.uid)
+                );
+                let sortIndex = sort?.sortIndex;
+                // component._metaData.sortId = this.getCurrentStepSequence();
+                component._metaData.sortIndex = sortIndex;
+                component._metaData.sortUid = sort?.uid || vis?.[0];
                 return component;
             });
+        if (
+            filteredComponents?.filter((a) => a._metaData.sortIndex)?.length > 0
+        ) {
+            filteredComponents = filteredComponents.sort(
+                (a, b) => a._metaData.sortIndex - b._metaData.sortIndex
+            );
+        }
         this.zus.dotUpdate(
             `kvFilteredStepComponentList.${this.itemStepUid}`,
             filteredComponents

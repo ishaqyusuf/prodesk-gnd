@@ -40,11 +40,18 @@ export function composePrint(
         isPacking: query.mode == "packing list",
         isOrder: query.mode == "order",
     };
+    let paymentDate = null;
+    if (data.order.amountDue <= 1) {
+        //
+        let pd = data.order.payments?.[0]?.createdAt;
+        if (pd) paymentDate = formatDate(pd);
+    }
     const printData = {
         isEstimate: query.mode == "quote",
         isProd: query.mode == "production",
         isPacking: query.mode == "packing list",
         isOrder: query.mode == "order",
+        paymentDate,
         ...query,
         // address: address(data,this.isOrder),
         // heading: heading(data,),
@@ -813,7 +820,7 @@ function heading({ mode, isOrder, order, isEstimate, isPacking }) {
     // if (isOrder || isPacking)
     h.lines.push(styled("P.O No", order?.meta?.po, {}));
 
-    if (isOrder) {
+    if (isOrder && order.amountDue > 1) {
         h.lines.push(
             styled(
                 "Invoice Status",
