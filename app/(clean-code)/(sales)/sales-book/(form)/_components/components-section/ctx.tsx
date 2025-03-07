@@ -118,9 +118,7 @@ export function useStepContext(stepUid) {
     useEffect(() => {
         stepHelper.fetchStepComponents().then(setStepComponents);
     }, [salesMultiplier, zusStepComponents]);
-    // useEffect(() => {
-    //     cls.refreshStepComponentsData();
-    // }, [cls, salesMultiplier]);
+
     const sticky = useSticky((bv, pv, { top, bottom }) => !bv && pv);
     const props = {
         stepUid,

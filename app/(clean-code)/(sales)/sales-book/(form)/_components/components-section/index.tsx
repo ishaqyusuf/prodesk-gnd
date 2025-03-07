@@ -50,8 +50,8 @@ import { CustomComponent } from "./custom-component";
 import { CustomComponentAction } from "./custom-component.action";
 import { Sortable, SortableItem } from "@/components/ui/sortable";
 import { closestCorners } from "@dnd-kit/core";
-import { useHotkeys } from "react-hotkeys-hook";
 import { useSortControl } from "@/hooks/use-sort-control";
+import { updateComponentsSortingAction } from "@/actions/update-components-sorting";
 
 interface Props {
     itemStepUid;
@@ -64,6 +64,19 @@ export function ComponentsSection({ itemStepUid }: Props) {
     const onSorted = async (e: typeof items) => {
         startSavingSort(async () => {
             ctx.setItems(e);
+            const data = e
+                // .filter((item, i) => item._metaData.sortIndex !== i)
+                .map((i, _i) => ({
+                    componentId: i.id,
+                    sortUid: i?._metaData?.sortUid,
+                    sortIndex: _i,
+                }));
+            console.log({ data });
+
+            await updateComponentsSortingAction({
+                list: data,
+            });
+            cls.refreshStepComponentsData(true);
         });
     };
     return (
@@ -87,14 +100,25 @@ export function ComponentsSection({ itemStepUid }: Props) {
                             className={cn(savingSort && "grayscale")}
                             asChild
                         >
-                            {/* <div className=""> */}
-                            <Component
-                                sortMode={sortMode}
-                                ctx={ctx}
-                                itemIndex={index}
-                                key={component.uid}
-                                component={component}
-                            />
+                            {sortMode && !savingSort ? (
+                                <div className="  flex flex-col">
+                                    <Component
+                                        sortMode={sortMode}
+                                        ctx={ctx}
+                                        itemIndex={index}
+                                        key={component.uid}
+                                        component={component}
+                                    />
+                                </div>
+                            ) : (
+                                <Component
+                                    sortMode={sortMode}
+                                    ctx={ctx}
+                                    itemIndex={index}
+                                    key={component.uid}
+                                    component={component}
+                                />
+                            )}
                             {/* </div> */}
                         </SortableItem>
                     ))}
