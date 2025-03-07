@@ -142,12 +142,11 @@ export class StepHelperClass extends SettingsClass {
         if (c.variations?.length)
             return c.variations.some((v) => {
                 const rules = v.rules;
-                return rules.every(
+                const matches = rules.every(
                     ({ componentsUid, operator, stepUid: __stepUid }) => {
                         const selectedComponentUid =
                             this.zus.kvStepForm[`${this.itemUid}-${__stepUid}`]
                                 ?.componentUid;
-
                         return (
                             !componentsUid?.length ||
                             (operator == "is"
@@ -160,6 +159,7 @@ export class StepHelperClass extends SettingsClass {
                         );
                     }
                 );
+                return matches;
             });
         return true;
     }

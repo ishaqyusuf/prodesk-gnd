@@ -31,7 +31,6 @@ export function NoteForm({}) {
             tagName: "type",
             tagValue: type,
         });
-        console.log(eventDate);
 
         const result = await createNoteAction({
             // type: "sales",
@@ -43,7 +42,6 @@ export function NoteForm({}) {
             note,
             tags,
         });
-        console.log(result);
         setNotes((current) => {
             return [result, ...current] as any;
         });
@@ -128,8 +126,6 @@ export function NoteForm({}) {
                                     placeholder={"Event date"}
                                     value={!!eventDate ? null : eventDate}
                                     setValue={(e) => {
-                                        console.log(e);
-
                                         form.setValue("eventDate", e);
                                     }}
                                     // setValue={changeDueDate}
@@ -159,7 +155,6 @@ function NotePad({ tagFilterKeys }) {
     const form = useFormContext();
     useEffect(() => {
         getNoteSuggestionsAction(tagFilterKeys).then((res) => {
-            console.log({ res });
             setNotes(res);
         });
     }, [tagFilterKeys]);
@@ -170,7 +165,6 @@ function NotePad({ tagFilterKeys }) {
                 // const phone = value.data?.value;
                 // if (phone) tx.dotUpdate("phoneNo", phone);
                 // else toast.error("Customer must have phone no");
-                console.log(value);
 
                 form.setValue("note", value);
             }}
@@ -182,7 +176,6 @@ function NotePad({ tagFilterKeys }) {
             placeholder={"Note"}
             allowCreate
             onChange={(e) => {
-                console.log(e);
                 form.setValue("note", e);
             }}
             // form={form}
