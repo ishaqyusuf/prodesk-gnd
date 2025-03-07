@@ -278,8 +278,8 @@ export function Component({
     component: ZusComponent;
     ctx: UseStepContext;
     swapDoor?;
-    sortMode;
-    itemIndex;
+    sortMode?;
+    itemIndex?;
 }) {
     const { stepUid } = ctx;
     const zus = useFormDataStore();
