@@ -8,6 +8,7 @@
 - marked items x btn not working.
 - accounting delete payment: reflect on orders.
 - sales delete order reflect on accounting.
+- sales extra costs.
 # WED, MAR 05
 - route cache
 # TUE, MAR 04

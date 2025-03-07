@@ -62,6 +62,7 @@ model SalesOrders {
     shippingAddress   AddressBooks?                    @relation(name: "shippingAddress", fields: [shippingAddressId], references: [id])
     stat              SalesStat[]
     supplies          SalesItemSupply[]
+    extraCosts        SalesExtraCosts[]
 
     @@unique([orderId, type])
     @@index([createdAt, deletedAt, orderId, grandTotal, prodId, type, prodDueDate])
@@ -72,6 +73,19 @@ model SalesOrders {
     @@index([prodId])
     @@index([salesRepId])
     @@index([pickupId])
+}
+
+model SalesExtraCosts {
+    id          Int          @unique @default(autoincrement())
+    order       SalesOrders? @relation(fields: [orderId], references: [id])
+    type        String //discount, labor, etc
+    taxxable    Boolean?
+    amount      Float
+    tax         Float?
+    totalAmount Float?
+    orderId     Int
+
+    @@index([orderId])
 }
 
 model SalesOrderItems {
