@@ -373,6 +373,8 @@ model ProductSortIndex {
     deletedAt          DateTime?         @db.Timestamp(0)
     stepProduct        DykeStepProducts? @relation(fields: [dykeStepProductsId], references: [id])
     dykeStepProductsId Int?
+
+    @@index([dykeStepProductsId])
 }
 
 model DykePricingSystem {

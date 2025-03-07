@@ -65,6 +65,8 @@ model Session {
     expires      DateTime
     deletedAt    DateTime? @db.Timestamp(0)
     user         Users     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@index([userId])
 }
 
 model EmployeeProfile {

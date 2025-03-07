@@ -46,6 +46,9 @@ model DealerAuth {
     token                    DealerToken[]
     primaryBillingAddress    AddressBooks?         @relation(name: "primaryBillingAddress", fields: [primaryBillingAddressId], references: [id])
     primaryShippingAddress   AddressBooks?         @relation(name: "primaryShippingAddress", fields: [primaryShippingAddressId], references: [id])
+
+    @@index([primaryBillingAddressId])
+    @@index([primaryShippingAddressId])
 }
 
 model DealerStatusHistory {
@@ -58,6 +61,9 @@ model DealerStatusHistory {
     deletedAt DateTime?   @db.Timestamp(0)
     auth      DealerAuth? @relation(fields: [dealerId], references: [id])
     author    Users       @relation(fields: [authorId], references: [id])
+
+    @@index([dealerId])
+    @@index([authorId])
 }
 
 model DealerToken {
@@ -67,6 +73,8 @@ model DealerToken {
     consumedAt DateTime?   @db.Timestamp(0)
     deletedAt  DateTime?   @db.Timestamp(0)
     auth       DealerAuth? @relation(fields: [dealerId], references: [id])
+
+    @@index([dealerId])
 }
 
 model CustomerTypes {
