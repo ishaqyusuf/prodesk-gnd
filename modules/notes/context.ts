@@ -52,6 +52,7 @@ export const useNoteContext = (props: NoteProps) => {
     return {
         notes,
         props,
+        ...props,
         setNotes,
         deleteNote(id) {
             setNotes((prev) => {

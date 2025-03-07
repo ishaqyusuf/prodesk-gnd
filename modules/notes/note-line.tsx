@@ -93,8 +93,8 @@ export function NoteLine({ note }: { note: GetNotes[number] }) {
                     </div>
                 )}
                 <div className="flex-1"></div>
-                <ConfirmBtn trash onClick={deleteNote} />
-                <Menu>
+                <ConfirmBtn disabled={!ctx.admin} trash onClick={deleteNote} />
+                <Menu disabled={!ctx.admin}>
                     <Menu.Item
                         SubMenu={
                             <>
