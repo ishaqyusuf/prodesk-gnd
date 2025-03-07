@@ -67,12 +67,19 @@ export function ComponentsSection({ itemStepUid }: Props) {
             const data = e
                 // .filter((item, i) => item._metaData.sortIndex !== i)
                 .map((i, _i) => ({
+                    prevIndex: i._metaData.sortIndex,
                     componentId: i.id,
                     sortUid: i?._metaData?.sortUid,
                     sortIndex: _i,
-                }));
-            console.log({ data });
+                }))
+                .filter((a) => {
+                    if (a.sortIndex > 0) {
+                        return a.sortIndex != a.prevIndex;
+                    }
+                    return a.prevIndex == null || a.prevIndex != a.sortIndex;
+                });
 
+            console.log(data);
             await updateComponentsSortingAction({
                 list: data,
             });
