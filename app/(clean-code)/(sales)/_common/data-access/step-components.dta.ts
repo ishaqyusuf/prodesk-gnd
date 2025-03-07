@@ -79,6 +79,7 @@ export async function getComponentsDta(props: LoadStepComponentsProps) {
         include: {
             door: props.stepTitle != null,
             product: true,
+            sorts: true,
         },
     });
     // .sort((a, b) => {
@@ -107,7 +108,7 @@ export async function getComponentsDta(props: LoadStepComponentsProps) {
 export function transformStepProduct(
     component: AsyncFnType<typeof getComponentsDta>[number]
 ) {
-    const { door, product, sortIndex, ...prod } = component;
+    const { door, product, sortIndex, sorts, ...prod } = component;
     let meta: StepComponentMeta = prod.meta as any;
     if (!prod.meta)
         meta = {

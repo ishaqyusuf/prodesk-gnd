@@ -366,15 +366,17 @@ model DykeStepProducts {
 }
 
 model ProductSortIndex {
-    id                 Int               @unique @default(autoincrement())
-    sortIndex          Int
-    createdAt          DateTime?         @default(now()) @db.Timestamp(0)
-    updatedAt          DateTime?         @updatedAt
-    deletedAt          DateTime?         @db.Timestamp(0)
-    stepProduct        DykeStepProducts? @relation(fields: [dykeStepProductsId], references: [id])
-    dykeStepProductsId Int?
+    id              Int              @unique @default(autoincrement())
+    sortIndex       Int
+    uid             String
+    createdAt       DateTime?        @default(now()) @db.Timestamp(0)
+    updatedAt       DateTime?        @updatedAt
+    deletedAt       DateTime?        @db.Timestamp(0)
+    stepComponentId Int
+    stepComponent   DykeStepProducts @relation(fields: [stepComponentId], references: [id])
 
-    @@index([dykeStepProductsId])
+    @@unique([stepComponentId, uid])
+    @@index([stepComponentId])
 }
 
 model DykePricingSystem {
