@@ -166,16 +166,31 @@ export function whereSales(query: SearchParamsType) {
         if (!query?.[k]) return;
         switch (k) {
             case "id":
-                whereAnd.push({
-                    id: query.id,
-                });
+                let id = String(query.id);
+                if (id?.includes(","))
+                    whereAnd.push({
+                        id: {
+                            in: id?.split(",").map((s) => Number(s)),
+                        },
+                    });
+                else
+                    whereAnd.push({
+                        id: query.id,
+                    });
                 break;
             case "order.no":
-                whereAnd.push({
-                    orderId: {
-                        contains: val,
-                    },
-                });
+                if (val?.includes(","))
+                    whereAnd.push({
+                        orderId: {
+                            in: val?.split(","),
+                        },
+                    });
+                else
+                    whereAnd.push({
+                        orderId: {
+                            contains: val,
+                        },
+                    });
                 break;
             case "po":
                 whereAnd.push({

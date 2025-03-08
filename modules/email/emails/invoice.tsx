@@ -17,14 +17,21 @@ import { SalesType } from "@/app/(clean-code)/(sales)/types";
 interface Props {
     salesRep: string;
     link: string;
+    paymentLink?: string;
     customerName;
     type: SalesType;
-    paymentLink?;
+    amountDue?;
 }
 export const composeSalesEmail = (props: Props) => (
     <SalesInvoiceEmail {...props} />
 );
-export const SalesInvoiceEmail = ({ salesRep, type, link, customerName }) => {
+export const SalesInvoiceEmail = ({
+    salesRep,
+    paymentLink,
+    type,
+    link,
+    customerName,
+}) => {
     const isQuote = type == "quote";
     const text = `You've Received ${
         isQuote ? "a quote" : "an Invoice"
@@ -87,12 +94,14 @@ export const SalesInvoiceEmail = ({ salesRep, type, link, customerName }) => {
                             </Button>
                         </Section>
                         <Section className="text-center mt-[50px] mb-[50px]">
-                            {/* <Button
-                                className="bg-transparent text-primary text-[14px] text-[#121212] font-medium no-underline text-center px-6 py-3 border border-solid border-[#121212]"
-                                href={link}
-                            >
-                                Make Payment
-                            </Button> */}
+                            {!paymentLink || (
+                                <Button
+                                    className="bg-transparent text-primary text-[14px] text-[#121212] font-medium no-underline text-center px-6 py-3 border border-solid border-[#121212]"
+                                    href={paymentLink}
+                                >
+                                    Make Payment
+                                </Button>
+                            )}
                         </Section>
 
                         <br />

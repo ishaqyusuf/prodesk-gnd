@@ -20,7 +20,6 @@ import { QueryTabAction } from "@/app/(clean-code)/_common/query-tab/query-tab-e
 
 import { openTxForm } from "../../../_common/_components/tx-form";
 import { openSalesOverview } from "../../../_common/_components/sales-overview-sheet";
-import { isProdClient } from "@/lib/is-prod";
 import {
     BatchBtn,
     BatchDelete,
@@ -29,6 +28,7 @@ import { PrintAction } from "../../../_common/_components/overview-sheet.bin/foo
 import { useInfiniteDataTable } from "@/components/(clean-code)/data-table/use-data-table";
 import { useMemo } from "react";
 import { deleteSalesByOrderIds } from "../../../_common/data-actions/sales-actions";
+import { SalesEmailMenuItem } from "@/components/sales-email-menu-item";
 
 export default function OrdersPageClient({
     filterFields,
@@ -155,7 +155,20 @@ function BatchActions() {
             >
                 Print
             </BatchBtn>
-
+            <BatchBtn
+                icon="Email"
+                menu={
+                    <>
+                        <SalesEmailMenuItem
+                            asChild
+                            salesType="order"
+                            orderNo={slugs.join(",")}
+                        />
+                    </>
+                }
+            >
+                Email
+            </BatchBtn>
             <BatchDelete
                 onClick={async () => {
                     await deleteSalesByOrderIds(slugs);

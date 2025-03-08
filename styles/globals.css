@@ -175,3 +175,8 @@ table.styled td.action {
     -webkit-text-fill-color: transparent;
     /* opacity: 0.3; Controls overall visibility */
 }
+.text-stroke {
+    color: red;
+    text-shadow: -1px 1px 0 rgb(99, 45, 45), 1px 1px 0 rgb(99, 45, 45),
+        1px -1px 0 rgb(99, 45, 45), -1px -1px 0 rgb(99, 45, 45);
+}

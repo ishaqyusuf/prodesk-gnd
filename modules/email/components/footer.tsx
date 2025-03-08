@@ -1,4 +1,4 @@
-import { getEmailUrl } from "@/envs";
+import { getBaseUrl } from "@/envs";
 import {
     Column,
     Hr,
@@ -9,7 +9,7 @@ import {
     Text,
 } from "@react-email/components";
 
-const baseUrl = getEmailUrl();
+const baseUrl = getBaseUrl();
 
 export function Footer() {
     return (
@@ -302,7 +302,7 @@ export function Footer() {
                     <Img
                         src={`${baseUrl}/email/logo-footer.png`}
                         width="100"
-                        alt="Midday"
+                        alt="GndMillwork"
                         className="block"
                     />
                 </Link>

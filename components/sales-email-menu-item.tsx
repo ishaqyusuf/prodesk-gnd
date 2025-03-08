@@ -5,20 +5,40 @@ import { SalesType } from "@/app/(clean-code)/(sales)/types";
 
 export function SalesEmailMenuItem({
     salesId,
+    orderNo,
     salesType,
+    asChild = false,
 }: {
-    salesId;
+    salesId?;
     salesType: SalesType;
+    asChild?: boolean;
+    orderNo?: string;
 }) {
     const isQuote = salesType == "quote";
     async function sendInvoiceEmail() {
-        toast.promise(async () => await __sendInvoiceEmailTrigger(salesId), {
-            loading: "Sending email...",
-            error(data) {
-                return data.message;
-            },
-        });
+        toast.promise(
+            async () =>
+                await __sendInvoiceEmailTrigger({
+                    ids: salesId,
+                    orderIds: orderNo,
+                }),
+            {
+                loading: "Sending email...",
+                error(data) {
+                    return data.message;
+                },
+            }
+        );
     }
+    if (asChild)
+        return (
+            <>
+                <Menu.Item onClick={sendInvoiceEmail}>
+                    {isQuote ? "Quote " : "Invoice "} Email
+                </Menu.Item>
+                <Menu.Item disabled>Reminder Email</Menu.Item>
+            </>
+        );
     return (
         <>
             <Menu.Item

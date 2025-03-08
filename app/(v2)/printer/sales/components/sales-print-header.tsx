@@ -67,13 +67,13 @@ export default function SalesPrintHeader() {
                                         {index == 1 && (
                                             <td colSpan={6} className="">
                                                 {!sale.paymentDate || (
-                                                    <div className="sabsolute watermark-text   -rotate-45 -translate-y-20 translate-x-8 font-mono uppercase font-bold">
-                                                        <p className="text-5xl">
+                                                    <div className="sabsolute watermark-text text-strokes   -rotate-45 -translate-y-6 translate-x-8 font-mono uppercase font-bold inline-flex flex-col ">
+                                                        <span className="text-5xl">
                                                             Paid
-                                                        </p>
-                                                        <p className="text-2xl">
+                                                        </span>
+                                                        <span className="text-2xl">
                                                             {sale.paymentDate}
-                                                        </p>
+                                                        </span>
                                                     </div>
                                                 )}
                                             </td>

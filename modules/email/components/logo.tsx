@@ -1,7 +1,7 @@
-import { getEmailUrl } from "@/envs";
+import { getBaseUrl } from "@/envs";
 import { Img, Section } from "@react-email/components";
 
-const baseUrl = getEmailUrl();
+const baseUrl = getBaseUrl();
 
 export function Logo() {
     return (
@@ -10,10 +10,9 @@ export function Logo() {
                 src={`${baseUrl}/email/logo.png`}
                 width="45"
                 height="45"
-                alt="Midday"
+                alt="GndMillwork"
                 className="my-0 mx-auto block"
             />
         </Section>
     );
 }
-
