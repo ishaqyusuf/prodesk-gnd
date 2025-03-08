@@ -37,30 +37,33 @@ model CustomerWallet {
 }
 
 model SalesPayments {
-    id            Int                  @unique @default(autoincrement())
-    note          String?
-    authorId      Int?
+    id               Int                  @unique @default(autoincrement())
+    note             String?
+    authorId         Int?
     // customerId    Int
-    transactionId Int?
-    orderId       Int
-    amount        Float
-    tip           Float?
-    meta          Json?                @db.Json
-    status        String? // success,pending,paid
-    deletedAt     DateTime?            @db.Timestamp(0)
-    createdAt     DateTime?            @default(now()) @db.Timestamp(0)
-    updatedAt     DateTime?            @updatedAt
-    order         SalesOrders          @relation(name: "salesPayment", fields: [orderId], references: [id], onDelete: Cascade)
-    checkout      SalesCheckout?
+    transactionId    Int?
+    orderId          Int
+    amount           Float
+    tip              Float?
+    meta             Json?                @db.Json
+    status           String? // success,pending,paid
+    deletedAt        DateTime?            @db.Timestamp(0)
+    createdAt        DateTime?            @default(now()) @db.Timestamp(0)
+    updatedAt        DateTime?            @updatedAt
+    order            SalesOrders          @relation(name: "salesPayment", fields: [orderId], references: [id], onDelete: Cascade)
+    checkout         SalesCheckout?
     // customer      Customers            @relation(fields: [customerId], references: [id], onDelete: Cascade)
-    transaction   CustomerTransaction? @relation(fields: [transactionId], references: [id], onDelete: Cascade)
-    commissions   SalesCommision[]
-    author        Users?               @relation(fields: [authorId], references: [id])
+    transaction      CustomerTransaction? @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+    commissions      SalesCommision[]
+    author           Users?               @relation(fields: [authorId], references: [id])
+    squarePayments   SquarePayments?      @relation(fields: [squarePaymentsId], references: [id])
+    squarePaymentsId String?
 
     @@index([authorId])
     @@index([orderId])
     // @@index([customerId])
     @@index([transactionId])
+    @@index([squarePaymentsId])
 }
 
 model SquarePayments {
@@ -81,9 +84,22 @@ model SquarePayments {
     paymentTerminal PaymentTerminals?     @relation(fields: [terminalId], references: [terminalId])
     customerTxs     CustomerTransaction[]
     createdBy       Users                 @relation(fields: [createdById], references: [id])
+    orders          SquarePaymentOrders[]
+    salesPayments   SalesPayments[]
 
     @@index([terminalId])
     @@index([createdById])
+}
+
+model SquarePaymentOrders {
+    id              String         @id @default(cuid())
+    orderId         Int
+    squarePaymentId String
+    squarePayment   SquarePayments @relation(fields: [squarePaymentId], references: [id])
+    order           SalesOrders?   @relation(fields: [orderId], references: [id])
+
+    @@index([squarePaymentId])
+    @@index([orderId])
 }
 
 model PaymentTerminals {

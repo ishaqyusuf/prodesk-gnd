@@ -15,7 +15,6 @@ import {
 import { toast } from "sonner";
 import { _modal } from "@/components/common/modal/provider";
 import { isProdClient } from "@/lib/is-prod";
-import { useInfiniteDataTable } from "@/components/(clean-code)/data-table/use-data-table";
 import { revalidateTable } from "@/components/(clean-code)/data-table/use-infinity-data-table";
 
 export type UsePayForm = ReturnType<typeof usePayForm>;

@@ -63,6 +63,7 @@ model SalesOrders {
     stat              SalesStat[]
     supplies          SalesItemSupply[]
     extraCosts        SalesExtraCosts[]
+    squarePayOrders   SquarePaymentOrders[]
 
     @@unique([orderId, type])
     @@index([createdAt, deletedAt, orderId, grandTotal, prodId, type, prodDueDate])

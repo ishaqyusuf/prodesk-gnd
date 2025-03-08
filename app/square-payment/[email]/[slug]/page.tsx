@@ -1,9 +1,9 @@
 "use client";
 
 import {
-    getSalesPaymentLink,
-    GetSalesPaymentLink,
-} from "@/actions/get-sales-payment-link";
+    getSalesPaymentCheckoutInfoAction,
+    GetSalesPaymentCheckoutInfo,
+} from "@/actions/get-sales-payment-checkout-info-action";
 import { Icons } from "@/components/_v1/icons";
 import Money from "@/components/_v1/money";
 import Button from "@/components/common/button";
@@ -15,7 +15,6 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
-import { constructMetadata } from "@/lib/(clean-code)/construct-metadata";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
 
@@ -28,12 +27,12 @@ export default function Page({ params }) {
     const email = params.email;
     const slugs = params.slug?.split("-").map((a) => a.replaceAll("_", "-"));
 
-    const [data, setData] = useState<GetSalesPaymentLink>(null);
+    const [data, setData] = useState<GetSalesPaymentCheckoutInfo>(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         async function load() {
-            const resp = await getSalesPaymentLink(slugs, email);
+            const resp = await getSalesPaymentCheckoutInfoAction(slugs, email);
             setData(resp);
             setLoading(false);
         }

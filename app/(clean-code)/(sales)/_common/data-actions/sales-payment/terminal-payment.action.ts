@@ -45,7 +45,6 @@ export async function createTerminalPaymentAction(props: Props) {
                 },
             },
         });
-        console.log(squarePayment);
         return {
             squarePaymentId: squarePayment.id,
             squareCheckout: checkout,

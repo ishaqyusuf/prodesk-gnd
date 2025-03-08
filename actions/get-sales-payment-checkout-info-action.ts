@@ -4,8 +4,10 @@ import { prisma } from "@/db";
 import { sum } from "@/lib/utils";
 import { AsyncFnType } from "@/types";
 
-export type GetSalesPaymentLink = AsyncFnType<typeof getSalesPaymentLink>;
-export async function getSalesPaymentLink(slugs, email) {
+export type GetSalesPaymentCheckoutInfo = AsyncFnType<
+    typeof getSalesPaymentCheckoutInfoAction
+>;
+export async function getSalesPaymentCheckoutInfoAction(slugs, email) {
     const orders = await prisma.salesOrders.findMany({
         where: {
             slug: {
@@ -45,6 +47,7 @@ export async function getSalesPaymentLink(slugs, email) {
             },
         },
     });
+    if (orders.length != slugs?.length) throw new Error("Unauthorized");
     const ls = orders.map((order) => ({
         customerName:
             order.customer?.name ||
