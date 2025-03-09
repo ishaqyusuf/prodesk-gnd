@@ -21,6 +21,7 @@ import { timeout } from "@/lib/timeout";
 import { cn } from "@/lib/utils";
 import { formatPaymentParams } from "@/utils/format-payment-params";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 // export async function generateMetadata({ params }) {
 //     return constructMetadata({
@@ -44,14 +45,19 @@ export default function Page({ params }) {
         load();
     }, [emailToken, orderIdsParam]);
     async function createPayment() {
-        await timeout(1000);
-        const resp = await createSalesCheckoutLinkAction({
-            emailToken,
-            orderIdsParam,
-            orderIds,
-        });
-        console.log({ resp });
-        // openLink(resp.paymentLink)
+        try {
+            // await timeout(1000);
+            const resp = await createSalesCheckoutLinkAction({
+                emailToken,
+                orderIdsParam,
+                orderIds,
+            });
+            console.log({ resp });
+            openLink((resp as any).paymentLink);
+        } catch (error) {
+            console.log(error);
+            toast.error("Unable to complete");
+        }
         // const paymentLink = await
     }
     return (

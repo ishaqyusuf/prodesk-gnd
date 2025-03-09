@@ -7,6 +7,6 @@ export function openLink(path, query = {}, newTab = false) {
     let base = env.NEXT_PUBLIC_APP_URL;
     base = path?.startsWith("http") ? null : `${base}/`;
     if (newTab) link.target = "_blank";
-    link.href = `${base}${path}?${QueryString.stringify(query)}`;
+    link.href = `${base || ""}${path}?${QueryString.stringify(query)}`;
     link.click();
 }

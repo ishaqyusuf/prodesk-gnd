@@ -70,12 +70,13 @@ export const __sendInvoiceEmailTrigger = async ({
                 const sEmail = a.customer?.email || a?.billingAddress?.email;
                 return customerEmail == sEmail;
             });
+            const isDev = env.NODE_ENV == "development";
             let emailSlug = customerEmail?.split("@")[0];
             if (matchingSales?.[0]?.id == sales.id) {
                 if (!customerEmail)
                     throw new Error("Customer has no valid email");
 
-                env.NODE_ENV == "development" &&
+                isDev &&
                     (customerEmail = [
                         "ishaqyusuf024@gmail.com",
                         "pcruz321@gmail.com",
@@ -91,12 +92,13 @@ export const __sendInvoiceEmailTrigger = async ({
                     (s) => s.amountDue > 0
                 );
                 const totalDueAmount = sum(pendingAmountSales, "amountDue");
-                let paymentLink =
-                    totalDueAmount > 0
-                        ? `${getBaseUrl()}/square-payment/${emailSlug}/${composePaymentOrderIdsParam(
-                              pendingAmountSales.map((a) => a.slug)
-                          )}`
-                        : null;
+                let paymentLink = !isDev
+                    ? null
+                    : totalDueAmount > 0
+                    ? `${getBaseUrl()}/square-payment/${emailSlug}/${composePaymentOrderIdsParam(
+                          pendingAmountSales.map((a) => a.slug)
+                      )}`
+                    : null;
 
                 const response = await resend.emails.send({
                     from: `GND Millwork <${
