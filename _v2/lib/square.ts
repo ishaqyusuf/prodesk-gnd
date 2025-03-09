@@ -1,4 +1,3 @@
-"use server";
 import { userId } from "@/app/(v1)/_actions/utils";
 import { CheckoutStatus } from "@/app/(v2)/(loggedIn)/sales-v2/_components/_square-payment-modal/action";
 import { prisma } from "@/db";
@@ -15,10 +14,10 @@ import {
 // const devMode = env.NODE_ENV == "development";
 let devMode = env.NODE_ENV != "production";
 devMode = false;
-const SQUARE_LOCATION_ID = devMode
+export const SQUARE_LOCATION_ID = devMode
     ? env.SQUARE_SANDBOX_LOCATION_ID
     : env.SQUARE_LOCATION_ID;
-const client = new Client({
+export const squareClient = new Client({
     environment: devMode ? Environment.Sandbox : Environment.Production,
     accessToken: devMode
         ? env.SQUARE_SANDBOX_ACCESS_TOKEN
@@ -132,8 +131,7 @@ export async function createSalesPaymentLink(data: CreateSalesPaymentProps) {
     return await errorHandler(async () => {
         const redirectUrl = `https://${env.NEXT_PUBLIC_ROOT_DOMAIN}/square-payment-response/${data.salesCheckoutId}`;
         const quickPay = !data.items?.length || data.grandTotal != data.amount;
-        console.log({ quickPay });
-        const resp = await client.checkoutApi.createPaymentLink({
+        const resp = await squareClient.checkoutApi.createPaymentLink({
             idempotencyKey: new Date().toISOString(),
             quickPay: !quickPay
                 ? undefined
@@ -229,7 +227,7 @@ export async function createSalesPaymentLink(data: CreateSalesPaymentProps) {
 let res;
 export async function ceateTerminalCheckout(data: CreateSalesPaymentProps) {
     return await errorHandler(async () => {
-        const s = await client.terminalApi.createTerminalCheckout({
+        const s = await squareClient.terminalApi.createTerminalCheckout({
             // deviceId: process.env.SQUARE_TERMINAL_DEVICE_ID,
             idempotencyKey: data.salesCheckoutId, // Unique identifier for each transaction
             checkout: {
@@ -275,7 +273,7 @@ function phone(pg: string) {
 export type GetSquareDevices = Awaited<ReturnType<typeof getSquareDevices>>;
 export async function getSquareDevices() {
     try {
-        const devices = await client.devicesApi.listDeviceCodes();
+        const devices = await squareClient.devicesApi.listDeviceCodes();
         return devices?.result?.deviceCodes
             ?.map((device) => ({
                 label: device?.name,
@@ -293,7 +291,9 @@ export async function getSquareTerminalPaymentStatus(
     terminalId,
     salesCheckoutId
 ) {
-    const payment = await client.terminalApi.getTerminalCheckout(terminalId);
+    const payment = await squareClient.terminalApi.getTerminalCheckout(
+        terminalId
+    );
     const paymentStatus = payment.result.checkout.status as
         | "PENDING"
         | "IN_PROGRESS"
@@ -336,7 +336,7 @@ export async function validateSquarePayment(id) {
         result: {
             order: { id: orderId, tenders },
         },
-    } = await client.ordersApi.retrieveOrder(meta.squareOrderId);
+    } = await squareClient.ordersApi.retrieveOrder(meta.squareOrderId);
 
     const resp: { amount; tip; status: SquarePaymentStatus } = {
         amount: null,
@@ -348,7 +348,7 @@ export async function validateSquarePayment(id) {
         tenders.map(async (tender) => {
             const {
                 result: { payment },
-            } = await client.paymentsApi.getPayment(tender.paymentId);
+            } = await squareClient.paymentsApi.getPayment(tender.paymentId);
             const tip = payment.tipMoney?.amount;
             resp.status = payment.status as any;
             if (resp.status == "COMPLETED") {
@@ -429,7 +429,7 @@ export async function __cancelTerminalPayment(checkoutId) {
     //         order: true,
     //     },
     // });
-    await client.terminalApi.cancelTerminalCheckout(checkoutId);
+    await squareClient.terminalApi.cancelTerminalCheckout(checkoutId);
 }
 export async function cancelTerminalPayment(id) {
     const p = await prisma.salesCheckout.findUnique({
@@ -440,7 +440,7 @@ export async function cancelTerminalPayment(id) {
             order: true,
         },
     });
-    await client.terminalApi.cancelTerminalCheckout(p.paymentId);
+    await squareClient.terminalApi.cancelTerminalCheckout(p.paymentId);
     await prisma.salesCheckout.update({
         where: { id },
         data: {

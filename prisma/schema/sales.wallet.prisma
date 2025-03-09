@@ -73,17 +73,17 @@ model SquarePayments {
     squareOrderId   String?
     paymentMethod   String //link,terminal
     paymentLink     String?
+    terminalId      String?
     amount          Float
     tip             Float?
     meta            Json?                 @db.Json
     deletedAt       DateTime?             @db.Timestamp(0)
     createdAt       DateTime?             @default(now()) @db.Timestamp(0)
     updatedAt       DateTime?             @updatedAt
-    terminalId      String?
-    createdById     Int
+    createdById     Int?
     paymentTerminal PaymentTerminals?     @relation(fields: [terminalId], references: [terminalId])
     customerTxs     CustomerTransaction[]
-    createdBy       Users                 @relation(fields: [createdById], references: [id])
+    createdBy       Users?                @relation(fields: [createdById], references: [id])
     orders          SquarePaymentOrders[]
     salesPayments   SalesPayments[]
 

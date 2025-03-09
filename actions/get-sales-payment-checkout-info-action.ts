@@ -37,12 +37,19 @@ export async function getSalesPaymentCheckoutInfoAction(slugs, email) {
             billingAddress: {
                 select: {
                     name: true,
+                    phoneNo: true,
                 },
             },
             customer: {
                 select: {
                     name: true,
                     businessName: true,
+                    phoneNo: true,
+                    wallet: {
+                        select: {
+                            id: true,
+                        },
+                    },
                 },
             },
         },
@@ -57,8 +64,24 @@ export async function getSalesPaymentCheckoutInfoAction(slugs, email) {
         id: order.id,
         orderNo: order.orderId,
     }));
+    const phoneNoList = Array.from(
+        new Set(
+            orders
+                .map((order) =>
+                    [
+                        order.customer?.phoneNo,
+                        order.billingAddress?.phoneNo,
+                    ]?.filter(Boolean)
+                )
+                .flat()
+        )
+    );
+    const primaryPhone = phoneNoList.length == 1 ? phoneNoList?.[0] : null;
+    // const walletId = orders.map(a => a.customer?.wallet?.id)
     return {
         orders: ls,
+        phoneNoList,
+        primaryPhone,
         amountDue: sum(
             ls.filter((a) => a.amountDue > 0),
             "amountDue"
