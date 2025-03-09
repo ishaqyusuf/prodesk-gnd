@@ -148,6 +148,8 @@ model CheckoutTenders {
     squareOrderId   String
     salesCheckoutId String
     status          String
+    amount          Float?
+    tip             Float?
     deletedAt       DateTime?     @db.Timestamp(0)
     createdAt       DateTime?     @default(now()) @db.Timestamp(0)
     checkout        SalesCheckout @relation(fields: [salesCheckoutId], references: [id])
