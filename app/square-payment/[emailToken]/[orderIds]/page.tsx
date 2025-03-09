@@ -16,6 +16,7 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
+import { formatPaymentParams } from "@/utils/format-payment-params";
 import { useEffect, useState } from "react";
 
 // export async function generateMetadata({ params }) {
@@ -24,20 +25,21 @@ import { useEffect, useState } from "react";
 //     });
 // }
 export default function Page({ params }) {
-    const email = params.email;
-    const slugs = params.slug?.split("-").map((a) => a.replaceAll("_", "-"));
-
+    const { emailToken, orderIdsParam, orderIds } = formatPaymentParams(params);
     const [data, setData] = useState<GetSalesPaymentCheckoutInfo>(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         async function load() {
-            const resp = await getSalesPaymentCheckoutInfoAction(slugs, email);
+            const resp = await getSalesPaymentCheckoutInfoAction(
+                orderIds,
+                emailToken
+            );
             setData(resp);
             setLoading(false);
         }
         load();
-    }, [params.slugs, email]);
+    }, [emailToken, orderIdsParam]);
     async function createPayment() {}
     return (
         <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-4">

@@ -68,6 +68,7 @@ model SalesPayments {
 
 model SquarePayments {
     id              String                @id @default(cuid())
+    checkoutId      String?               @unique
     paymentId       String?               @unique
     status          String                @default("created")
     squareOrderId   String?
@@ -86,6 +87,7 @@ model SquarePayments {
     createdBy       Users?                @relation(fields: [createdById], references: [id])
     orders          SquarePaymentOrders[]
     salesPayments   SalesPayments[]
+    checkout        SalesCheckout?
 
     @@index([terminalId])
     @@index([createdById])
@@ -116,21 +118,23 @@ model SalesCheckout {
     id              String            @id @default(cuid())
     paymentId       String?           @unique
     userId          Int?
-    status          String
-    paymentType     String
+    status          String?
+    paymentType     String?
     terminalId      String?
     terminalName    String?
-    amount          Float
+    amount          Float?
     tip             Float?            @default(0)
-    orderId         Int
+    orderId         Int?
     meta            Json?             @db.Json
     deletedAt       DateTime?         @db.Timestamp(0)
     createdAt       DateTime?         @default(now()) @db.Timestamp(0)
     updatedAt       DateTime?         @updatedAt
-    order           SalesOrders       @relation(fields: [orderId], references: [id])
+    order           SalesOrders?      @relation(fields: [orderId], references: [id])
     createdBy       Users?            @relation(fields: [userId], references: [id])
     salesPaymentsId Int?              @unique
+    squarePaymentId String?           @unique
     paymentSlip     SalesPayments?    @relation(fields: [salesPaymentsId], references: [id])
+    squarePayment   SquarePayments?   @relation(fields: [squarePaymentId], references: [id])
     tenders         CheckoutTenders[]
 
     @@index([orderId])

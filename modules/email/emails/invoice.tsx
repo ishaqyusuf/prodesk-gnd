@@ -31,7 +31,7 @@ export const SalesInvoiceEmail = ({
     type,
     link,
     customerName,
-}) => {
+}: Props) => {
     const isQuote = type == "quote";
     const text = `You've Received ${
         isQuote ? "a quote" : "an Invoice"

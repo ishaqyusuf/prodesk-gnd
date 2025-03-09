@@ -5,9 +5,12 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { Icons } from "@/components/_v1/icons";
 import { CheckCircle, XCircle } from "lucide-react";
+import { formatPaymentParams } from "@/utils/format-payment-params";
 
 export default function PaymentResponsePage({ params }) {
-    const { emailToken, slug, paymentId } = params;
+    // const { emailToken, slug, paymentId } = params;
+    const { emailToken, orderIdsParam, orderIds, paymentId } =
+        formatPaymentParams(params);
     const [status, setStatus] = useState("processing");
     const router = useRouter();
 
@@ -27,7 +30,7 @@ export default function PaymentResponsePage({ params }) {
             // setStatus(response.status);
         };
         processPayment();
-    }, [emailToken, slug, paymentId]);
+    }, [emailToken, orderIdsParam, paymentId]);
 
     const getStatusMessage = () => {
         switch (status) {

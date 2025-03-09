@@ -10,6 +10,7 @@ import { createNoteAction } from "@/modules/notes/actions/create-note-action";
 import { sum } from "@/lib/utils";
 import { whereSales } from "@/utils/db/where.sales";
 import { getBaseUrl } from "@/envs";
+import { composePaymentOrderIdsParam } from "@/utils/format-payment-params";
 
 interface Props {
     ids;
@@ -51,7 +52,6 @@ export const __sendInvoiceEmailTrigger = async ({
             },
         },
     });
-    console.log(__sales);
 
     const noEmail = __sales
         .filter((sales) => sales.customer?.email || sales.billingAddress?.email)
@@ -70,7 +70,7 @@ export const __sendInvoiceEmailTrigger = async ({
                 const sEmail = a.customer?.email || a?.billingAddress?.email;
                 return customerEmail == sEmail;
             });
-            let paymentSlug = customerEmail?.split("@")[0];
+            let emailSlug = customerEmail?.split("@")[0];
             if (matchingSales?.[0]?.id == sales.id) {
                 if (!customerEmail)
                     throw new Error("Customer has no valid email");
@@ -93,9 +93,9 @@ export const __sendInvoiceEmailTrigger = async ({
                 const totalDueAmount = sum(pendingAmountSales, "amountDue");
                 let paymentLink =
                     totalDueAmount > 0
-                        ? `${getBaseUrl()}/square-payment/${paymentSlug}/${pendingAmountSales
-                              .map((a) => a.slug?.replaceAll("-", "_"))
-                              .join("-")}`
+                        ? `${getBaseUrl()}/square-payment/${emailSlug}/${composePaymentOrderIdsParam(
+                              pendingAmountSales.map((a) => a.slug)
+                          )}`
                         : null;
 
                 const response = await resend.emails.send({

@@ -54,6 +54,11 @@ export async function getSalesCheckoutLinkAction(props: Props) {
                     amount,
                     paymentMethod: "link" as PaymentMethods,
                     tip: 0,
+                    checkout: {
+                        create: {
+                            paymentType: "link" as PaymentMethods,
+                        },
+                    },
                 },
             },
             type: "transaction" as CustomerTransactionType,
