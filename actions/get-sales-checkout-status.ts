@@ -1,7 +1,8 @@
 "use server";
 
-import { squareClient, SquarePaymentStatus } from "@/_v2/lib/square";
+import { SquarePaymentStatus } from "@/_v2/lib/square";
 import { prisma } from "@/db";
+import { squareClient } from "@/utils/square-utils";
 
 interface Props {
     squareOrderId: string;
