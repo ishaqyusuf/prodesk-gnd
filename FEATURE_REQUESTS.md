@@ -1,5 +1,9 @@
-# SAT, MAR 08
+# SAT, MAR 09
+- check sales email & phoneNo before sending email.
+- add continue anyway if phoneNo is not there: put note ( customer will be prompted before checkout)
+- sales checkout if no phone no, prompt customer.
 - 
+# SAT, MAR 08
 # FRI, MAR 07
 - global side-nav
 - dispatch page.

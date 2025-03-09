@@ -1,6 +1,7 @@
 "use server";
 
 import { squareClient, SquarePaymentStatus } from "@/_v2/lib/square";
+import { prisma } from "@/db";
 
 interface Props {
     squareOrderId: string;
@@ -23,6 +24,15 @@ export async function getSalesCheckoutStatus({
             } = await squareClient.paymentsApi.getPayment(tender.paymentId);
             const tip = payment.tipMoney?.amount;
             const status = payment.status as SquarePaymentStatus;
+            const tenderId = payment.id;
+            // await prisma.checkoutTenders.upsert({
+            //     where: {
+            //         tenderId,
+            //     },
+            //     create: {
+            //         tenderId,
+            //     },
+            // });
         })
     );
 }

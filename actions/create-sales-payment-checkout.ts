@@ -2,15 +2,12 @@
 
 import { prisma } from "@/db";
 import { getSalesPaymentCheckoutInfoAction } from "./get-sales-payment-checkout-info-action";
-import {
-    SQUARE_LOCATION_ID,
-    squareClient,
-    SquarePaymentStatus,
-} from "@/_v2/lib/square";
+import { SquarePaymentStatus } from "@/_v2/lib/square";
 import { generateRandomString } from "@/lib/utils";
 import { PaymentMethods } from "@/app/(clean-code)/(sales)/types";
 import { CustomerTransactionType } from "./get-sales-customers-tx";
 import { getBaseUrl } from "@/envs";
+import { SQUARE_LOCATION_ID, squareClient } from "@/utils/square-utils";
 
 interface Props {
     email: string;

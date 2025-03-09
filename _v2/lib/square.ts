@@ -1,28 +1,12 @@
+"use server";
 import { userId } from "@/app/(v1)/_actions/utils";
 import { CheckoutStatus } from "@/app/(v2)/(loggedIn)/sales-v2/_components/_square-payment-modal/action";
 import { prisma } from "@/db";
 import { env } from "@/env.mjs";
 import { __isProd } from "@/lib/is-prod-server";
-import {
-    Client,
-    ApiError,
-    Environment,
-    OrderLineItem,
-    PrePopulatedData,
-} from "square";
+import { SQUARE_LOCATION_ID, squareClient } from "@/utils/square-utils";
+import { ApiError, OrderLineItem, PrePopulatedData } from "square";
 
-// const devMode = env.NODE_ENV == "development";
-let devMode = env.NODE_ENV != "production";
-devMode = false;
-export const SQUARE_LOCATION_ID = devMode
-    ? env.SQUARE_SANDBOX_LOCATION_ID
-    : env.SQUARE_LOCATION_ID;
-export const squareClient = new Client({
-    environment: devMode ? Environment.Sandbox : Environment.Production,
-    accessToken: devMode
-        ? env.SQUARE_SANDBOX_ACCESS_TOKEN
-        : env.SQUARE_ACCESS_TOKEN,
-});
 export interface SquarePaymentMeta {
     squareOrderId;
 }
