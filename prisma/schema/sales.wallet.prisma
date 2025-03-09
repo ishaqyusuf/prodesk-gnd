@@ -1,6 +1,6 @@
 model CustomerTransaction {
     id            Int                  @unique @default(autoincrement())
-    authorId      Int
+    authorId      Int?
     status        String?
     amount        Float
     walletId      Int?
@@ -40,6 +40,7 @@ model SalesPayments {
     id               Int                  @unique @default(autoincrement())
     note             String?
     authorId         Int?
+    squarePaymentsId String?
     // customerId    Int
     transactionId    Int?
     orderId          Int
@@ -57,7 +58,6 @@ model SalesPayments {
     commissions      SalesCommision[]
     author           Users?               @relation(fields: [authorId], references: [id])
     squarePayments   SquarePayments?      @relation(fields: [squarePaymentsId], references: [id])
-    squarePaymentsId String?
 
     @@index([authorId])
     @@index([orderId])
@@ -144,8 +144,8 @@ model SalesCheckout {
 model CheckoutTenders {
     id              String        @id @default(cuid())
     tenderId        String        @unique
-    squarePaymentId String
-    squareOrderId   String
+    // squarePaymentId String
+    // squareOrderId   String
     salesCheckoutId String
     status          String
     amount          Float?

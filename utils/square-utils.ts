@@ -1,4 +1,5 @@
 import { env } from "@/env.mjs";
+import { formatMoney } from "@/lib/use-number";
 import { Client, Environment } from "square";
 
 let devMode = env.NODE_ENV != "production";
@@ -14,3 +15,8 @@ export const squareClient = new Client({
         : env.SQUARE_ACCESS_TOKEN,
 });
 
+export const amountFromCent = (amount) => {
+    if (!amount) return amount;
+    amount = Number(amount);
+    return formatMoney(amount);
+};

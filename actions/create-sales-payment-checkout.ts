@@ -10,31 +10,28 @@ import { getBaseUrl } from "@/envs";
 import { SQUARE_LOCATION_ID, squareClient } from "@/utils/square-utils";
 
 interface Props {
-    email: string;
-    slugs: string[];
-    primaryPhoneNo: string;
-    amount: number;
-    rawSlug: string;
-    address?: string;
+    emailToken: string;
+    orderIds: string[];
+    // primaryPhoneNo: string;
+    orderIdsParam: string;
 }
-export async function getSalesCheckoutLinkAction(props: Props) {
-    const { slugs, email, primaryPhoneNo, amount, rawSlug } = props;
-    const data = await getSalesPaymentCheckoutInfoAction(slugs, email);
-    // create square payment with (orders) squarepaymentorders
+export async function createSalesCheckoutLinkAction(props: Props) {
+    const { orderIds, emailToken, orderIdsParam } = props;
+    const data = await getSalesPaymentCheckoutInfoAction(orderIds, emailToken);
     const tx = await prisma.customerTransaction.create({
         data: {
             wallet: {
                 connectOrCreate: {
                     where: {
-                        accountNo: primaryPhoneNo,
+                        accountNo: data.primaryPhone,
                     },
                     create: {
                         balance: 0,
-                        accountNo: primaryPhoneNo,
+                        accountNo: data.primaryPhone,
                     },
                 },
             },
-            amount,
+            amount: data.amountDue,
             paymentMethod: "link" as PaymentMethods,
             squarePayment: {
                 create: {
@@ -48,7 +45,7 @@ export async function getSalesCheckoutLinkAction(props: Props) {
                             })),
                         },
                     },
-                    amount,
+                    amount: data.amountDue,
                     paymentMethod: "link" as PaymentMethods,
                     tip: 0,
                     checkout: {
@@ -70,24 +67,26 @@ export async function getSalesCheckoutLinkAction(props: Props) {
             },
         },
     });
-    const redirectUrl = `${getBaseUrl()}/square-payment/${email}/${rawSlug}`;
+    const redirectUrl = `${getBaseUrl()}/square-payment/${emailToken}/${orderIdsParam}/pament-response/${
+        tx.squarePayment?.paymentId
+    }`;
     const resp = await squareClient.checkoutApi.createPaymentLink({
         idempotencyKey: new Date().toISOString(),
         quickPay: {
             locationId: SQUARE_LOCATION_ID,
             name: `sales payment for order${
-                slugs.length ? "s" : ""
-            } ${slugs.join(", ")}`,
+                orderIds.length ? "s" : ""
+            } ${orderIds.join(", ")}`,
             priceMoney: {
                 amount: BigInt(Math.round(data.amountDue * 100)),
                 currency: "USD",
             },
         },
         prePopulatedData: {
-            buyerEmail: props.email,
-            buyerPhoneNumber: props.primaryPhoneNo,
+            buyerEmail: data.email,
+            buyerPhoneNumber: data.primaryPhone,
             buyerAddress: {
-                addressLine1: props.address,
+                addressLine1: data.address,
             },
         },
         checkoutOptions: {

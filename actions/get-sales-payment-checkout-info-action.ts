@@ -7,7 +7,7 @@ import { AsyncFnType } from "@/types";
 export type GetSalesPaymentCheckoutInfo = AsyncFnType<
     typeof getSalesPaymentCheckoutInfoAction
 >;
-export async function getSalesPaymentCheckoutInfoAction(slugs, email) {
+export async function getSalesPaymentCheckoutInfoAction(slugs, emailToken) {
     const orders = await prisma.salesOrders.findMany({
         where: {
             slug: {
@@ -17,14 +17,14 @@ export async function getSalesPaymentCheckoutInfoAction(slugs, email) {
                 {
                     customer: {
                         email: {
-                            startsWith: email,
+                            startsWith: emailToken,
                         },
                     },
                 },
                 {
                     billingAddress: {
                         email: {
-                            startsWith: email,
+                            startsWith: emailToken,
                         },
                     },
                 },
@@ -36,8 +36,10 @@ export async function getSalesPaymentCheckoutInfoAction(slugs, email) {
             amountDue: true,
             billingAddress: {
                 select: {
+                    email: true,
                     name: true,
                     phoneNo: true,
+                    address1: true,
                 },
             },
             customer: {
@@ -45,6 +47,7 @@ export async function getSalesPaymentCheckoutInfoAction(slugs, email) {
                     name: true,
                     businessName: true,
                     phoneNo: true,
+                    email: true,
                     wallet: {
                         select: {
                             id: true,
@@ -63,6 +66,8 @@ export async function getSalesPaymentCheckoutInfoAction(slugs, email) {
         amountDue: order.amountDue,
         id: order.id,
         orderNo: order.orderId,
+        email: order.customer?.email || order.billingAddress?.email,
+        address: order.billingAddress.address1,
     }));
     const phoneNoList = Array.from(
         new Set(
@@ -77,8 +82,11 @@ export async function getSalesPaymentCheckoutInfoAction(slugs, email) {
         )
     );
     const primaryPhone = phoneNoList.length == 1 ? phoneNoList?.[0] : null;
-    // const walletId = orders.map(a => a.customer?.wallet?.id)
+    const email = ls.filter((a) => a.email?.startsWith(emailToken))?.[0]?.email;
+    const address = ls.filter((a) => a.address)?.[0]?.address;
     return {
+        email,
+        address,
         orders: ls,
         phoneNoList,
         primaryPhone,

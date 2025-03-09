@@ -1,5 +1,6 @@
 "use client";
 
+import { createSalesCheckoutLinkAction } from "@/actions/create-sales-payment-checkout";
 import {
     getSalesPaymentCheckoutInfoAction,
     GetSalesPaymentCheckoutInfo,
@@ -15,6 +16,8 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
+import { openLink } from "@/lib/open-link";
+import { timeout } from "@/lib/timeout";
 import { cn } from "@/lib/utils";
 import { formatPaymentParams } from "@/utils/format-payment-params";
 import { useEffect, useState } from "react";
@@ -40,7 +43,17 @@ export default function Page({ params }) {
         }
         load();
     }, [emailToken, orderIdsParam]);
-    async function createPayment() {}
+    async function createPayment() {
+        await timeout(1000);
+        const resp = await createSalesCheckoutLinkAction({
+            emailToken,
+            orderIdsParam,
+            orderIds,
+        });
+        console.log({ resp });
+        // openLink(resp.paymentLink)
+        // const paymentLink = await
+    }
     return (
         <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-4">
             <div className="flex items-center  space-x-2 mb-6">
@@ -131,7 +144,7 @@ export default function Page({ params }) {
                                 </div>
 
                                 <Button
-                                    onClick={createPayment}
+                                    action={createPayment}
                                     size="lg"
                                     className="w-full"
                                     // className="w-full bg-blue-600 text-white font-semibold py-3 rounded-lg shadow hover:bg-blue-700 transition"
