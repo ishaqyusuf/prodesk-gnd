@@ -8,6 +8,7 @@ import { CheckCircle, XCircle } from "lucide-react";
 import { formatPaymentParams } from "@/utils/format-payment-params";
 import { finalizeSalesCheckout } from "@/actions/finalize-sales-checkout";
 import { salesPaymentCheckoutResponse } from "@/actions/sales-payment-checkout-response";
+import { notifySalesRepPaymentSuccessAction } from "@/actions/triggers/sales-rep-payment-notification";
 
 export default function PaymentResponsePage({ params }) {
     // const { emailToken, slug, paymentId } = params;
@@ -35,6 +36,13 @@ export default function PaymentResponsePage({ params }) {
                     salesPaymentId: paymentId,
                 });
                 console.log({ response });
+                await Promise.all(
+                    response?.notifications?.map(async (not) => {
+                        await notifySalesRepPaymentSuccessAction({
+                            ...not,
+                        });
+                    })
+                );
                 // const response = await salesPaymentCheckoutResponse({
                 //     emailToken,
                 //     slug,

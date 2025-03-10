@@ -7,6 +7,7 @@
 - swap door: add search
 - invoice success: notify sales rep
 - make invoice payment optional.
+- inventory management system
 # SAT, MAR 09
 - check sales email & phoneNo before sending email.
 - add continue anyway if phoneNo is not there: put note ( customer will be prompted before checkout)
