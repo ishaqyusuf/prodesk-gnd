@@ -6,6 +6,7 @@ import { useStepContext } from "../../components-section/ctx";
 import { getFormState } from "../../../_common/_stores/form-data-store";
 import { toast } from "sonner";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import SearchBar from "../../components-section/search-bar";
 
 export type Door = HptContext["doors"][number];
 export const openDoorSwapModal = (door: Door, itemUid) => {
@@ -40,6 +41,11 @@ export function DoorSwapModal({ door, itemStepUid }) {
                     </div>
                 </ScrollArea>
             </div>
+            <Modal.Footer>
+                <div className="flex justify-center w-full">
+                    <SearchBar ctx={ctx} />
+                </div>
+            </Modal.Footer>
         </Modal.Content>
     );
 }
