@@ -28,7 +28,7 @@ export function DoorSwapModal({ door, itemStepUid }) {
             <Modal.Header title="Select Door" />
             <div className="">
                 {/* <ComponentsSection itemStepUid={itemStepUid} /> */}
-                <ScrollArea className="h-[85vh]">
+                <ScrollArea className="h-[80vh]">
                     <div className="grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-3">
                         {items?.map((component) => (
                             <Component
