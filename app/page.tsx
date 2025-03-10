@@ -2,7 +2,7 @@
 import { nav } from "@/lib/navs";
 import { redirect } from "next/navigation";
 import { useEffect } from "react";
-import { signOut, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 export default function AuthPage({}) {
     const { data: session } = useSession({
         required: true,

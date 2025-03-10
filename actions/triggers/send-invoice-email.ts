@@ -92,13 +92,15 @@ export const __sendInvoiceEmailTrigger = async ({
                     (s) => s.amountDue > 0
                 );
                 const totalDueAmount = sum(pendingAmountSales, "amountDue");
-                let paymentLink = !isDev
-                    ? null
-                    : totalDueAmount > 0
-                    ? `${getBaseUrl()}/square-payment/${emailSlug}/${composePaymentOrderIdsParam(
-                          pendingAmountSales.map((a) => a.slug)
-                      )}`
-                    : null;
+                let paymentLink =
+                    // !isDev
+                    //     ? null
+                    //     :
+                    totalDueAmount > 0
+                        ? `${getBaseUrl()}/square-payment/${emailSlug}/${composePaymentOrderIdsParam(
+                              pendingAmountSales.map((a) => a.slug)
+                          )}`
+                        : null;
 
                 const response = await resend.emails.send({
                     from: `GND Millwork <${
