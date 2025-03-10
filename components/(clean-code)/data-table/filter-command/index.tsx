@@ -112,10 +112,6 @@ export function DataTableFilterCommand<TData, TSchema extends z.AnyZodObject>({
 
                 col?.setFilterValue(value);
             }
-            console.log({
-                data: searchParams.data,
-                currentEnabledFilters,
-            });
             const currentFiltersToReset = currentEnabledFilters.filter(
                 (filter) => {
                     return !__filterKeyInSearch(filter.id, searchParams.data);

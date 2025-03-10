@@ -71,7 +71,6 @@ export function useInfiniteDataTableContext({
         .filter(({ value }) => value ?? undefined);
     const flatData = React.useMemo(() => {
         const result = data?.pages?.flatMap((page) => page.data ?? []) ?? [];
-        // return result.filter((a, i) => i < 1);
         return result;
     }, [data?.pages]);
     const lastPage = data?.pages?.[data?.pages.length - 1];
@@ -250,6 +249,15 @@ export function useInfiniteDataTableContext({
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [rowSelection, selectedRow, checkMode]);
+    React.useEffect(() => {
+        const selectedKeys = Object.keys(rowSelection);
+        const selections = flatData.filter((a) =>
+            selectedKeys?.includes(a?.uuid)
+        );
+        if (selectedKeys?.length && selectedKeys.length != selections.length) {
+            setRowSelection({});
+        }
+    }, [flatData, rowSelection]);
     ctx.refetch = refetch;
     return {
         checkable,
