@@ -8,11 +8,13 @@
 - invoice success: notify sales rep
 - make invoice payment optional.
 - inventory management system
+  - shelf inventory dashboard and overview sheet assessible form new dashboard, orders,quick action.
+  - manage shelf categories and products, set available qty
+  - manage components as inventorie
 # SAT, MAR 09
 - check sales email & phoneNo before sending email.
 - add continue anyway if phoneNo is not there: put note ( customer will be prompted before checkout)
 - sales checkout if no phone no, prompt customer.
-- 
 # SAT, MAR 08
 # FRI, MAR 07
 - global side-nav
@@ -56,9 +58,9 @@
 - batch production: throw error when already assigned item is selected
 - create feature-request feature
 - email system:
-    - create and send email
-    - invoice updated email
-    - reminder email
+    - create and send email.
+    - invoice updated email.
+    - reminder email.
     - quote email.
 - invoice copy & move history
 - payment portal: created, saved but not applied.
