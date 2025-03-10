@@ -78,12 +78,12 @@ Props) {
         step: stepForm,
     } = stepCtx;
     const selected = isMultiSection
-        ? ctx.multi.watchItemSelected(safeFormText(item.product.title))
+        ? ctx.multi.watchItemSelected(safeFormText(item.product?.title))
         : false;
     const itemData = ctx.get.itemArray();
 
     const doorPriceCount = Object.entries(
-        item.product.meta.doorPrice || {}
+        item.product?.meta?.doorPrice || {}
     ).filter(([k, v]) => {
         return v > 0 && k?.endsWith(itemData.item?.housePackageTool?.height);
     }).length;
@@ -166,8 +166,8 @@ Props) {
                     {/* <span>{item.deletedAt ? "yes" : "no"}</span> */}
                     <CardTitle className="line-clamp-1s text-sm">
                         {isRoot
-                            ? item.product?.value || item.product.title
-                            : item.product.title}
+                            ? item.product?.value || item.product?.title
+                            : item.product?.title}
                     </CardTitle>
                 </CardContent>
             </>
@@ -322,8 +322,8 @@ Props) {
             </div>
             <span className="sr-only">
                 {isRoot
-                    ? item.product?.value || item.product.title
-                    : item.product.title}
+                    ? item.product?.value || item.product?.title
+                    : item.product?.title}
             </span>
             {stepForm.step?.title == "Moulding" ? (
                 <MouldingContent />
@@ -346,16 +346,16 @@ interface ProductImageProps {
     aspectRatio?;
 }
 export function ProductImage({ item, aspectRatio = 4 / 2 }: ProductImageProps) {
-    const src = item.product.img || item?.product?.meta?.cld;
-    const svg = (item.product.meta as any)?.svg;
-    const url = item.product.meta?.url;
+    const src = item.product?.img || item?.product?.meta?.cld;
+    const svg = (item.product?.meta as any)?.svg;
+    const url = item.product?.meta?.url;
     return (
         <Img
             src={src}
             aspectRatio={
                 src || url ? (item.isDoor ? 4 / 4 : aspectRatio) : aspectRatio
             }
-            alt={item.product.title}
+            alt={item.product?.title}
             svg={svg}
         />
     );
@@ -365,28 +365,28 @@ export function ProductImage({ item, aspectRatio = 4 / 2 }: ProductImageProps) {
             whileHover={{ scale: 1.01 }}
             transition={{ type: "spring", stiffness: 300 }}
         >
-            {item.product.img || item?.product?.meta?.cld ? (
+            {item.product?.img || item?.product?.meta?.cld ? (
                 <AspectRatio ratio={item.isDoor ? 4 / 4 : aspectRatio}>
                     <Image
                         src={`${env.NEXT_PUBLIC_CLOUDINARY_BASE_URL}/dyke/${
-                            item.product.img || item?.product?.meta?.cld
+                            item.product?.img || item?.product?.meta?.cld
                         }`}
-                        alt={item.product.title}
+                        alt={item.product?.title}
                         className="object-contain"
                         // sizes="(min-width: 1024px) 10vw"
                         fill
                         loading="lazy"
                     />
                 </AspectRatio>
-            ) : (item.product.meta as any)?.svg ? (
+            ) : (item.product?.meta as any)?.svg ? (
                 <AspectRatio ratio={1}>
-                    <SVG className="" src={item.product.meta?.svg} />
+                    <SVG className="" src={item.product?.meta?.svg} />
                 </AspectRatio>
-            ) : item.product.meta?.url ? (
+            ) : item.product?.meta?.url ? (
                 <AspectRatio ratio={item.isDoor ? 4 / 4 : aspectRatio}>
                     <div className="absolute inset-0 bg-red-400 bg-opacity-0"></div>
                     <object
-                        data={item.product.meta?.url}
+                        data={item.product?.meta?.url}
                         type={"image/svg+xml"}
                         className=""
                         id="img"

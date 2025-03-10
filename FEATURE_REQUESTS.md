@@ -4,7 +4,9 @@
 - sales filter
   - net terms: ...terms, has term, no term
   - profiles: ...profiles, has profile, no profile
-- 
+- swap door: add search
+- invoice success: notify sales rep
+- make invoice payment optional.
 # SAT, MAR 09
 - check sales email & phoneNo before sending email.
 - add continue anyway if phoneNo is not there: put note ( customer will be prompted before checkout)

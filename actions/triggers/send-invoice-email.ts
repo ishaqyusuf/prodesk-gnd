@@ -15,10 +15,12 @@ import { composePaymentOrderIdsParam } from "@/utils/format-payment-params";
 interface Props {
     ids;
     orderIds;
+    withPayment;
 }
 export const __sendInvoiceEmailTrigger = async ({
     ids: _ids,
     orderIds,
+    withPayment,
 }: Props) => {
     const where = whereSales({
         "order.no": orderIds,
@@ -118,7 +120,7 @@ export const __sendInvoiceEmailTrigger = async ({
                         composeSalesEmail({
                             type: sales.type as any,
                             customerName,
-                            paymentLink,
+                            paymentLink: withPayment ? paymentLink : null,
                             link: `${getBaseUrl()}/api/pdf/download?${QueryString.stringify(
                                 {
                                     id: sales.id,
