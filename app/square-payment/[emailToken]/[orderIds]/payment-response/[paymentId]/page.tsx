@@ -6,6 +6,8 @@ import { motion } from "framer-motion";
 import { Icons } from "@/components/_v1/icons";
 import { CheckCircle, XCircle } from "lucide-react";
 import { formatPaymentParams } from "@/utils/format-payment-params";
+import { finalizeSalesCheckout } from "@/actions/finalize-sales-checkout";
+import { salesPaymentCheckoutResponse } from "@/actions/sales-payment-checkout-response";
 
 export default function PaymentResponsePage({ params }) {
     // const { emailToken, slug, paymentId } = params;
@@ -19,7 +21,18 @@ export default function PaymentResponsePage({ params }) {
         if (hasRun.current) return; // prevent second run
         hasRun.current = true; // mark as run
         const processPayment = async () => {
-            await new Promise((resolve) => setTimeout(resolve, 3000)); // Simulate processing delay
+            const response0 = await salesPaymentCheckoutResponse({
+                paymentId,
+            });
+            console.log({
+                response0,
+            });
+            // return;
+            await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate processing delay
+            // const response = await finalizeSalesCheckout({
+            //     salesPaymentId: paymentId,
+            // });
+            // console.log({response})
             // const response = await salesPaymentCheckoutResponse({
             //     emailToken,
             //     slug,

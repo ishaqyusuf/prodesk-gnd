@@ -71,12 +71,13 @@ export async function createSalesCheckoutLinkAction(props: Props) {
             include: {
                 squarePayment: {
                     include: {
+                        checkout: true,
                         orders: true,
                     },
                 },
             },
         });
-        const redirectUrl = `${getBaseUrl()}/square-payment/${emailToken}/${orderIdsParam}/pament-response/${
+        const redirectUrl = `${getBaseUrl()}/square-payment/${emailToken}/${orderIdsParam}/payment-response/${
             tx.squarePayment?.paymentId
         }`;
         try {

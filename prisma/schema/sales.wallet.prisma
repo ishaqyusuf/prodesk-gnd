@@ -68,7 +68,6 @@ model SalesPayments {
 
 model SquarePayments {
     id              String                @id @default(cuid())
-    checkoutId      String?               @unique
     paymentId       String?               @unique
     status          String                @default("created")
     squareOrderId   String?

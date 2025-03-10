@@ -11,6 +11,9 @@ export function formatPaymentParams(params) {
 export function transformPaymentOrderIds(orderIds): string[] {
     return orderIds?.split("-").map((a) => a.replaceAll("_", "-"));
 }
-export function composePaymentOrderIdsParam(...orderIds) {
-    return orderIds.map((a) => a.slug?.replaceAll("-", "_")).join("-");
+export function composePaymentOrderIdsParam(orderIds: string[]) {
+    return orderIds
+        ?.filter(Boolean)
+        .map((a) => a?.replaceAll("-", "_"))
+        .join("-");
 }

@@ -2,6 +2,7 @@
 
 import { SquarePaymentStatus } from "@/_v2/lib/square";
 import { prisma } from "@/db";
+import { updateSalesCheckoutStatus } from "./update-sales-checkout-status";
 
 interface Props {
     paymentId: string;
@@ -17,6 +18,7 @@ export async function salesPaymentCheckoutResponse(props: Props) {
         include: {
             squarePayment: {
                 include: {
+                    checkout: true,
                     orders: {
                         include: {
                             order: {
@@ -31,8 +33,13 @@ export async function salesPaymentCheckoutResponse(props: Props) {
             },
         },
     });
+    return payment;
     const paymentStatus = payment.status as SquarePaymentStatus;
+    // return { paymentStatus };
     if (paymentStatus == "PENDING") {
-        //
+        return await updateSalesCheckoutStatus({
+            squareOrderId: payment.squarePayment.squareOrderId,
+            checkoutId: payment.squarePayment.checkoutId,
+        });
     }
 }
