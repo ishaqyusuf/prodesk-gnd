@@ -39,7 +39,7 @@ export async function salesPaymentCheckoutResponse(props: Props) {
     if (paymentStatus == "PENDING") {
         return await updateSalesCheckoutStatus({
             squareOrderId: payment.squarePayment.squareOrderId,
-            checkoutId: payment.squarePayment.checkoutId,
+            checkoutId: payment.squarePayment.checkout.id,
         });
     }
 }
