@@ -15,6 +15,7 @@ import { getSalesPaymentsAction } from "@/actions/get-sales-payment";
 import NoResults from "./empty-tx-history";
 import ConfirmBtn from "@/components/_v1/confirm-btn";
 import { Badge } from "@/components/ui/badge";
+import Money from "@/components/_v1/money";
 export function TransactionHistoryTab() {
     const store = salesOverviewStore();
     const ctx = useEffectLoader(
@@ -37,7 +38,7 @@ export function TransactionHistoryTab() {
                         <TableHead>Date</TableHead>
                         <TableHead>Payment Method</TableHead>
                         {/* <TableHead>Processed By</TableHead> */}
-                        {/* <TableHead>Amount</TableHead> */}
+                        <TableHead>Amount</TableHead>
                         <TableHead>Status</TableHead>
                         <TableHead></TableHead>
                     </TableRow>
@@ -60,18 +61,20 @@ export function TransactionHistoryTab() {
                                     >
                                         {tx.paymentMethod}
                                     </Badge>
-                                    <>
-                                        {" by "}
-                                        {tx.receivedBy}
-                                    </>
+                                    {!tx.receivedBy || (
+                                        <>
+                                            {" by "}
+                                            {tx.receivedBy}
+                                        </>
+                                    )}
                                 </TCell.Secondary>
                             </TableCell>
                             {/* <TableCell>
                                 <>{tx.receivedBy}</>
                             </TableCell> */}
-                            {/* <TableCell>
+                            <TableCell>
                                 <Money value={Math.abs(tx.amount)} />
-                            </TableCell> */}
+                            </TableCell>
                             <TableCell>
                                 <TCell.Status status={tx.status} />
                             </TableCell>

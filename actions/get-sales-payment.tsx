@@ -47,7 +47,7 @@ export async function getSalesPaymentsAction(id) {
             payment,
             id: payment.id,
             paymentId: `P${payment.id}-T${payment.transaction.id}`,
-            receivedBy: payment.transaction.author.name,
+            receivedBy: payment.transaction.author?.name,
             amount: payment.amount,
             note:
                 payment.note ||

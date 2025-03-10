@@ -1,3 +1,10 @@
+# ...
+# MON, MAR 10
+- Make roles and meta data cached from server action and not hard stored with login.
+- sales filter
+  - net terms: ...terms, has term, no term
+  - profiles: ...profiles, has profile, no profile
+- 
 # SAT, MAR 09
 - check sales email & phoneNo before sending email.
 - add continue anyway if phoneNo is not there: put note ( customer will be prompted before checkout)

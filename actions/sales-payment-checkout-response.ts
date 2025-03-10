@@ -33,7 +33,7 @@ export async function salesPaymentCheckoutResponse(props: Props) {
             },
         },
     });
-    return payment;
+    // return payment;
     const paymentStatus = payment.status as SquarePaymentStatus;
     // return { paymentStatus };
     if (paymentStatus == "PENDING") {

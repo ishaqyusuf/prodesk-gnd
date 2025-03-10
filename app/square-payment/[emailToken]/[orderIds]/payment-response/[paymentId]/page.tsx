@@ -14,6 +14,7 @@ export default function PaymentResponsePage({ params }) {
     const { emailToken, orderIdsParam, orderIds, paymentId } =
         formatPaymentParams(params);
     const [status, setStatus] = useState("processing");
+    const [error, setError] = useState(null);
     const router = useRouter();
 
     const hasRun = useRef(false);
@@ -21,26 +22,31 @@ export default function PaymentResponsePage({ params }) {
         if (hasRun.current) return; // prevent second run
         hasRun.current = true; // mark as run
         const processPayment = async () => {
-            const response0 = await salesPaymentCheckoutResponse({
-                paymentId,
-            });
-            console.log({
-                response0,
-            });
-            // return;
-            await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate processing delay
-            // const response = await finalizeSalesCheckout({
-            //     salesPaymentId: paymentId,
-            // });
-            // console.log({response})
-            // const response = await salesPaymentCheckoutResponse({
-            //     emailToken,
-            //     slug,
-            //     paymentId,
-            // });
-            // setStatus("error");
-            setStatus("success");
-            // setStatus(response.status);
+            try {
+                const response0 = await salesPaymentCheckoutResponse({
+                    paymentId,
+                });
+                console.log({
+                    response0,
+                });
+                // return;
+                await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate processing delay
+                const response = await finalizeSalesCheckout({
+                    salesPaymentId: paymentId,
+                });
+                console.log({ response });
+                // const response = await salesPaymentCheckoutResponse({
+                //     emailToken,
+                //     slug,
+                //     paymentId,
+                // });
+                // setStatus("error");
+                setStatus("success");
+                // setStatus(response.status);
+            } catch (error) {
+                setError(error.message);
+                setStatus("error");
+            }
         };
         processPayment();
     }, [emailToken, orderIdsParam, paymentId]);
@@ -55,7 +61,7 @@ export default function PaymentResponsePage({ params }) {
                 };
             case "error":
                 return {
-                    text: "Payment Failed!",
+                    text: `${error}`,
                     color: "text-red-600",
                     icon: <XCircle className="w-12 h-12 text-red-500" />,
                 };

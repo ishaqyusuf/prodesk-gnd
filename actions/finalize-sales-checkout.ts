@@ -44,7 +44,7 @@ export async function finalizeSalesCheckout({ salesPaymentId }: Props) {
         },
     });
     const status: SquarePaymentStatus = cTx.status as any;
-    if (status != "COMPLETED") throw new Error("Payment Already Applied!");
+    if (status == "COMPLETED") throw new Error("Payment Already Applied!");
 
     const tenders = cTx.squarePayment.checkout.tenders;
     const validTenders = tenders.filter(
@@ -70,7 +70,8 @@ export async function finalizeSalesCheckout({ salesPaymentId }: Props) {
     const tip =
         totalTip > 0 ? formatMoney(totalTip / squarePayment.orders.length) : 0;
     let balance = totalAmount;
-    await Promise.all(
+
+    const proms = await Promise.all(
         squarePayment.orders.map(async (o) => {
             let orderAmountDue = formatMoney(o.order.amountDue);
             let paidAmount =
@@ -79,7 +80,7 @@ export async function finalizeSalesCheckout({ salesPaymentId }: Props) {
                     : formatMoney(orderAmountDue - balance);
             balance = formatMoney(balance - paidAmount);
             if (paidAmount) {
-                await prisma.salesPayments.create({
+                const sp = await prisma.salesPayments.create({
                     data: {
                         amount: paidAmount,
                         tip,
@@ -93,6 +94,7 @@ export async function finalizeSalesCheckout({ salesPaymentId }: Props) {
                         status: `success` as SalesPaymentStatus,
                         transactionId: cTx.id,
                         squarePaymentsId: squarePayment.id,
+
                         // transaction: {
                         //     connect: {
                         //         id: cTx.id,
@@ -100,15 +102,40 @@ export async function finalizeSalesCheckout({ salesPaymentId }: Props) {
                         // },
                     },
                 });
-                await prisma.salesOrders.update({
+                const ord = await prisma.salesOrders.update({
                     where: {
                         id: o.orderId,
                     },
                     data: {
                         amountDue: formatMoney(orderAmountDue - paidAmount),
                     },
+                    select: {
+                        amountDue: true,
+                        orderId: true,
+                    },
                 });
+                return {
+                    sp,
+                    ord,
+                };
             }
+            return {
+                paidAmount,
+            };
         })
     );
+    await prisma.customerTransaction.update({
+        where: {
+            id: cTx.id,
+        },
+        data: {
+            status: "COMPLETED" as SquarePaymentStatus,
+            amount: totalAmount,
+        },
+    });
+    return {
+        proms,
+        tip,
+        totalAmount,
+    };
 }
