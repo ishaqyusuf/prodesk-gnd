@@ -35,7 +35,9 @@ export const SalesInvoiceEmail = ({
     const isQuote = type == "quote";
     const text = `You've Received ${
         isQuote ? "a quote" : "an Invoice"
-    } from ${salesRep}`;
+    } from GND Millwork 
+    `;
+    // ${salesRep}
     return (
         <Html>
             <Tailwind>

@@ -2,7 +2,12 @@
 # MON, MAR 11
     - customer report sheet, balance owed, wallet balance, sales, quotes
     - door inventory management
-      - size management
+      - size management as variants
+      - inbound qty
+      - low qty alert settings
+      - track qty based on invoices
+      - 
+    - payment page error states
 <!-- - customer profile changing not working. -->
 <!-- - exterior doors selection -->
 # MON, MAR 10
