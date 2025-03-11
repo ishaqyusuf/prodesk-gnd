@@ -409,6 +409,8 @@ export function zhHarvestDoorSizes(data: SalesFormZusData, itemUid) {
             };
         })
         .filter((c) => c.valid);
+    // console.log(heightStepUid);
+
     const stepCls = new StepHelperClass(heightStepUid);
     const visibleComponents = stepCls.getVisibleComponents();
     const sizeList: {

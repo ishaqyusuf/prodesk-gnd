@@ -483,6 +483,7 @@ export class StepHelperClass extends SettingsClass {
             stepProductUid: componentUid,
             dykeStepId: this.getStepForm().stepId,
         };
+
         const stepProdPricings = this.getComponentPricings(componentUid);
 
         sizeList.map((sl) => {
