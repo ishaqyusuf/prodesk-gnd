@@ -1,6 +1,7 @@
 # ...
 # MON, MAR 11
 - customer report sheet, balance owed, wallet balance, sales, quotes
+- customer profile changing not working.
 # MON, MAR 10
 - Make roles and meta data cached from server action and not hard stored with login.
 - sales filter

@@ -340,7 +340,6 @@ export class StepHelperClass extends SettingsClass {
                 // component._metaData.sortId = this.getCurrentStepSequence();
                 component._metaData.sortIndex = sortIndex;
                 component._metaData.sortUid = sort?.uid || vis?.[0];
-                console.log({ vis });
 
                 return component;
             });

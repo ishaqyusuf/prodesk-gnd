@@ -63,6 +63,7 @@ type PricingOption = (typeof pricingOptions)[number];
 export default function DoorSizeSelectModal({ cls, door }: Props) {
     const ctx = useInitContext(cls, door);
     const config = ctx.routeConfig;
+
     return (
         <DoorSizeSelectContext.Provider value={ctx}>
             <Modal.Content

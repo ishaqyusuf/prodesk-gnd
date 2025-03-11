@@ -21,6 +21,7 @@ export async function searchAddressDta(q = null) {
                 select: {
                     businessName: true,
                     customerTypeId: true,
+                    profile: true,
                 },
             },
             name: true,
@@ -65,10 +66,15 @@ export async function searchAddressDta(q = null) {
             phoneAddress: [s.phoneNo, s.address1]?.filter(Boolean).join("   "),
             isBusiness: s.customer?.businessName != null,
             taxProfile,
-            salesProfile: {
-                id: bo?.salesProfile?.id,
-                name: bo?.salesProfile?.title,
-            },
+            salesProfile: s.customer?.profile
+                ? {
+                      id: s.customer.profile.id,
+                      name: s.customer.profile.title,
+                  }
+                : {
+                      id: bo?.salesProfile?.id,
+                      name: bo?.salesProfile?.title,
+                  },
         };
     });
 }

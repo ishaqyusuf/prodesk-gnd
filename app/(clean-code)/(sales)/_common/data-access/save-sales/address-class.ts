@@ -27,6 +27,7 @@ export class AddressClass {
                 phoneNo: billing.primaryPhone,
                 phoneNo2: billing.secondaryPhone,
                 email: billing.email,
+                customerTypeId: this.ctx.form?.metaData?.salesProfileId,
             };
             Object.entries(customerData).map(([k, v]) => {
                 if (!v) delete customerData[k];

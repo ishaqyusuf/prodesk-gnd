@@ -363,8 +363,9 @@ export function Component({
             ctx.toggleComponent(component.uid);
             return;
         }
-        if (cls.isDoor()) openDoorSizeSelectModal(cls, swapDoor);
-        else cls.selectComponent();
+        if (cls.isDoor()) {
+            openDoorSizeSelectModal(cls, swapDoor);
+        } else cls.selectComponent();
     }, [selectState, cls, component, ctx]);
     const multiSelect = cls.isMultiSelect();
 
