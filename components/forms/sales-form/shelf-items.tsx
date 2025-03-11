@@ -63,7 +63,6 @@ export function ShelfItems({ itemStepUid }) {
                                     key={item}
                                     value={item}
                                 >
-                                    <
                                     {option.label}
                                 </ComboboxBadgeItem>
                             );
