@@ -1,6 +1,8 @@
 # ...
 # MON, MAR 11
     - customer report sheet, balance owed, wallet balance, sales, quotes
+    - door inventory management
+      - size management
 <!-- - customer profile changing not working. -->
 <!-- - exterior doors selection -->
 # MON, MAR 10

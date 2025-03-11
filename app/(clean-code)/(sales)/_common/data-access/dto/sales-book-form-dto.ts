@@ -220,7 +220,7 @@ export function transformShelfItem(item: SalesFormItems[number]) {
         if (!shelfItemArray[cid])
             shelfItemArray[cid] = {
                 productArray: [],
-                categoryIds: s.meta.categoryIds,
+                categoryIds: s.meta.categoryIds as any,
                 categoryId: s.categoryId,
                 uid,
             };

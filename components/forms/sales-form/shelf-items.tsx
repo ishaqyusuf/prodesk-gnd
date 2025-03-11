@@ -33,9 +33,8 @@ const groupedTricks = {
     "Pro Tricks": tricks.slice(5),
 };
 export function ShelfItems({ itemStepUid }) {
-    const [value, setValue] = React.useState<string>("");
+    const [value, setValue] = React.useState<string[]>([]);
     const [open, onOpenChange] = useState(false);
-
     return (
         <div className="">
             <Combobox
@@ -43,15 +42,13 @@ export function ShelfItems({ itemStepUid }) {
                 onOpenChange={onOpenChange}
                 value={value}
                 onValueChange={setValue}
-                onFilter={(e) => {
-                    return e;
-                }}
-                // multiple
+                multiple
                 className="w-[400px]"
                 autoHighlight
             >
-                <ComboboxAnchor className=" flex-wrap px-3 py-2">
-                    {/* <ComboboxBadgeList>
+                <ComboboxLabel>Trick</ComboboxLabel>
+                <ComboboxAnchor className="h-full flex-wrap px-3 py-2">
+                    <ComboboxBadgeList>
                         {value.map((item) => {
                             const option = tricks.find(
                                 (trick) => trick.value === item
@@ -66,11 +63,12 @@ export function ShelfItems({ itemStepUid }) {
                                     key={item}
                                     value={item}
                                 >
+                                    <
                                     {option.label}
                                 </ComboboxBadgeItem>
                             );
                         })}
-                    </ComboboxBadgeList> */}
+                    </ComboboxBadgeList>
                     <ComboboxInput
                         onFocus={(e) => {
                             onOpenChange(true);
