@@ -334,7 +334,7 @@ export class StepHelperClass extends SettingsClass {
                 component.basePrice = this.getComponentPrice(component.uid);
                 component.salesPrice = this.calculateSales(component.basePrice);
                 const sort = component._metaData.sorts?.find((s) =>
-                    vis.includes(s.uid)
+                    vis?.includes(s.uid)
                 );
                 let sortIndex = sort?.sortIndex;
                 // component._metaData.sortId = this.getCurrentStepSequence();

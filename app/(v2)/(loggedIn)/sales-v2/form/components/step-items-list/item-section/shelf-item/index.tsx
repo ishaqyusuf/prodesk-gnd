@@ -24,20 +24,6 @@ export default function ShelfItemIndex() {
         name: `itemArray.${item.rowIndex}.item.shelfItemArray`,
     });
 
-    // useEffect(() => {
-    //     if (!fields.length)
-    //         append({
-    //             item: {
-    //                 productArray: [
-    //                     {
-    //                         item: {},
-    //                     },
-    //                 ],
-    //                 categoryIds: [-1],
-    //                 categoryId: null,
-    //             },
-    //         });
-    // }, [fields]);
     return (
         <Table>
             <TableHeader className="">
