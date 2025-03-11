@@ -1,20 +1,20 @@
 # ...
 # MON, MAR 11
-- customer report sheet, balance owed, wallet balance, sales, quotes
-- customer profile changing not working.
-- exterior doors selection
+    - customer report sheet, balance owed, wallet balance, sales, quotes
+<!-- - customer profile changing not working. -->
+<!-- - exterior doors selection -->
 # MON, MAR 10
-- Make roles and meta data cached from server action and not hard stored with login.
-- sales filter
-  - net terms: ...terms, has term, no term
-  - profiles: ...profiles, has profile, no profile
-- swap door: add search
-- invoice success: notify sales rep
-- make invoice payment optional.
-- inventory management system
-  - shelf inventory dashboard and overview sheet assessible form new dashboard, orders,quick action.
-  - manage shelf categories and products, set available qty
-  - manage components as inventorie
+  - Make roles and meta data cached from server action and not hard stored with login.
+  - sales filter
+    - net terms: ...terms, has term, no term
+    - profiles: ...profiles, has profile, no profile
+  - swap door: add search
+  - invoice success: notify sales rep
+  - make invoice payment optional.
+  - inventory management system
+    - shelf inventory dashboard and overview sheet assessible form new dashboard, orders,quick action.
+    - manage shelf categories and products, set available qty
+    - manage components as inventorie
 # SAT, MAR 09
 - check sales email & phoneNo before sending email.
 - add continue anyway if phoneNo is not there: put note ( customer will be prompted before checkout)

@@ -103,7 +103,7 @@ export async function createSalesCheckoutLinkAction(props: Props) {
                 checkoutOptions: {
                     redirectUrl,
                     askForShippingAddress: false,
-                    allowTipping: true,
+                    allowTipping: false,
                 },
             });
 
