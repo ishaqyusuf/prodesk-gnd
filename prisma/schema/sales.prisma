@@ -1,3 +1,25 @@
+model CommissionPayment {
+    id            Int              @unique @default(autoincrement())
+    amount        Float
+    userId        Int
+    paidBy        Int
+    checkNo       String?
+    paymentMethod String?
+    meta          Json?            @db.Json
+    deletedAt     DateTime?        @db.Timestamp(0)
+    createdAt     DateTime?        @default(now()) @db.Timestamp(0)
+    updatedAt     DateTime?        @updatedAt
+    commissions   SalesCommision[]
+    user          Users?           @relation(name: "worker", fields: [userId], references: [id])
+    payer         Users?           @relation(name: "payer", fields: [paidBy], references: [id])
+    Users         Users?           @relation(fields: [usersId], references: [id])
+    usersId       Int?
+
+    @@index([userId])
+    @@index([paidBy])
+    @@index([usersId])
+}
+
 model SalesOrders {
     id                Int                              @unique @default(autoincrement())
     title             String?                          @db.VarChar(255)
@@ -599,7 +621,10 @@ model OrderItemProductionAssignments {
     salesDoor           DykeSalesDoors?              @relation(fields: [salesDoorId], references: [id])
     salesItemControlUid String?
     itemControl         SalesItemControl?            @relation(fields: [salesItemControlUid], references: [uid])
+    shelfItem           DykeSalesShelfItem?          @relation(fields: [shelfItemId], references: [id])
+    shelfItemId         Int?
 
+    @@index([shelfItemId])
     @@index([salesItemControlUid])
     @@index([orderId])
     @@index([itemId])
@@ -632,7 +657,7 @@ model OrderProductionSubmissions {
 }
 
 model DykeSalesShelfItem {
-    id               Int                  @unique @default(autoincrement())
+    id               Int                              @unique @default(autoincrement())
     salesOrderItemId Int?
     description      String?
     productId        Int?
@@ -640,13 +665,14 @@ model DykeSalesShelfItem {
     qty              Int?
     unitPrice        Int?
     totalPrice       Int?
-    meta             Json?                @db.Json
-    createdAt        DateTime?            @default(now()) @db.Timestamp(0)
-    updatedAt        DateTime?            @updatedAt
-    deletedAt        DateTime?            @db.Timestamp(0)
-    salesOrderItem   SalesOrderItems?     @relation(fields: [salesOrderItemId], references: [id])
-    shelfProduct     DykeShelfProducts?   @relation(fields: [productId], references: [id])
-    category         DykeShelfCategories? @relation(fields: [categoryId], references: [id])
+    meta             Json?                            @db.Json
+    createdAt        DateTime?                        @default(now()) @db.Timestamp(0)
+    updatedAt        DateTime?                        @updatedAt
+    deletedAt        DateTime?                        @db.Timestamp(0)
+    salesOrderItem   SalesOrderItems?                 @relation(fields: [salesOrderItemId], references: [id])
+    shelfProduct     DykeShelfProducts?               @relation(fields: [productId], references: [id])
+    category         DykeShelfCategories?             @relation(fields: [categoryId], references: [id])
+    assignments      OrderItemProductionAssignments[]
 
     @@index([salesOrderItemId])
     @@index([productId])
@@ -654,20 +680,6 @@ model DykeSalesShelfItem {
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
-model SalesOrderProducts {
-    id               Int       @unique @default(autoincrement())
-    salesOrderId     Int
-    salesOrderItemId Int
-    qty              Int?
-    stockQty         Int?
-    shortQty         Int?
-    productVariantId Int?
-    productId        Int?
-    status           String    @db.VarChar(255)
-    deletedAt        DateTime? @db.Timestamp(0)
-    createdAt        DateTime? @default(now()) @db.Timestamp(0)
-    updatedAt        DateTime? @updatedAt
-}
 
 model SalesCommision {
     id                  Int                @unique @default(autoincrement())
@@ -691,24 +703,17 @@ model SalesCommision {
     @@index([commissionPaymentId])
 }
 
-model CommissionPayment {
-    id            Int              @unique @default(autoincrement())
-    amount        Float
-    userId        Int
-    paidBy        Int
-    checkNo       String?
-    paymentMethod String?
-    meta          Json?            @db.Json
-    deletedAt     DateTime?        @db.Timestamp(0)
-    createdAt     DateTime?        @default(now()) @db.Timestamp(0)
-    updatedAt     DateTime?        @updatedAt
-    commissions   SalesCommision[]
-    user          Users?           @relation(name: "worker", fields: [userId], references: [id])
-    payer         Users?           @relation(name: "payer", fields: [paidBy], references: [id])
-    Users         Users?           @relation(fields: [usersId], references: [id])
-    usersId       Int?
-
-    @@index([userId])
-    @@index([paidBy])
-    @@index([usersId])
+model SalesOrderProducts {
+    id               Int       @unique @default(autoincrement())
+    salesOrderId     Int
+    salesOrderItemId Int
+    qty              Int?
+    stockQty         Int?
+    shortQty         Int?
+    productVariantId Int?
+    productId        Int?
+    status           String    @db.VarChar(255)
+    deletedAt        DateTime? @db.Timestamp(0)
+    createdAt        DateTime? @default(now()) @db.Timestamp(0)
+    updatedAt        DateTime? @updatedAt
 }

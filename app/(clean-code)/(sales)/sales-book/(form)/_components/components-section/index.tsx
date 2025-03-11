@@ -15,7 +15,7 @@ import {
     useState,
     useTransition,
 } from "react";
-import { cn, generateRandomString } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import {
     BoxSelect,
     CheckCircle,

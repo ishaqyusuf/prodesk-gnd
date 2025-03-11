@@ -257,7 +257,19 @@ export interface DykeFormStepMeta {
     hidden?: boolean;
 }
 export interface ShelfItemMeta {
-    categoryIds: number[];
+    categoryIds: { id: number }[];
+    shelfItem: {
+        id: number;
+        qty: number;
+        unitPrice: number;
+        totalPrice?: number;
+        categoryId: number;
+        productId: number;
+        _calculated?: {
+            salesPrice?: number;
+            totalSalesPrice?: number;
+        };
+    }[];
 }
 
 export type DykeStepProduct = Omit<DykeStepProducts, "meta"> & {
@@ -361,6 +373,95 @@ export interface PricingMetaData {
 }
 export type PaymentTerms = "None" | "Net10" | "Net20" | "Net30";
 
+export interface SalesShelfField {}
+export interface SalesFormItem {
+    id?: number;
+    uid?: string;
+    collapsed?: boolean;
+    currentStepUid?: string;
+    title?: string;
+    routeUid?: string;
+    swapUid?: string;
+    sideView?: {
+        img?: string;
+    }[];
+    shelf?: SalesShelfField;
+    groupItem?: {
+        _?: {
+            tabUid?: string;
+        };
+        itemType: DykeDoorType;
+        type?: "MOULDING" | "HPT" | "SERVICE";
+        hptId?;
+        doorStepProductId?;
+        groupUid?;
+        pricing?: {
+            components?: {
+                basePrice?: number;
+                salesPrice?: number;
+            };
+            total?: {
+                basePrice?: number;
+                salesPrice?: number;
+            };
+        };
+        qty: {
+            rh?: number;
+            lh?: number;
+            total?: number;
+        };
+        // componentsBasePrice?: number;
+        // componentsSalesPrice?: number;
+        // totalBasePrice?: number;
+        // totalSalesPrice?: number;
+        itemIds: string[];
+        stepUid?: string;
+        form: {
+            [id in string]: {
+                selected: boolean;
+                // id for door = `${componentUid}-${size}`
+                // id for moulding = `${componentUid}`
+                // id for services = random
+                primaryGroupItem?: boolean;
+                meta: {
+                    description?: string;
+                    taxxable?: boolean;
+                    produceable?: boolean;
+                    salesItemId?;
+                    // noHandle: boolean;
+                };
+                qty: {
+                    rh?: number | string;
+                    lh?: number | string;
+                    total?: number | string;
+                };
+                // basePrice?: number;
+                pricing?: {
+                    itemPrice?: {
+                        basePrice?: number;
+                        salesPrice?: number;
+                    };
+                    customPrice?: number | string;
+                    componentPrice?: number | string;
+                    unitPrice?: number;
+                    totalPrice?: number;
+                    addon: number | string;
+                };
+                // totalSalesPrice?: number;
+                hptId?: number;
+                doorId?: number;
+                swing?: string;
+                stepProductId?: {
+                    id?;
+                    fallbackId?;
+                };
+                mouldingProductId?;
+                // customPrice?: number | string;
+                // imgUrl: string;
+            };
+        };
+    };
+}
 export interface SalesFormFields {
     saveAction?: "new" | "close" | "default";
     metaData?: {
@@ -401,93 +502,7 @@ export interface SalesFormFields {
         goodUntil?;
     };
     kvFormItem: {
-        [itemUid in string]: {
-            id?: number;
-            uid?: string;
-            collapsed?: boolean;
-            currentStepUid?: string;
-            title?: string;
-            routeUid?: string;
-            swapUid?: string;
-            sideView?: {
-                img?: string;
-            }[];
-            groupItem?: {
-                _?: {
-                    tabUid?: string;
-                };
-                itemType: DykeDoorType;
-                type?: "MOULDING" | "HPT" | "SERVICE";
-                hptId?;
-                doorStepProductId?;
-                groupUid?;
-                pricing?: {
-                    components?: {
-                        basePrice?: number;
-                        salesPrice?: number;
-                    };
-                    total?: {
-                        basePrice?: number;
-                        salesPrice?: number;
-                    };
-                };
-                qty: {
-                    rh?: number;
-                    lh?: number;
-                    total?: number;
-                };
-                // componentsBasePrice?: number;
-                // componentsSalesPrice?: number;
-                // totalBasePrice?: number;
-                // totalSalesPrice?: number;
-                itemIds: string[];
-                stepUid?: string;
-                form: {
-                    [id in string]: {
-                        selected: boolean;
-                        // id for door = `${componentUid}-${size}`
-                        // id for moulding = `${componentUid}`
-                        // id for services = random
-                        primaryGroupItem?: boolean;
-                        meta: {
-                            description?: string;
-                            taxxable?: boolean;
-                            produceable?: boolean;
-                            salesItemId?;
-                            // noHandle: boolean;
-                        };
-                        qty: {
-                            rh?: number | string;
-                            lh?: number | string;
-                            total?: number | string;
-                        };
-                        // basePrice?: number;
-                        pricing?: {
-                            itemPrice?: {
-                                basePrice?: number;
-                                salesPrice?: number;
-                            };
-                            customPrice?: number | string;
-                            componentPrice?: number | string;
-                            unitPrice?: number;
-                            totalPrice?: number;
-                            addon: number | string;
-                        };
-                        // totalSalesPrice?: number;
-                        hptId?: number;
-                        doorId?: number;
-                        swing?: string;
-                        stepProductId?: {
-                            id?;
-                            fallbackId?;
-                        };
-                        mouldingProductId?;
-                        // customPrice?: number | string;
-                        // imgUrl: string;
-                    };
-                };
-            };
-        };
+        [itemUid in string]: SalesFormItem;
     };
 
     kvStepForm: {

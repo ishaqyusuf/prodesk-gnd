@@ -8,6 +8,7 @@ import { generateRandomString } from "@/lib/utils";
 import { AddressClass } from "./address-class";
 import { composeSalesUrl } from "../../utils/sales-utils";
 import { resetSalesStatAction } from "../../data-actions/sales-stat-control.action";
+import { saveShelfHelper } from "./save-shelf-helper";
 
 export interface SaverData {
     tx?;
@@ -278,6 +279,12 @@ export class SaveSalesClass extends SaveSalesHelper {
             // formItem.uid
             if (!formItem?.groupItem?.groupUid)
                 formItem.groupItem.groupUid = generateRandomString(4);
+            if (formItem.shelf) {
+                saveShelfHelper({
+                    ctx: this,
+                    formItem,
+                });
+            }
             const formEntries = Object.entries(
                 formItem.groupItem.form || {}
             ).filter(([k, v]) => v.selected);
@@ -291,15 +298,12 @@ export class SaveSalesClass extends SaveSalesHelper {
             formEntries.map(([groupItemFormId, groupItemForm], index) => {
                 const itemCtx = new ItemHelperClass(this, itemId);
 
-                console.log({ groupItemForm, groupItemFormId });
                 if (groupItemFormId?.split("-")?.length > 2) {
                     if (index == 0) {
                         console.log(itemId);
                         itemCtx.generateDoorsItem();
                     }
                 } else {
-                    console.log(groupItemForm);
-
                     itemCtx.generateNonDoorItem(
                         groupItemFormId,
                         groupItemForm,

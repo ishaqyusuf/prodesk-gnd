@@ -355,6 +355,9 @@ export function zhInitializeState(data: GetSalesBookForm, copy = false) {
                 });
             }
         });
+
+        const shelfItems = item.item.shelfItemArray;
+        // shelfItems.map(si => {})
         const costCls = new CostingClass(
             new SettingsClass("", uid, "", resp as any)
         );

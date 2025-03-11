@@ -32,7 +32,7 @@ export default function Button({
             className={cn("relative", props.className)}
             onClick={_action}
             {...props}
-            disabled={loading}
+            disabled={loading || props.disabled}
         >
             <div
                 className={cn(

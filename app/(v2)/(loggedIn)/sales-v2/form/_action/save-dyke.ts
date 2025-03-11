@@ -156,7 +156,6 @@ export async function saveDykeSales(data: DykeForm) {
                                                 // categoryIds;
                                                 // shelf.categoryId = categoryId;
                                                 shelf.salesOrderItemId = itemId;
-                                                console.log(shelf);
 
                                                 if (newShelf) {
                                                     createShelfItems.push({

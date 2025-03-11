@@ -16,6 +16,7 @@ import { StepHelperClass } from "../_utils/helpers/zus/step-component-class";
 import MouldingLineItem from "./moulding-step";
 import ServiceLineItem from "./service-step";
 import { ComponentsSection } from "./components-section";
+import { ShelfItems } from "@/components/forms/sales-form/shelf-items";
 
 interface Props {
     stepUid?;
@@ -32,12 +33,14 @@ export function StepSection({ stepUid, isFirst, isLast }: Props) {
         const ret = {
             cls,
             isHtp: cls.isHtp(),
+            isShelfItems: cls.isShelfItems(),
             isMouldingLineItem: cls.isMouldingLineItem(),
             isServiceLineItem: cls.isServiceLineItem(),
             Render: ComponentsSection as any,
             itemStepUid: stepUid,
         };
         if (ret.isHtp) ret.Render = HousePackageTool;
+        else if (ret.isShelfItems) ret.Render = ShelfItems;
         else if (ret.isMouldingLineItem) ret.Render = MouldingLineItem;
         else if (ret.isServiceLineItem) ret.Render = ServiceLineItem;
         return ret;

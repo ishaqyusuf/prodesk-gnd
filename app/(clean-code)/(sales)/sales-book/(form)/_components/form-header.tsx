@@ -162,18 +162,6 @@ export function FormHeader({ sticky }: { sticky: Sticky }) {
             </div>
             <div className="flex-1" />
             <div className="flex gap-4 px-4 py-2 items-center">
-                {isOld > 0 && (
-                    <Link
-                        className={cn(
-                            buttonVariants({
-                                variant: "destructive",
-                            })
-                        )}
-                        href={`/sales-v2/form/${zus.metaData.type}/${zus.metaData.salesId}`}
-                    >
-                        Open In Old Version
-                    </Link>
-                )}
                 <CreatedDate />
                 <Button
                     size="xs"

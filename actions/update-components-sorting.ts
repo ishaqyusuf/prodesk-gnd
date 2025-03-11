@@ -12,6 +12,7 @@ interface Props {
 export async function updateComponentsSortingAction(data: Props) {
     await Promise.all(
         data.list.map(async (ls) => {
+            // if(Array.isArray(ls.sortUid))
             await prisma.productSortIndex.upsert({
                 create: {
                     sortIndex: ls.sortIndex,

@@ -20,6 +20,7 @@ import { QueryTabProvider } from "./(clean-code)/_common/query-tab/provider";
 import { constructMetadata } from "@/lib/(clean-code)/construct-metadata";
 import UserAccountUpdateModal from "@/components/modals/user-account-update-required-modal";
 import UserAccountUpdateRequiredModal from "@/components/modals/user-account-update-required-modal";
+import { trashSoftDeletesAction } from "@/actions/trash-soft-deletes";
 
 export async function generateMetadata({}) {
     return constructMetadata({
@@ -33,6 +34,7 @@ export default async function RootLayout({
     children: React.ReactNode;
 }) {
     const prodDB = env.DATABASE_URL?.includes("pscale");
+    // trashSoftDeletesAction();
     return (
         <html lang="en">
             {/* <Suspense> */}

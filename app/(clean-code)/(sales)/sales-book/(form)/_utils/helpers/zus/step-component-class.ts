@@ -31,6 +31,9 @@ export class StepHelperClass extends SettingsClass {
         this.stepUid = stepUid;
     }
 
+    public isShelfItems() {
+        return this.getStepForm().title == "Shelf Items";
+    }
     public isHtp() {
         return this.getStepForm().title == "House Package Tool";
     }
@@ -166,7 +169,7 @@ export class StepHelperClass extends SettingsClass {
                     }
                 );
                 if (matches)
-                    vis.push(rules.map((r) => r.componentsUid.join("-")));
+                    vis.push(...rules.map((r) => r.componentsUid.join("-")));
                 return matches;
             });
             if (!vis.length) return null;
@@ -337,6 +340,8 @@ export class StepHelperClass extends SettingsClass {
                 // component._metaData.sortId = this.getCurrentStepSequence();
                 component._metaData.sortIndex = sortIndex;
                 component._metaData.sortUid = sort?.uid || vis?.[0];
+                console.log({ vis });
+
                 return component;
             });
         if (
