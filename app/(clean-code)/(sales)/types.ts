@@ -373,7 +373,19 @@ export interface PricingMetaData {
 }
 export type PaymentTerms = "None" | "Net10" | "Net20" | "Net30";
 
-export interface SalesShelfField {}
+export interface SalesShelfField {
+    categoryIds: number[];
+    productUids: string[];
+    products: {
+        [uid in string]: {
+            productId: number;
+            basePrice: number;
+            qty: number;
+            totalPrice: number;
+            categoryId: number;
+        };
+    };
+}
 export interface SalesFormItem {
     id?: number;
     uid?: string;
@@ -385,7 +397,10 @@ export interface SalesFormItem {
     sideView?: {
         img?: string;
     }[];
-    shelf?: SalesShelfField;
+    shelfItems?: {
+        lines: { [uid in string]: SalesShelfField };
+        lineUids: string[];
+    };
     groupItem?: {
         _?: {
             tabUid?: string;

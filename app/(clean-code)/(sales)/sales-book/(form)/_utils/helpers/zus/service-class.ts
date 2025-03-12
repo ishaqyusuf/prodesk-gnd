@@ -87,7 +87,6 @@ export class ServiceClass extends GroupFormClass {
                 },
             },
         };
-        console.log({ groupItem });
 
         if (!itemForm.groupItem)
             this.dotUpdateItemForm("groupItem", groupItem as any);
@@ -99,18 +98,5 @@ export class ServiceClass extends GroupFormClass {
                 };
             })
             ?.filter((s) => s.selected);
-        // const gf = this.getGroupItemForm()
-
-        // const mouldingStep = this.getMouldingStepForm();
-        // const selectionComponentUids = Array.from(
-        //     new Set(itemForm.groupItem?.itemIds?.map((s) => s))
-        // );
-        // return selectionComponentUids.map((componentUid) => {
-        //     const component = this.getComponentFromSettingsByStepId(
-        //         mouldingStep?.stepId,
-        //         componentUid
-        //     );
-        //     return component;
-        // });
     }
 }

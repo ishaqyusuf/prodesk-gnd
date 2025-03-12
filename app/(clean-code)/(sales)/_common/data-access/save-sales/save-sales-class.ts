@@ -279,7 +279,7 @@ export class SaveSalesClass extends SaveSalesHelper {
             // formItem.uid
             if (!formItem?.groupItem?.groupUid)
                 formItem.groupItem.groupUid = generateRandomString(4);
-            if (formItem.shelf) {
+            if (formItem.shelfItems) {
                 saveShelfHelper({
                     ctx: this,
                     formItem,

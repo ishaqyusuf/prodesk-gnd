@@ -15,7 +15,7 @@ import { zhHarvestDoorSizes } from "./zus-form-helper";
 import { FieldPath, FieldPathValue } from "react-hook-form";
 import { SettingsClass } from "./settings-class";
 import { toast } from "sonner";
-import { sum } from "@/lib/utils";
+import { generateRandomString, sum } from "@/lib/utils";
 import { dotSet } from "@/app/(clean-code)/_common/utils/utils";
 interface Filters {
     stepUid?;
@@ -727,6 +727,26 @@ export class ComponentHelperClass extends StepHelperClass {
             if (stepData.title == "Item Type") {
                 if (component.title == "Moulding") {
                     this.dotUpdateItemForm("groupItem.type", "SERVICE");
+                } else if (component.title == "Shelf Items") {
+                    const shelfItems = this.getItemForm()?.shelfItems;
+                    if (!shelfItems) {
+                        const uid = generateRandomString();
+                        const puid = generateRandomString();
+                        this.dotUpdateItemForm(`shelfItems`, {
+                            lines: {
+                                [uid]: {
+                                    categoryIds: [],
+                                    productUids: [uid],
+                                    products: {
+                                        [puid]: {} as any,
+                                    },
+                                },
+                            },
+                            lineUids: [uid],
+                        });
+                    }
+                } else if (component.title == "Service") {
+                    //
                 }
             }
             stepData = {

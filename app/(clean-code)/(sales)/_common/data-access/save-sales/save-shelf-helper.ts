@@ -6,5 +6,5 @@ interface Props {
     formItem: SalesFormItem;
 }
 export function saveShelfHelper({ ctx, formItem, ...props }: Props) {
-    const shelf = formItem.shelf;
+    const shelfItems = formItem.shelfItems;
 }

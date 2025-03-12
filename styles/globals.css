@@ -84,6 +84,11 @@
         font-feature-settings: "rlig" 1, "calt" 1;
     }
 }
+
+.data-highlighted\:text-accent-foreground[data-highlighted] {
+    color: var(--accent-foreground);
+}
+
 table#invoiceFooter tr {
     @apply hover:bg-inherit !important;
 }

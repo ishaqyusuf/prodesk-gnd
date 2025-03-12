@@ -18,8 +18,7 @@ export async function getShelfProducts(parentCategoryId, categoryId) {
                   //   parentCategoryId,
               },
           });
-    console.log(products.length);
-
+    // console.log(products.length);
     return { subCategoriesCount, products };
 }
 

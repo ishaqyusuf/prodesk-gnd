@@ -25,7 +25,7 @@ const ComboboxAnchor = React.forwardRef<
     <ComboboxPrimitive.Anchor
         ref={ref}
         className={cn(
-            "relative flex h-9 w-full items-center justify-between gap-2 rounded-md border border-input bg-transparent px-3 py-2 shadow-xs data-focused:ring-1 data-focused:ring-ring",
+            "flex h-9 w-full items-center justify-between rounded-md border border-zinc-200 bg-white px-3 py-2 shadow-xs transition-colors data-focused:ring-1 data-focused:ring-zinc-800 dark:border-zinc-800 dark:bg-zinc-950 dark:data-focused:ring-zinc-300",
             className
         )}
         {...props}
@@ -40,7 +40,7 @@ const ComboboxInput = React.forwardRef<
     <ComboboxPrimitive.Input
         ref={ref}
         className={cn(
-            "flex h-9 w-full rounded-md bg-transparent text-base placeholder:text-muted-foreground focus:outline-hidden disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
+            "flex h-9 w-full rounded-md bg-transparent text-base text-zinc-900 placeholder:text-zinc-500 focus:outline-hidden disabled:cursor-not-allowed disabled:opacity-50 md:text-sm dark:text-zinc-50 dark:placeholder:text-zinc-400 outline-none focus:outline-none",
             className
         )}
         {...props}
@@ -55,7 +55,7 @@ const ComboboxTrigger = React.forwardRef<
     <ComboboxPrimitive.Trigger
         ref={ref}
         className={cn(
-            "flex shrink-0 items-center justify-center rounded-r-md border-input bg-transparent text-muted-foreground transition-colors hover:text-foreground/80 focus-visible:outline-hidden disabled:cursor-not-allowed disabled:opacity-50",
+            "flex shrink-0 items-center justify-center rounded-r-md border-zinc-200 bg-transparent text-zinc-500 transition-colors hover:text-zinc-900 focus-visible:outline-hidden disabled:cursor-not-allowed disabled:opacity-50 dark:border-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-50",
             className
         )}
         {...props}
@@ -91,27 +91,44 @@ const ComboboxBadgeList = React.forwardRef<
     />
 ));
 ComboboxBadgeList.displayName = ComboboxPrimitive.BadgeList.displayName;
-
+interface ComboboxBadgeItemProps
+    extends React.ComponentPropsWithoutRef<typeof ComboboxPrimitive.BadgeItem> {
+    disableDelete?: boolean;
+    noDelete?: boolean;
+    onDelete?: (e) => void;
+}
 const ComboboxBadgeItem = React.forwardRef<
     React.ElementRef<typeof ComboboxPrimitive.BadgeItem>,
-    React.ComponentPropsWithoutRef<typeof ComboboxPrimitive.BadgeItem>
->(({ className, children, ...props }, ref) => (
-    <ComboboxPrimitive.BadgeItem
-        ref={ref}
-        className={cn(
-            "inline-flex items-center justify-between gap-1 rounded-sm bg-secondary px-2 py-0.5",
-            className
-        )}
-        {...props}
-    >
-        <span className="truncate text-[13px] text-secondary-foreground">
-            {children}
-        </span>
-        <ComboboxPrimitive.BadgeItemDelete className="shrink-0 rounded p-0.5 opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring data-highlighted:bg-destructive">
-            <X className="h-3 w-3" />
-        </ComboboxPrimitive.BadgeItemDelete>
-    </ComboboxPrimitive.BadgeItem>
-));
+    ComboboxBadgeItemProps
+>(
+    (
+        { className, children, onDelete, disableDelete, noDelete, ...props },
+        ref
+    ) => (
+        <ComboboxPrimitive.BadgeItem
+            ref={ref}
+            className={cn(
+                "inline-flex items-center justify-between gap-1 rounded-sm bg-secondary px-2 py-0.5",
+                className
+            )}
+            {...props}
+        >
+            <span className="truncate text-[13px] text-secondary-foreground">
+                {children}
+            </span>
+            <ComboboxPrimitive.BadgeItemDelete
+                onClick={onDelete}
+                disabled={disableDelete}
+                className={cn(
+                    "shrink-0 rounded p-0.5 opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring data-highlighted:bg-destructive",
+                    noDelete && "hidden"
+                )}
+            >
+                <X className="h-3 w-3" />
+            </ComboboxPrimitive.BadgeItemDelete>
+        </ComboboxPrimitive.BadgeItem>
+    )
+);
 ComboboxBadgeItem.displayName = ComboboxPrimitive.BadgeItem.displayName;
 
 const ComboboxContent = React.forwardRef<
@@ -123,7 +140,7 @@ const ComboboxContent = React.forwardRef<
             ref={ref}
             sideOffset={6}
             className={cn(
-                "data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 relative z-50 max-h-fit min-w-[var(--dice-anchor-width)] origin-[var(--dice-transform-origin)] overflow-hidden rounded-md border bg-popover p-1 text-popover-foreground shadow-md data-[state=closed]:animate-out data-[state=open]:animate-in",
+                "data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 relative z-50 min-w-[var(--dice-anchor-width)] overflow-hidden rounded-md border border-zinc-200 bg-white p-1 text-zinc-950 shadow-md data-[state=closed]:animate-out data-[state=open]:animate-in dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-50",
                 className
             )}
             {...props}
@@ -195,7 +212,7 @@ const ComboboxItem = React.forwardRef<
     <ComboboxPrimitive.Item
         ref={ref}
         className={cn(
-            "relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 text-sm outline-hidden data-disabled:pointer-events-none data-highlighted:bg-accent data-highlighted:text-accent-foreground data-disabled:opacity-50",
+            "relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pr-2 pl-8 text-sm outline-hidden data-disabled:pointer-events-none data-highlighted:bg-zinc-100 data-highlighted:text-zinc-900 data-disabled:opacity-50 dark:data-highlighted:bg-zinc-800 dark:data-highlighted:text-zinc-50 ",
             outset ? "pr-8 pl-2" : "pr-2 pl-8",
             className
         )}
@@ -243,4 +260,3 @@ export {
     ComboboxProgress,
     ComboboxSeparator,
 };
-

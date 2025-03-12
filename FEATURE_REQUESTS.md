@@ -8,6 +8,7 @@
       - track qty based on invoices
       - 
     - payment page error states
+    - 
 <!-- - customer profile changing not working. -->
 <!-- - exterior doors selection -->
 # MON, MAR 10
