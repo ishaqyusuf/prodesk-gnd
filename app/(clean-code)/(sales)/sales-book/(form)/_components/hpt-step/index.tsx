@@ -29,6 +29,7 @@ import { MoneyBadge } from "@/components/(clean-code)/money-badge";
 import { LineInput } from "../line-input";
 import { Repeat } from "lucide-react";
 import { Door } from "./door";
+import { AnimatedNumber } from "@/components/animated-number";
 
 interface Props {
     itemStepUid;
@@ -323,7 +324,8 @@ function DoorSizeRow({ size }: { size }) {
                 />
             </TableCell> */}
             <TableCell>
-                <Money value={sizeForm?.pricing?.totalPrice} />
+                <AnimatedNumber value={sizeForm?.pricing?.totalPrice || 0} />
+                {/* <Money value={sizeForm?.pricing?.totalPrice} /> */}
             </TableCell>
             <TableCell align="right">
                 <ConfirmBtn

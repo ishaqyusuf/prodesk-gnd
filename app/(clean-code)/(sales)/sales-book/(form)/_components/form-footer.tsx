@@ -9,6 +9,7 @@ import ItemSection from "./item-section";
 import { zhAddItem } from "../_utils/helpers/zus/zus-form-helper";
 import { Label } from "@/components/ui/label";
 import Money from "@/components/_v1/money";
+import { AnimatedNumber } from "@/components/animated-number";
 
 export function FormFooter() {
     const zus = useFormDataStore();
@@ -99,7 +100,8 @@ function FixedDisplay({ label, value }) {
                 {label}:
             </Label>
             <div className="text-sm font-semibold font-mono">
-                <Money value={value} />
+                <AnimatedNumber value={value || 0} />
+                {/* <Money value={value} /> */}
             </div>
         </div>
     );

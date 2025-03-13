@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/_v1/icons";
 import { Input } from "@/components/ui/input";
 import { LineInput, LineSwitch } from "../line-input";
+import { AnimatedNumber } from "@/components/animated-number";
 
 interface Props {
     itemStepUid;
@@ -135,7 +136,8 @@ function ServiceRow({ lineUid, sn }: { sn; lineUid }) {
                     /> */}
                 </TableCell>
                 <TableCell>
-                    <Money value={mfd?.pricing?.totalPrice} />
+                    <AnimatedNumber value={mfd?.pricing?.totalPrice || 0} />
+                    {/* <Money value={mfd?.pricing?.totalPrice} /> */}
                 </TableCell>
                 <TableCell align="right">
                     <ConfirmBtn

@@ -127,8 +127,21 @@ export function useCreateShelfItemContext({ shelfUid }) {
         console.log({ products });
         return products;
     }, [shelf.categoryIds, categories]);
+    function dotUpdateProduct(
+        prodId,
+        key: keyof (typeof shelf.products)[""],
+        value
+    ) {
+        if (value === undefined) value = null;
+        zus.dotUpdate(
+            `kvFormItem.${shelfCtx.itemUid}.shelfItems.lines.${shelfUid}.products.${prodId}.${key}`,
+            value
+        );
+    }
+    // shelf.products
     return {
         filteredTricks,
+        dotUpdateProduct,
         setContent,
         // prodUids: shelf.productUids,
         deferredInputValue,
@@ -141,7 +154,7 @@ export function useCreateShelfItemContext({ shelfUid }) {
                 ids
             );
         },
-        products,
+        productsList: products,
         onInputValueChange,
         addProduct() {
             const puid = generateRandomString();
@@ -155,7 +168,16 @@ export function useCreateShelfItemContext({ shelfUid }) {
             );
         },
         productChanged(prodUid, value) {
-            console.log({ prodUid, value });
+            if (!value) return;
+            const productId = +value;
+            const product = products.products.find(
+                (prod) => prod.id == productId
+            );
+            dotUpdateProduct(prodUid, "qty", 1);
+            dotUpdateProduct(prodUid, "productId", product.id);
+            dotUpdateProduct(prodUid, "categoryId", product.categoryId);
+            dotUpdateProduct(prodUid, "basePrice", product.unitPrice);
+            console.log(product);
         },
         deleteProductLine(puid) {
             cls.dotUpdateItemForm(

@@ -17,6 +17,7 @@ import { Label } from "@/components/ui/label";
 import ConfirmBtn from "@/components/_v1/confirm-btn";
 import { cn } from "@/lib/utils";
 import { LineInput } from "../line-input";
+import { AnimatedNumber } from "@/components/animated-number";
 
 interface Props {
     itemStepUid;
@@ -154,7 +155,8 @@ function MouldingRow({
                     /> */}
             </TableCell>
             <TableCell>
-                <Money value={mfd?.pricing?.totalPrice} />
+                <AnimatedNumber value={mfd?.pricing?.totalPrice || 0} />
+                {/* <Money value={mfd?.pricing?.totalPrice} /> */}
             </TableCell>
             <TableCell align="right">
                 <ConfirmBtn

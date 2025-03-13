@@ -380,7 +380,9 @@ export interface SalesShelfField {
         [uid in string]: {
             productId: number;
             basePrice: number;
+            salesPrice: number;
             qty: number;
+            customPrice: number;
             totalPrice: number;
             categoryId: number;
         };

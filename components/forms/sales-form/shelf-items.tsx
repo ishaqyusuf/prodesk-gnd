@@ -51,6 +51,10 @@ import {
     useShelfItem,
 } from "@/hooks/use-shelf";
 import ConfirmBtn from "@/components/_v1/confirm-btn";
+import Money from "@/components/_v1/money";
+import { ShelfQtyInput } from "./shelf-qty-input";
+import { AnimatedNumber } from "@/components/animated-number";
+import { ShelfPriceCell } from "./shelf-price-cell";
 
 export function ShelfItems({ itemStepUid }) {
     const ctx = useCreateShelfContext(itemStepUid);
@@ -90,83 +94,123 @@ export function ShelfItemLine({ shelfUid }) {
 
     return (
         <ShelfItemContext.Provider value={ctx}>
-            <TableRow>
+            <TableRow className="hover:bg-transparent">
                 <TableCell className="flex flex-col">
-                    <Combobox
-                        open={open}
-                        onOpenChange={onOpenChange}
-                        value={categoryIds.map((id) => String(id))}
-                        onValueChange={setCategoryIds}
-                        multiple
-                        inputValue={inputValue}
-                        onInputValueChange={ctx.onInputValueChange}
-                        manualFiltering
-                        className="w-full"
-                        autoHighlight
-                    >
-                        <ComboboxLabel>Select Categories</ComboboxLabel>
-                        <ComboboxAnchor className="h-full min-h-10 flex-wrap px-3 py-2">
-                            <ComboboxBadgeList>
-                                {categoryIds.map((item, index) => {
-                                    const option = categories.find(
-                                        (trick) => trick.id === Number(item)
-                                    );
-                                    if (!option) return null;
-
-                                    return (
-                                        <ComboboxBadgeItem
-                                            noDelete={
-                                                !(
-                                                    categoryIds?.length - 1 ==
-                                                    index
-                                                )
-                                            }
-                                            onDelete={(e) => {
-                                                // e.preventDefault();
-                                                // console.log(e);
-                                            }}
-                                            key={item}
-                                            value={String(item)}
-                                        >
-                                            {option.name}
-                                        </ComboboxBadgeItem>
-                                    );
-                                })}
-                            </ComboboxBadgeList>
-                            {!ctx?.options?.length || (
-                                <>
-                                    <ComboboxInput
-                                        className="h-auto min-w-20 flex-1"
-                                        onFocus={(e) => {
-                                            onOpenChange(true);
-                                        }}
-                                        placeholder="Select category..."
-                                    />
-                                    <ComboboxTrigger className="absolute top-3 right-2">
-                                        <ChevronDown className="h-4 w-4" />
-                                    </ComboboxTrigger>
-                                </>
-                            )}
-                        </ComboboxAnchor>
-
-                        {!ctx.options?.length || (
-                            <ComboboxContent
-                                ref={(node) => ctx?.setContent(node)}
-                                className="relative max-h-[300px] overflow-y-auto overflow-x-hidden"
-                            >
-                                <ComboboxEmpty>No category found</ComboboxEmpty>
-                                {filteredTricks?.map((trick) => (
-                                    <ComboboxItem
-                                        key={String(trick.id)}
-                                        value={String(trick.id)}
-                                        outset
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>Category</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            <TableRow>
+                                <TableCell>
+                                    <Combobox
+                                        open={open}
+                                        onOpenChange={onOpenChange}
+                                        value={categoryIds.map((id) =>
+                                            String(id)
+                                        )}
+                                        onValueChange={setCategoryIds}
+                                        multiple
+                                        inputValue={inputValue}
+                                        onInputValueChange={
+                                            ctx.onInputValueChange
+                                        }
+                                        manualFiltering
+                                        className="w-full"
+                                        autoHighlight
                                     >
-                                        {trick.name}
-                                    </ComboboxItem>
-                                ))}
-                            </ComboboxContent>
-                        )}
-                    </Combobox>
+                                        {/* <ComboboxLabel>
+                                            Select Categories
+                                        </ComboboxLabel> */}
+                                        <ComboboxAnchor className="h-full min-h-10 flex-wrap px-3 py-2">
+                                            <ComboboxBadgeList>
+                                                {categoryIds.map(
+                                                    (item, index) => {
+                                                        const option =
+                                                            categories.find(
+                                                                (trick) =>
+                                                                    trick.id ===
+                                                                    Number(item)
+                                                            );
+                                                        if (!option)
+                                                            return null;
+
+                                                        return (
+                                                            <ComboboxBadgeItem
+                                                                noDelete={
+                                                                    !(
+                                                                        categoryIds?.length -
+                                                                            1 ==
+                                                                        index
+                                                                    )
+                                                                }
+                                                                onDelete={(
+                                                                    e
+                                                                ) => {
+                                                                    // e.preventDefault();
+                                                                    // console.log(e);
+                                                                }}
+                                                                key={item}
+                                                                value={String(
+                                                                    item
+                                                                )}
+                                                            >
+                                                                {option.name}
+                                                            </ComboboxBadgeItem>
+                                                        );
+                                                    }
+                                                )}
+                                            </ComboboxBadgeList>
+                                            {!ctx?.options?.length || (
+                                                <>
+                                                    <ComboboxInput
+                                                        className="h-auto min-w-20 flex-1"
+                                                        onFocus={(e) => {
+                                                            onOpenChange(true);
+                                                        }}
+                                                        placeholder="Select category..."
+                                                    />
+                                                    <ComboboxTrigger className="absolute top-3 right-2">
+                                                        <ChevronDown className="h-4 w-4" />
+                                                    </ComboboxTrigger>
+                                                </>
+                                            )}
+                                        </ComboboxAnchor>
+
+                                        {!ctx.options?.length || (
+                                            <ComboboxContent
+                                                ref={(node) =>
+                                                    ctx?.setContent(node)
+                                                }
+                                                className="relative max-h-[300px] overflow-y-auto overflow-x-hidden"
+                                            >
+                                                <ComboboxEmpty>
+                                                    No category found
+                                                </ComboboxEmpty>
+                                                {filteredTricks?.map(
+                                                    (trick) => (
+                                                        <ComboboxItem
+                                                            key={String(
+                                                                trick.id
+                                                            )}
+                                                            value={String(
+                                                                trick.id
+                                                            )}
+                                                            outset
+                                                        >
+                                                            {trick.name}
+                                                        </ComboboxItem>
+                                                    )
+                                                )}
+                                            </ComboboxContent>
+                                        )}
+                                    </Combobox>
+                                </TableCell>
+                            </TableRow>
+                        </TableBody>
+                    </Table>
                 </TableCell>
                 <TableCell className="w-3/5 p-0">
                     <div className="flex flex-col">
@@ -174,9 +218,9 @@ export function ShelfItemLine({ shelfUid }) {
                             <TableHeader>
                                 <TableRow>
                                     <TableHead>Product</TableHead>
-                                    <TableHead>Unit Price</TableHead>
+                                    <TableHead>Price</TableHead>
                                     <TableHead>Qty</TableHead>
-                                    <TableHead>Total Price</TableHead>
+                                    <TableHead align="right">Total</TableHead>
                                     <TableHead></TableHead>
                                 </TableRow>
                             </TableHeader>
@@ -207,10 +251,11 @@ export function ShelfItemLine({ shelfUid }) {
 }
 function ShelfItemProduct({ prodUid }) {
     const itemCtx = useShelfItem();
-    const { products } = itemCtx;
-    const [productId, setProductId] = useState(
-        itemCtx?.products?.[prodUid]?.productId
-    );
+    const { productsList: products } = itemCtx;
+    const product = itemCtx.products?.[prodUid];
+    // const [productId, setProductId] = useState(
+    //     itemCtx?.products?.[prodUid]?.productId
+    // );
     const [open, onOpenChange] = useState(false);
     const [inputValue, setInputValue] = React.useState("");
     const deferredInputValue = useDeferredValue(inputValue);
@@ -237,13 +282,18 @@ function ShelfItemProduct({ prodUid }) {
     );
 
     return (
-        <TableRow className="w-2/3">
+        <TableRow className="w-2/3 hover:bg-transparent">
             <TableCell>
                 <Combobox
                     open={open}
                     onOpenChange={onOpenChange}
-                    value={String(productId)}
-                    onValueChange={(e) => itemCtx.productChanged(prodUid, e)}
+                    value={String(product?.productId)}
+                    onValueChange={(e) => {
+                        itemCtx.productChanged(prodUid, e);
+                        setTimeout(() => {
+                            if (e) onOpenChange(false);
+                        }, 100);
+                    }}
                     inputValue={inputValue}
                     onInputValueChange={onInputValueChange}
                     manualFiltering
@@ -282,9 +332,15 @@ function ShelfItemProduct({ prodUid }) {
                     </ComboboxContent>
                 </Combobox>
             </TableCell>
-            <TableCell className="w-24"></TableCell>
-            <TableCell className="w-24"></TableCell>
-            <TableCell className="w-24"></TableCell>
+            <TableCell className="w-24">
+                <ShelfPriceCell prodUid={prodUid} product={product} />
+            </TableCell>
+            <TableCell className="w-16">
+                <ShelfQtyInput prodUid={prodUid} value={product?.qty} />
+            </TableCell>
+            <TableCell className="w-24">
+                <AnimatedNumber value={product?.basePrice || 0} />
+            </TableCell>
             <TableCell className="w-24">
                 <ConfirmBtn
                     trash

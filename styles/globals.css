@@ -185,3 +185,6 @@ table.styled td.action {
     text-shadow: -1px 1px 0 rgb(99, 45, 45), 1px 1px 0 rgb(99, 45, 45),
         1px -1px 0 rgb(99, 45, 45), -1px -1px 0 rgb(99, 45, 45);
 }
+input {
+    @apply outline-none focus:outline-none;
+}
