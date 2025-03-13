@@ -35,8 +35,60 @@ export class CostingClass {
         // this.calculateTotalPrice();
         toast.success("Price updated");
     }
+
     public taxList() {
         return this.setting.dotGet("_taxForm.taxList");
+    }
+    public shelfItemCostUpdated(itemUid, salesPrice, productId) {
+        const data = this.setting.zus;
+        Object.entries(data.kvFormItem).map(([k, formData]) => {
+            let subTotal = 0;
+            const shelfItems = formData?.shelfItems;
+            shelfItems?.lineUids?.map((uid) => {
+                const line = shelfItems.lines?.[uid];
+                line?.productUids?.map((puid) => {
+                    const prod = line?.products?.[uid];
+                    if (prod && prod.productId == productId) {
+                        prod.salesPrice = salesPrice;
+                        prod.totalPrice = formatMoney(
+                            prod.salesPrice * prod.qty
+                        );
+                        data.dotUpdate(
+                            `kvFormItem.${k}.shelfItems.lines.${uid}.products.${puid}`,
+                            prod
+                        );
+                    }
+                    subTotal += Number(prod?.totalPrice || 0);
+                });
+                data.dotUpdate(`kvFormItem.${k}.shelfItems.subTotal`, subTotal);
+            });
+        });
+        this.calculateTotalPrice();
+    }
+    public updateShelfCosts(
+        itemUid = this.setting.itemUid,
+        forceUpdate = false
+    ) {
+        const data = this.setting.zus;
+        const shelf = data.kvFormItem[itemUid].shelfItems;
+        let subTotal = 0;
+        shelf.lineUids.map((uid) => {
+            const line = shelf?.lines?.[uid];
+            line?.productUids?.map((puid) => {
+                let prod = line?.products?.[puid];
+                if (!prod) return;
+                // let oldTotal = prod.totalPrice;
+                prod.salesPrice = this.calculateSales(prod.basePrice);
+                prod.totalPrice = formatMoney(prod.salesPrice * prod.qty);
+                data.dotUpdate(
+                    `kvFormItem.${itemUid}.shelfItems.lines.${uid}.products.${puid}`,
+                    prod
+                );
+                subTotal += prod.totalPrice;
+            });
+        });
+        data.dotUpdate(`kvFormItem.${itemUid}.shelfItems.subTotal`, subTotal);
+        this.calculateTotalPrice();
     }
     public updateComponentCost(
         itemUid = this.setting.itemUid,
@@ -44,15 +96,16 @@ export class CostingClass {
     ) {
         const data = this.setting.zus;
         const itemForm = data.kvFormItem[itemUid];
-
+        if (itemForm?.shelfItems?.lineUids) {
+            this.updateShelfCosts(itemUid, forceUpdate);
+            return;
+        }
         let totalBasePrice = 0;
         Object.entries(data.kvStepForm).map(([k, stepData]) => {
             if (k.startsWith(`${itemUid}-`)) {
                 totalBasePrice += stepData?.basePrice || 0;
             }
         });
-        console.log(totalBasePrice);
-
         if (
             ((totalBasePrice ||
                 itemForm?.groupItem?.pricing?.components?.basePrice) &&
@@ -225,17 +278,18 @@ export class CostingClass {
         };
         Object.entries(data.kvFormItem).map(([itemUid, itemData]) => {
             const groupItem = itemData.groupItem;
-            Object.entries(groupItem?.form || {}).map(([uid, formData]) => {
-                if (!formData.selected) return;
-                const isService = groupItem.type == "SERVICE";
-                // console.log(groupItem.type);
-
-                const price = Number(formData.pricing?.totalPrice || 0);
-                const taxxable =
-                    !isService || (isService && formData.meta.taxxable);
-                estimate.subTotal += price;
-                if (taxxable) estimate.taxxable += price;
-            });
+            if (itemData.shelfItems) {
+                estimate.subTotal += Number(itemData.shelfItems?.subTotal || 0);
+            } else
+                Object.entries(groupItem?.form || {}).map(([uid, formData]) => {
+                    if (!formData.selected) return;
+                    const isService = groupItem.type == "SERVICE";
+                    const price = Number(formData.pricing?.totalPrice || 0);
+                    const taxxable =
+                        !isService || (isService && formData.meta.taxxable);
+                    estimate.subTotal += price;
+                    if (taxxable) estimate.taxxable += price;
+                });
         });
         this.softCalculateTotalPrice(estimate);
     }

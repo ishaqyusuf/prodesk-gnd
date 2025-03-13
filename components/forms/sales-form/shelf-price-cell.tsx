@@ -1,3 +1,4 @@
+import { updateShelfItemAction } from "@/actions/update-shelf-product";
 import { AnimatedNumber } from "@/components/animated-number";
 import { NumberInput } from "@/components/currency-input";
 import { Button } from "@/components/ui/button";
@@ -9,12 +10,13 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover";
 import { useDebounce } from "@/hooks/use-debounce";
-import { useShelfItem } from "@/hooks/use-shelf";
+import { useShelf } from "@/hooks/use-shelf";
 import { useEffect, useState } from "react";
-
+import { useShelfItem } from "@/hooks/use-shelf-item";
 export function ShelfPriceCell({ product, prodUid }) {
     const { basePrice, productId, customPrice, salesPrice } = product || {};
     const ctx = useShelfItem();
+    const shelf = useShelf();
     //    useEffect(() => {},[])
     const [basePriceInput, setBasePriceInput] = useState(basePrice);
     const [open, onOpenChange] = useState(false);
@@ -22,7 +24,20 @@ export function ShelfPriceCell({ product, prodUid }) {
 
     useEffect(() => {
         if (deb != basePrice) {
-            ctx.dotUpdateProduct(prodUid, "basePrice", deb);
+            updateShelfItemAction(productId, {
+                unitPrice: Number(deb),
+            }).then((resp) => {
+                ctx.dotUpdateProduct(prodUid, "basePrice", deb);
+                let _salesPrice = shelf.costCls.calculateSales(deb);
+                ctx.dotUpdateProduct(prodUid, "salesPrice", _salesPrice);
+                ctx.refreshProds();
+                shelf.costCls.shelfItemCostUpdated(
+                    shelf.itemUid,
+                    _salesPrice,
+                    productId
+                );
+                // shelf.costCls.updateShelfCosts(shelf.itemUid);
+            });
         }
     }, [deb]);
 
@@ -30,12 +45,12 @@ export function ShelfPriceCell({ product, prodUid }) {
     return (
         <Popover open={open} onOpenChange={onOpenChange}>
             <PopoverTrigger asChild>
-                <Button variant="outline">
+                <Button disabled={!productId} size="xs" variant="outline">
                     <AnimatedNumber
                         value={
                             Number.isInteger(customPrice)
                                 ? customPrice
-                                : basePrice
+                                : salesPrice || 0
                         }
                     />
                 </Button>

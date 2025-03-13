@@ -1,6 +1,8 @@
 import { getShelfCateogriesAction } from "@/actions/cache/get-shelf-categories";
 import { getShelfProductsAction } from "@/actions/cache/get-shelf-products";
 import { useFormDataStore } from "@/app/(clean-code)/(sales)/sales-book/(form)/_common/_stores/form-data-store";
+import { CostingClass } from "@/app/(clean-code)/(sales)/sales-book/(form)/_utils/helpers/zus/costing-class";
+import { SettingsClass } from "@/app/(clean-code)/(sales)/sales-book/(form)/_utils/helpers/zus/settings-class";
 import { StepHelperClass } from "@/app/(clean-code)/(sales)/sales-book/(form)/_utils/helpers/zus/step-component-class";
 import { ComboboxContent } from "@/components/ui/combobox";
 import useEffectLoader from "@/lib/use-effect-loader";
@@ -11,189 +13,59 @@ import React, {
     useDeferredValue,
     useEffect,
     useMemo,
+    useState,
 } from "react";
-import { MdOutlineFormatUnderlined } from "react-icons/md";
+import { FieldPath } from "react-hook-form";
 import { useAsyncMemo } from "use-async-memo";
 
-export const ShelfContext = createContext<
-    ReturnType<typeof useCreateShelfContext>
->(null as any);
-export const ShelfItemContext = createContext<
-    ReturnType<typeof useCreateShelfItemContext>
->(null as any);
+export const ShelfContext = createContext<ReturnType<typeof useShelfContext>>(
+    null as any
+);
+
 export const useShelf = () => useContext(ShelfContext);
-export const useShelfItem = () => useContext(ShelfItemContext);
-export function useCreateShelfContext(itemStepUid) {
+export function useShelfContext(itemStepUid) {
     const { data: categories } = useEffectLoader(getShelfCateogriesAction);
-    const zus = useFormDataStore();
     const [itemUid, stepUid] = itemStepUid?.split("-");
+    const costCls = new CostingClass(
+        new SettingsClass(itemStepUid, itemUid, stepUid)
+    );
+    const zus = useFormDataStore();
     const shelfItemUids =
         zus?.kvFormItem?.[itemUid]?.shelfItems?.lineUids || [];
+    const basePath = `kvFormItem.${itemUid}.shelfItems`;
+    function newProductLine(shelfUid, productUids = []) {
+        const puid = generateRandomString();
+        zus.dotUpdate(`${basePath}.lines.${shelfUid}.productUids` as any, [
+            ...productUids,
+            puid,
+        ]);
+        zus.dotUpdate(
+            `${basePath}.lines.${shelfUid}.products.${puid}` as any,
+            {} as any
+        );
+    }
+    function newSection() {
+        const uid = generateRandomString();
+        zus.dotUpdate(`kvFormItem.${itemUid}.shelfItems.lineUids`, [
+            ...shelfItemUids,
+            uid,
+        ]);
+        zus.dotUpdate(
+            `kvFormItem.${itemUid}.shelfItems.lines.${uid}.categoryIds`,
+            []
+        );
+
+        newProductLine(uid);
+    }
 
     return {
         itemStepUid,
+        newProductLine,
+        newSection,
         itemUid,
         stepUid,
         categories,
         shelfItemUids,
-        addSection() {
-            const uid = generateRandomString();
-            const puid = generateRandomString();
-            zus.dotUpdate(`kvFormItem.${itemUid}.shelfItems.lines.${uid}`, {
-                categoryIds: [],
-                productUids: [puid],
-                products: {
-                    [puid]: {},
-                },
-            });
-        },
-    };
-}
-
-export function useCreateShelfItemContext({ shelfUid }) {
-    const shelfCtx = useShelf();
-    const zus = useFormDataStore();
-    const { categories, itemStepUid } = shelfCtx;
-    const { shelf, cls } = useMemo(() => {
-        const cls = new StepHelperClass(itemStepUid);
-        const shelfItems = cls.getItemForm().shelfItems;
-        // if (!shelfItems)
-        // cls.dotUpdateItemForm("shelfItems", {
-        // [uid]:           { products: [], categoryIds: [] },
-        // });
-
-        return {
-            cls,
-            shelf: shelfItems.lines?.[shelfUid],
-        };
-    }, []);
-    const options = useMemo(() => {
-        if (shelf.categoryIds.length == 0)
-            return categories?.filter((a) => a.type == "parent");
-        const _catId = Number([...shelf.categoryIds].pop());
-        const lastCat = categories.find((a) => a.id == _catId);
-        console.log({
-            _catId,
-            lastCat,
-        });
-        const options = categories.filter((a) => a.categoryId == lastCat?.id);
-        return options;
-    }, [categories, shelf.categoryIds]);
-
-    const [inputValue, setInputValue] = React.useState("");
-    const deferredInputValue = useDeferredValue(inputValue);
-    const filteredTricks = React.useMemo(() => {
-        if (!deferredInputValue) return options;
-        const normalized = deferredInputValue.toLowerCase();
-        return options.filter((item) =>
-            item.name.toLowerCase().includes(normalized)
-        );
-    }, [deferredInputValue, options]);
-
-    const [content, setContent] = React.useState<React.ComponentRef<
-        typeof ComboboxContent
-    > | null>(null);
-    const onInputValueChange = React.useCallback(
-        (value: string) => {
-            setInputValue(value);
-            if (content) {
-                content.scrollTop = 0; // Reset scroll position
-                //  virtualizer.measure();
-            }
-        },
-        [content]
-    );
-    const products = useAsyncMemo(async () => {
-        const category = categories?.find(
-            (c) => c.id == Number([...shelf.categoryIds].pop())
-        );
-        let subCats = categories?.filter((c) => c.categoryId == category?.id);
-        let cid = !subCats?.length && category ? [category.id] : null;
-        if (!cid && subCats?.length && category) {
-            //
-            cid = [];
-            function scrapeFinalCats(id) {
-                let _subCats = categories?.filter((c) => c.categoryId == id);
-
-                if (!_subCats?.length) cid.push(id);
-                _subCats?.map((subCat) => {
-                    scrapeFinalCats(subCat.id);
-                });
-            }
-            scrapeFinalCats(category?.id);
-        }
-
-        const products = await getShelfProductsAction(cid);
-        console.log({ products });
-        return products;
-    }, [shelf.categoryIds, categories]);
-    function dotUpdateProduct(
-        prodId,
-        key: keyof (typeof shelf.products)[""],
-        value
-    ) {
-        if (value === undefined) value = null;
-        zus.dotUpdate(
-            `kvFormItem.${shelfCtx.itemUid}.shelfItems.lines.${shelfUid}.products.${prodId}.${key}`,
-            value
-        );
-    }
-    // shelf.products
-    return {
-        filteredTricks,
-        dotUpdateProduct,
-        setContent,
-        // prodUids: shelf.productUids,
-        deferredInputValue,
-        inputValue,
-        options,
-        ...shelf,
-        setCategoryIds(ids) {
-            cls.dotUpdateItemForm(
-                `shelfItems.lines.${shelfUid}.categoryIds`,
-                ids
-            );
-        },
-        productsList: products,
-        onInputValueChange,
-        addProduct() {
-            const puid = generateRandomString();
-            cls.dotUpdateItemForm(`shelfItems.lines.${shelfUid}.productUids`, [
-                ...shelf.productUids,
-                puid,
-            ]);
-            cls.dotUpdateItemForm(
-                `shelfItems.lines.${shelfUid}.products.${puid}`,
-                {} as any
-            );
-        },
-        productChanged(prodUid, value) {
-            if (!value) return;
-            const productId = +value;
-            const product = products.products.find(
-                (prod) => prod.id == productId
-            );
-            dotUpdateProduct(prodUid, "qty", 1);
-            dotUpdateProduct(prodUid, "productId", product.id);
-            dotUpdateProduct(prodUid, "categoryId", product.categoryId);
-            dotUpdateProduct(prodUid, "basePrice", product.unitPrice);
-            console.log(product);
-        },
-        deleteProductLine(puid) {
-            cls.dotUpdateItemForm(
-                `shelfItems.lines.${shelfUid}.productUids`,
-                [...shelf.productUids].filter((a) => a != puid)
-            );
-            const data = cls.dotGet(
-                `kvFormItem.${shelfCtx.itemUid}.shelfItems.lines.${shelfUid}.products`
-            );
-            if (data) delete data[puid];
-            console.log({ data });
-
-            zus.dotUpdate(
-                `kvFormItem.${shelfCtx.itemUid}.shelfItems.lines.${shelfUid}.products`,
-                data
-            );
-        },
+        costCls,
     };
 }

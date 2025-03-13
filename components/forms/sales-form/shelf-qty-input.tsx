@@ -1,7 +1,7 @@
 "react-hook-form";
 
 import { NumberInput } from "@/components/currency-input";
-import { useShelfItem } from "@/hooks/use-shelf";
+import { useShelfItem } from "@/hooks/use-shelf-item";
 
 export function ShelfQtyInput({ value, prodUid }) {
     const ctx = useShelfItem();
@@ -10,7 +10,6 @@ export function ShelfQtyInput({ value, prodUid }) {
         <NumberInput
             value={value}
             onValueChange={(values) => {
-                console.log({ aa: values.floatValue || null, values });
                 ctx.dotUpdateProduct(prodUid, "qty", values.floatValue);
                 // onChange(values.floatValue);
             }}

@@ -400,6 +400,7 @@ export interface SalesFormItem {
         img?: string;
     }[];
     shelfItems?: {
+        subTotal: number;
         lines: { [uid in string]: SalesShelfField };
         lineUids: string[];
     };

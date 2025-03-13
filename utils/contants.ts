@@ -13,3 +13,7 @@ export const ROUTE_VERSIONS = {
         new: "",
     },
 };
+export const Tags = {
+    shelfProducts: "shelf_products",
+    shelfCategories: "shelf-categories",
+};

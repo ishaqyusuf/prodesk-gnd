@@ -1,5 +1,6 @@
 "use server";
 import { prisma } from "@/db";
+import { Tags } from "@/utils/contants";
 import { unstable_cache } from "next/cache";
 
 export const getShelfProductsAction = async (categoryId?, page?) => {
@@ -30,10 +31,10 @@ export const getShelfProductsAction = async (categoryId?, page?) => {
                 page: page ? ++page : 1,
             };
         },
-        ["shelf_products"],
+        [Tags.shelfProducts],
         {
             tags: [
-                "shelf_products",
+                Tags.shelfProducts,
                 // , `shelf_products_${categoryId}_${page}`
             ],
         }

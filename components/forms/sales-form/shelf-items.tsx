@@ -1,7 +1,5 @@
 "use client";
 
-import { getShelfCateogriesAction } from "@/actions/cache/get-shelf-categories";
-import { useAsyncMemo } from "use-async-memo";
 import {
     Combobox,
     ComboboxAnchor,
@@ -9,99 +7,106 @@ import {
     ComboboxBadgeList,
     ComboboxContent,
     ComboboxEmpty,
-    ComboboxGroup,
-    ComboboxGroupLabel,
     ComboboxInput,
     ComboboxItem,
-    ComboboxLabel,
-    ComboboxSeparator,
     ComboboxTrigger,
 } from "@/components/ui/combobox";
 import {
     Table,
     TableBody,
     TableCell,
-    TableFooter,
     TableHead,
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
 import { _useAsync } from "@/lib/use-async";
-import useEffectLoader from "@/lib/use-effect-loader";
 import { ChevronDown } from "lucide-react";
-import React, {
-    createContext,
-    useContext,
-    useDeferredValue,
-    useMemo,
-    useState,
-} from "react";
-import { getShelfProductsAction } from "@/actions/cache/get-shelf-products";
+import React, { useDeferredValue, useEffect, useState } from "react";
 import { useFormDataStore } from "@/app/(clean-code)/(sales)/sales-book/(form)/_common/_stores/form-data-store";
 import Button from "@/components/common/button";
 import { Icons } from "@/components/_v1/icons";
-import { StepHelperClass } from "@/app/(clean-code)/(sales)/sales-book/(form)/_utils/helpers/zus/step-component-class";
-import { generateRandomString } from "@/lib/utils";
+import { ShelfContext, useShelfContext, useShelf } from "@/hooks/use-shelf";
 import {
-    ShelfContext,
     ShelfItemContext,
-    useCreateShelfContext,
-    useCreateShelfItemContext,
-    useShelf,
+    useShelfItemContext,
     useShelfItem,
-} from "@/hooks/use-shelf";
+} from "@/hooks/use-shelf-item";
 import ConfirmBtn from "@/components/_v1/confirm-btn";
-import Money from "@/components/_v1/money";
 import { ShelfQtyInput } from "./shelf-qty-input";
 import { AnimatedNumber } from "@/components/animated-number";
 import { ShelfPriceCell } from "./shelf-price-cell";
+import { ClearCategoryModal } from "./clear-category";
 
 export function ShelfItems({ itemStepUid }) {
-    const ctx = useCreateShelfContext(itemStepUid);
+    const ctx = useShelfContext(itemStepUid);
     return (
         <ShelfContext.Provider value={ctx}>
             <div className="">
                 <Table className="size-sm">
                     <TableBody>
-                        {ctx.shelfItemUids?.map((uid) => (
-                            <ShelfItemLine key={uid} shelfUid={uid} />
+                        {ctx.shelfItemUids?.map((uid, index) => (
+                            <ShelfItemLine
+                                index={index}
+                                key={uid}
+                                shelfUid={uid}
+                                isLast={ctx.shelfItemUids?.length - 1 == index}
+                            />
                         ))}
                     </TableBody>
                 </Table>
-                <div className="border-t w-full">
+                <div className="border-t p-4  w-full">
                     <Button
                         onClick={() => {
-                            ctx.addSection();
+                            ctx.newSection();
                         }}
                         className=""
                         size="xs"
                     >
                         <Icons.add className="size-4" />
-                        Add Section
+                        Item Section
                     </Button>
                 </div>
             </div>
         </ShelfContext.Provider>
     );
 }
-export function ShelfItemLine({ shelfUid }) {
+export function ShelfItemLine({ shelfUid, index, isLast }) {
     const zus = useFormDataStore();
     const { itemUid, categories } = useShelf();
-    const ctx = useCreateShelfItemContext({ shelfUid });
+    const ctx = useShelfItemContext({ shelfUid });
     const { categoryIds, setCategoryIds, filteredTricks, inputValue } = ctx;
     // const [categoryIds, setCategoryIds] = React.useState<string[]>([]);
     const [open, onOpenChange] = useState(false);
-
+    const [openClearCat, setOpenClearCat] = useState(false);
+    function _clearCats() {}
+    function clearCategory(e) {
+        e.preventDefault();
+        const selection = Object.values(ctx.products)?.filter(
+            (a) => a?.productId
+        )?.length;
+        if (selection > 0) {
+            setOpenClearCat(true);
+        } else {
+            ctx.dotUpdateShelf("categoryIds", []);
+        }
+    }
     return (
         <ShelfItemContext.Provider value={ctx}>
             <TableRow className="hover:bg-transparent">
+                <ClearCategoryModal
+                    onClear={_clearCats}
+                    open={openClearCat}
+                    openChange={setOpenClearCat}
+                />
                 <TableCell className="flex flex-col">
                     <Table>
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead>Category</TableHead>
-                            </TableRow>
-                        </TableHeader>
+                        {index > 0 || (
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead>Category</TableHead>
+                                </TableRow>
+                            </TableHeader>
+                        )}
                         <TableBody>
                             <TableRow>
                                 <TableCell>
@@ -121,9 +126,6 @@ export function ShelfItemLine({ shelfUid }) {
                                         className="w-full"
                                         autoHighlight
                                     >
-                                        {/* <ComboboxLabel>
-                                            Select Categories
-                                        </ComboboxLabel> */}
                                         <ComboboxAnchor className="h-full min-h-10 flex-wrap px-3 py-2">
                                             <ComboboxBadgeList>
                                                 {categoryIds.map(
@@ -161,6 +163,15 @@ export function ShelfItemLine({ shelfUid }) {
                                                             </ComboboxBadgeItem>
                                                         );
                                                     }
+                                                )}
+                                                {categoryIds?.length < 1 || (
+                                                    <ComboboxBadgeItem
+                                                        className=""
+                                                        value="clear"
+                                                        onDelete={clearCategory}
+                                                    >
+                                                        Clear
+                                                    </ComboboxBadgeItem>
                                                 )}
                                             </ComboboxBadgeList>
                                             {!ctx?.options?.length || (
@@ -212,50 +223,71 @@ export function ShelfItemLine({ shelfUid }) {
                         </TableBody>
                     </Table>
                 </TableCell>
-                <TableCell className="w-3/5 p-0">
+                <TableCell className="w-[70%] p-0">
                     <div className="flex flex-col">
                         <Table className="">
-                            <TableHeader>
-                                <TableRow>
-                                    <TableHead>Product</TableHead>
-                                    <TableHead>Price</TableHead>
-                                    <TableHead>Qty</TableHead>
-                                    <TableHead align="right">Total</TableHead>
-                                    <TableHead></TableHead>
-                                </TableRow>
-                            </TableHeader>
+                            {index > 0 || (
+                                <TableHeader>
+                                    <TableRow>
+                                        <TableHead>Product</TableHead>
+                                        <TableHead>Price</TableHead>
+                                        <TableHead>Qty</TableHead>
+                                        <TableHead align="right">
+                                            Total
+                                        </TableHead>
+                                        <TableHead></TableHead>
+                                    </TableRow>
+                                </TableHeader>
+                            )}
                             <TableBody>
-                                {ctx.productUids?.map((puid) => (
+                                {ctx.productUids?.map((puid, puidIndex) => (
                                     <ShelfItemProduct
+                                        isLast={
+                                            isLast &&
+                                            ctx.productUids?.length - 1 ==
+                                                puidIndex
+                                        }
                                         prodUid={puid}
                                         key={puid}
                                     />
                                 ))}
+
+                                <TableRow>
+                                    <TableCell>
+                                        <div className="flex justify-end">
+                                            <Button
+                                                onClick={() => {
+                                                    ctx.addProduct();
+                                                }}
+                                            >
+                                                <Icons.add className="size-4" />
+                                                Add Product
+                                            </Button>
+                                        </div>
+                                    </TableCell>
+                                </TableRow>
                             </TableBody>
                         </Table>
-                        <div className="flex justify-end">
-                            <Button
-                                onClick={() => {
-                                    ctx.addProduct();
-                                }}
-                            >
-                                <Icons.add className="size-4" />
-                                Add Product
-                            </Button>
-                        </div>
                     </div>
                 </TableCell>
             </TableRow>
         </ShelfItemContext.Provider>
     );
 }
-function ShelfItemProduct({ prodUid }) {
+function ShelfItemProduct({ prodUid, isLast }) {
     const itemCtx = useShelfItem();
+    const shelf = useShelf();
     const { productsList: products } = itemCtx;
     const product = itemCtx.products?.[prodUid];
-    // const [productId, setProductId] = useState(
-    //     itemCtx?.products?.[prodUid]?.productId
-    // );
+    const { basePrice, salesPrice, qty, customPrice } = product || {};
+    useEffect(() => {
+        let _salesPrice = Number.isInteger(customPrice)
+            ? customPrice
+            : salesPrice || 0;
+        let totalPrice = qty * _salesPrice;
+        // itemCtx.dotUpdateProduct(prodUid, "totalPrice", totalPrice);
+        shelf.costCls.updateShelfCosts(shelf.itemUid);
+    }, [basePrice, qty, customPrice, prodUid]);
     const [open, onOpenChange] = useState(false);
     const [inputValue, setInputValue] = React.useState("");
     const deferredInputValue = useDeferredValue(inputValue);
@@ -338,8 +370,9 @@ function ShelfItemProduct({ prodUid }) {
             <TableCell className="w-16">
                 <ShelfQtyInput prodUid={prodUid} value={product?.qty} />
             </TableCell>
-            <TableCell className="w-24">
-                <AnimatedNumber value={product?.basePrice || 0} />
+            <TableCell className="w-24 relative">
+                <AnimatedNumber value={product?.totalPrice || 0} />
+                {/* {!isLast || <Footer />} */}
             </TableCell>
             <TableCell className="w-24">
                 <ConfirmBtn
@@ -350,5 +383,12 @@ function ShelfItemProduct({ prodUid }) {
                 />
             </TableCell>
         </TableRow>
+    );
+}
+function Footer() {
+    return (
+        <div className="absolute">
+            <AnimatedNumber value={100} />
+        </div>
     );
 }

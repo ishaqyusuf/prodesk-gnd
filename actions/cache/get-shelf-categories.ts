@@ -1,6 +1,7 @@
 "use server";
 
 import { prisma } from "@/db";
+import { Tags } from "@/utils/contants";
 import { unstable_cache } from "next/cache";
 
 export async function getShelfCateogriesAction() {
@@ -23,9 +24,9 @@ export async function getShelfCateogriesAction() {
                 };
             });
         },
-        ["shelf-categories"],
+        [Tags.shelfCategories],
         {
-            tags: ["shelf-categories"],
+            tags: [Tags.shelfCategories],
         }
     )();
     return s;

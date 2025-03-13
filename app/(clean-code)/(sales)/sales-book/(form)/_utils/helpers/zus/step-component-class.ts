@@ -733,6 +733,7 @@ export class ComponentHelperClass extends StepHelperClass {
                         const uid = generateRandomString();
                         const puid = generateRandomString();
                         this.dotUpdateItemForm(`shelfItems`, {
+                            subTotal: 0,
                             lines: {
                                 [uid]: {
                                     categoryIds: [],
