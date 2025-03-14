@@ -257,19 +257,10 @@ export interface DykeFormStepMeta {
     hidden?: boolean;
 }
 export interface ShelfItemMeta {
-    categoryIds: { id: number }[];
-    shelfItem: {
-        id: number;
-        qty: number;
-        unitPrice: number;
-        totalPrice?: number;
-        categoryId: number;
-        productId: number;
-        _calculated?: {
-            salesPrice?: number;
-            totalSalesPrice?: number;
-        };
-    }[];
+    categoryUid: string;
+    itemIndex: number;
+    customPrice?: number;
+    basePrice?: number;
 }
 
 export type DykeStepProduct = Omit<DykeStepProducts, "meta"> & {
@@ -385,6 +376,7 @@ export interface SalesShelfField {
             qty: number;
             customPrice: number;
             totalPrice: number;
+            id?: number;
             categoryId: number;
         };
     };

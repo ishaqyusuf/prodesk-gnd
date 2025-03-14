@@ -39,6 +39,10 @@ export interface SaverData {
             id?;
             data?;
         }[];
+        shelfItems?: {
+            id?;
+            data?;
+        }[];
         hpt?: {
             id?;
             data?;
@@ -59,6 +63,7 @@ export interface SaverData {
 }
 
 export type HptData = SaverData["items"][number]["hpt"];
+export type ShelfData = SaverData["items"][number]["shelfItems"];
 export type SaveQuery = {
     restoreMode: boolean;
     allowRedirect: boolean;
@@ -110,6 +115,7 @@ export class SaveSalesClass extends SaveSalesHelper {
             tx.housePackageTools as any,
             tx.dykeSalesDoors as any,
             tx.salesTaxes as any,
+            tx.dykeSalesShelfItem as any,
         ][priority - 1];
     }
     public data: SaverData = {
@@ -136,6 +142,7 @@ export class SaveSalesClass extends SaveSalesHelper {
         this.nextIds.salesDoor = await nextId(prisma.dykeSalesDoors);
         this.nextIds.formStep = await nextId(prisma.dykeStepForm);
         this.nextIds.salesId = await nextId(prisma.salesOrders);
+        this.nextIds.shelfItemId = await nextId(prisma.dykeSalesShelfItem);
         await this.generateSalesForm();
         await this.generateItemsForm();
         this.composeTax();
@@ -155,7 +162,6 @@ export class SaveSalesClass extends SaveSalesHelper {
             ?.filter((s) => s?.ids?.length)
             .map((s) => {
                 const table = this.getTable(s.priority);
-
                 txs.push(
                     table.updateMany({
                         where: {
@@ -246,6 +252,9 @@ export class SaveSalesClass extends SaveSalesHelper {
             item.formValues?.map((fv) => {
                 this.createStack(fv, 3);
             });
+            item.shelfItems?.map((shelfItem) => {
+                this.createStack(shelfItem, 7);
+            });
             if (item.hpt) {
                 this.createStack(item.hpt, 4);
                 item.hpt.doors?.map((door) => {
@@ -272,6 +281,7 @@ export class SaveSalesClass extends SaveSalesHelper {
         salesDoor: null,
         formStep: null,
         salesId: null,
+        shelfItemId: null,
     };
     public async generateItemsForm() {
         this.form.sequence.formItem.map((itemId) => {
@@ -283,6 +293,7 @@ export class SaveSalesClass extends SaveSalesHelper {
                 saveShelfHelper({
                     ctx: this,
                     formItem,
+                    itemId,
                 });
             }
             const formEntries = Object.entries(
@@ -300,12 +311,10 @@ export class SaveSalesClass extends SaveSalesHelper {
 
                 if (groupItemFormId?.split("-")?.length > 2) {
                     if (index == 0) {
-                        console.log(itemId);
                         itemCtx.generateDoorsItem();
                     }
                 } else {
                     itemCtx.generateNonDoorItem(
-                        groupItemFormId,
                         groupItemForm,
                         groupItemForm.primaryGroupItem
                     );

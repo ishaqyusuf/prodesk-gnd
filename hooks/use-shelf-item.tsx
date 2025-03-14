@@ -85,7 +85,6 @@ export function useShelfItemContext({ shelfUid }) {
         }
 
         const products = await getShelfProductsAction(cid);
-        console.log({ products });
         return products;
     }, [shelf.categoryIds, categories, prodRefreshToken]);
     const baseLinePath =

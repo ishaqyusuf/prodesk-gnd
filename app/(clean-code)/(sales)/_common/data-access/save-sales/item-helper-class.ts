@@ -5,8 +5,14 @@ import {
     HousePackageToolMeta,
     SalesFormFields,
     SalesItemMeta,
+    ShelfItemMeta,
 } from "../../../types";
-import { HptData, SaverData, SaveSalesClass } from "./save-sales-class";
+import {
+    HptData,
+    SaverData,
+    SaveSalesClass,
+    ShelfData,
+} from "./save-sales-class";
 
 export class ItemHelperClass {
     constructor(public ctx: SaveSalesClass, public formItemId) {}
@@ -136,7 +142,6 @@ export class ItemHelperClass {
                             doorData.data = createDoor;
                             doorData.id = createDoor.id;
                         }
-                        console.log(doorData);
 
                         itemHtp.doors.push(doorData);
                     });
@@ -281,19 +286,82 @@ export class ItemHelperClass {
         _.data = data;
         return _;
     }
+    public generateShelfItems() {
+        const {
+            shelfItems: { lineUids, lines, subTotal },
+        } = this.formItem();
+        let itemIndex = 0;
+        const shelfs: ShelfData = [];
+        lineUids.map((uid) => {
+            const { categoryIds, productUids, products } = lines[uid];
+            productUids.map((puid) => {
+                const prod = products[puid];
+                const meta = {
+                    itemIndex: ++itemIndex,
+                    categoryUid: categoryIds.join("-"),
+                    customPrice: prod.customPrice,
+                    basePrice: prod.basePrice,
+                } as ShelfItemMeta;
+                const updateShelf = {
+                    category: {
+                        connect: {
+                            id: prod.categoryId,
+                        },
+                    },
+                    totalPrice: prod.totalPrice,
+                    unitPrice: prod.salesPrice,
+                    qty: prod.qty,
+                    description: prod.title,
+                    shelfProduct: {
+                        connect: {
+                            id: prod.productId,
+                        },
+                    },
+                    salesOrderItem: {
+                        connect: {
+                            id: this.itemData.id,
+                        },
+                    },
+                    meta: meta as any,
+                } satisfies Prisma.DykeSalesShelfItemUpdateInput;
+                const prodId = prod.id || this.ctx.nextId("shelfItemId");
+                if (prod.id) {
+                    shelfs.push({
+                        data: updateShelf,
+                        id: prod.id,
+                    });
+                } else {
+                    const { category, shelfProduct, salesOrderItem, ...rest } =
+                        updateShelf;
+                    shelfs.push({
+                        id: prodId,
+                        data: {
+                            ...rest,
+                            id: prodId,
+                            categoryId: category.connect.id,
+                            productId: shelfProduct.connect.id,
+                            salesOrderItemId: this.itemData.id,
+                        } satisfies Prisma.DykeSalesShelfItemCreateManyInput,
+                    });
+                }
+            });
+        });
+        this.itemData.shelfItems = shelfs;
+    }
     public generateNonDoorItem(
-        gfId,
-        gf: SalesFormFields["kvFormItem"][""]["groupItem"]["form"][""],
-        primaryGroupItem
+        gf?: SalesFormFields["kvFormItem"][""]["groupItem"]["form"][""],
+        primaryGroupItem?
     ) {
+        if (!gf) gf = {} as any;
         const lineIndex = this.getLineIndex();
         const formItem = this.formItem();
         const isMoulding = formItem?.groupItem?.type == "MOULDING";
+        const isShelf = formItem?.shelfItems?.lineUids?.length;
 
         const meta = {
-            doorType: formItem.groupItem.itemType,
+            doorType: formItem?.groupItem?.itemType,
             lineIndex,
-            ...(isMoulding
+            ...(isMoulding || isShelf
                 ? {}
                 : {
                       tax: gf?.meta?.taxxable,
@@ -302,17 +370,17 @@ export class ItemHelperClass {
 
         const updateData = {
             meta,
-            ...(isMoulding
+            ...(isMoulding || isShelf
                 ? {}
                 : {
                       dykeProduction: gf.meta?.produceable || false,
                   }),
             rate: this.ctx.safeInt(gf?.pricing?.unitPrice),
             total: this.ctx.safeInt(gf?.pricing?.totalPrice),
-            description: gf.meta.description,
+            description: gf?.meta?.description,
             swing: gf.swing,
-            qty: this.ctx.safeInt(gf.qty.total),
-            multiDykeUid: formItem.groupItem.groupUid,
+            qty: this.ctx.safeInt(gf.qty?.total),
+            multiDykeUid: formItem?.groupItem?.groupUid,
             multiDyke: primaryGroupItem,
             dykeDescription: formItem?.title,
             // salesOrder
@@ -337,6 +405,7 @@ export class ItemHelperClass {
             };
         }
         if (primaryGroupItem) this.generateItemFormSteps();
+        if (isShelf) this.generateShelfItems();
         if (isMoulding) {
             const itemHtp: HptData = {
                 id: gf.hptId,
