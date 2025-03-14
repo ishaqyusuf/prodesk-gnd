@@ -34,9 +34,9 @@ export function useShelfItemContext({ shelfUid }) {
         if (shelf.categoryIds.length == 0)
             return categories?.filter((a) => a.type == "parent");
         const _catId = Number([...shelf.categoryIds].pop());
-        const lastCat = categories.find((a) => a.id == _catId);
+        const lastCat = categories?.find((a) => a.id == _catId);
 
-        const options = categories.filter((a) => a.categoryId == lastCat?.id);
+        const options = categories?.filter((a) => a.categoryId == lastCat?.id);
         return options;
     }, [categories, shelf.categoryIds]);
 
@@ -143,6 +143,12 @@ export function useShelfItemContext({ shelfUid }) {
                 {} as any
             );
         },
+        clearProduct(prodUid) {
+            cls.dotUpdateItemForm(
+                `shelfItems.lines.${shelfUid}.products.${prodUid}`,
+                {} as any
+            );
+        },
         productChanged(prodUid, value) {
             if (!value) return;
             const productId = +value;
@@ -153,6 +159,7 @@ export function useShelfItemContext({ shelfUid }) {
             dotUpdateProduct(prodUid, "productId", product.id);
             dotUpdateProduct(prodUid, "categoryId", product.categoryId);
             dotUpdateProduct(prodUid, "basePrice", product.unitPrice);
+            dotUpdateProduct(prodUid, "title", product.title);
             dotUpdateProduct(
                 prodUid,
                 "salesPrice",
@@ -163,7 +170,7 @@ export function useShelfItemContext({ shelfUid }) {
                 let cids = [];
                 function getParentId(cid) {
                     cids.unshift(cid);
-                    const c = categories.find((s) => s.id == cid);
+                    const c = categories?.find((s) => s.id == cid);
 
                     let pid = c?.categoryId;
                     if (pid) {

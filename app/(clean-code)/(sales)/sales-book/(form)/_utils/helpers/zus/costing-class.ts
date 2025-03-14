@@ -279,7 +279,11 @@ export class CostingClass {
         Object.entries(data.kvFormItem).map(([itemUid, itemData]) => {
             const groupItem = itemData.groupItem;
             if (itemData.shelfItems) {
-                estimate.subTotal += Number(itemData.shelfItems?.subTotal || 0);
+                const shelfSubTotal = Number(
+                    itemData.shelfItems?.subTotal || 0
+                );
+                estimate.subTotal += shelfSubTotal;
+                estimate.taxxable += shelfSubTotal;
             } else
                 Object.entries(groupItem?.form || {}).map(([uid, formData]) => {
                     if (!formData.selected) return;

@@ -131,7 +131,7 @@ export function ShelfItemLine({ shelfUid, index, isLast }) {
                                                 {categoryIds.map(
                                                     (item, index) => {
                                                         const option =
-                                                            categories.find(
+                                                            categories?.find(
                                                                 (trick) =>
                                                                     trick.id ===
                                                                     Number(item)
@@ -289,16 +289,17 @@ function ShelfItemProduct({ prodUid, isLast }) {
         shelf.costCls.updateShelfCosts(shelf.itemUid);
     }, [basePrice, qty, customPrice, prodUid]);
     const [open, onOpenChange] = useState(false);
-    const [inputValue, setInputValue] = React.useState("");
+    const [inputValue, setInputValue] = React.useState(product?.title || "");
     const deferredInputValue = useDeferredValue(inputValue);
+    const [isTyping, setIsTyping] = useState(false);
     const filteredProducts = React.useMemo(() => {
-        if (!deferredInputValue) return products?.products;
+        if (!deferredInputValue || !isTyping) return products?.products;
         const normalized = deferredInputValue.toLowerCase();
         const __products = products?.products?.filter((item) =>
             item.title.toLowerCase().includes(normalized)
         );
         return __products;
-    }, [deferredInputValue, products]);
+    }, [deferredInputValue, products, isTyping]);
     const [content, setContent] = React.useState<React.ComponentRef<
         typeof ComboboxContent
     > | null>(null);
@@ -332,19 +333,33 @@ function ShelfItemProduct({ prodUid, isLast }) {
                     className="w-full"
                     autoHighlight
                 >
-                    <ComboboxAnchor className="h-full min-h-10 flex-wrap px-3 py-2">
-                        <>
-                            <ComboboxInput
-                                className="h-auto min-w-20 flex-1 "
-                                onFocus={(e) => {
-                                    onOpenChange(true);
+                    <ComboboxAnchor className="h-full min-h-10 flex-wrap px-3 py-2 relative">
+                        <ComboboxInput
+                            className="h-auto min-w-20 flex-1 "
+                            onFocus={(e) => {
+                                onOpenChange(true);
+                                setIsTyping(false);
+                            }}
+                            onBlur={() => {
+                                setIsTyping(false);
+                            }}
+                            onKeyDown={(e) => {
+                                setIsTyping(true);
+                            }}
+                            placeholder="Select product..."
+                        />
+                        {!product?.productId || (
+                            <ComboboxTrigger
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    setInputValue("");
+                                    itemCtx.clearProduct(prodUid);
                                 }}
-                                placeholder="Select product..."
-                            />
-                            <ComboboxTrigger className="absolute top-3 right-2">
-                                <ChevronDown className="h-4 w-4" />
+                                className="absolute top-3 right-2"
+                            >
+                                <Icons.X className="h-4 w-4" />
                             </ComboboxTrigger>
-                        </>
+                        )}
                     </ComboboxAnchor>
 
                     <ComboboxContent

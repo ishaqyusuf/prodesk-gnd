@@ -379,6 +379,7 @@ export interface SalesShelfField {
     products: {
         [uid in string]: {
             productId: number;
+            title?: string;
             basePrice: number;
             salesPrice: number;
             qty: number;
