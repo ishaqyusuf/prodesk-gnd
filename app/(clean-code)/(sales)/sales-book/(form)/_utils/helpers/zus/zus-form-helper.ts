@@ -223,7 +223,7 @@ export function zhInitializeState(data: GetSalesBookForm, copy = false) {
             const form = resp.kvFormItem[uid].groupItem.form;
             form[formId] = formData;
         }
-        if (item.item.shelfItemsData)
+        if (item.item.shelfItemsData?.lineUids?.length)
             resp.kvFormItem[uid].shelfItems = item.item.shelfItemsData;
         else
             Object.entries(item.multiComponent.components).map(([id, data]) => {
