@@ -259,6 +259,7 @@ export interface DykeFormStepMeta {
 export interface ShelfItemMeta {
     categoryUid: string;
     itemIndex: number;
+    lineUid: string;
     customPrice?: number;
     basePrice?: number;
 }
@@ -393,6 +394,7 @@ export interface SalesFormItem {
         img?: string;
     }[];
     shelfItems?: {
+        salesItemId: number;
         subTotal: number;
         lines: { [uid in string]: SalesShelfField };
         lineUids: string[];

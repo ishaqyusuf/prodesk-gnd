@@ -301,6 +301,7 @@ export class ItemHelperClass {
                     categoryUid: categoryIds.join("-"),
                     customPrice: prod.customPrice,
                     basePrice: prod.basePrice,
+                    lineUid: uid,
                 } as ShelfItemMeta;
                 const updateShelf = {
                     category: {
@@ -355,9 +356,14 @@ export class ItemHelperClass {
         if (!gf) gf = {} as any;
         const lineIndex = this.getLineIndex();
         const formItem = this.formItem();
+        // formItem.groupItem.id
+        // formItem?.id
         const isMoulding = formItem?.groupItem?.type == "MOULDING";
-        const isShelf = formItem?.shelfItems?.lineUids?.length;
-
+        const shelf = formItem?.shelfItems;
+        const isShelf = shelf?.lineUids?.length;
+        const salesItemId = isShelf
+            ? formItem?.shelfItems?.salesItemId
+            : gf?.meta?.salesItemId;
         const meta = {
             doorType: formItem?.groupItem?.itemType,
             lineIndex,
@@ -376,17 +382,19 @@ export class ItemHelperClass {
                       dykeProduction: gf.meta?.produceable || false,
                   }),
             rate: this.ctx.safeInt(gf?.pricing?.unitPrice),
-            total: this.ctx.safeInt(gf?.pricing?.totalPrice),
+            total: isShelf
+                ? this.ctx.safeInt(shelf.subTotal)
+                : this.ctx.safeInt(gf?.pricing?.totalPrice),
             description: gf?.meta?.description,
             swing: gf.swing,
             qty: this.ctx.safeInt(gf.qty?.total),
-            multiDykeUid: formItem?.groupItem?.groupUid,
+            multiDykeUid: isShelf ? null : formItem?.groupItem?.groupUid,
             multiDyke: primaryGroupItem,
             dykeDescription: formItem?.title,
             // salesOrder
         } satisfies Prisma.SalesOrderItemsUpdateInput;
         const { multiDykeUid, multiDyke, ...rest } = updateData;
-        if (!gf.meta.salesItemId) {
+        if (!salesItemId) {
             const createData = {
                 ...updateData,
                 salesOrderId: this.ctx.salesId,
@@ -400,11 +408,11 @@ export class ItemHelperClass {
         } else {
             this.itemData = {
                 data: updateData,
-                id: gf.meta.salesItemId,
+                id: salesItemId,
                 formValues: [],
             };
         }
-        if (primaryGroupItem) this.generateItemFormSteps();
+        if (primaryGroupItem || isShelf) this.generateItemFormSteps();
         if (isShelf) this.generateShelfItems();
         if (isMoulding) {
             const itemHtp: HptData = {

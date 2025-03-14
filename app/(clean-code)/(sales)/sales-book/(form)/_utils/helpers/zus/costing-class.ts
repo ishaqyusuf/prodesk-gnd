@@ -41,6 +41,7 @@ export class CostingClass {
     }
     public shelfItemCostUpdated(itemUid, salesPrice, productId) {
         const data = this.setting.zus;
+        if (this.setting.staticZus) return;
         Object.entries(data.kvFormItem).map(([k, formData]) => {
             let subTotal = 0;
             const shelfItems = formData?.shelfItems;
@@ -53,14 +54,17 @@ export class CostingClass {
                         prod.totalPrice = formatMoney(
                             prod.salesPrice * prod.qty
                         );
-                        data.dotUpdate(
+                        data?.dotUpdate(
                             `kvFormItem.${k}.shelfItems.lines.${uid}.products.${puid}`,
                             prod
                         );
                     }
                     subTotal += Number(prod?.totalPrice || 0);
                 });
-                data.dotUpdate(`kvFormItem.${k}.shelfItems.subTotal`, subTotal);
+                data?.dotUpdate(
+                    `kvFormItem.${k}.shelfItems.subTotal`,
+                    subTotal
+                );
             });
         });
         this.calculateTotalPrice();
@@ -70,6 +74,7 @@ export class CostingClass {
         forceUpdate = false
     ) {
         const data = this.setting.zus;
+        if (this.setting.staticZus) return;
         const shelf = data.kvFormItem[itemUid].shelfItems;
         let subTotal = 0;
         shelf.lineUids.map((uid) => {
@@ -95,6 +100,7 @@ export class CostingClass {
         forceUpdate = false
     ) {
         const data = this.setting.zus;
+        if (this.setting.staticZus) return;
         const itemForm = data.kvFormItem[itemUid];
         if (itemForm?.shelfItems?.lineUids) {
             this.updateShelfCosts(itemUid, forceUpdate);
@@ -153,6 +159,7 @@ export class CostingClass {
 
         const itemForm = data.kvFormItem[itemUid];
         let groupItem = itemForm.groupItem;
+        if (!groupItem) return;
         if (!groupItem.pricing)
             groupItem.pricing = {
                 components: {

@@ -723,6 +723,7 @@ export class ComponentHelperClass extends StepHelperClass {
             this.calculateTotalPrice();
         } else {
             let stepData = this.getStepForm();
+            stepData.salesOrderItemId;
             const component = this.component;
             if (stepData.title == "Item Type") {
                 if (component.title == "Moulding") {
@@ -734,6 +735,7 @@ export class ComponentHelperClass extends StepHelperClass {
                         const puid = generateRandomString();
                         this.dotUpdateItemForm(`shelfItems`, {
                             subTotal: 0,
+                            salesItemId: null,
                             lines: {
                                 [uid]: {
                                     categoryIds: [],

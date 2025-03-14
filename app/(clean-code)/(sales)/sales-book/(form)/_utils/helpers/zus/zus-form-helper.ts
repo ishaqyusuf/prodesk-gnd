@@ -183,13 +183,12 @@ export function zhInitializeState(data: GetSalesBookForm, copy = false) {
             resp.sequence.stepComponent[uid].push(suid);
             resp.kvFormItem[uid].currentStepUid = suid;
         });
-        if (!resp.kvFormItem[uid].groupItem)
+        if (
+            !resp.kvFormItem[uid].groupItem &&
+            !item.item?.shelfItemsData?.lineUids?.length
+        )
             resp.kvFormItem[uid].groupItem = {
-                // componentsBasePrice: 0,
-                // componentsSalesPrice: 0,
-                //  type: "HPT",
                 groupUid: item.multiComponent?.uid,
-
                 itemType,
                 pricing: {
                     components: {
@@ -203,7 +202,6 @@ export function zhInitializeState(data: GetSalesBookForm, copy = false) {
                 },
                 itemIds: [],
                 form: {},
-                //  stepUid: stepProdUid,
                 qty: {
                     lh: 0,
                     rh: 0,
@@ -222,141 +220,136 @@ export function zhInitializeState(data: GetSalesBookForm, copy = false) {
         function addFormItem(formId, formData: GroupType["form"][""]) {
             formData.primaryGroupItem =
                 formData.meta.salesItemId == item.item.id;
-
-            // resp.kvFormItem[uid].groupItem.itemIds.push(formId); //= formData;
             const form = resp.kvFormItem[uid].groupItem.form;
-            if (form[formId]) {
-                console.log("ALREADY EXIST", formId, form[formId]);
-            }
             form[formId] = formData;
         }
-        Object.entries(item.multiComponent.components).map(([id, data]) => {
-            let sp =
-                item.item?.housePackageTool?.stepProduct || data.stepProduct;
+        if (item.item.shelfItemsData)
+            resp.kvFormItem[uid].shelfItems = item.item.shelfItemsData;
+        else
+            Object.entries(item.multiComponent.components).map(([id, data]) => {
+                let sp =
+                    item.item?.housePackageTool?.stepProduct ||
+                    data.stepProduct;
 
-            if (!sp && fallBackDoorStepProd) {
-                console.log("FALL BACK", sp);
-                sp = fallBackDoorStepProd;
-            }
-            const stepProdUid =
-                sp?.uid ||
-                item.item.housePackageTool?.door?.stepProducts?.[0]?.uid;
-            const stepProductId = sp?.id;
+                if (!sp && fallBackDoorStepProd) {
+                    sp = fallBackDoorStepProd;
+                }
+                const stepProdUid =
+                    sp?.uid ||
+                    item.item.housePackageTool?.door?.stepProducts?.[0]?.uid;
+                const stepProductId = sp?.id;
 
-            const doorCount = Object.keys(data._doorForm).length;
+                const doorCount = Object.keys(data._doorForm).length;
 
-            if (doorCount) {
-                setType("HPT");
-                resp.kvFormItem[uid].groupItem.hptId = copy
-                    ? null
-                    : item.item?.housePackageTool?.id;
-                resp.kvFormItem[uid].groupItem.doorStepProductId =
-                    stepProductId;
-                Object.entries(data._doorForm).map(([formId, doorForm]) => {
-                    // const stepProdUid = doorForm?.stepProduct?.uid;
-                    console.log(stepProdUid);
-
-                    // const formId = `${stepProdUid}-${inToFt(dimIn)}`;
-                    pushItemId(formId);
-                    // console.log(doorForm);
-                    addFormItem(formId, {
-                        doorId: copy ? null : doorForm.id,
-                        pricing: {
-                            itemPrice: {
-                                salesPrice: doorForm.jambSizePrice,
-                                basePrice: basePrice(doorForm.jambSizePrice),
+                if (doorCount) {
+                    setType("HPT");
+                    resp.kvFormItem[uid].groupItem.hptId = copy
+                        ? null
+                        : item.item?.housePackageTool?.id;
+                    resp.kvFormItem[uid].groupItem.doorStepProductId =
+                        stepProductId;
+                    Object.entries(data._doorForm).map(([formId, doorForm]) => {
+                        pushItemId(formId);
+                        // console.log(doorForm);
+                        addFormItem(formId, {
+                            doorId: copy ? null : doorForm.id,
+                            pricing: {
+                                itemPrice: {
+                                    salesPrice: doorForm.jambSizePrice,
+                                    basePrice: basePrice(
+                                        doorForm.jambSizePrice
+                                    ),
+                                },
+                                unitPrice: doorForm.unitPrice,
+                                customPrice: customPrice(
+                                    doorForm?.meta?.overridePrice
+                                ),
+                                addon: doorForm.doorPrice,
                             },
-                            unitPrice: doorForm.unitPrice,
-                            customPrice: customPrice(
-                                doorForm?.meta?.overridePrice
-                            ),
-                            addon: doorForm.doorPrice,
-                        },
+                            meta: {
+                                salesItemId: copy ? null : data.itemId,
+                                // noHandle,
+                            },
+                            hptId: copy ? null : doorForm.housePackageToolId,
+                            selected: true,
+                            swing: doorForm.swing,
+                            qty: {
+                                lh: doorForm.lhQty,
+                                rh: doorForm.rhQty,
+                                total: doorForm.totalQty,
+                            },
+                            stepProductId: {
+                                id: doorForm.stepProductId,
+                                fallbackId: sp?.id,
+                            },
+                        });
+                    });
+                } else if (item.item?.meta?.doorType == "Moulding") {
+                    const formId = `${id}`;
+                    pushItemId(formId);
+                    // console.log({ formId, stepProdUid, id });
+                    // console.log({
+                    //     m: item.item?.housePackageTool?.molding,
+                    //     md: data,
+                    // });
+                    addFormItem(formId, {
+                        hptId: copy ? null : data.hptId,
+                        mouldingProductId: data.stepProduct?.dykeProductId,
+                        selected: true,
                         meta: {
                             salesItemId: copy ? null : data.itemId,
                             // noHandle,
                         },
-                        hptId: copy ? null : doorForm.housePackageToolId,
-                        selected: true,
-                        swing: doorForm.swing,
                         qty: {
-                            lh: doorForm.lhQty,
-                            rh: doorForm.rhQty,
-                            total: doorForm.totalQty,
+                            total: data.qty,
+                        },
+                        pricing: {
+                            customPrice: customPrice(
+                                data.priceTags?.moulding?.overridePrice
+                            ),
+                            itemPrice: {
+                                basePrice: data.priceTags?.moulding?.basePrice,
+                                salesPrice:
+                                    data.priceTags?.moulding?.salesPrice ||
+                                    data.priceTags?.moulding?.price,
+                            },
+                            unitPrice: data.priceTags?.moulding?.price,
+                            addon: data.priceTags?.moulding?.addon,
                         },
                         stepProductId: {
-                            id: doorForm.stepProductId,
-                            fallbackId: sp?.id,
+                            id: data.stepProduct?.id,
                         },
                     });
-                });
-            } else if (item.item?.meta?.doorType == "Moulding") {
-                const formId = `${id}`;
-                pushItemId(formId);
-                // console.log({ formId, stepProdUid, id });
-                // console.log({
-                //     m: item.item?.housePackageTool?.molding,
-                //     md: data,
-                // });
-                setType("MOULDING");
-                addFormItem(formId, {
-                    hptId: copy ? null : data.hptId,
-                    mouldingProductId: data.stepProduct?.dykeProductId,
-                    selected: true,
-                    meta: {
-                        salesItemId: copy ? null : data.itemId,
-                        // noHandle,
-                    },
-                    qty: {
-                        total: data.qty,
-                    },
-                    pricing: {
-                        customPrice: customPrice(
-                            data.priceTags?.moulding?.overridePrice
-                        ),
-                        itemPrice: {
-                            basePrice: data.priceTags?.moulding?.basePrice,
-                            salesPrice:
-                                data.priceTags?.moulding?.salesPrice ||
-                                data.priceTags?.moulding?.price,
+                } else {
+                    const formId = `${data.uid}`;
+                    pushItemId(formId);
+                    setType("SERVICE");
+                    addFormItem(formId, {
+                        pricing: {
+                            itemPrice: {},
+                            unitPrice: data.unitPrice,
+                            customPrice: customPrice(data.unitPrice),
+                            addon: 0,
                         },
-                        unitPrice: data.priceTags?.moulding?.price,
-                        addon: data.priceTags?.moulding?.addon,
-                    },
-                    stepProductId: {
-                        id: data.stepProduct?.id,
-                    },
-                });
-            } else {
-                const formId = `${data.uid}`;
-                pushItemId(formId);
-                setType("SERVICE");
-                console.log("SERVICE:", data);
-                addFormItem(formId, {
-                    pricing: {
-                        itemPrice: {},
-                        unitPrice: data.unitPrice,
-                        customPrice: customPrice(data.unitPrice),
-                        addon: 0,
-                    },
-                    selected: true,
+                        selected: true,
 
-                    qty: {
-                        total: data.qty,
-                    },
-                    meta: {
-                        description: data.description,
-                        produceable: data.production,
-                        taxxable: data.tax,
-                        salesItemId: copy ? null : data.itemId,
-                        // noHandle,
-                    },
-                    stepProductId: null,
-                });
-            }
-        });
+                        qty: {
+                            total: data.qty,
+                        },
+                        meta: {
+                            description: data.description,
+                            produceable: data.production,
+                            taxxable: data.tax,
+                            salesItemId: copy ? null : data.itemId,
+                            // noHandle,
+                        },
+                        stepProductId: null,
+                    });
+                }
+            });
 
-        const shelfItems = item.item.shelfItemArray;
+        console.log({ shelfData: item.item.shelfItemsData });
+
         // shelfItems.map(si => {})
         const costCls = new CostingClass(
             new SettingsClass("", uid, "", resp as any)

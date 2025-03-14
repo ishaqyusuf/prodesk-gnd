@@ -6,6 +6,7 @@ import {
     DykeStepProduct,
     HousePackageToolMeta,
     MultiSalesFormItem,
+    SalesFormItem,
     SalesItemMeta,
     ShelfItemMeta,
     StepComponentMeta,
@@ -135,14 +136,13 @@ export function transformSalesBookFormItem(
                 item || {};
             const shelfItemArray = transformShelfItem(item);
             const multiItem = transformMultiDykeItem(item, items, itemIndex);
-            return {
+            const _ = {
                 opened: true,
                 stepIndex: 0,
                 multiComponent: multiItem.multiComponent,
                 expanded: data.order.id ? false : true,
                 stillChecked: true,
-                sectionPrice:
-                    multiItem.sectionPrice || shelfItemArray.sectionPrice,
+                sectionPrice: multiItem.sectionPrice,
                 priceReferesher: null,
                 formStepArray: formSteps.map(
                     ({ step, component, ...rest }) => ({
@@ -154,11 +154,12 @@ export function transformSalesBookFormItem(
                 item: {
                     ...itemData,
                     housePackageTool,
-                    shelfItemArray: shelfItemArray.shelfItemArray,
+                    ...shelfItemArray,
                 },
                 uid: generateRandomString(4),
                 stepSequence: getItemStepSequence(item, data),
             };
+            return _;
         });
 
     return itemArray?.every((item) => item?.item?.meta?.lineIndex > -1)
@@ -203,41 +204,49 @@ const batchSetting: {
 } = {};
 export function transformShelfItem(item: SalesFormItems[number]) {
     const { shelfItems, ...itemData } = item;
-    let sectionPrice = 0;
-    const shelfItemArray: {
-        [k in string]: {
-            productArray: {
-                item: (typeof shelfItems)[0];
-            }[];
-            categoryIds: number[];
-            categoryId: number;
-            uid;
-        };
-    } = {};
-    shelfItems.map((s) => {
-        const cid = s.categoryId?.toString();
-        const uid = generateRandomString(4);
-        if (!shelfItemArray[cid])
-            shelfItemArray[cid] = {
-                productArray: [],
-                categoryIds: s.meta.categoryIds as any,
-                categoryId: s.categoryId,
-                uid,
+    const shelfItemsData: SalesFormItem["shelfItems"] = {
+        salesItemId: item?.id,
+        subTotal: item.total,
+        lines: {},
+        lineUids: [],
+    };
+    const sorted = shelfItems.sort(
+        (a, b) => a.meta.itemIndex - b.meta.itemIndex
+    );
+
+    sorted.map((line) => {
+        const siblings = sorted.filter(
+            (a) => a.meta.lineUid == line.meta.lineUid
+        );
+        if (line?.id == siblings?.[0]?.id) {
+            shelfItemsData.lineUids.push(line.meta.lineUid);
+            shelfItemsData.lines[line.meta.lineUid] = {
+                categoryIds: line?.meta?.categoryUid
+                    ?.split("-")
+                    ?.map((a) => Number(a)),
+                productUids: [],
+                products: {},
             };
-        if (shelfItemArray[cid])
-            (shelfItemArray[cid] as any)?.productArray?.push({
-                item: s,
+            const lineData = shelfItemsData.lines[line.meta.lineUid];
+            siblings.map((product) => {
+                const prodUid = generateRandomString();
+                lineData.productUids.push(prodUid);
+                lineData.products[prodUid] = {
+                    basePrice: product.meta.basePrice,
+                    categoryId: product.categoryId,
+                    customPrice: product.meta.customPrice,
+                    productId: product.productId,
+                    qty: product.qty,
+                    salesPrice: product.unitPrice,
+                    totalPrice: product.totalPrice,
+                    id: product.id,
+                    title: product.description,
+                };
             });
-        sectionPrice += s.totalPrice || 0;
-        footerPrices[uid] = {
-            price: s.totalPrice || 0,
-            doorType: itemData?.meta?.doorType,
-            tax: itemData.meta?.tax,
-        };
+        }
     });
     return {
-        sectionPrice,
-        shelfItemArray: Object.values(shelfItemArray),
+        shelfItemsData,
     };
 }
 export function transformMultiDykeItem(

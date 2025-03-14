@@ -287,14 +287,17 @@ export class SaveSalesClass extends SaveSalesHelper {
         this.form.sequence.formItem.map((itemId) => {
             const formItem = this.form.kvFormItem[itemId];
             // formItem.uid
-            if (!formItem?.groupItem?.groupUid)
-                formItem.groupItem.groupUid = generateRandomString(4);
+
             if (formItem.shelfItems) {
                 saveShelfHelper({
                     ctx: this,
                     formItem,
                     itemId,
                 });
+                return;
+            } else {
+                if (!formItem?.groupItem?.groupUid)
+                    formItem.groupItem.groupUid = generateRandomString(4);
             }
             const formEntries = Object.entries(
                 formItem.groupItem.form || {}
