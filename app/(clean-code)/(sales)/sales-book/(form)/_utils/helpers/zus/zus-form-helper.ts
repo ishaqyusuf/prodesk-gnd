@@ -225,7 +225,7 @@ export function zhInitializeState(data: GetSalesBookForm, copy = false) {
         }
         if (item.item.shelfItemsData?.lineUids?.length)
             resp.kvFormItem[uid].shelfItems = item.item.shelfItemsData;
-        else
+        else {
             Object.entries(item.multiComponent.components).map(([id, data]) => {
                 let sp =
                     item.item?.housePackageTool?.stepProduct ||
@@ -292,6 +292,7 @@ export function zhInitializeState(data: GetSalesBookForm, copy = false) {
                     //     m: item.item?.housePackageTool?.molding,
                     //     md: data,
                     // });
+                    setType("MOULDING");
                     addFormItem(formId, {
                         hptId: copy ? null : data.hptId,
                         mouldingProductId: data.stepProduct?.dykeProductId,
@@ -347,8 +348,7 @@ export function zhInitializeState(data: GetSalesBookForm, copy = false) {
                     });
                 }
             });
-
-        console.log({ shelfData: item.item.shelfItemsData });
+        }
 
         // shelfItems.map(si => {})
         const costCls = new CostingClass(

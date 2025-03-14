@@ -373,7 +373,6 @@ export class ItemHelperClass {
                       tax: gf?.meta?.taxxable,
                   }),
         } satisfies SalesItemMeta;
-
         const updateData = {
             meta,
             ...(isMoulding || isShelf
