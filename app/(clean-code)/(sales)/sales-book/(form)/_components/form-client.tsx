@@ -33,7 +33,7 @@ export function FormClient({ data }: FormClientProps) {
     });
     if (!zus.formStatus) return <></>;
     return (
-        <div className="mb-28">
+        <div className="mb-28 bg-white">
             <FormHeader sticky={sticky} />
             <div
                 ref={sticky.containerRef}

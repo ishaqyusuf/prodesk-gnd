@@ -27,7 +27,7 @@ export function NumberInput({
     const [isFocused, setIsFocused] = useState(false);
     const isPlaceholder = !value && !isFocused;
     return (
-        <div className="relative  font-mono">
+        <div className="relative  font-mono midday">
             <CurrencyInput
                 // suffix="%)"
                 // prefix="$"

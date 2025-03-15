@@ -1,4 +1,17 @@
 # ...
+# SAT, MAR 15
+    - new sales form info page
+    - stack it all back to a single page
+    - 
+    - fix auto scroll
+    - remove footer summary and fix it to the right for big screen
+    - inventory page tabs: shelf items, components
+      - doors variants mgmt and stocks
+    - feature: make component shelf item
+      - make it connect to component pricing system
+      - one component can have multiple shelf items (variants)
+      - when create shelf is clicked: show step forms and select applicable step which will serve as category and add variant title (which will be prefixed to component name)
+      - when create shelf is clicked: check component if it has variant and automatically map to all variants prices (A BIT COMPLEX: if not able to accomplish then restrict to one price component)
 # MON, MAR 11
     - customer report sheet, balance owed, wallet balance, sales, quotes
     - door inventory management

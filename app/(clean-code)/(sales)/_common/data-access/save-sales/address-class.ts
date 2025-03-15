@@ -36,15 +36,18 @@ export class AddressClass {
             if (Object.keys(customerData).length == 0) {
                 return;
             }
-            const _customer = await prisma.customers.upsert({
-                where: {
-                    phoneNo: customerData.phoneNo,
-                },
-                create: customerData,
-                update: customerData,
-            });
+            const _customer = customerData.phoneNo
+                ? await prisma.customers.upsert({
+                      where: {
+                          phoneNo: customerData.phoneNo,
+                      },
+                      create: customerData,
+                      update: customerData,
+                  })
+                : await prisma.customers.create({
+                      data: customerData,
+                  });
             const customerChanged = _customer.id != this.ctx.form.metaData.cad;
-
             if (
                 customerChanged ||
                 (_customer.id && !this.ctx.form.metaData.id)

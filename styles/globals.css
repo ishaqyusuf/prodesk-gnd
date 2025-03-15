@@ -188,3 +188,9 @@ table.styled td.action {
 input {
     @apply outline-none focus:outline-none;
 }
+.midday input,
+.midday button,
+button.midday,
+input.midday {
+    @apply focus:ring-transparent focus:rounded-none focus:border-b;
+}
