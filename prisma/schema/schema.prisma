@@ -38,6 +38,7 @@ model AddressBooks {
     email          String?       @db.VarChar(255)
     phoneNo        String?       @db.VarChar(255)
     phoneNo2       String?       @db.VarChar(255)
+    isPrimary      Boolean?
     meta           Json?         @db.Json
     createdAt      DateTime?     @default(now()) @db.Timestamp(0)
     updatedAt      DateTime?     @updatedAt

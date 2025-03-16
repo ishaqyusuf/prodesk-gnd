@@ -34,10 +34,7 @@ export function FormHeader({ sticky }: { sticky: Sticky }) {
         { name: "address", title: "Customer Info" },
         // { name: "info", title: "Customer Info" },
     ];
-    const isOld = dayjs("12/18/2024").diff(
-        dayjs(zus.metaData.createdAt),
-        "days"
-    );
+
     function isActive(tab) {
         return (!zus.currentTab && tab.default) || zus.currentTab == tab.name;
     }

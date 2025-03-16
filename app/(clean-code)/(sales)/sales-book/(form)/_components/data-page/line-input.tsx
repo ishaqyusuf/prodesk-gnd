@@ -18,7 +18,6 @@ import { Label } from "@/components/ui/label";
 import { useMemo } from "react";
 import { LabelInput } from "@/components/label-input";
 import { NumberInput } from "@/components/currency-input";
-import { SelectIcon } from "@radix-ui/react-select";
 
 interface LineInputProps {
     name: FieldPath<SalesFormZusData>;

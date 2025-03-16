@@ -18,12 +18,20 @@ import { cn } from "@/lib/utils";
 import { FormFooter } from "./form-footer";
 import { AddressTab } from "./data-page/address-tab";
 import CustomerProfileUpdateModal from "@/components/modals/customer-profile-update-modal";
+import { SalesFormClient } from "@/components/forms/sales-form/sales-form";
+import { useMediaQuery } from "react-responsive";
+import { screens } from "@/lib/responsive";
 
 interface FormClientProps {
     data: GetSalesBookForm;
 }
 
-export function FormClient({ data }: FormClientProps) {
+export function FormClient({ data }) {
+    const isBigScreen = useMediaQuery(screens["2xl"]);
+    return <SalesFormClient data={data} />;
+    // return <FormClientOld data={data} />;
+}
+function FormClientOld({ data }: FormClientProps) {
     const zus = useFormDataStore();
     useEffect(() => {
         zus.init(zhInitializeState(data));

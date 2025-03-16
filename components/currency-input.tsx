@@ -51,7 +51,7 @@ export function NumberInput({
                 className={cn(
                     // className,
                     isPlaceholder && "opacity-0",
-                    "p-0 border-0 h-6 text-xs !bg-transparent border-b border-transparents focus:border-border text-center",
+                    "p-0 border-0 h-6 text-xs !bg-transparent border-b border-transparents focus:border-border",
                     className
                 )}
                 allowNegative={false}

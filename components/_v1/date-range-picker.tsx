@@ -10,8 +10,8 @@ import { DateFormats, formatDate } from "@/lib/use-day";
 import { Menu } from "../(clean-code)/menu";
 
 interface Props {
-    range?: Boolean;
-    hideIcon?: Boolean;
+    range?: boolean;
+    hideIcon?: boolean;
     value?: any;
     setValue?: any;
     format?: DateFormats;

@@ -1,14 +1,8 @@
-import { Icons } from "@/components/_v1/icons";
 import { _modal } from "@/components/common/modal/provider";
-import { Button } from "@/components/ui/button";
-import FormSettingsModal from "./modals/form-settings-modal";
 import { useFormDataStore } from "../_common/_stores/form-data-store";
 import { Sticky, useSticky } from "../_hooks/use-sticky";
 import { cn } from "@/lib/utils";
-import ItemSection from "./item-section";
-import { zhAddItem } from "../_utils/helpers/zus/zus-form-helper";
 import { Label } from "@/components/ui/label";
-import Money from "@/components/_v1/money";
 import { AnimatedNumber } from "@/components/animated-number";
 
 export function FormFooter() {

@@ -22,7 +22,7 @@ export default {
     ],
     paymentOptions: ["Cash", "Credit Card", "Check", "COD", "Zelle"],
     paymentTerms: [
-        textValue("None"),
+        textValue("None", ""),
         textValue("Net10"),
         textValue("Net20"),
         textValue("Net30"),
