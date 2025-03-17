@@ -3,29 +3,18 @@ import FormSettingsModal from "./modals/form-settings-modal";
 import { useFormDataStore } from "../_common/_stores/form-data-store";
 import { Sticky } from "../_hooks/use-sticky";
 import { cn } from "@/lib/utils";
-import {
-    getSalesBookFormUseCase,
-    saveFormUseCase,
-} from "../../../_common/use-case/sales-book-form-use-case";
 import Button from "@/components/common/button";
-import { toast } from "sonner";
-import { zhInitializeState } from "../_utils/helpers/zus/zus-form-helper";
-import Link from "next/link";
-import { buttonVariants } from "@/components/ui/button";
-import dayjs from "dayjs";
-import { useRouter, useSearchParams } from "next/navigation";
 import { Menu } from "@/components/(clean-code)/menu";
 
-import { useMemo } from "react";
 import { openSalesOverview } from "../../../_common/_components/sales-overview-sheet";
 import { MenuIcon } from "lucide-react";
 import { Label } from "@/components/ui/label";
 
 import { DatePicker } from "@/components/_v1/date-range-picker";
-import { SalesEmailMenuItem } from "@/components/sales-email-menu-item";
-import { PrintMenuAction } from "../../../_common/_components/sales-overview-sheet/footer/print.menu.action";
-import { useSalesFormFeatureParams } from "@/hooks/use-sales-form-feature-params";
+
 import { SalesFormSave } from "@/components/forms/sales-form/sales-form-save";
+import { SalesFormEmailMenu } from "@/components/forms/sales-form/sales-form-email-menu";
+import { SalesFormPrintMenu } from "@/components/forms/sales-form/sales-form-print-menu";
 
 export function FormHeader({ sticky }: { sticky: Sticky }) {
     const zus = useFormDataStore();
@@ -40,21 +29,6 @@ export function FormHeader({ sticky }: { sticky: Sticky }) {
     function isActive(tab) {
         return (!zus.currentTab && tab.default) || zus.currentTab == tab.name;
     }
-    const printData = useMemo(() => {
-        return zus.metaData.id
-            ? {
-                  item: {
-                      type: zus.metaData.type,
-                      slug: zus.metaData.salesId,
-                      dispatchList: [],
-                  },
-                  overview: {
-                      type: zus.metaData.type,
-                      orderId: zus.metaData.salesId,
-                  },
-              }
-            : null;
-    }, [zus.metaData]);
 
     return (
         <div
@@ -144,16 +118,11 @@ export function FormHeader({ sticky }: { sticky: Sticky }) {
                     </Menu>
                     <SalesFormSave type="button" />
                 </div>
-                {printData && (
-                    <Menu>
-                        <PrintMenuAction data={printData} />
-                        <PrintMenuAction pdf data={printData} />
-                        <SalesEmailMenuItem
-                            salesId={zus?.metaData?.id}
-                            salesType={zus.metaData.type}
-                        />
-                    </Menu>
-                )}
+
+                <Menu>
+                    <SalesFormPrintMenu />
+                    <SalesFormEmailMenu />
+                </Menu>
             </div>
         </div>
     );

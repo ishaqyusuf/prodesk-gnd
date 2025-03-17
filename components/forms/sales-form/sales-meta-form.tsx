@@ -22,6 +22,10 @@ import { NumericFormatProps } from "react-number-format";
 import { SalesCustomerForm } from "./sales-customer-form";
 import { Menu } from "@/components/(clean-code)/menu";
 import { Icons } from "@/components/_v1/icons";
+import { SalesFormSave } from "./sales-form-save";
+import { SalesFormPrintMenu } from "./sales-form-print-menu";
+import { SalesFormEmailMenu } from "./sales-form-email-menu";
+import { openSalesOverview } from "@/app/(clean-code)/(sales)/_common/_components/sales-overview-sheet";
 
 export function SalesMetaForm({}) {
     const zus = useFormDataStore();
@@ -57,11 +61,20 @@ export function SalesMetaForm({}) {
                 <div className="flex-1"></div>
                 <div>
                     <Menu>
-                        <Menu.Item Icon={Icons.save}>Save</Menu.Item>
-                        <Menu.Item Icon={Icons.customerService}>
+                        {/* <Menu.Item Icon={Icons.save}>Save</Menu.Item> */}
+                        <SalesFormSave type="menu" />
+                        <Menu.Item
+                            onClick={() => {
+                                openSalesOverview({
+                                    salesId: zus.metaData.id,
+                                });
+                            }}
+                            Icon={Icons.customerService}
+                        >
                             Overview
                         </Menu.Item>
-                        <Menu.Item Icon={Icons.print}>Print</Menu.Item>
+                        <SalesFormPrintMenu />
+                        <SalesFormEmailMenu />
                         <Menu.Item Icon={Icons.copy}>Copy</Menu.Item>
                         <Menu.Item Icon={Icons.move2}>Move to</Menu.Item>
                         <Menu.Item Icon={Icons.settings}>Settings</Menu.Item>

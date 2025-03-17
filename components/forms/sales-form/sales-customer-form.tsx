@@ -29,6 +29,7 @@ import {
 } from "../customer-form";
 import { getCustomerFormAction } from "@/actions/get-customer-form";
 import { SettingsClass } from "@/app/(clean-code)/(sales)/sales-book/(form)/_utils/helpers/zus/settings-class";
+import { findCustomerIdFromBilling } from "@/actions/find-customer-id-from-billing";
 export function SalesCustomerForm() {
     const zus = useFormDataStore();
     const md = zus.metaData;
@@ -36,6 +37,15 @@ export function SalesCustomerForm() {
     useEffect(() => {
         setTimeout(() => {
             if (md.customer?.id) onCustomerSelect(md?.customer?.id, false);
+            else {
+                if (md.bad) {
+                    findCustomerIdFromBilling(md.bad).then((customerId) => {
+                        console.log(customerId);
+                        // return;
+                        if (customerId) onCustomerSelect(customerId, false);
+                    });
+                }
+            }
         }, 250);
     }, []);
     const [customer, setCustomer] = useState<CustomerFormData>(null);

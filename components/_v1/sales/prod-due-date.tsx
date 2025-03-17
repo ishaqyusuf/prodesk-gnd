@@ -13,8 +13,8 @@ export default function ProductionDueDate({
     hideIcon,
 }: {
     data: ISalesOrder;
-    editable?: Boolean;
-    hideIcon?: Boolean;
+    editable?: boolean;
+    hideIcon?: boolean;
 }) {
     const [date, setDate] = useState(data.prodDueDate);
     if (!editable) return <p>{formatDate(date)}</p>;
