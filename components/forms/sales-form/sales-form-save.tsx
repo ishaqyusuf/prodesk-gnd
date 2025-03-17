@@ -15,11 +15,11 @@ interface Props {
     and?: "default" | "close" | "new";
 }
 export function SalesFormSave({ type = "button", and }: Props) {
+    const searchParams = useSearchParams();
     const zus = useFormDataStore();
+    const router = useRouter();
+    const newInterfaceQuery = useSalesFormFeatureParams();
     async function save(action: "new" | "close" | "default" = "default") {
-        const searchParams = useSearchParams();
-        const router = useRouter();
-        const newInterfaceQuery = useSalesFormFeatureParams();
         const { kvFormItem, kvStepForm, metaData, sequence } = zus;
         const restoreMode = searchParams.get("restoreMode") != null;
 
