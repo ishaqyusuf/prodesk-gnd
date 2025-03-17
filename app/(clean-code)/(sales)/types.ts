@@ -480,6 +480,7 @@ export interface SalesFormItem {
 }
 export interface SalesFormFields {
     saveAction?: "new" | "close" | "default";
+    newFeature?: boolean;
     metaData?: {
         salesRepId;
         type: SalesType;

@@ -24,6 +24,8 @@ import { Label } from "@/components/ui/label";
 import { DatePicker } from "@/components/_v1/date-range-picker";
 import { SalesEmailMenuItem } from "@/components/sales-email-menu-item";
 import { PrintMenuAction } from "../../../_common/_components/sales-overview-sheet/footer/print.menu.action";
+import { useSalesFormFeatureParams } from "@/hooks/use-sales-form-feature-params";
+import { SalesFormSave } from "@/components/forms/sales-form/sales-form-save";
 
 export function FormHeader({ sticky }: { sticky: Sticky }) {
     const zus = useFormDataStore();
@@ -37,14 +39,6 @@ export function FormHeader({ sticky }: { sticky: Sticky }) {
 
     function isActive(tab) {
         return (!zus.currentTab && tab.default) || zus.currentTab == tab.name;
-    }
-    async function refetchData() {
-        if (!zus.metaData.salesId) return;
-        const data = await getSalesBookFormUseCase({
-            type: zus.metaData.type,
-            slug: zus.metaData.salesId,
-        });
-        zus.init(zhInitializeState(data));
     }
     const printData = useMemo(() => {
         return zus.metaData.id
@@ -61,55 +55,7 @@ export function FormHeader({ sticky }: { sticky: Sticky }) {
               }
             : null;
     }, [zus.metaData]);
-    const searchParams = useSearchParams();
-    const router = useRouter();
-    async function save(action: "new" | "close" | "default" = "default") {
-        const { kvFormItem, kvStepForm, metaData, sequence } = zus;
-        const restoreMode = searchParams.get("restoreMode") != null;
 
-        const resp = await saveFormUseCase(
-            {
-                kvFormItem,
-                kvStepForm,
-                metaData,
-                sequence,
-                saveAction: action,
-            },
-            zus.oldFormState,
-            {
-                restoreMode,
-                allowRedirect: true,
-            }
-        );
-        switch (action) {
-            case "close":
-                router.push(`/sales-book/${metaData.type}s`);
-                break;
-            case "default":
-                if (resp.redirectTo) {
-                    console.log(resp.redirectTo);
-
-                    router.push(resp.redirectTo);
-                }
-                break;
-            case "new":
-                router.push(`/sales-book/create-${metaData.type}`);
-        }
-        // console.log({ resp });
-        // return;
-        if (!metaData.debugMode) {
-            await refetchData();
-            if (resp.data?.error) toast.error(resp.data?.error);
-            else {
-                toast.success("Saved", {
-                    closeButton: true,
-                });
-            }
-        } else {
-            toast.info("Debug mode");
-        }
-        // if(resp.redirectTo)
-    }
     return (
         <div
             style={
@@ -184,25 +130,19 @@ export function FormHeader({ sticky }: { sticky: Sticky }) {
                 </Button>
                 <div className="flex">
                     <Menu Icon={MenuIcon}>
-                        <Menu.Item onClick={() => save("close")}>
+                        <SalesFormSave type="menu" and="close" />
+                        <SalesFormSave type="menu" and="new" />
+                        {/* <Menu.Item onClick={() => save("close")}>
                             Save & Close
                         </Menu.Item>
                         <Menu.Item onClick={() => save("new")}>
                             Save & New
-                        </Menu.Item>
+                        </Menu.Item> */}
                         <Menu.Item>Copy</Menu.Item>
                         <Menu.Item disabled>Move To Sales</Menu.Item>
                         <Menu.Item disabled>Move To Quotes</Menu.Item>
                     </Menu>
-                    <Button
-                        icon="save"
-                        size="xs"
-                        action={save}
-                        variant="default"
-                    >
-                        {/* <Icons.save className="size-4 mr-4" /> */}
-                        <span className="">Save</span>
-                    </Button>
+                    <SalesFormSave type="button" />
                 </div>
                 {printData && (
                     <Menu>

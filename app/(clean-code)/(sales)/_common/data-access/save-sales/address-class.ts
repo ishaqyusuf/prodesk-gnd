@@ -8,6 +8,13 @@ export class AddressClass {
     constructor(public ctx: SaveSalesClass) {}
 
     public async saveAddress() {
+        if (this.ctx?.form?.newFeature) {
+            const md = this.ctx.form.metaData;
+            this.ctx.data.billingAddressId = md.billing?.id;
+            this.ctx.data.shippingAddressId = md?.shipping?.id;
+            this.ctx.data.customerId = md?.customer?.id;
+            return;
+        }
         const data = this.checkAddressUpdate();
 
         if (data) {

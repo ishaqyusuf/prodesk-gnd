@@ -28,16 +28,19 @@ export function SalesMetaForm({}) {
     const md = zus.metaData;
     const tabs = [
         "summary",
+        "transactions",
+        "customer info",
         // , "customer"
     ];
     const [tab, setTab] = useState(md?.id ? "summary" : "summary");
     return (
         <div className="">
             <div className="border-b flex">
-                {tabs.map((_tab) => (
+                {tabs.map((_tab, ti) => (
                     <Button
                         key={_tab}
                         variant="ghost"
+                        disabled={ti != 0}
                         onClick={(e) => {
                             setTab(_tab);
                         }}
@@ -131,7 +134,7 @@ function SummaryTab({}) {
                 </LineContainer>
                 <LineContainer
                     label={
-                        <div className="col-span-3 flex items-center justify-end">
+                        <div className="col-span-3 flex items-center justify-end border-b hover:bg-muted-foreground/30">
                             <Select
                                 name="metaData.tax.taxCode"
                                 options={taxList}
@@ -158,7 +161,7 @@ function SummaryTab({}) {
                 </LineContainer>
                 <LineContainer
                     label={
-                        <div className="col-span-3 flex items-center justify-end">
+                        <div className="col-span-3 flex items-center justify-end border-b hover:bg-muted-foreground/30">
                             <Select
                                 name="metaData.paymentMethod"
                                 options={salesData.paymentOptions}

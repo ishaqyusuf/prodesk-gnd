@@ -28,13 +28,35 @@ import {
     customerFormStaticCallbacks,
 } from "../customer-form";
 import { getCustomerFormAction } from "@/actions/get-customer-form";
+import { SettingsClass } from "@/app/(clean-code)/(sales)/sales-book/(form)/_utils/helpers/zus/settings-class";
 export function SalesCustomerForm() {
     const zus = useFormDataStore();
     const md = zus.metaData;
+    const setting = useMemo(() => new SettingsClass(), []);
+    useEffect(() => {
+        setTimeout(() => {
+            if (md.customer?.id) onCustomerSelect(md?.customer?.id, false);
+        }, 250);
+    }, []);
     const [customer, setCustomer] = useState<CustomerFormData>(null);
-    const onCustomerSelect = (customerId) => {
+    const onCustomerSelect = (customerId, resetSalesData = true) => {
         getCustomerFormAction(customerId).then((resp) => {
             setCustomer(resp);
+            zus.dotUpdate("metaData.customer.id", customerId);
+            zus.dotUpdate("metaData.billing.id", resp?.addressId);
+            if (resetSalesData) {
+                zus.dotUpdate("metaData.shipping.id", resp?.addressId);
+                zus.dotUpdate(
+                    "metaData.salesProfileId",
+                    Number(resp?.profileId)
+                );
+                zus.dotUpdate("metaData.tax.taxCode", resp?.taxCode);
+                zus.dotUpdate("metaData.paymentTerm", resp?.netTerm);
+                setting.taxCodeChanged();
+                setTimeout(() => {
+                    setting.calculateTotalPrice();
+                }, 100);
+            }
         });
     };
     customerFormStaticCallbacks.created = onCustomerSelect;
@@ -43,13 +65,18 @@ export function SalesCustomerForm() {
         <div className="grid sm:grid-cols-2 font-mono gap-4 sm:gap-8">
             <div className="col-span-2 p-4">
                 {!customer ? (
-                    <SelectCustomer onSelect={onCustomerSelect}>
-                        <Label className="cursor-pointer">
+                    <SelectCustomer
+                        onSelect={(e) => onCustomerSelect(e.customerId)}
+                    >
+                        <Button variant="ghost" className="cursor-pointer">
                             Select Customer...
-                        </Label>
+                        </Button>
                     </SelectCustomer>
                 ) : (
                     <div className="text-sm text-muted-foreground relative">
+                        <div className="">
+                            <span>Customer Data</span>
+                        </div>
                         <p>{customer?.name}</p>
                         <p>{customer?.phoneNo}</p>
                         <p>
@@ -58,10 +85,13 @@ export function SalesCustomerForm() {
                         <p>{customer?.email}</p>
                         <p>{/* {customer?.} */}</p>
                         <div className="absolute flex items-center -mr-5 top-0 right-0">
-                            <SelectCustomer onSelect={onCustomerSelect}>
-                                <Label className="cursor-pointer">Change</Label>
+                            <SelectCustomer
+                                onSelect={(e) => onCustomerSelect(e.customerId)}
+                            >
+                                <Button size="xs" variant="link">
+                                    <Icons.Search className="size-4" />
+                                </Button>
                             </SelectCustomer>
-
                             <Button
                                 onClick={() => {
                                     setParams({
@@ -96,7 +126,7 @@ function SelectCustomer({ children, onSelect }) {
     const { params, setParams } = useCreateCustomerParams();
     return (
         <Popover open={open} onOpenChange={setOpen}>
-            <PopoverTrigger asChild>
+            <PopoverTrigger>
                 {children}
                 {/* <Button
                     disabled={disabled}

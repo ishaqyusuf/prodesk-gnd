@@ -1,5 +1,6 @@
 # ...
 # MON, MAR 17
+- system backdoor to see all activities going on
 - 
 # SAT, MAR 15
     - new sales form info page
