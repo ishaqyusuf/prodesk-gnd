@@ -1,4 +1,3 @@
-import UserAccountUpdateRequiredModal from "@/components/modals/user-account-update-required-modal";
 import { ContentLayout } from "../../../components/(clean-code)/content-layout";
 import SidebarLayout from "../../../components/(clean-code)/side-bar-layout";
 import BackwardCompat from "./_backward-compat";
@@ -7,6 +6,7 @@ import { SalesPreviewModal } from "@/components/modals/sales-preview-modal";
 import { SalesQuickAction } from "@/components/sales-quick-action";
 
 import SalesOverviewSheet from "@/components/sheets/sales-overview-sheet";
+import { CustomerCreateSheet } from "@/components/sheets/customer-create-sheet";
 
 export default async function Layout({ children }) {
     // await fixPaymentMethod();
@@ -20,6 +20,7 @@ export default async function Layout({ children }) {
             <CustomerOverviewSheet />
             <SalesPreviewModal />
             <SalesOverviewSheet />
+            <CustomerCreateSheet />
         </SidebarLayout>
     );
 }

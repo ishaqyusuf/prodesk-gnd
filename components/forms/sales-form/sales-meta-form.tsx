@@ -26,8 +26,11 @@ import { Icons } from "@/components/_v1/icons";
 export function SalesMetaForm({}) {
     const zus = useFormDataStore();
     const md = zus.metaData;
-    const tabs = ["summary", "customer"];
-    const [tab, setTab] = useState(md?.id ? "summary" : "customer");
+    const tabs = [
+        "summary",
+        // , "customer"
+    ];
+    const [tab, setTab] = useState(md?.id ? "summary" : "summary");
     return (
         <div className="">
             <div className="border-b flex">
@@ -39,7 +42,7 @@ export function SalesMetaForm({}) {
                             setTab(_tab);
                         }}
                         className={cn(
-                            "capitalize font-mono hover:bg-transparent rounded-none border-b-2 uppercase border-transparent",
+                            "font-mono hover:bg-transparent rounded-none border-b-2 uppercase border-transparent",
                             tab == _tab
                                 ? "border-b rounded-none border-primary"
                                 : "text-muted-foreground/90 hover:text-muted-foreground"
@@ -72,10 +75,14 @@ function SummaryTab({}) {
     const setting = useMemo(() => new SettingsClass(), []);
     const profiles = setting.salesProfiles();
     const taxList = setting.taxList();
-    const tabs = ["summary", "customer"];
-    const [tab, setTab] = useState(md?.id ? "summary" : "customer");
+    function calculateTotal() {
+        setting.calculateTotalPrice();
+    }
     return (
         <div className="">
+            <div className="min-h-[20vh] border-b">
+                <SalesCustomerForm />
+            </div>
             <div className="grid gap-1">
                 <Input
                     label="Date"
@@ -180,18 +187,21 @@ function SummaryTab({}) {
                     name="metaData.pricing.labour"
                     value={md.pricing?.labour}
                     numberProps={{ prefix: "$" }}
+                    onChange={calculateTotal}
                 />
                 <Input
                     label="Delivery Cost ($)"
                     name="metaData.pricing.delivery"
                     value={md.pricing?.delivery}
                     numberProps={{ prefix: "$" }}
+                    onChange={calculateTotal}
                 />
                 <Input
                     label="Sales Discount ($)"
                     name="metaData.pricing.discount"
                     value={md.pricing?.discount}
                     numberProps={{ prefix: "$" }}
+                    onChange={calculateTotal}
                 />
                 <LineContainer label="Total">
                     <div className="text-right">
@@ -210,8 +220,9 @@ interface InputProps {
     numberProps?: NumericFormatProps;
     lg?: boolean;
     readOnly?: boolean;
+    onChange?;
 }
-function Input({ value, label, name, lg, ...props }: InputProps) {
+function Input({ value, label, name, lg, onChange, ...props }: InputProps) {
     const zus = useFormDataStore();
     return (
         <LineContainer lg={lg} label={label}>
@@ -223,6 +234,7 @@ function Input({ value, label, name, lg, ...props }: InputProps) {
                         value={value as any}
                         setValue={(e) => {
                             zus.dotUpdate(name, e);
+                            onChange?.(e);
                         }}
                     />
                 </>
@@ -234,9 +246,8 @@ function Input({ value, label, name, lg, ...props }: InputProps) {
                     readOnly={props.readOnly}
                     onValueChange={(e) => {
                         const val = e.floatValue || null;
-                        console.log([val]);
-
                         zus.dotUpdate(name, val);
+                        onChange?.(val);
                     }}
                 />
             ) : (
@@ -255,16 +266,18 @@ function LineContainer({ label, lg = false, className = "", children }) {
     return (
         <div
             className={cn(
-                "uppercase font-mono items-center  gap-2",
+                "uppercase font-mono items-center gap-4",
                 label && "grid grid-cols-5"
             )}
         >
-            {!label ||
-                (typeof label === "string" ? (
-                    <Label className="text-right col-span-3">{label}:</Label>
-                ) : (
-                    label
-                ))}
+            <div className="col-span-3 flex justify-end text-black/70">
+                {!label ||
+                    (typeof label === "string" ? (
+                        <Label className="">{label}:</Label>
+                    ) : (
+                        label
+                    ))}
+            </div>
             <div className={cn(lg && "col-span-2")}>{children}</div>
         </div>
     );

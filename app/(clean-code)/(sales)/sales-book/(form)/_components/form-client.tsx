@@ -21,21 +21,29 @@ import CustomerProfileUpdateModal from "@/components/modals/customer-profile-upd
 import { SalesFormClient } from "@/components/forms/sales-form/sales-form";
 import { useMediaQuery } from "react-responsive";
 import { screens } from "@/lib/responsive";
+import { useSalesFormFeatureParams } from "@/hooks/use-sales-form-feature-params";
 
 interface FormClientProps {
     data: GetSalesBookForm;
 }
 
 export function FormClient({ data }) {
-    const isBigScreen = useMediaQuery(screens["2xl"]);
-    return <SalesFormClient data={data} />;
-    // return <FormClientOld data={data} />;
-}
-function FormClientOld({ data }: FormClientProps) {
     const zus = useFormDataStore();
     useEffect(() => {
         zus.init(zhInitializeState(data));
     }, []);
+    const feature = useSalesFormFeatureParams();
+
+    const Component = feature?.params?.newInterface
+        ? SalesFormClient
+        : FormClientOld;
+
+    return <Component data={data} />;
+    // return <FormClientOld data={data} />;
+}
+function FormClientOld({ data }: FormClientProps) {
+    const zus = useFormDataStore();
+
     const sticky = useSticky((bv, pv, { top, bottom }) => {
         return top < 100;
     });

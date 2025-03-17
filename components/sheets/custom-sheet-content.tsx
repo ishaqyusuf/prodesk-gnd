@@ -16,7 +16,7 @@ const sheetContentVariant = cva("flex flex-col h-screen w-full ", {
         size: {
             xl: "sm:max-w-xl",
             default: "",
-            lg: "",
+            lg: "sm:max-w-lg",
         },
     },
 });

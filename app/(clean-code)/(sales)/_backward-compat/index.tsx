@@ -8,6 +8,7 @@ import HtpDoors from "./hpt-doors";
 import DoorPriceHarvest from "./door-price-harvest";
 import Customers from "./customers";
 import JanSalesStat from "./january-sales-stats";
+import FixCustomerTaxProfile from "./fix-customer-tax-profiles";
 
 export default function BackwardCompat({}) {
     return (
@@ -19,6 +20,7 @@ export default function BackwardCompat({}) {
                     <DoorPriceHarvest />
                     <Customers />
                     <JanSalesStat />
+                    <FixCustomerTaxProfile />
                 </Menu>
             </Portal>
         </DevOnly>

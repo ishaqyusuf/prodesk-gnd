@@ -8,6 +8,8 @@ interface Props {
     onSuccess?;
     onError?;
     transform?;
+    deps?;
+    wait?;
 }
 export default function useEffectLoader<T extends (...args: any) => any>(
     fn: T,
@@ -17,18 +19,22 @@ export default function useEffectLoader<T extends (...args: any) => any>(
     const [data, setData] = useState<DataType>();
     const [ready, setReady] = useState(false);
     const [refreshToken, setRefreshToken] = useState(null);
-    useEffect(() => {
-        load();
-    }, []);
-    async function load(r = false) {
-        if (!fn) return;
-        const res = await fn();
 
+    useEffect(() => {
+        setTimeout(() => {
+            load();
+        }, props.wait || 0);
+    }, props.deps || []);
+    async function load(r = false) {
+        if (!fn) {
+            return;
+        }
         (fn as any)()?.then((res) => {
             setData(res);
             setReady(true);
             if (r) setRefreshToken(generateRandomString());
             props.onSuccess?.(res);
+            console.log(res);
         });
     }
     return {

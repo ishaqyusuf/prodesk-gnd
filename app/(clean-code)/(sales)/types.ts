@@ -142,6 +142,9 @@ export type TypedSales = SalesOrders & {
 export interface AddressBookMeta {
     zip_code;
 }
+export type CustomerMeta = {
+    netTerm?: string;
+};
 export type TypedAddressBook = Omit<AddressBooks, "meta"> & {
     meta: AddressBookMeta;
 };
@@ -600,4 +603,9 @@ export type QtyControlByType = {
     [type in QtyControlType]: Omit<Prisma.QtyControlCreateManyInput, "type"> & {
         type: QtyControlType;
     };
+};
+export type CustomerProfileMeta = {
+    net: string;
+    goodUntil: number;
+    taxCode?: string;
 };

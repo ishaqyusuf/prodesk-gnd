@@ -6,7 +6,6 @@ import {
     parseAsStringEnum,
     useQueryStates,
 } from "nuqs";
-import QueryString from "qs";
 import { useOnCloseQuery } from "./use-on-close-query";
 
 export function useCustomerOverviewQuery() {

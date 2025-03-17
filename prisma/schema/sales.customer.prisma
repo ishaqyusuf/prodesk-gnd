@@ -1,30 +1,44 @@
 model Customers {
-    id             Int            @unique @default(autoincrement())
+    id             Int                   @unique @default(autoincrement())
     addressId      Int?
     customerTypeId Int?
-    slug           String?        @unique @db.VarChar(255)
-    walletId       Int?           @unique
-    name           String?        @db.VarChar(255)
-    businessName   String?        @db.VarChar(255)
-    email          String?        @db.VarChar(255)
-    phoneNo        String?        @unique @db.VarChar(255)
-    phoneNo2       String?        @db.VarChar(255)
-    address        String?        @db.Text
-    meta           Json?          @db.Json
-    deletedAt      DateTime?      @db.Timestamp(0)
-    createdAt      DateTime?      @default(now()) @db.Timestamp(0)
-    updatedAt      DateTime?      @updatedAt
+    slug           String?               @unique @db.VarChar(255)
+    walletId       Int?                  @unique
+    name           String?               @db.VarChar(255)
+    businessName   String?               @db.VarChar(255)
+    email          String?               @db.VarChar(255)
+    phoneNo        String?               @unique @db.VarChar(255)
+    phoneNo2       String?               @db.VarChar(255)
+    address        String?               @db.Text
+    meta           Json?                 @db.Json
+    deletedAt      DateTime?             @db.Timestamp(0)
+    createdAt      DateTime?             @default(now()) @db.Timestamp(0)
+    updatedAt      DateTime?             @updatedAt
     salesOrders    SalesOrders[]
-    profile        CustomerTypes? @relation(fields: [customerTypeId], references: [id])
-    addressBooks   AddressBooks[] @relation(name: "addressBooks")
-
+    profile        CustomerTypes?        @relation(fields: [customerTypeId], references: [id])
+    addressBooks   AddressBooks[]        @relation(name: "addressBooks")
+    taxProfiles    CustomerTaxProfiles[]
     // payments       SalesPayments[] @relation()
-    wallet CustomerWallet?
-    auth   DealerAuth?
+    wallet         CustomerWallet?
+    auth           DealerAuth?
 
     @@index([createdAt, deletedAt, name, email, phoneNo])
     @@index([customerTypeId])
     @@index([phoneNo])
+}
+
+model CustomerTaxProfiles {
+    id         Int       @unique @default(autoincrement())
+    customerId Int
+    customer   Customers @relation(fields: [customerId], references: [id])
+    taxCode    String
+    tax        Taxes     @relation(fields: [taxCode], references: [taxCode])
+    deletedAt  DateTime? @db.Timestamp(0)
+    createdAt  DateTime? @default(now()) @db.Timestamp(0)
+    updatedAt  DateTime? @updatedAt
+
+    @@unique([taxCode, customerId, deletedAt])
+    @@index([customerId])
 }
 
 model DealerAuth {

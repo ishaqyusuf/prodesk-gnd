@@ -18,13 +18,27 @@ import { SearchAddressType } from "@/app/(clean-code)/(sales)/_common/data-acces
 import Button from "@/components/common/button";
 import { Icons } from "@/components/_v1/icons";
 import { CustomerHistory } from "./customer-history";
+import { useCreateCustomerParams } from "@/hooks/use-create-customer-params";
+import {
+    CustomersListData,
+    getCustomersAction,
+} from "@/actions/cache/get-customers";
+import {
+    CustomerFormData,
+    customerFormStaticCallbacks,
+} from "../customer-form";
+import { getCustomerFormAction } from "@/actions/get-customer-form";
 export function SalesCustomerForm() {
     const zus = useFormDataStore();
     const md = zus.metaData;
-    const [customer, setCustomer] = useState<SearchAddressType>(null);
-    const onCustomerSelect = (customer: SearchAddressType) => {
-        setCustomer(customer);
+    const [customer, setCustomer] = useState<CustomerFormData>(null);
+    const onCustomerSelect = (customerId) => {
+        getCustomerFormAction(customerId).then((resp) => {
+            setCustomer(resp);
+        });
     };
+    customerFormStaticCallbacks.created = onCustomerSelect;
+    const { params, setParams } = useCreateCustomerParams();
     return (
         <div className="grid sm:grid-cols-2 font-mono gap-4 sm:gap-8">
             <div className="col-span-2 p-4">
@@ -38,28 +52,32 @@ export function SalesCustomerForm() {
                     <div className="text-sm text-muted-foreground relative">
                         <p>{customer?.name}</p>
                         <p>{customer?.phoneNo}</p>
-                        <p>{customer?.address1}</p>
+                        <p>
+                            {customer?.address1} {customer.zip_code}
+                        </p>
+                        <p>{customer?.email}</p>
                         <p>{/* {customer?.} */}</p>
                         <div className="absolute flex items-center -mr-5 top-0 right-0">
                             <SelectCustomer onSelect={onCustomerSelect}>
                                 <Label className="cursor-pointer">Change</Label>
                             </SelectCustomer>
 
-                            <Button size="xs" variant="link">
+                            <Button
+                                onClick={() => {
+                                    setParams({
+                                        customerId: customer.id,
+                                        customerForm: true,
+                                    });
+                                }}
+                                size="xs"
+                                variant="link"
+                            >
                                 <Icons.edit className="size-3" />
                             </Button>
                         </div>
                     </div>
                 )}
             </div>
-
-            <div className="col-span-2">
-                <Label>Billing Address</Label>
-            </div>
-            <div className="col-span-2">
-                <Label>Shipping Address</Label>
-            </div>
-            {customer?.id && <CustomerHistory customerId={customer?.id} />}
         </div>
     );
 }
@@ -68,13 +86,14 @@ function SelectCustomer({ children, onSelect }) {
     const [q, setSearch] = useState("");
     const debouncedQuery = useDebounce(q, 800);
     const [open, setOpen] = useState(false);
-    const [result, setResult] = useState<AddressSearchType[]>([]);
+    const [result, setResult] = useState<CustomersListData[]>([]);
     useEffect(() => {
         if (debouncedQuery)
-            searchAddressUseCase(debouncedQuery).then((res) => {
+            getCustomersAction(debouncedQuery).then((res) => {
                 setResult(res || []);
             });
     }, [debouncedQuery]);
+    const { params, setParams } = useCreateCustomerParams();
     return (
         <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
@@ -102,7 +121,14 @@ function SelectCustomer({ children, onSelect }) {
                 </Command>
                 <ScrollArea className="max-h-[30vh] max-w-[400px] overflow-auto">
                     <div className="divide-y">
-                        <button className="w-full px-3 py-2 text-left hover:bg-accent hover:text-accent-foreground space-y-1">
+                        <button
+                            onClick={(e) => {
+                                setParams({
+                                    customerForm: true,
+                                });
+                            }}
+                            className="w-full px-3 py-2 text-left hover:bg-accent hover:text-accent-foreground space-y-1"
+                        >
                             <Label className="text-sm font-medium text-primary truncate">
                                 Create Customer
                             </Label>
@@ -120,17 +146,18 @@ function SelectCustomer({ children, onSelect }) {
                                     {address.name}
                                 </Label>
                                 <div className="text-xs text-muted-foreground truncate">
-                                    {address.phoneAddress}
+                                    {address.phone}
+                                    {address.address}
                                 </div>
                                 <div className="text-xs text-muted-foreground flex flex-wrap gap-1">
-                                    {address.taxProfile?.title && (
+                                    {address.taxName && (
                                         <span className="px-1 py-0.5 bg-muted rounded text-muted-foreground">
-                                            {address.taxProfile.title}
+                                            {address.taxName}
                                         </span>
                                     )}
-                                    {address.salesProfile?.name && (
+                                    {address.profileName && (
                                         <span className="px-1 py-0.5 bg-muted rounded text-muted-foreground">
-                                            {address.salesProfile.name}
+                                            {address.profileName}
                                         </span>
                                     )}
                                 </div>

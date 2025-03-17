@@ -194,3 +194,11 @@ button.midday,
 input.midday {
     @apply focus:ring-transparent focus:rounded-none focus:border-b;
 }
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+
+.scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}

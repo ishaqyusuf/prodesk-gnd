@@ -14,6 +14,9 @@ export const ROUTE_VERSIONS = {
     },
 };
 export const Tags = {
+    salesCustomers: "sales_customers",
+    salesCustomerProfiles: "sales_customer_profiles",
+    salesTaxCodes: "sales_tax_codes",
     shelfProducts: "shelf_products",
     shelfCategories: "shelf-categories",
 };

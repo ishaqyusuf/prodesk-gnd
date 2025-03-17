@@ -552,14 +552,15 @@ model SalesTaxes {
 }
 
 model Taxes {
-    title      String
-    taxCode    String       @unique
-    percentage Float        @default(0.00)
-    taxOn      String       @default("total") //total, first 50000 
-    createdAt  DateTime?    @default(now()) @db.Timestamp(0)
-    updatedAt  DateTime?    @updatedAt
-    deletedAt  DateTime?    @db.Timestamp(0)
-    salesTaxes SalesTaxes[]
+    title               String
+    taxCode             String                @unique
+    percentage          Float                 @default(0.00)
+    taxOn               String                @default("total") //total, first 50000 
+    createdAt           DateTime?             @default(now()) @db.Timestamp(0)
+    updatedAt           DateTime?             @updatedAt
+    deletedAt           DateTime?             @db.Timestamp(0)
+    salesTaxes          SalesTaxes[]
+    customerTaxProfiles CustomerTaxProfiles[]
 }
 
 model SalesStat {

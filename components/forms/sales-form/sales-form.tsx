@@ -9,13 +9,19 @@ import Button from "@/components/common/button";
 import { cn } from "@/lib/utils";
 import { useEffect } from "react";
 import { SalesMetaForm } from "./sales-meta-form";
+import useEffectLoader from "@/lib/use-effect-loader";
 
 export function SalesFormClient({ data }) {
     const zus = useFormDataStore();
-    useEffect(() => {
-        zus.init(zhInitializeState(data));
-        zus.dotUpdate("currentTab", "invoice");
-    }, []);
+    useEffectLoader(
+        () => {
+            zus.dotUpdate("currentTab", "invoice");
+        },
+        {
+            wait: 200,
+        }
+    );
+
     if (!zus.formStatus) return <></>;
     return (
         <div className="xl:flex w-full xl:gap-4 p-4 xl:p-8 min-h-screen bg-white">

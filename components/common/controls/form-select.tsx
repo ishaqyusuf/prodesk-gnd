@@ -32,7 +32,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 
 export interface FormSelectProps<T> {
     label?;
-    placeholder?;
+    placeholder?: string;
     options?: T[];
     SelectItem?({ option }: { option: T });
     Item?({ option }: { option: T });
