@@ -52,6 +52,8 @@ export function CustomerProfileTaxUpdatePrompt({}) {
                 }
             }
         }
+        console.log({ updates });
+
         return updates;
     }, [customerId, profileId, taxCode]);
     const [resolved, setResolved] = useState<{

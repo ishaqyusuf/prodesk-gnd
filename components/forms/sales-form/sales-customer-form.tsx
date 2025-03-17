@@ -10,11 +10,7 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover";
-import {
-    AddressSearchType,
-    searchAddressUseCase,
-} from "@/app/(clean-code)/(sales)/_common/use-case/sales-address-use-case";
-import { SearchAddressType } from "@/app/(clean-code)/(sales)/_common/data-access/sales-address-dta";
+
 import Button from "@/components/common/button";
 import { Icons } from "@/components/_v1/icons";
 import { useCreateCustomerParams } from "@/hooks/use-create-customer-params";
