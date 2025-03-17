@@ -17,7 +17,6 @@ import {
 import { SearchAddressType } from "@/app/(clean-code)/(sales)/_common/data-access/sales-address-dta";
 import Button from "@/components/common/button";
 import { Icons } from "@/components/_v1/icons";
-import { CustomerHistory } from "./customer-history";
 import { useCreateCustomerParams } from "@/hooks/use-create-customer-params";
 import {
     CustomersListData,

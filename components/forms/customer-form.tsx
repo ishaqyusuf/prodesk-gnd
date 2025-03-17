@@ -23,8 +23,6 @@ import { useAction } from "next-safe-action/hooks";
 import { createCustomerAction } from "@/actions/create-customer-action";
 import { useCreateCustomerParams } from "@/hooks/use-create-customer-params";
 import { getTaxProfilesAction } from "@/actions/cache/get-tax-profiles";
-import { useAsyncMemo } from "use-async-memo";
-import { generateRandomString } from "@/lib/utils";
 import { toast } from "sonner";
 
 export type CustomerFormData = z.infer<typeof createCustomerSchema>;
