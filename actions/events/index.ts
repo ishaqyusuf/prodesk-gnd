@@ -7,8 +7,10 @@ import { z } from "zod";
 import { SendComposedEmailSchema } from "@/trigger/schema";
 import { sendComposedEmail } from "@/trigger/tasks/email/send-composed-email";
 import { salesUpdatedEvent } from "./sales-updated-event";
+import { checkSiteActionNotificationAction } from "../check-site-action-notification";
 
 export async function triggerEvent(event: EventTypes, id) {
+    if ((await checkSiteActionNotificationAction(event)) == false) return;
     const composed = await (async () => {
         switch (event) {
             case "salesCreated":
