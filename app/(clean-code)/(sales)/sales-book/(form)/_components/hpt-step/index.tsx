@@ -117,7 +117,12 @@ function DoorSizeTable({ door }: DoorSizeTable) {
                                 <TableHead className="w-28">Swing</TableHead>
                             )}
                             {ctx.config.noHandle ? (
-                                <TableHead className="w-28">Qty</TableHead>
+                                <TableHead
+                                    className="w-16 text-center"
+                                    align="center"
+                                >
+                                    <span className="">Qty</span>
+                                </TableHead>
                             ) : (
                                 <>
                                     <TableHead className="w-28">Lh</TableHead>
@@ -215,6 +220,7 @@ function DoorSizeRow({ size }: { size }) {
                         cls={ctx.ctx}
                         name="qty.total"
                         lineUid={lineUid}
+                        className="w-16 text-center"
                         type="number"
                         valueChanged={valueChanged}
                     />

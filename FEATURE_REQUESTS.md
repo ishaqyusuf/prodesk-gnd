@@ -1,11 +1,21 @@
 # ...
+# TUE, MAR 18
+- sales subscription: select target users and events
+- sales notification
+  - sales created
+  - sales edited
+  - payment applied
+- sales payment check: make check required
+- copy as: show button to open
 # MON, MAR 17
 - system backdoor to see all activities going on
   - email notification
   - subscription page to subscribe for activities to be notified for
   - email footer to unsubscribe for a particular notification
+
 - new feature: add shipping line (shipping: same as billing [change])
 - create dispatch, create batch assignment
+
 # SAT, MAR 15
     - new sales form info page
     - stack it all back to a single page

@@ -1,6 +1,5 @@
 "use server";
 
-import { composeEmailTemplate } from "@/modules/email/emails/composed-email";
 import { salesEventData } from ".";
 import {
     composeStackLine,

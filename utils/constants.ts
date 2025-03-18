@@ -24,5 +24,7 @@ export const Events = {
     salesCreated: "sales_created",
     salesDeleted: "sales_deleted",
     salesUpdated: "sales_updated",
+    paymentApplied: "sales_payment_applied",
+    paymentDeleted: "sales_payment_deleted",
 } as const;
 export type EventTypes = keyof typeof Events;

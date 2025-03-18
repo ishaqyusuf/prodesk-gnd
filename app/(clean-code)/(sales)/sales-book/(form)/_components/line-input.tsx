@@ -6,6 +6,8 @@ import {
 import { GroupFormClass } from "../_utils/helpers/zus/group-form-class";
 import { FieldPath } from "react-hook-form";
 import { Switch } from "@/components/ui/switch";
+import { NumberInput } from "@/components/currency-input";
+import { cn } from "@/lib/utils";
 
 interface LineInputProps {
     lineUid;
@@ -22,6 +24,18 @@ export function LineInput({
 }: LineInputProps & InputProps) {
     // const state = useFormDataStore();
     const value = cls.dotGetGroupItemFormValue(lineUid, name);
+    if (props.type == "number")
+        return (
+            <NumberInput
+                className={cn(props.className)}
+                value={value}
+                onValueChange={(e) => {
+                    let value = e.floatValue || null;
+                    cls.dotUpdateGroupItemFormPath(lineUid, name, value);
+                    valueChanged?.(value);
+                }}
+            />
+        );
     return (
         <Input
             className="h-8 uppercase"
