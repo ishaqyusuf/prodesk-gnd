@@ -13,8 +13,6 @@ export async function createTransactionDta(data: SalesTransaction) {
         const wallet = await getCustomerWalletDta(data.accountNo);
         const saleslist = await getSalesPendingPayments(data.salesIds);
         switch (data.paymentMode) {
-            // case "terminal":
-            //     break;
             case "link":
                 break;
             default:
@@ -25,9 +23,8 @@ export async function createTransactionDta(data: SalesTransaction) {
                     paymentMethod: data.paymentMode,
                     description: data.description,
                     squarePaymentId: data.squarePaymentId,
+                    checkNo: data.checkNo,
                 });
-                console.log(tx.paymentMethod);
-
                 const transactionIds = await Promise.all(
                     saleslist.map(async (orderItem) => {
                         let payAmount =
@@ -50,6 +47,7 @@ export async function createTransactionDta(data: SalesTransaction) {
                                 paymentMethod: data.paymentMode,
                                 transactionId: tx.id,
                                 status: "created",
+                                checkNo: data.checkNo,
                             });
                             return res.id;
                         }
@@ -58,7 +56,8 @@ export async function createTransactionDta(data: SalesTransaction) {
                 await applyPaymentDta(
                     wallet.id,
                     transactionIds.filter(Boolean),
-                    data.paymentMode
+                    data.paymentMode,
+                    data.checkNo
                 );
                 break;
         }
@@ -114,6 +113,7 @@ interface CreateSalesPaymentTxProps {
     transactionId;
     customerId;
     paymentMethod;
+    checkNo?;
     status: SalesPaymentStatus;
 }
 export async function createSalesPaymentTransactionDta({
@@ -123,11 +123,15 @@ export async function createSalesPaymentTransactionDta({
     customerId,
     paymentMethod,
     status = "created",
+    checkNo = null,
 }: CreateSalesPaymentTxProps) {
     const payment = await prisma.salesPayments.create({
         data: {
             amount: amount,
             status: "created" as SalesPaymentStatus,
+            meta: {
+                checkNo,
+            },
             order: {
                 connect: { id: orderId },
             },

@@ -16,11 +16,14 @@ import { toast } from "sonner";
 import { _modal } from "@/components/common/modal/provider";
 import { isProdClient } from "@/lib/is-prod";
 import { revalidateTable } from "@/components/(clean-code)/data-table/use-infinity-data-table";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { createPaymentSchema } from "@/actions/schema";
 
 export type UsePayForm = ReturnType<typeof usePayForm>;
 export const usePayForm = () => {
     const tx = txStore();
     const form = useForm({
+        resolver: zodResolver(createPaymentSchema),
         defaultValues: {
             terminal: null as CreateTerminalPaymentAction["resp"],
             paymentMethod: tx.paymentMethod,
@@ -159,6 +162,7 @@ export const usePayForm = () => {
             salesIds: selections?.map((a) => a.id),
             description: "",
             squarePaymentId: data.terminal?.squarePaymentId,
+            checkNo: data?.checkNo,
         });
         revalidateTable();
         _modal.close();

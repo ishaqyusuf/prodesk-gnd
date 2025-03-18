@@ -9,6 +9,8 @@ import { salesOverviewStore } from "../store";
 import { copySalesUseCase } from "../../../use-case/sales-book-form-use-case";
 import { useRouter } from "next/navigation";
 import { revalidateTable } from "@/components/(clean-code)/data-table/use-infinity-data-table";
+import { salesFormUrl } from "@/utils/sales-utils";
+import { openLink } from "@/lib/open-link";
 
 export function CopyMenuAction({}) {
     const ctx = salesOverviewStore();
@@ -21,12 +23,12 @@ export function CopyMenuAction({}) {
 
         if (result.link) {
             toast.success(`Copied as ${as}`, {
-                // action: {
-                //     label: "open",
-                //     onClick(event) {
-                //         route.push(result.link);
-                //     },
-                // },
+                action: {
+                    label: "edit",
+                    onClick(event) {
+                        openLink(salesFormUrl(as, result.data?.slug), {}, true);
+                    },
+                },
             });
             revalidateTable();
         }

@@ -214,6 +214,7 @@ export type SalesTransaction = {
     salesIds: Number[];
     accountNo: string;
     description: string;
+    checkNo: string;
 };
 export type SalesPaymentType = "square_terminal" | "square_link";
 export type SalesPaymentStatus =

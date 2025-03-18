@@ -7,7 +7,7 @@
   - payment applied
 - sales payment check: make check required
 - copy as: show button to open
-- door price not coming out right.
+<!-- - door price not coming out right. -->
 # MON, MAR 17
 - system backdoor to see all activities going on
   - email notification

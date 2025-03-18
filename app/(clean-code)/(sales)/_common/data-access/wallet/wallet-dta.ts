@@ -22,6 +22,7 @@ export async function fundCustomerWalletDta({
     paymentMethod,
     description,
     squarePaymentId = null,
+    checkNo = null,
 }) {
     const tx = await prisma.customerTransaction.create({
         data: {
@@ -39,6 +40,9 @@ export async function fundCustomerWalletDta({
             },
             paymentMethod,
             description,
+            meta: {
+                checkNo,
+            },
             status: "success" as SalesPaymentStatus,
             // squarePID: squarePaymentId ? squarePaymentId : undefined,
             squarePayment: squarePaymentId
@@ -72,7 +76,12 @@ export async function getWalletBalance(walletId) {
     });
     return sum(tx, "amount");
 }
-export async function applyPaymentDta(walletId, transactionIds, paymentMethod) {
+export async function applyPaymentDta(
+    walletId,
+    transactionIds,
+    paymentMethod,
+    checkNo?
+) {
     const transactions = await prisma.salesPayments.findMany({
         where: {
             id: {
@@ -93,6 +102,9 @@ export async function applyPaymentDta(walletId, transactionIds, paymentMethod) {
             authorId: await authId(),
             paymentMethod,
             status: "success" as SalesPaymentStatus,
+            meta: {
+                checkNo,
+            },
         },
     });
     await prisma.salesPayments.updateMany({

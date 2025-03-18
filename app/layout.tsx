@@ -47,7 +47,6 @@ export default async function RootLayout({
                             <Suspense>
                                 <QueryTabProvider>
                                     {children}
-
                                     <UserAccountUpdateRequiredModal />
                                     <PageAnalytics />
                                 </QueryTabProvider>
