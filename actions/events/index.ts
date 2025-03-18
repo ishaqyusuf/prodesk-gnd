@@ -6,13 +6,15 @@ import { prisma } from "@/db";
 import { z } from "zod";
 import { SendComposedEmailSchema } from "@/trigger/schema";
 import { sendComposedEmail } from "@/trigger/tasks/email/send-composed-email";
+import { salesUpdatedEvent } from "./sales-updated-event";
 
 export async function triggerEvent(event: EventTypes, id) {
     const composed = await (async () => {
         switch (event) {
             case "salesCreated":
-            case "salesUpdated":
                 return await salesCreatedEvent(id);
+            case "salesUpdated":
+                return await salesUpdatedEvent(id);
         }
     })();
     const data: z.infer<typeof SendComposedEmailSchema> = {

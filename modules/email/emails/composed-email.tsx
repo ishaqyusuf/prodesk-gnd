@@ -67,7 +67,7 @@ const RenderStack = ({ stack }) => {
 export const composeEmailTemplate = (props: { emailStack; preview }) => (
     <EmailTemplate {...props} />
 );
-const EmailTemplate = ({ emailStack, preview }) => {
+export const EmailTemplate = ({ emailStack, preview }) => {
     return (
         <Html>
             <Tailwind>

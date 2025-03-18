@@ -16,12 +16,12 @@ import { Footer } from "../components/footer";
 import { SalesType } from "@/app/(clean-code)/(sales)/types";
 
 interface Props {
-    salesRep: string;
-    link: string;
+    salesRep?: string;
+    link?: string;
     paymentLink?: string;
-    customerName;
+    customerName: string;
     type: SalesType;
-    amountDue?;
+    amountDue?: string;
 }
 export const composeSalesEmail = (props: Props) => (
     <SalesInvoiceEmail {...props} />
