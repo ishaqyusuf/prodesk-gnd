@@ -1,7 +1,7 @@
 "use server";
 
 import { prisma } from "@/db";
-import { Tags } from "@/utils/contants";
+import { Tags } from "@/utils/constants";
 import { unstable_cache } from "next/cache";
 
 export async function getShelfCateogriesAction() {

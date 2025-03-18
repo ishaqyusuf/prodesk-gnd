@@ -3,7 +3,7 @@
 import { AddressBookMeta } from "@/app/(clean-code)/(sales)/types";
 import { prisma } from "@/db";
 import { AsyncFnType } from "@/types";
-import { Tags } from "@/utils/contants";
+import { Tags } from "@/utils/constants";
 import { unstable_cache } from "next/cache";
 
 export type CustomersListData = AsyncFnType<typeof getCustomersAction>[number];

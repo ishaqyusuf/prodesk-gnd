@@ -9,6 +9,7 @@ import {
     Section,
     Tailwind,
     Text,
+    Head,
 } from "@react-email/components";
 import { Logo } from "../components/logo";
 import { Footer } from "../components/footer";
@@ -41,7 +42,7 @@ export const SalesInvoiceEmail = ({
     return (
         <Html>
             <Tailwind>
-                <head>
+                <Head>
                     <Font
                         fontFamily="Geist"
                         fallbackFontFamily="Helvetica"
@@ -62,7 +63,7 @@ export const SalesInvoiceEmail = ({
                         fontWeight={500}
                         fontStyle="normal"
                     />
-                </head>
+                </Head>
                 <Preview>{text}</Preview>
                 <Body className="bg-[#fff] my-auto mx-auto font-sans">
                     <Container

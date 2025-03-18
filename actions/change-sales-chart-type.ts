@@ -3,7 +3,7 @@
 import { cookies } from "next/headers";
 import { actionClient } from "./safe-action";
 import { changeSalesChartTypeSchema } from "./schema";
-import { Cookies } from "@/utils/contants";
+import { Cookies } from "@/utils/constants";
 import { addYears } from "date-fns";
 import { revalidateTag } from "next/cache";
 

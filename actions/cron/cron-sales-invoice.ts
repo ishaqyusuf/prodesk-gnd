@@ -1,3 +1,4 @@
+"use server";
 import { SalesType } from "@/app/(clean-code)/(sales)/types";
 import { prisma } from "@/db";
 

@@ -20,3 +20,9 @@ export const Tags = {
     shelfProducts: "shelf_products",
     shelfCategories: "shelf-categories",
 };
+export const Events = {
+    salesCreated: "sales_created",
+    salesDeleted: "sales_deleted",
+    salesUpdated: "sales_updated",
+} as const;
+export type EventTypes = keyof typeof Events;

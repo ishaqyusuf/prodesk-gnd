@@ -9,7 +9,7 @@ import {
 } from "@/app/(clean-code)/(sales)/types";
 import { Prisma } from "@prisma/client";
 import { revalidateTag } from "next/cache";
-import { Tags } from "@/utils/contants";
+import { Tags } from "@/utils/constants";
 
 export const createCustomerAction = actionClient
     .schema(createCustomerSchema)

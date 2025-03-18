@@ -1,3 +1,4 @@
+import { triggerEvent } from "@/actions/events";
 import {
     getSalesBookFormUseCase,
     saveFormUseCase,
@@ -38,6 +39,12 @@ export function SalesFormSave({ type = "button", and }: Props) {
                 allowRedirect: true,
             }
         );
+        const s = resp?.data?.sales;
+        if (s?.updateId) triggerEvent("salesUpdated", s?.id);
+        else triggerEvent("salesCreated", s?.id);
+
+        console.log({ resp });
+
         switch (action) {
             case "close":
                 router.push(`/sales-book/${metaData.type}s`);

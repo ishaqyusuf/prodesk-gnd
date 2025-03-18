@@ -1,7 +1,7 @@
 "use server";
 
 import { prisma } from "@/db";
-import { Tags } from "@/utils/contants";
+import { Tags } from "@/utils/constants";
 import { revalidateTag } from "next/cache";
 
 interface Props {

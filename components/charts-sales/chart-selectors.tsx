@@ -1,4 +1,4 @@
-import { Cookies } from "@/utils/contants";
+import { Cookies } from "@/utils/constants";
 import { cookies } from "next/headers";
 import { ChartType } from "./chart-type";
 

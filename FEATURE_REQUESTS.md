@@ -1,7 +1,8 @@
 # ...
 # MON, MAR 17
 - system backdoor to see all activities going on
-- 
+- new feature: add shipping line (shipping: same as billing [change])
+- create dispatch, create batch assignment
 # SAT, MAR 15
     - new sales form info page
     - stack it all back to a single page

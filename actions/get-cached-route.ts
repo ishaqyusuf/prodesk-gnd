@@ -3,7 +3,7 @@
 import { cookies } from "next/headers";
 import { setCachedRoute } from "./set-cached-route";
 import { redirect } from "next/navigation";
-import { ROUTE_VERSIONS } from "@/utils/contants";
+import { ROUTE_VERSIONS } from "@/utils/constants";
 
 export async function getCachedRoute(name, currentPage: "old" | "new") {
     const r = cookies().get(name)?.value;
