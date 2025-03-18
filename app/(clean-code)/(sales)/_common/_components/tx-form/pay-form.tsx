@@ -117,6 +117,7 @@ export default function PayForm({}) {
                                 </>
                             )}
                             <Button
+                                // disabled={!form.formState}
                                 onClick={async () => {
                                     if (!pm)
                                         tx.dotUpdate(
@@ -129,7 +130,7 @@ export default function PayForm({}) {
                                         else await pay();
                                     }
                                 }}
-                                disabled={!tx.totalPay}
+                                disabled={!form.formState.isValid}
                             >
                                 Pay
                                 <Money className="ml-2" value={amount} />
@@ -145,13 +146,7 @@ function ReceivingPayment({ ctx }: { ctx: UsePayForm }) {
     const paymentStatus = ctx.terminal?.status;
     return (
         <div className="">
-            <div
-                className={cn(
-                    "hidden",
-
-                    "block border shadow-sm rounded p-2"
-                )}
-            >
+            <div className={cn("hidden", "block border shadow-sm rounded p-2")}>
                 <div className="flex items-center gap-4">
                     <div className="flex items-center gap-2">
                         {paymentStatus == "COMPLETED" ? (

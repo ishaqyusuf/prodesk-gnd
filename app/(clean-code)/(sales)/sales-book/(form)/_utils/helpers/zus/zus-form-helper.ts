@@ -21,7 +21,6 @@ export function zhInitializeState(data: GetSalesBookForm, copy = false) {
     // if (copy) {
     //     data.order.id = data.order.slug = data.order.orderId = null;
     // }
-    console.log({ data });
 
     function basePrice(sp) {
         if (!sp) return sp;

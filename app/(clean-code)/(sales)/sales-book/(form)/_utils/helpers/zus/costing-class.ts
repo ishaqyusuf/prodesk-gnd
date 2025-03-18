@@ -95,6 +95,21 @@ export class CostingClass {
         data.dotUpdate(`kvFormItem.${itemUid}.shelfItems.subTotal`, subTotal);
         this.calculateTotalPrice();
     }
+    public groupComponentCost(groupItem, itemUid) {
+        const data = this.setting.zus;
+        let totalBasePrice = 0;
+        Object.entries(data.kvStepForm).map(([k, stepData]) => {
+            if (k.startsWith(`${itemUid}-`)) {
+                totalBasePrice += stepData?.basePrice || 0;
+            }
+        });
+        const ds = dotSet(groupItem);
+        ds.set("pricing.components.basePrice", totalBasePrice);
+        ds.set(
+            "pricing.components.salesPrice",
+            this.calculateSales(totalBasePrice)
+        );
+    }
     public updateComponentCost(
         itemUid = this.setting.itemUid,
         forceUpdate = false
@@ -112,6 +127,7 @@ export class CostingClass {
                 totalBasePrice += stepData?.basePrice || 0;
             }
         });
+
         if (
             ((totalBasePrice ||
                 itemForm?.groupItem?.pricing?.components?.basePrice) &&
@@ -181,6 +197,7 @@ export class CostingClass {
             basePrice: 0,
             salesPrice: 0,
         };
+        this.groupComponentCost(groupItem, itemUid);
         let noHandle = new SettingsClass(
             null,
             itemUid,
@@ -209,8 +226,7 @@ export class CostingClass {
     }
     public getEstimatePricing(groupItem, formData) {
         const cPrice = formData.pricing?.customPrice;
-        console.log(formData.pricing?.customPrice);
-        // if cPrise is not empty string
+
         const pl =
             cPrice || (cPrice == 0 && cPrice !== "")
                 ? cPrice

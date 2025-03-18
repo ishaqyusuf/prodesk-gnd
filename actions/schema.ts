@@ -40,3 +40,4 @@ export const createCustomerSchema = z
             });
         }
     });
+export const createPaymentSchema = z.object({});

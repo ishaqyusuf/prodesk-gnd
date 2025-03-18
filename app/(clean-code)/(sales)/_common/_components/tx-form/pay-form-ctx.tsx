@@ -25,8 +25,8 @@ export const usePayForm = () => {
             terminal: null as CreateTerminalPaymentAction["resp"],
             paymentMethod: tx.paymentMethod,
             amount: tx.totalPay,
-            checkNo: null,
-            deviceId: null,
+            checkNo: undefined,
+            deviceId: undefined,
             enableTip: false,
         },
     });
