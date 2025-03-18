@@ -1,6 +1,6 @@
 // import { SalesType } from "@/app/(clean-code)/(sales)/types";
 import { SalesType } from "@/app/(clean-code)/(sales)/types";
-// import { prisma } from "@/db";
+import { prisma } from "@/db";
 import { schedules } from "@trigger.dev/sdk/v3";
 
 export const salesInvoiceScheduler = schedules.task({
@@ -10,28 +10,28 @@ export const salesInvoiceScheduler = schedules.task({
     run: async (payload, ctx) => {
         if (process.env.NODE_ENV !== "production") return;
         let val: SalesType = "order";
-        // const pendingInvoices = await prisma.salesOrders.findMany({
-        //     where: {
-        //         type: "order" as SalesType,
-        //         amountDue: {
-        //             gt: 0,
-        //         },
-        //     },
-        //     select: {
-        //         id: true,
-        //         customer: {
-        //             select: {
-        //                 phoneNo: true,
-        //                 email: true,
-        //             },
-        //         },
-        //         billingAddress: {
-        //             select: {
-        //                 phoneNo: true,
-        //                 email: true,
-        //             },
-        //         },
-        //     },
-        // });
+        const pendingInvoices = await prisma.salesOrders.findMany({
+            where: {
+                type: "order" as SalesType,
+                amountDue: {
+                    gt: 0,
+                },
+            },
+            select: {
+                id: true,
+                customer: {
+                    select: {
+                        phoneNo: true,
+                        email: true,
+                    },
+                },
+                billingAddress: {
+                    select: {
+                        phoneNo: true,
+                        email: true,
+                    },
+                },
+            },
+        });
     },
 });

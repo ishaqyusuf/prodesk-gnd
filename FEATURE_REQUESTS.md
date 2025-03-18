@@ -1,6 +1,9 @@
 # ...
 # MON, MAR 17
 - system backdoor to see all activities going on
+  - email notification
+  - subscription page to subscribe for activities to be notified for
+  - email footer to unsubscribe for a particular notification
 - new feature: add shipping line (shipping: same as billing [change])
 - create dispatch, create batch assignment
 # SAT, MAR 15

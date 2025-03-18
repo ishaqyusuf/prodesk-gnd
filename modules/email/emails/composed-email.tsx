@@ -11,26 +11,38 @@ import {
 } from "@react-email/components";
 import { Footer } from "../components/footer";
 import { Logo } from "../components/logo";
-
+import { cva } from "class-variance-authority";
+import { cn } from "@/lib/utils";
+const variants = cva("", {
+    variants: {
+        heading: {
+            true: "text-[#121212] text-[21px] font-normal text-center p-0 my-[30px] mx-0",
+        },
+    },
+});
 const RenderLine = ({ line }) => {
+    const style = cn(variants(line.style));
     if (line.type === "text") {
-        return <Text className={line.style}>{line.text}</Text>;
+        return <Text className={style}>{line.text}</Text>;
     }
     if (line.type === "link") {
         return (
-            <Link href={line.href} className={line.style}>
+            <Link href={line.href} className={style}>
                 {line.text}
             </Link>
         );
     }
     if (line.type === "table") {
         return (
-            <table>
-                <tbody>
+            <table className={style}>
+                <tbody className={cn(variants(line.bodyStyle))}>
                     {line.lines.map((rows, index) => (
-                        <tr key={index}>
+                        <tr className={cn(variants(line.trStyle))} key={index}>
                             {rows?.map((row, rId) => (
-                                <td key={rId}>
+                                <td
+                                    className={cn(variants(line.tdStyle))}
+                                    key={rId}
+                                >
                                     <RenderLine line={row} />
                                 </td>
                             ))}
