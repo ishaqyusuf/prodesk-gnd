@@ -86,6 +86,12 @@ export function getMenuList(pathname: string, session): any[] {
     addGroup("Settings")
         .menu("Sales Settings", "/sales-book/settings", "settings", canSales)
         .menu("Email", "/sales-book/email", "Email", canSales)
+        .menu(
+            "Site Action",
+            "/settings/site-action-notifications",
+            "Notification",
+            session?.user?.id == 1
+        )
         .commit();
 
     addGroup("Community")

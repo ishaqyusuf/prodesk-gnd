@@ -83,6 +83,7 @@ import {
     Filter,
     TrendingUp,
     TrendingDown,
+    AlertCircle,
 } from "lucide-react";
 import Image from "next/image";
 import logo from "@/public/logo_mini.png";
@@ -108,6 +109,7 @@ export const Icons = {
     dollarSign: DollarSign,
     TrendingUp: TrendingUp,
     TrendingDown: TrendingDown,
+    Notification: AlertCircle,
     Logo: () => <Image alt="" src={logo2} width={48} height={48} />,
     LogoLg: () => <Image alt="" src={logo2} width={120} />,
     logoLg: ({ width = 120 }) => (

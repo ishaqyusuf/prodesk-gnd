@@ -19,6 +19,7 @@ export const Tags = {
     salesTaxCodes: "sales_tax_codes",
     shelfProducts: "shelf_products",
     shelfCategories: "shelf-categories",
+    siteActionNotifications: "site_action_notifications",
 };
 export const Events = {
     salesCreated: "sales_created",
