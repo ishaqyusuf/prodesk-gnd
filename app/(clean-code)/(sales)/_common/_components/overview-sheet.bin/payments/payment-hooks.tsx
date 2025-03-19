@@ -121,13 +121,13 @@ const usePaymentContext = (ctx) => {
         else {
             try {
                 const formData = form.getValues();
-                const r = await createTransactionUseCase({
-                    accountNo: ctx.item.customerPhone,
-                    amount: +formData.amount,
-                    paymentMode: formData.paymentMethod,
-                    salesIds: [ctx.item.id],
-                    description: "",
-                });
+                // const r = await createTransactionUseCase({
+                //     accountNo: ctx.item.customerPhone,
+                //     amount: +formData.amount,
+                //     paymentMode: formData.paymentMethod,
+                //     salesIds: [ctx.item.id],
+                //     description: "",
+                // });
                 _ctx.closePaymentForm();
                 toast.success("Payment Applied");
             } catch (error) {
