@@ -1,5 +1,6 @@
 import {
     AddressBooks,
+    Customers,
     DykeSalesDoors,
     DykeSalesShelfItem,
 } from "@prisma/client";
@@ -17,6 +18,7 @@ import { isComponentType } from "../../(loggedIn)/sales-v2/overview/is-component
 import salesData, {
     SalesTaxes,
 } from "@/app/(clean-code)/(sales)/_common/utils/sales-data";
+import { CustomerMeta } from "@/app/(clean-code)/(sales)/types";
 
 type PrintData = {
     order: ViewSaleType;
@@ -867,13 +869,15 @@ function address({ type, customer, billingAddress, shippingAddress }) {
         addressLine(
             estimate ? "Customer" : "Sold To",
             customer?.businessName,
-            billingAddress as any
+            billingAddress as any,
+            customer
         ),
         !estimate
             ? addressLine(
                   "Ship To",
                   customer?.businessName,
-                  shippingAddress as any
+                  shippingAddress as any,
+                  customer
               )
             : null,
     ].filter(Boolean);
@@ -881,22 +885,24 @@ function address({ type, customer, billingAddress, shippingAddress }) {
 function addressLine(
     title,
     businessName,
-    address: AddressBooks & { meta: IAddressMeta }
+    address: AddressBooks & { meta: IAddressMeta },
+    customer: Customers & { meta: CustomerMeta }
 ) {
     return {
         title,
-        lines: address
-            ? [
-                  businessName || address?.name,
-                  `${address?.phoneNo} ${
-                      address?.phoneNo2 ? `(${address?.phoneNo2})` : ""
-                  }`,
-                  address?.email,
-                  address?.address1,
-                  [address?.city, address?.state, address?.meta?.zip_code]
-                      ?.filter(Boolean)
-                      ?.join(" "),
-              ].filter(Boolean)
-            : ["No Address"],
+        lines:
+            address || customer
+                ? [
+                      businessName || address?.name || customer?.name,
+                      `${address?.phoneNo || customer?.phoneNo} ${
+                          address?.phoneNo2 ? `(${address?.phoneNo2})` : ""
+                      }`,
+                      address?.email || customer?.email,
+                      address?.address1 || customer?.address,
+                      [address?.city, address?.state, address?.meta?.zip_code]
+                          ?.filter(Boolean)
+                          ?.join(" "),
+                  ].filter(Boolean)
+                : ["No Address"],
     };
 }

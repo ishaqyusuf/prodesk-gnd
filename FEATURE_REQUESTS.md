@@ -1,6 +1,25 @@
 # ...
 # THUR, MAR 20
+- .
+- new feature customer not showing address.
+- sales form: swap door height
 - sales commission page
+  - create-sales-commission-action
+    - check if sales has no existing comission
+    - get commission percentage from table
+    - ask if commission should be created after sales is completed
+  - comission status: pending, paid
+    - create sales comission payment table
+  - show attaached sale order no and status
+  - sort by: sales rep, date.
+  - mark and pay
+- sales restore state
+  - when restore point is selected:
+    - if there is conflict between items: production,delivery,item-removal
+    - show resolution modal to give restore options:
+      - clear production & delivery
+      - keep production & delivery (show which production will be deleted due to item not available in restore)
+      - 
 # TUE, MAR 18
 - sales subscription: select target users and events
 - sales notification
