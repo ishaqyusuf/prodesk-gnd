@@ -64,6 +64,7 @@ export async function loadSalesOverviewAction(id) {
     }
     const phoneNo = order.customer?.phoneNo || order.billingAddress?.phoneNo;
     let type: SalesType = order.type as any;
+
     return {
         type,
         id: order.id,
@@ -87,13 +88,13 @@ export async function loadSalesOverviewAction(id) {
         phoneNo,
         displayName,
         shipping: [
-            addressLine(order.shippingAddress?.name, "user"),
-            addressLine(order.shippingAddress?.phoneNo, "phone"),
+            addressLine(order.shippingAddress?.name || displayName, "user"),
+            addressLine(order.shippingAddress?.phoneNo || phoneNo, "phone"),
             addressLine(order.shippingAddress?.address1, "address"),
         ].filter((a) => a.value),
         billing: [
-            addressLine(order.billingAddress?.name, "user"),
-            addressLine(order.billingAddress?.phoneNo, "phone"),
+            addressLine(order.billingAddress?.name || displayName, "user"),
+            addressLine(order.billingAddress?.phoneNo || phoneNo, "phone"),
             addressLine(order.billingAddress?.address1, "address"),
         ].filter((a) => a.value),
     };
