@@ -40,7 +40,7 @@ export function DescriptionCell({ item }: ItemProps) {
                     text={item.description}
                 />
             </TCell.Secondary>
-            {/* <TCell.Secondary>{item.description}</TCell.Secondary> */}
+            <TCell.Secondary>{item.paymentMethod}</TCell.Secondary>
         </TCell>
     );
 }

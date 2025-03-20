@@ -1,4 +1,6 @@
+import { CustomerTransactionType } from "@/actions/get-sales-customers-tx";
 import { composeQuery } from "@/app/(clean-code)/(sales)/_common/utils/db-utils";
+import { PaymentMethods } from "@/app/(clean-code)/(sales)/types";
 import { SearchParamsType } from "@/components/(clean-code)/data-table/search-params";
 import { Prisma } from "@prisma/client";
 
@@ -6,14 +8,27 @@ export function whereCustomerTx(query: SearchParamsType) {
     const whereAnd: Prisma.CustomerTransactionWhereInput[] = [
         {
             OR: [
-                { type: {} },
                 {
+                    AND: [
+                        { type: {} },
+                        // { type: "transaction" as CustomerTransactionType },
+                        {
+                            amount: {
+                                lt: 0,
+                            },
+                        },
+                    ],
+                },
+                {
+                    paymentMethod: "link" as PaymentMethods,
                     amount: {
-                        lte: 0,
+                        gt: 0,
                     },
                 },
             ],
         },
+        // {
+        // },
         // {
         //     salesPayments: {
         //         some: {

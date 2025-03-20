@@ -135,6 +135,18 @@ export const __filters = (): Filters => ({
             //
         ],
     },
+    "sales-accounting": {
+        fields: [
+            filterFields.search,
+            filterFields["order.no"],
+            //
+        ],
+        filterColumns: [
+            filterCol("search"),
+            filterCol("order.no"),
+            //
+        ],
+    },
 });
 
 export const paymentMethods: {

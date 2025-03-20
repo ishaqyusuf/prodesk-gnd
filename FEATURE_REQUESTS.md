@@ -1,4 +1,6 @@
 # ...
+# THUR, MAR 20
+- sales commission page
 # TUE, MAR 18
 - sales subscription: select target users and events
 - sales notification
