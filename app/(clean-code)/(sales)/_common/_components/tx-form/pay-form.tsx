@@ -119,16 +119,8 @@ export default function PayForm({}) {
                             <Button
                                 // disabled={!form.formState}
                                 onClick={async () => {
-                                    if (!pm)
-                                        tx.dotUpdate(
-                                            "paymentMethod",
-                                            "terminal"
-                                        );
-                                    else {
-                                        if (pm == "terminal")
-                                            await terminalPay();
-                                        else await pay();
-                                    }
+                                    if (pm == "terminal") await terminalPay();
+                                    else await pay();
                                 }}
                                 disabled={!form.formState.isValid}
                             >

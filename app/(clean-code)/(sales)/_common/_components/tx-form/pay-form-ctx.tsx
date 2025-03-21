@@ -30,7 +30,7 @@ export const usePayForm = () => {
             amount: tx.totalPay,
             checkNo: undefined,
             deviceId: undefined,
-            enableTip: false,
+            enableTip: undefined,
         },
     });
     const profile = tx.customerProfiles[tx.phoneNo];
@@ -47,7 +47,7 @@ export const usePayForm = () => {
             getPaymentTerminalsUseCase()
                 .then((terminals) => {
                     tx.dotUpdate("terminals", terminals.devices);
-                    form.setValue("deviceId", terminals.lastUsed);
+                    form.setValue("deviceId", terminals.lastUsed?.value);
                 })
                 .catch((e) => {
                     toast.error(e.message);

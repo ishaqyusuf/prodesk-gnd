@@ -70,5 +70,6 @@ export const createPaymentSchema = z
                 message: "Device Id is required",
                 code: "custom",
             });
+        } else {
         }
     });
