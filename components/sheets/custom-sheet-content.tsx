@@ -33,6 +33,7 @@ export function CustomSheet({ children, open, onOpenChange, ...props }: Props) {
             <SheetContent
                 {...props}
                 className={cn(
+                    "p-2 px-4",
                     sheetContentVariant({
                         ...(props as any),
                     })
@@ -45,7 +46,7 @@ export function CustomSheet({ children, open, onOpenChange, ...props }: Props) {
 }
 export function CustomSheetContent({ children = null, className = "" }) {
     return (
-        <ScrollArea className={cn("flex-1 -mx-6 px-6", className)}>
+        <ScrollArea className={cn("flex-1 -mx-4 px-4", className)}>
             {children}
         </ScrollArea>
     );

@@ -1,9 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import {
-    Sheet,
-    SheetContent,
     SheetDescription,
     SheetFooter,
     SheetHeader,
@@ -12,6 +9,8 @@ import {
 import { useCustomerOverviewQuery } from "@/hooks/use-customer-overview-query";
 import { useEffect } from "react";
 import { CustomSheet, CustomSheetContent } from "../custom-sheet-content";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { GeneralTab } from "./general-tab";
 
 export function CustomerOverviewSheet() {
     const ctx = useCustomerOverviewQuery();
@@ -21,6 +20,7 @@ export function CustomerOverviewSheet() {
         if (ctx.opened) {
         }
     }, [ctx.accountNo, ctx.opened]);
+    const currenTab = ctx.params?.tab;
     return (
         <CustomSheet
             open={ctx.opened}
@@ -28,13 +28,37 @@ export function CustomerOverviewSheet() {
             size="xl"
             onOpenChange={ctx.close}
         >
-            <SheetHeader>
-                <SheetTitle>Customer Overview</SheetTitle>
-                <SheetDescription>Desc</SheetDescription>
-            </SheetHeader>
-            <CustomSheetContent>
-                <div className="min-h-screen"></div>
+            <Tabs
+                value={currenTab}
+                onValueChange={(e) => {
+                    ctx.setParams({
+                        tab: e,
+                    });
+                }}
+                className=""
+            >
+                <SheetHeader>
+                    <SheetTitle>Customer Overview</SheetTitle>
+                    <SheetDescription>
+                        <TabsList className="w-full flex justify-start">
+                            <TabsTrigger value="general">General</TabsTrigger>
+                            <TabsTrigger value="prod">Production</TabsTrigger>
+                            <TabsTrigger value="tx">Transactions</TabsTrigger>
+                        </TabsList>
+                    </SheetDescription>
+                </SheetHeader>
+            </Tabs>
+            <CustomSheetContent className="-mt-4">
+                <Tabs value={currenTab}>
+                    <TabsContent value="general">
+                        <GeneralTab />
+                    </TabsContent>
+                    <TabsContent value="prod">
+                        <span>PRODUCTIOn</span>
+                    </TabsContent>
+                </Tabs>
             </CustomSheetContent>
+
             <SheetFooter className="flex justify-end">
                 <Button>Save</Button>
             </SheetFooter>

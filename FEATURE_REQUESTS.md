@@ -1,4 +1,7 @@
 # ...
+# FRI, MAR 21
+- shelf items
+  - add new category (category manager)
 # THUR, MAR 20
 - .
 - activity backdoor
@@ -11,7 +14,7 @@
     - ask if commission should be created after sales is completed
   - comission status: pending, paid
     - create sales comission payment table
-  - show attaached sale order no and status
+  - show attached sale order no and status
   - sort by: sales rep, date.
   - mark and pay
 - sales restore state
@@ -145,3 +148,18 @@
 <!-- - change alert position -->
 <!-- - sales print: remove footer on every page -->
   <!-- - invoice filter -->
+
+# #################################################
+- PRODUCTION VIEW SECTIONED JUST LIKE IN PRINT
+- WHEN NEW SIZE IS ADDED AFTER SAVE, IT REQUIRES DOUBLE SAVE
+- Multi-Height Select
+- DELETE SUBMISSION ACTION
+- TAKE PICTURE OF ORDER BEING LOADED.
+- DELIVERY/DISPATCH
+    AUTO MARK AS DELIVERED.
+    AUTO ASSIGN ALL.
+-  BUG: WHEN MENU IS OPENED IN MODAL AND MODAL IS CLOSED, NOTHING CLICKS
+-  CUSTOM COMPONENT
+<!-- - AUTO REFRESH ON PAYMENT -->
+<!-- - INVOICE PRINT AND OVERVIEW FROM EDIT PAGE -->
+# #################################################
