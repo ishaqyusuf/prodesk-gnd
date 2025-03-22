@@ -1,16 +1,7 @@
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { TabsContent } from "@/components/ui/tabs";
 import { customerStore } from "./store";
-import { Icons } from "@/components/_v1/icons";
 import { _modal } from "@/components/common/modal/provider";
-import { openTxForm } from "../tx-form";
 import { useEffect, useState } from "react";
 import { getCustomerGeneralInfoAction } from "@/actions/get-customer-general-info";
 import { AsyncFnType } from "@/types";

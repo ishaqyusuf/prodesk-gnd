@@ -1,6 +1,8 @@
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import {
+    parseAsArrayOf,
     parseAsBoolean,
+    parseAsInteger,
     parseAsJson,
     parseAsString,
     parseAsStringEnum,
@@ -13,8 +15,15 @@ export function useCustomerOverviewQuery() {
     const [params, setParams] = useQueryStates({
         viewCustomer: parseAsBoolean,
         accountNo: parseAsString,
-        tab: parseAsStringEnum(["general", "sales", "quotes", "payments"]),
+        tab: parseAsStringEnum([
+            "general",
+            "sales",
+            "quotes",
+            "transactions",
+            "pay-portal",
+        ] as const),
         onCloseQuery: parseAsJson(),
+        "pay-selections": parseAsArrayOf(parseAsInteger),
     });
     const opened = params.viewCustomer && !!params.accountNo;
 

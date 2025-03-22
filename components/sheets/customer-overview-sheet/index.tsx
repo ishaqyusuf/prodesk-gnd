@@ -32,7 +32,7 @@ export function CustomerOverviewSheet() {
                 value={currenTab}
                 onValueChange={(e) => {
                     ctx.setParams({
-                        tab: e,
+                        tab: e as any,
                     });
                 }}
                 className=""
@@ -42,8 +42,14 @@ export function CustomerOverviewSheet() {
                     <SheetDescription>
                         <TabsList className="w-full flex justify-start">
                             <TabsTrigger value="general">General</TabsTrigger>
-                            <TabsTrigger value="prod">Production</TabsTrigger>
-                            <TabsTrigger value="tx">Transactions</TabsTrigger>
+                            <TabsTrigger value="sales">Sales</TabsTrigger>
+                            <TabsTrigger value="quotes">Quotes</TabsTrigger>
+                            <TabsTrigger value="transactions">
+                                Transactions
+                            </TabsTrigger>
+                            <TabsTrigger value="pay-portal">
+                                Pay Portal
+                            </TabsTrigger>
                         </TabsList>
                     </SheetDescription>
                 </SheetHeader>

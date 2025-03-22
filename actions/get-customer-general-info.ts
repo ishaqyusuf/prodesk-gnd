@@ -1,12 +1,21 @@
 "use server";
 
 import { prisma } from "@/db";
+import { AsyncFnType } from "@/types";
+import { Prisma } from "@prisma/client";
 
-export async function getCustomerGeneralInfoAction(phoneNo) {
-    const customers = await prisma.customers.findMany({
-        where: {
-            phoneNo,
-        },
+export type CustomerGeneralInfo = AsyncFnType<
+    typeof getCustomerGeneralInfoAction
+>;
+export async function getCustomerGeneralInfoAction(accountNo) {
+    const [pref, id] = accountNo?.split("-");
+
+    let where: Prisma.CustomersWhereInput = {
+        phoneNo: pref == "cust" ? undefined : accountNo,
+        id: pref == "cust" ? id : undefined,
+    };
+    const customer = await prisma.customers.findFirst({
+        where,
         select: {
             id: true,
             name: true,
@@ -14,10 +23,17 @@ export async function getCustomerGeneralInfoAction(phoneNo) {
             phoneNo: true,
             email: true,
         },
+        orderBy: {
+            createdAt: "desc",
+        },
     });
-    const email = customers.find((s) => s.email)?.email;
+    const displayName = customer?.businessName || customer?.name;
     return {
-        customers,
-        email,
+        customers: [],
+        avatarUrl: null,
+        email: customer?.email,
+        displayName,
+        isBusiness: !!customer?.businessName,
+        accountNo,
     };
 }
