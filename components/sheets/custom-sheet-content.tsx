@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import { Sheet, SheetContent, SheetContentProps } from "../ui/sheet";
 import { cva, VariantProps } from "class-variance-authority";
 import { ScrollArea } from "../ui/scroll-area";
+import Portal from "../_v1/portal";
 
 const sheetContentVariant = cva("flex flex-col h-screen w-full ", {
     variants: {
@@ -31,6 +32,7 @@ export function CustomSheet({ children, open, onOpenChange, ...props }: Props) {
     return (
         <Sheet open={open} onOpenChange={onOpenChange}>
             <SheetContent
+                id="customSheetContent"
                 {...props}
                 className={cn(
                     "p-2 px-4",
@@ -42,6 +44,13 @@ export function CustomSheet({ children, open, onOpenChange, ...props }: Props) {
                 {children}
             </SheetContent>
         </Sheet>
+    );
+}
+export function CustomSheetContentPortal({ children }) {
+    return (
+        <Portal nodeId={"customSheetContent"} noDelay>
+            {children}
+        </Portal>
     );
 }
 export function CustomSheetContent({ children = null, className = "" }) {

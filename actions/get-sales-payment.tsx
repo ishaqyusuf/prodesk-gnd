@@ -13,6 +13,9 @@ export async function getSalesPaymentsAction(id) {
                 id,
             },
         },
+        orderBy: {
+            createdAt: "desc",
+        },
         select: {
             id: true,
             order: {

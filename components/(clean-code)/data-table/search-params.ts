@@ -62,11 +62,13 @@ export const searchParamsParser: {
     // pathname: parseAsString,
     // date: parseAsArrayOf(parseAsTimestamp, RANGE_DELIMITER),
     // // REQUIRED FOR SORTING & PAGINATION
+    "account.no": parseAsString,
     sort: parseAsSort,
     size: parseAsInteger.withDefault(30),
     start: parseAsInteger.withDefault(0),
     // // REQUIRED FOR SELECTION
     uuid: parseAsString,
+    "customer.id": parseAsInteger,
     "customer.name": parseAsString,
     address: parseAsString,
     status: parseAsString,
@@ -98,9 +100,11 @@ export const searchParamsParser: {
 };
 export const searchSchema = z
     .object({
+        "account.no": z.string().optional(),
         id: z.number().optional(),
         status: z.string().optional(),
         address: z.string().optional(),
+        "customer.id": z.number().optional(),
         "customer.name": z.string().optional(),
         "order.no": z.string().optional(),
         po: z.string().optional(),

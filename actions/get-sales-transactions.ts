@@ -7,13 +7,14 @@ import {
 } from "@/app/(clean-code)/_common/utils/db-utils";
 import { SearchParamsType } from "@/components/(clean-code)/data-table/search-params";
 import { prisma } from "@/db";
+import { formatMoney } from "@/lib/use-number";
 import { sum } from "@/lib/utils";
 import { AsyncFnType } from "@/types";
 import { whereCustomerTx } from "@/utils/db/where.customer-transactions";
 
-export type GetSalesCustomerTx = AsyncFnType<typeof getSalesCustomerTxAction>;
+export type GetSalesCustomerTx = AsyncFnType<typeof getSalesTransactionsAction>;
 export type CustomerTransactionType = "wallet" | "transaction";
-export async function getSalesCustomerTxAction(query: SearchParamsType) {
+export async function getSalesTransactionsAction(query: SearchParamsType) {
     const where = whereCustomerTx(query);
     const data = await prisma.customerTransaction.findMany({
         where,
@@ -83,13 +84,27 @@ export async function getSalesCustomerTxAction(query: SearchParamsType) {
     return {
         ...pageInfo,
         data: data.map((item) => {
-            // item.amount = Math.abs(item.amount);
-            // let amountDisplay = item.amount <= 0
-            // ? `(${Math.abs(item.amount)})`
+            const amount = formatMoney(Math.abs(item.amount));
+            const orderIds = item.salesPayments
+                .map((a) => a.order.orderId)
+                .join(", ")
+                .replace(/,([^,]*)$/, " &$1");
+
+            const paymentMethod = item.paymentMethod;
+            const description = item.description;
+            const salesReps = Array.from(
+                new Set(item.salesPayments?.map((s) => s.order?.salesRep?.name))
+            );
             return {
                 uuid: item.id,
-                ...item,
-                paymentSum: sum(item.salesPayments, "amount"),
+                authorName: item.author?.name,
+                status: item.status,
+                createdAt: item.createdAt,
+                amount,
+                paymentMethod,
+                description,
+                orderIds,
+                salesReps,
             };
         }),
     };

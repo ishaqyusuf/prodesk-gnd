@@ -82,6 +82,7 @@ export function pageQueryFilter(query) {
 
     const keys = Object.keys(query);
     let skip = null;
+    // if (!query?.perPage) perPage = query?.size;
     if (keys.includes("start")) {
         skip = query.start;
         perPage = query.size;

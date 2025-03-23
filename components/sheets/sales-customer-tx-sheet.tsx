@@ -3,7 +3,7 @@
 import {
     GetSalesCustomerTxOverview,
     getSalesCustomerTxOverviewAction,
-} from "@/actions/get-sales-customers-tx";
+} from "@/actions/get-sales-transactions";
 import Modal from "../common/modal";
 import { _modal } from "../common/modal/provider";
 import { Table, TableBody, TableCell, TableRow } from "../ui/table";

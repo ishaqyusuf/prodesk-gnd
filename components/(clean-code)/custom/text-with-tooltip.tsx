@@ -47,11 +47,10 @@ export function TextWithTooltip({ text, className }: TextWithTooltipProps) {
                         {text}
                     </div>
                 </TooltipTrigger>
-                <TooltipContent>{text}</TooltipContent>
+                <TooltipContent className="max-w-[20vw]">{text}</TooltipContent>
             </Tooltip>
         </TooltipProvider>
     );
 }
 
 export default TextWithTooltip;
-

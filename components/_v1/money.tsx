@@ -17,7 +17,9 @@ export default function Money({
     return (
         <span className={cn(className)}>
             {noCurrency
-                ? new Intl.NumberFormat("en-US", {}).format(value)
+                ? new Intl.NumberFormat("en-US", {
+                      minimumFractionDigits: 2,
+                  }).format(value)
                 : formatCurrency.format(value)}
         </span>
     );

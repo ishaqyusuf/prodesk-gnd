@@ -5,7 +5,7 @@ import { getSalesPaymentCheckoutInfoAction } from "./get-sales-payment-checkout-
 import { SquarePaymentStatus } from "@/_v2/lib/square";
 import { generateRandomString } from "@/lib/utils";
 import { PaymentMethods } from "@/app/(clean-code)/(sales)/types";
-import { CustomerTransactionType } from "./get-sales-customers-tx";
+import { CustomerTransactionType } from "./get-sales-transactions";
 import { getBaseUrl } from "@/envs";
 import { SQUARE_LOCATION_ID, squareClient } from "@/utils/square-utils";
 

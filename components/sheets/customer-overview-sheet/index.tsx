@@ -11,6 +11,7 @@ import { useEffect } from "react";
 import { CustomSheet, CustomSheetContent } from "../custom-sheet-content";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { GeneralTab } from "./general-tab";
+import { PayPortalTab } from "./pay-portal-tab";
 
 export function CustomerOverviewSheet() {
     const ctx = useCustomerOverviewQuery();
@@ -59,15 +60,11 @@ export function CustomerOverviewSheet() {
                     <TabsContent value="general">
                         <GeneralTab />
                     </TabsContent>
-                    <TabsContent value="prod">
-                        <span>PRODUCTIOn</span>
+                    <TabsContent value="pay-portal">
+                        <PayPortalTab />
                     </TabsContent>
                 </Tabs>
             </CustomSheetContent>
-
-            <SheetFooter className="flex justify-end">
-                <Button>Save</Button>
-            </SheetFooter>
         </CustomSheet>
     );
 }

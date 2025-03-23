@@ -1,4 +1,22 @@
 # ...
+# SAT, MAR 22
+- login profile cache
+- email render
+- midday table & filter
+- migrate db
+- midday animation on component section
+- shelf item inventory mgmt
+  - add/edit category
+  - add/edit product
+  - product inventory mgmt
+  - get product counts for each category
+- customer dashboard
+  - wallet balance
+  - total due | total overdraft
+  - orders, quotes
+  - generate report
+  - mark orders and send notification
+  - payment notification
 # FRI, MAR 21
 - shelf items
   - add new category (category manager)

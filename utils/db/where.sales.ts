@@ -10,11 +10,7 @@ import { Prisma } from "@prisma/client";
 import { composeQuery } from "../../app/(clean-code)/(sales)/_common/utils/db-utils";
 import { QtyControlType } from "../../app/(clean-code)/(sales)/types";
 import { ftToIn } from "../../app/(clean-code)/(sales)/_common/utils/sales-utils";
-import {
-    dateEquals,
-    dateQuery,
-    fixDbTime,
-} from "@/app/(v1)/_actions/action-utils";
+import { dateEquals, fixDbTime } from "@/app/(v1)/_actions/action-utils";
 import { formatDate } from "@/lib/use-day";
 import dayjs from "dayjs";
 import { prisma } from "@/db";
@@ -201,6 +197,11 @@ export function whereSales(query: SearchParamsType) {
                     },
                 });
                 break;
+            case "customer.id":
+                whereAnd.push({
+                    customerId: val,
+                });
+                break;
             case "customer.name":
                 whereAnd.push({
                     OR: [
@@ -267,8 +268,6 @@ export function whereSales(query: SearchParamsType) {
                         },
                     },
                 });
-                break;
-            case "invoice":
                 break;
         }
     });

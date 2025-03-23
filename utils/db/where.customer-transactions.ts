@@ -1,4 +1,4 @@
-import { CustomerTransactionType } from "@/actions/get-sales-customers-tx";
+import { CustomerTransactionType } from "@/actions/get-sales-transactions";
 import { composeQuery } from "@/app/(clean-code)/(sales)/_common/utils/db-utils";
 import { PaymentMethods } from "@/app/(clean-code)/(sales)/types";
 import { SearchParamsType } from "@/components/(clean-code)/data-table/search-params";
@@ -37,6 +37,13 @@ export function whereCustomerTx(query: SearchParamsType) {
         //     },
         // },
     ];
+    if (query["account.no"]) {
+        whereAnd.push({
+            wallet: {
+                accountNo: query["account.no"],
+            },
+        });
+    }
     if (query["sales.id"])
         whereAnd.push({
             salesPayments: {
